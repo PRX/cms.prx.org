@@ -1,6 +1,8 @@
 ENV["RAILS_ENV"] = "test"
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+if ENV['TRAVIS']
+  require "codeclimate-test-reporter"
+  CodeClimate::TestReporter.start
+end
 require File.expand_path("../../config/environment", __FILE__)
 require "rails/test_help"
 require "minitest/rails"
