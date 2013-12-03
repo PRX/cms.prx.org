@@ -4,4 +4,4 @@ rvm:
 bundler_args: --without development
 services: mysql
 before_script:
-  - mysql -e 'create database prx_test;'
+  - mysqladmin create prx_test
