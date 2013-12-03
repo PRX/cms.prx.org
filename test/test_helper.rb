@@ -10,6 +10,9 @@ require "minitest/rails"
 # Uncomment for awesome colorful output
 # require "minitest/pride"
 
+ActiveRecord::Base.establish_connection("travis") if ENV["TRAVIS"]
+ActiveRecord::Base.default_timezone = :utc
+
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   fixtures :all

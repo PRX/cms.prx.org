@@ -29,11 +29,9 @@ test:
   password:
   host: localhost
 
-production:
+travis:
   adapter: mysql2
   encoding: utf8
-  database: PRX_org-Backend_production
-  pool: 5
-  username: root
-  password:
-  host: localhost
+  username: travis
+  pool: 10
+  database: prx_test

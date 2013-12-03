@@ -3,6 +3,5 @@ rvm:
   - 2.0.0-p353
 bundler_args: --without development
 services: mysql
-env: DATABASE_URL=mysql2://travis@localhost/prx_test
 before_script:
   - mysql -e 'create database prx_test;'
