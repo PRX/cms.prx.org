@@ -19,6 +19,7 @@ end
 group :development, :test do
   gem 'minitest-rails'
   gem 'rake'
+  gem "codeclimate-test-reporter", require: false
 end
 
 

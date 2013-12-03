@@ -5,3 +5,6 @@ bundler_args: --without development
 services: mysql
 before_script:
   - mysqladmin create prx_test
+addons:
+  code_climate:
+    repo_token: 78c896adecc52c38b7778a7e7b3c28193798a9fac704dddc3a506006b948e591
