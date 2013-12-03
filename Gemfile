@@ -22,6 +22,7 @@ group :development, :test do
   gem 'guard-minitest'
   gem 'guard-bundler'
   gem 'spring'
+  gem 'rake'
 end
 
 # Use ActiveModel has_secure_password

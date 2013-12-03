@@ -130,5 +130,6 @@ DEPENDENCIES
   minitest-rails
   mysql2
   rails (= 4.0.1)
+  rake
   sdoc
   spring
