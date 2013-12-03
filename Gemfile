@@ -18,11 +18,18 @@ end
 
 group :development, :test do
   gem 'minitest-rails'
+  gem 'rake'
+end
+
+
+# These will not be installed on travis - keep all
+# developer-specific gems here so our travis builds
+# stay snappy!
+group :development do
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-bundler'
   gem 'spring'
-  gem 'rake'
 end
 
 # Use ActiveModel has_secure_password
