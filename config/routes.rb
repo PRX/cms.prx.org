@@ -53,4 +53,10 @@ PRX::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  namespace :api do
+    scope '(:api_version)', api_version: 'v1' do
+      resources :stories
+    end
+  end
 end
