@@ -1,7 +1,9 @@
 class Api::StoriesController < Api::BaseController
 
+  api_versions :v1
+
   def show
-    render json: {title: params[:api_version]}
+    respond_with Piece.find(params[:id].to_i)
   end
 
 end

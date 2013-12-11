@@ -6,10 +6,7 @@ gem 'rails', '4.0.1'
 # Use mysql as the database for Active Record
 gem 'mysql2'
 
-
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+gem 'roar-rails'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

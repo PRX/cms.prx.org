@@ -55,7 +55,8 @@ PRX::Application.routes.draw do
   #   end
 
   namespace :api do
-    scope '(:api_version)', api_version: 'v1' do
+    scope '(:api_version)', api_version: 'v1', format: 'json' do
+      root to: 'base#entrypoint'
       resources :stories
     end
   end
