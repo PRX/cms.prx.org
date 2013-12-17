@@ -1,4 +1,6 @@
+# Copy this file to application.yml for the figaro gem to use.
 # Add application configuration variables here, as shown below.
 
+RAILS_SECRET_KEY: thisisnotsafeitsonlyfordevelopmentthisisnotsafeitsonlyfordevelopmentthisisnotsafeitsonlyfordevelopment
 DEVELOPMENT_DATABASE: mediajoint_development
 TEST_DATABASE: mediajoint_test
