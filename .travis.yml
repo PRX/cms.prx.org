@@ -1,6 +1,7 @@
 language: ruby
 rvm:
   - 2.0.0-p353
+env: TEST_DATABASE=prx_test RAILS_ENV=test
 bundler_args: --without development
 services: mysql
 before_script:

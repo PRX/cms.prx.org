@@ -8,22 +8,29 @@ gem 'mysql2'
 
 gem 'roar-rails'
 
+gem 'figaro'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
 
 group :development, :test do
-  gem 'minitest-rails'
   gem 'rake'
+  gem 'minitest-rails'
+  gem 'minitest-reporters', require: false
+  gem 'factory_girl_rails'
   gem "codeclimate-test-reporter", require: false
+  gem 'simplecov'
+  gem 'simplecov-rcov'
+  gem 'coveralls', require: false
 end
-
 
 # These will not be installed on travis - keep all
 # developer-specific gems here so our travis builds
 # stay snappy!
 group :development do
+  gem 'growl', require: false
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-bundler'
