@@ -18,3 +18,7 @@ pickle-email-*.html
 .project
 config/initializers/secret_token.rb
 .powder
+.DS_Store
+
+# Ignore application configuration
+/config/application.yml

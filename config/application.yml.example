@@ -1,0 +1,4 @@
+# Add application configuration variables here, as shown below.
+
+DEVELOPMENT_DATABASE: mediajoint_development
+TEST_DATABASE: mediajoint_test

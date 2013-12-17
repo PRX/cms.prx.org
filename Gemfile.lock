@@ -48,6 +48,9 @@ GEM
       factory_girl (~> 4.3.0)
       railties (>= 3.0.0)
     ffi (1.9.3)
+    figaro (0.7.0)
+      bundler (~> 1.0)
+      rails (>= 3, < 5)
     formatador (0.2.4)
     growl (1.0.3)
     guard (2.2.4)
@@ -177,6 +180,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   coveralls
   factory_girl_rails
+  figaro
   growl
   guard
   guard-bundler
