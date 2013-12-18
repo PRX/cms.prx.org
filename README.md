@@ -52,6 +52,9 @@ bundle install
 # pow set-up
 powder link
 
-# see it in the browser
-open http://prx-backend.dev/
+# see the development status page
+open http://prx-backend.dev
+
+# see the api root json doc
+open http://prx-backend.dev/api
 ```
