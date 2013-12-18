@@ -55,9 +55,10 @@ PRX::Application.routes.draw do
   #   end
 
   namespace :api do
-    scope '(:api_version)', api_version: 'v1', format: 'json' do
+    scope ':api_version', format: 'json', api_version: 'v1' do
       root to: 'base#entrypoint'
       resources :stories
     end
   end
+  match '/api', via: [:get], to: redirect("/api/v1")
 end
