@@ -1,4 +1,4 @@
-class Api::PieceRepresenter < Roar::Decorator
+class Api::StoryRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
 
   property :title
