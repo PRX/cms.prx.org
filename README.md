@@ -43,11 +43,17 @@ Consider forking the repo if you plan to make changes, otherwise you can clone i
 git clone git@github.com:PRX/PRX.org-Backend.git prx-backend
 cd prx-backend
 
+# bundle to install gems dependencies
+bundle install
+
 # copy the config
 cp config/application.yml.example config/application.yml
 
-# bundle to install gems dependencies
-bundle install
+# create test database
+mysqladmin create prx_test
+
+# run tests
+bundle exec rake
 
 # pow set-up
 powder link
