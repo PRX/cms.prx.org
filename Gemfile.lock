@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/byroot/rails3_acts_as_paranoid.git
+  revision: 091afc0cbdc6e67ad56d98baf61304efad462e3c
+  branch: rails4.0
+  specs:
+    acts_as_paranoid (0.4.1)
+      activerecord (~> 4.0.0.beta1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -25,9 +33,16 @@ GEM
       multi_json (~> 1.3)
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
+    acts_as_list (0.3.0)
+      activerecord (>= 3.0)
     ansi (1.4.3)
     arel (4.0.1)
     atomic (1.1.14)
+    better_errors (1.1.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     builder (3.1.4)
     celluloid (0.15.2)
       timers (~> 1.1.0)
@@ -40,7 +55,11 @@ GEM
       simplecov (>= 0.7)
       term-ansicolor
       thor
+    debug_inspector (0.0.2)
     docile (1.1.1)
+    dotenv (0.9.0)
+    dotenv-rails (0.9.0)
+      dotenv (= 0.9.0)
     erubis (2.7.0)
     factory_girl (4.3.0)
       activesupport (>= 3.0.0)
@@ -48,9 +67,6 @@ GEM
       factory_girl (~> 4.3.0)
       railties (>= 3.0.0)
     ffi (1.9.3)
-    figaro (0.7.0)
-      bundler (~> 1.0)
-      rails (>= 3, < 5)
     formatador (0.2.4)
     growl (1.0.3)
     guard (2.2.4)
@@ -105,6 +121,10 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
+    pry-rails (0.3.2)
+      pry (>= 0.9.10)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -180,10 +200,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_list
+  acts_as_paranoid!
+  better_errors
+  binding_of_caller
   codeclimate-test-reporter
   coveralls
+  dotenv-rails
   factory_girl_rails
-  figaro
   growl
   guard
   guard-bundler
@@ -192,6 +216,8 @@ DEPENDENCIES
   minitest-rails
   minitest-reporters
   mysql2
+  pry-rails
+  quiet_assets
   rails (~> 4.0)
   rake
   roar-rails

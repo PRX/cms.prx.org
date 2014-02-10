@@ -8,9 +8,10 @@ gem 'mysql2'
 
 gem 'roar-rails'
 
-gem 'figaro'
-
 gem 'kaminari'
+
+gem 'acts_as_paranoid', github: 'byroot/rails3_acts_as_paranoid', branch: 'rails4.0'
+gem 'acts_as_list'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -18,7 +19,9 @@ group :doc do
 end
 
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'rake'
+
   gem 'minitest-rails'
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'
@@ -32,6 +35,11 @@ end
 # developer-specific gems here so our travis builds
 # stay snappy!
 group :development do
+  gem 'quiet_assets'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'pry-rails'
+
   gem 'growl', require: false
   gem 'guard'
   gem 'guard-minitest'
