@@ -57,4 +57,53 @@ ActiveRecord::Schema.define(version: 0) do
   add_index "pieces", ["published_at"], :name => "by_published_at"
   add_index "pieces", ["series_id"], :name => "pieces_series_id_fk"
 
+  create_table "audio_files", :force => true do |t|
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "audio_version_id"
+    t.integer  "account_id"
+    t.integer  "size"
+    t.string   "content_type"
+    t.string   "filename"
+    t.integer  "parent_id"
+    t.string   "label"
+    t.integer  "length"
+    t.integer  "layer"
+    t.integer  "bit_rate",                                       :default => 0,   :null => false
+    t.decimal  "frequency",        :precision => 5, :scale => 2, :default => 0.0, :null => false
+    t.string   "channel_mode"
+    t.string   "status"
+    t.string   "format"
+    t.datetime "deleted_at"
+    t.string   "listenable_type"
+    t.integer  "listenable_id"
+    t.string   "upload_path"
+    t.integer  "current_job_id"
+  end
+
+  add_index "audio_files", ["account_id"], :name => "audio_files_account_id_fk"
+  add_index "audio_files", ["audio_version_id"], :name => "audio_files_audio_version_id_fk"
+  add_index "audio_files", ["listenable_type", "listenable_id"], :name => "listenable_idx"
+  add_index "audio_files", ["parent_id"], :name => "audio_files_parent_id_fk"
+  add_index "audio_files", ["position"], :name => "position_idx"
+  add_index "audio_files", ["status"], :name => "status_idx"
+
+  create_table "audio_versions", :force => true do |t|
+    t.integer  "piece_id"
+    t.string   "label"
+    t.text     "content_advisory"
+    t.text     "timing_and_cues"
+    t.text     "transcript"
+    t.boolean  "news_hole_break"
+    t.boolean  "floating_break"
+    t.boolean  "bottom_of_hour_break"
+    t.boolean  "twenty_forty_break"
+    t.boolean  "promos"
+    t.datetime "deleted_at"
+    t.integer  "audio_version_template_id"
+  end
+
+  add_index "audio_versions", ["piece_id"], :name => "audio_versions_piece_id_fk"
+
 end
