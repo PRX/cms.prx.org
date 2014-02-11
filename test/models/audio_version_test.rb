@@ -2,7 +2,7 @@ require "test_helper"
 
 describe AudioVersion do
   before do
-    @AudioVersion = AudioVersion.new
+    @audio_version = AudioVersion.new
   end
 
   it "has a table defined" do
