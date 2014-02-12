@@ -1,6 +1,6 @@
 class Api::BaseController < ApplicationController
   protect_from_forgery with: :null_session
-  after_filter :set_access_control_headers
+
   class << self
     attr_accessor :understood_api_versions
     def api_versions(*versions)
@@ -17,11 +17,6 @@ class Api::BaseController < ApplicationController
   end
 
   private
-
-  def set_access_control_headers 
-    headers['Access-Control-Allow-Origin'] = '*' 
-    headers['Access-Control-Request-Method'] = '*'
-  end
 
   def api_version
     params[:api_version]

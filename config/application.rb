@@ -31,5 +31,12 @@ module PRX
     config.generators do |g|
       g.test_framework :mini_test, spec: true, fixture: false
     end
+
+    config.middleware.use Rack::Cors do
+      allow do
+        origins '*'
+        resource '/api/*', methods: [:get]
+      end
+    end
   end
 end
