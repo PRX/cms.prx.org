@@ -27,22 +27,12 @@ module PublicAsset
     Digest::MD5.hexdigest(str)
   end
 
-  # media/:token/:expires/:use/:class/:id/:name.:extension
+  # assumes a route like the following
+  # get 'pub/:token/:expires/:use/:class/:id/:version/:name.:extension' => 'public_assets#show', as: :public_asset
   def public_url(options={})
-    o = set_asset_option_defaults(options)
-
-    t = public_url_token(o)
-    e = o[:expires]
-    u = o[:use]
-    c = o[:class]
-    i = o[:id]
-    v = o[:version]
-    n = o[:name]
-    x = o[:extension]
-
-    url = root_url + ["pub",t,e,u,c,i,v,n].join("/")
-    url = url + ".#{x}" unless x.blank?
-    url
+    options = set_asset_option_defaults(options)
+    options[:token] = public_url_token(options)
+    public_asset_url(options)
   end
 
   def asset_url(options={})
