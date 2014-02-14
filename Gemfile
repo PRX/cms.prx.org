@@ -19,6 +19,7 @@ gem 'event_attribute'
 gem 'carrierwave'
 
 gem 'fog'
+gem 'unf'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
