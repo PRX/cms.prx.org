@@ -63,14 +63,15 @@ module PublicAsset
 
   def url_expired?(options)
     expires = options[:expires].to_i
+    return false if (expires == 0)
     now     = DateTime.now.to_i
-    return ((expires == 0) || (expires > now))
+    (expires < now)
   end    
 
   def token_valid?(options)
-    token   = options[:token]
-    check   = public_url_token(options)
-    return (token == check)
+    token = options[:token]
+    check = public_url_token(options)
+    (token == check)
   end
 
   def set_asset_option_defaults(options={})

@@ -55,6 +55,14 @@ describe PublicAsset do
 
   it 'tests if valid' do    
     public_asset.public_url_valid?({}).must_equal false
+
+    options = public_asset.set_asset_option_defaults
+    options[:token] = public_asset.public_url_token(options)
+    public_asset.public_url_valid?(options).must_equal true
+  end
+
+  it 'tests if expired' do    
+    public_asset.url_expired?({expires: 1.week.ago.to_i}).must_equal true
   end
 
 end
