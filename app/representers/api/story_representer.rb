@@ -34,7 +34,7 @@ class Api::StoryRepresenter < Roar::Decorator
   property :timing_and_cues, decorator_scope: true
 
   def timing_and_cues
-    represented.default_audio_version.timing_and_cues
+    represented.default_audio_version.try(:timing_and_cues)
   end
 
 # * Audio Files
