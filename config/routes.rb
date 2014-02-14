@@ -14,7 +14,7 @@ PRX::Application.routes.draw do
   match '/', via: [:get], to: redirect("/api/v1")
   root to: 'api/base#entrypoint', format: 'json', api_version: 'v1'
 
-  get 'pub/:token/:expires/:use/:class/:id/:name.:extension', controller: 'public_asset', action: 'show'
+  get 'pub/:token/:expires/:use/:class/:id/:version/:name.:extension' => 'public_assets#show', as: :public_asset
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
