@@ -1,4 +1,21 @@
 PRX::Application.routes.draw do
+
+  namespace :api do
+    scope ':api_version', format: 'json', api_version: 'v1' do
+      root to: 'base#entrypoint'
+      resources :stories
+      resources :audio_versions
+      resources :audio_files
+    end
+  end
+
+
+  match '/api', via: [:get], to: redirect("/api/v1")
+  match '/', via: [:get], to: redirect("/api/v1")
+  root to: 'api/base#entrypoint', format: 'json', api_version: 'v1'
+
+  get 'pub/:token/:expires/:use/:class/:id/:name.:extension', controller: 'public_asset', action: 'show'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -53,12 +70,4 @@ PRX::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-
-  namespace :api do
-    scope ':api_version', format: 'json', api_version: 'v1' do
-      root to: 'base#entrypoint'
-      resources :stories
-    end
-  end
-  match '/api', via: [:get], to: redirect("/api/v1")
 end
