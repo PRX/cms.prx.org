@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::StoryRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
 
@@ -37,6 +39,17 @@ class Api::StoryRepresenter < Roar::Decorator
     represented.default_audio_version.try(:timing_and_cues)
   end
 
+# * Producer Name (producing account?)
+# * Producing Account
+#   * Name
+#   * Username
+#   * Location
+#   * Photo
+#   * Social Media Links
+  property :account, embedded: true, class: Account, decorator: Api::AccountRepresenter
+
+  property :default_image, as: :image, embedded: true, class: StoryImage, decorator: Api::ImageRepresenter
+
 # * Audio Files
   collection :default_audio, as: :audio, embedded: true, class: AudioFile, decorator: Api::AudioFileRepresenter
 
@@ -45,24 +58,31 @@ class Api::StoryRepresenter < Roar::Decorator
     api_story_path(represented)
   end
 
+# * Musical Works
+  link :musical_works do
+    api_story_musical_works_path(represented)
+  end
+
+  links :audio_versions do
+    represented.audio_versions.collect{ |a| { href: api_audio_version_path(a), name: a.label } }
+  end
+
+# * image(s)
+  links :images do
+    represented.images.collect{ |a| { href: api_story_story_image_path(represented, a) } }
+  end
+
 end
 
-# * Producer Name (producing account?)
-# * Producing Account
-#   * Name
-#   * Username
-#   * Location
-#   * Photo
-#   * Social Media Links
-# * Producing Account's other Pieces (Doesn't make sense for right now)
+# TODO:
 # * List of Producers
-
 # * Licensing terms
-# * Musical Works
 # * tags
-# * image(s)
 
-# require castle integration
+# WAIT:
+# * Producing Account's other Pieces (Doesn't make sense for right now)
+
+# requires castle integration
 # * Purchase Count
 # * Listen Count (don't know if this makes sense to have here)
 

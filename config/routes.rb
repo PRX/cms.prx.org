@@ -5,9 +5,17 @@ PRX::Application.routes.draw do
 
       root to: 'base#entrypoint'
 
-      resources :audio_files
+      resources :accounts do
+        resources :account_images, path: 'images'
+      end
+
+      resources :stories do
+        resources :story_images, path: 'images'
+        resources :musical_works
+      end
+
       resources :audio_versions
-      resources :stories
+      resources :audio_files
     end
   end
 

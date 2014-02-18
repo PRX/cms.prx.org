@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::StoriesRepresenter < Roar::Decorator
   include Api::PagedCollectionRepresenter
 

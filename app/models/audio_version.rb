@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class AudioVersion < PRXModel
 
   belongs_to :story, class_name: 'Story', foreign_key: 'piece_id', with_deleted: true 

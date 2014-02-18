@@ -1,9 +1,15 @@
+# encoding: utf-8
+
 class Story < PRXModel
 
   self.table_name = 'pieces'
 
+  belongs_to :account, with_deleted: true
+
+  has_many :images, -> { where(parent_id: nil).order(:position) }, class_name: 'StoryImage', foreign_key: :piece_id
   has_many :audio_versions, -> { where(promos: false).includes(:audio_files) }, foreign_key: :piece_id
   has_many :audio_files, through: :audio_versions
+
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
 
   acts_as_paranoid
@@ -24,6 +30,10 @@ class Story < PRXModel
 
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)
+  end
+
+  def default_image
+    images.first
   end
 
   def default_audio_version

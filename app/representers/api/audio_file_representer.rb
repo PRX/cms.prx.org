@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::AudioFileRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
 

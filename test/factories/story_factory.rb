@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :story do
 
-    association :promos, factory: :promos
+    promos
 
     title 'Story Title'
     length 120
