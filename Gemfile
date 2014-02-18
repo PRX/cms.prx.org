@@ -12,8 +12,11 @@ gem 'kaminari'
 
 gem 'acts_as_paranoid', github: 'byroot/rails3_acts_as_paranoid', branch: 'rails4.0'
 gem 'acts_as_list'
-
 gem 'rack-cors', :require => 'rack/cors'
+gem 'event_attribute'
+gem 'carrierwave'
+gem 'fog'
+gem 'unf'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -28,8 +31,7 @@ group :development, :test do
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'
   gem "codeclimate-test-reporter", require: false
-  gem 'simplecov'
-  gem 'simplecov-rcov'
+  gem 'simplecov', '~> 0.7.1'
   gem 'coveralls', require: false
 end
 

@@ -1,25 +1,26 @@
-require "test_helper"
+require 'test_helper'
+SimpleCov.command_name 'test:representers'
+
+require 'api' if !defined?(Api)
 
 describe Api::ApiRepresenter do
 
-  before(:each) {
-    @api = Api.version('1.0')
-    @api_representer = Api::ApiRepresenter.new(@api)
-    @json = JSON.parse(@api_representer.to_json)
-  }
+  let(:api)         { Api.version('1.0') }
+  let(:representer) { Api::ApiRepresenter.new(api) }
+  let(:json)        { JSON.parse(representer.to_json) }
 
-  it "create api representer" do
-    @api_representer.wont_be_nil
+  it 'create api representer' do
+    representer.wont_be_nil
   end
 
-  it "use api representer to create json" do
-    @json['version'].must_equal '1.0'
-    @json.keys.sort.must_equal ['_links', 'version']
+  it 'use api representer to create json' do
+    json['version'].must_equal '1.0'
+    json.keys.sort.must_equal ['_links', 'version']
   end
 
-  it "return root doc with links for an api version" do
-    @json['_links']['self']['href'].must_equal '/api/1.0'
-    @json['_links']['stories'].size.must_equal 2
+  it 'return root doc with links for an api version' do
+    json['_links']['self']['href'].must_equal '/api/1.0'
+    json['_links']['stories'].size.must_equal 2
   end
 
 end

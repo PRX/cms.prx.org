@@ -1,9 +1,11 @@
-require "test_helper"
+require 'test_helper'
+SimpleCov.command_name 'test:units'
 
 describe Api do
 
-  it "create an api with a version" do
-    api = Api.version('1.0')
+  let(:api) { Api.version('1.0') }
+
+  it 'create an api with a version' do
     api.version.must_equal '1.0'
   end
 
