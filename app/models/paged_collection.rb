@@ -5,13 +5,12 @@ require 'forwardable'
 class PagedCollection
   extend Forwardable
 
-  attr_accessor :items, :request, :item_class, :options
-
-  def_delegators :request, :params
+  attr_accessor :items, :request, :options
 
   def_delegators :items, :count, :total_count, :prev_page, :next_page, :total_pages, :first_page?, :last_page?
-
   alias_method :total, :total_count
+
+  def_delegators :request, :params
 
   def initialize(items, request, options={})
     self.items   = items
