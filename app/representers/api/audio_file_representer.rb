@@ -9,7 +9,7 @@ class Api::AudioFileRepresenter < Roar::Decorator
   property :url, decorator_scope: true
   
   def url
-    represented.public_url(version: :download)
+    represented.public_url(version: :download, extension: 'mp3')
   end
 
   link :self do
