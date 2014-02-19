@@ -39,6 +39,10 @@ class Api::StoryRepresenter < Roar::Decorator
     represented.default_audio_version.try(:timing_and_cues)
   end
 
+  link :self do 
+    api_story_path(represented)
+  end
+
 # * Producer Name (producing account?)
 # * Producing Account
 #   * Name
@@ -46,17 +50,21 @@ class Api::StoryRepresenter < Roar::Decorator
 #   * Location
 #   * Photo
 #   * Social Media Links
+  link :account do
+    { href: api_account_path(represented.account), name: represented.account.name }
+  end
   property :account, embedded: true, class: Account, decorator: Api::AccountRepresenter
 
+  link :image do
+    api_story_story_image_path(represented, represented.default_image.id) if represented.default_image
+  end
   property :default_image, as: :image, embedded: true, class: StoryImage, decorator: Api::ImageRepresenter
 
 # * Audio Files
-  collection :default_audio, as: :audio, embedded: true, class: AudioFile, decorator: Api::AudioFileRepresenter
-
-
-  link :self do 
-    api_story_path(represented)
+  links :audio do
+    represented.default_audio.collect{ |a| { href: api_audio_file_path(a), name: a.label } }
   end
+  collection :default_audio, as: :audio, embedded: true, class: AudioFile, decorator: Api::AudioFileRepresenter
 
   link :license do
     api_story_license_path(represented, represented.license.id)
@@ -73,7 +81,7 @@ class Api::StoryRepresenter < Roar::Decorator
 
 # * image(s)
   links :images do
-    represented.images.collect{ |a| { href: api_story_story_image_path(represented, a) } }
+    represented.images.collect{ |a| { href: api_story_story_image_path(represented, a) } } unless represented.images.empty?
   end
 
 end
