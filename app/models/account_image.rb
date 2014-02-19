@@ -16,16 +16,4 @@ class AccountImage < PRXModel
     file.try(:url, *v)
   end
 
-  # validates_presence_of :filename
-
-  # #file system for now, will quickly move this to s3 after stable
-  # has_attachment :storage => AppConfig.storage_backend,
-  #                :processor => :MiniMagick,
-  #                :content_type=>:image,
-  #                :max_size => 10.megabytes,
-  #                :path_prefix => 'public/account_images',
-  #                :thumbnails => { :square => '75x75', :small=>'120x120', :medium=>'240x240' }
-
-  # attr_accessible :thumbnail_resize_options, :content_type, :filename, :uploaded_data, :account, :account_id
-
 end

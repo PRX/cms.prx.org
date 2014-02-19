@@ -12,6 +12,7 @@ PRX::Application.routes.draw do
       resources :stories do
         resources :story_images, path: 'images'
         resources :musical_works
+        resources :licenses
       end
 
       resources :audio_versions

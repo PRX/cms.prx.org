@@ -5,7 +5,7 @@ require 'forwardable'
 class PagedCollection
   extend Forwardable
 
-  attr_accessor :items, :request
+  attr_accessor :items, :request, :item_class, :options
 
   def_delegators :request, :params
 
@@ -13,9 +13,22 @@ class PagedCollection
 
   alias_method :total, :total_count
 
-  def initialize(items, request)
-    self.items = items
+  def initialize(items, request, options={})
+    self.items   = items
     self.request = request
+    self.options = options
+  end
+
+  def item_class
+    options[:item_class] || self.items.first.class
+  end
+
+  def item_decorator
+    options[:item_decorator] || "Api::#{item_class.name}Representer".constantize
+  end
+
+  def url_helper
+    options[:url_helper] || "api_#{item_class.name.underscore.pluralize}_path"
   end
 
 end

@@ -49,11 +49,12 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "publish_notified_at"
     t.datetime "publish_on_valid_at"
     t.boolean  "publish_on_valid"
+    t.datetime "promos_only_at"
+    t.string   "episode_identifier"
   end
 
   add_index "pieces", ["account_id"], :name => "pieces_account_id_fk"
   add_index "pieces", ["creator_id"], :name => "pieces_creator_id_fk"
-  add_index "pieces", ["deleted_at"], :name => "deleted_at_idx"
   add_index "pieces", ["published_at"], :name => "by_published_at"
   add_index "pieces", ["series_id"], :name => "pieces_series_id_fk"
 
@@ -198,5 +199,17 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_index "piece_images", ["piece_id"], :name => "piece_images_piece_id_fk"
+
+  create_table "licenses", :force => true do |t|
+    t.integer  "piece_id"
+    t.string   "website_usage"
+    t.string   "allow_edit"
+    t.text     "additional_terms"
+    t.integer  "version_user_id"
+    t.integer  "version"
+    t.datetime "deleted_at"
+  end
+
+  add_index "licenses", ["piece_id"], :name => "licenses_piece_id_fk"
 
 end

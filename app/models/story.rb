@@ -11,6 +11,7 @@ class Story < PRXModel
   has_many :audio_files, through: :audio_versions
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
+  has_one :license, foreign_key: :piece_id
 
   acts_as_paranoid
 

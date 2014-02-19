@@ -31,10 +31,4 @@ class AudioFile < PRXModel
     File.basename(file.path)
   end
 
-  def update_file!(name)
-    filename_will_change!
-    raw_write_attribute(:filename, name)
-    save!
-  end
-
 end

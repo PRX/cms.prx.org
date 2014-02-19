@@ -1,6 +1,6 @@
 TestObject = Struct.new(:title)
 
-class Api::TestRepresenter < Roar::Decorator
+class Api::TestObjectRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
 
   property :title
@@ -14,13 +14,22 @@ class Api::TestRepresenter < Roar::Decorator
   end
 end
 
-class Api::TestsRepresenter < Roar::Decorator
-  include Api::PagedCollectionRepresenter
-
-  def api_tests_path(represented)
-    "/api/tests?page=#{represented[:page] || 1}"
+test_routes = Proc.new do
+  namespace :api do
+    resources :test_objects
   end
-
-  collection :items, as: :tests, embedded: true, class: TestObject, decorator: Api::TestRepresenter
 end
+Rails.application.routes.eval_block(test_routes)
+
+
+
+# class Api::TestsRepresenter < Roar::Decorator
+#   include Api::PagedCollectionRepresenter
+
+#   def api_tests_path(represented)
+#     "/api/tests?page=#{represented[:page] || 1}"
+#   end
+
+#   collection :items, as: :tests, embedded: true, class: TestObject, decorator: Api::TestRepresenter
+# end
 

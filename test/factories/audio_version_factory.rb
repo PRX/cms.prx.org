@@ -6,11 +6,13 @@ FactoryGirl.define do
     promos false
 
     ignore do
-      audio_files_count 1
+      audio_files_count 0 
     end
 
     after(:create) do |audio_version, evaluator|
-      FactoryGirl.create_list(:audio_file, evaluator.audio_files_count, audio_version: audio_version)
+      c = evaluator.audio_files_count
+      c = (rand(5) + 1) if (evaluator.audio_files_count == 0)
+      FactoryGirl.create_list(:audio_file, c, audio_version: audio_version)
     end
 
     factory :promos do

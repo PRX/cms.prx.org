@@ -14,7 +14,7 @@ class Api::MusicalWorkRepresenter < Roar::Decorator
   property :excerpt_length, as: :length
 
   link :self do 
-    api_story_path(represented)
+    api_story_musical_work_path(represented.story, represented)
   end
 
 end

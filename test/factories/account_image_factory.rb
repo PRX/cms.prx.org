@@ -3,5 +3,7 @@ FactoryGirl.define do
 
     account
 
+    after(:create) { |af| af.update_file!('test.png') }
+
   end
 end

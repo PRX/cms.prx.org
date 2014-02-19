@@ -58,6 +58,10 @@ class Api::StoryRepresenter < Roar::Decorator
     api_story_path(represented)
   end
 
+  link :license do
+    api_story_license_path(represented, represented.license.id)
+  end
+
 # * Musical Works
   link :musical_works do
     api_story_musical_works_path(represented)

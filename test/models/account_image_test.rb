@@ -8,4 +8,12 @@ describe AccountImage do
     AccountImage.table_name.must_equal 'account_images'
   end
 
+  it 'returns an owner' do
+    account_image.owner.must_be_instance_of Account
+  end
+
+  it 'has an url' do
+    account_image.url.must_match "/public/account_images/#{account_image.id}/test.png"
+  end
+
 end

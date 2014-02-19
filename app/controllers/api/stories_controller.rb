@@ -8,7 +8,8 @@ class Api::StoriesController < Api::BaseController
 
   def index
     @stories = Story.published.order(created_at: :desc).page(params[:page])
-    respond_with PagedCollection.new(@stories, request), represent_with: Api::StoriesRepresenter
+    # respond_with PagedCollection.new(@stories, request), represent_with: Api::StoriesRepresenter
+    respond_with PagedCollection.new(@stories, request)
   end
 
 end

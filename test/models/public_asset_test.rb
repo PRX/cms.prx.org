@@ -45,6 +45,10 @@ describe PublicAsset do
     defaults[:expires].must_equal 0
   end
 
+  it 'has a token secret' do    
+    bare_public_asset.token_secret.wont_be_nil
+  end
+
   it 'needs to have asset_url implemented' do
     proc{ bare_public_asset.asset_url}.must_raise NotImplementedError
   end
