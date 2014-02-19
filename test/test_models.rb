@@ -20,16 +20,3 @@ test_routes = Proc.new do
   end
 end
 Rails.application.routes.eval_block(test_routes)
-
-
-
-# class Api::TestsRepresenter < Roar::Decorator
-#   include Api::PagedCollectionRepresenter
-
-#   def api_tests_path(represented)
-#     "/api/tests?page=#{represented[:page] || 1}"
-#   end
-
-#   collection :items, as: :tests, embedded: true, class: TestObject, decorator: Api::TestRepresenter
-# end
-
