@@ -20,4 +20,4 @@ pickle-email-*.html
 .DS_Store
 
 # Ignore application configuration
-.env
+.env*
