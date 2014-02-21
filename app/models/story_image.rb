@@ -14,10 +14,6 @@ class StoryImage < PRXModel
     end
   end
 
-  def owner
-    story
-  end
-
   def url(options={})
     v = options[:version]
     v = nil if (v.blank? || v.to_s == 'original')

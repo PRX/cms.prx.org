@@ -7,7 +7,10 @@ class Account < PRXModel
   has_one :address, as: :addressable
   has_one :image, -> { where(parent_id: nil) }, class_name: 'AccountImage'
 
+  acts_as_paranoid
+
   scope :pending, -> { where status: :pending }
+  scope :active, -> { where status: :open }
 
 end
 

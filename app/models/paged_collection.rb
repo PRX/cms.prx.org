@@ -27,7 +27,7 @@ class PagedCollection
   end
 
   def url_helper
-    options[:url_helper] || "api_#{item_class.name.underscore.pluralize}_path"
+    options[:url_helper] #|| "api_#{item_class.name.underscore.pluralize}_path"
   end
 
 end

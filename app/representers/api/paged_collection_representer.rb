@@ -32,12 +32,12 @@ class Api::PagedCollectionRepresenter < Roar::Decorator
     represented.params
   end
 
-  def helper(*args)
-    self.send(url_helper, *args)
+  def helper(options={})
+    url_helper ? self.send(url_helper, options) : url_for(options.merge(only_path: true))
   end
 
   def url_helper
-    represented.try(:url_helper)
+    represented.try(:url_helper) 
   end
 
 end

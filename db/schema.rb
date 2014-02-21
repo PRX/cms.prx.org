@@ -212,4 +212,123 @@ ActiveRecord::Schema.define(version: 0) do
 
   add_index "licenses", ["piece_id"], :name => "licenses_piece_id_fk"
 
+  create_table "series", :force => true do |t|
+    t.integer  "account_id"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "short_description"
+    t.text     "description"
+    t.string   "frequency"
+    t.text     "production_notes"
+    t.integer  "creator_id"
+    t.datetime "deleted_at"
+    t.string   "file_prefix"
+    t.string   "time_zone"
+    t.integer  "episode_start_number"
+    t.datetime "episode_start_at"
+    t.string   "subscription_approval_status"
+    t.integer  "evergreen_piece_id"
+    t.integer  "due_before_hours"
+    t.datetime "prx_billing_at"
+    t.integer  "promos_days_early"
+    t.datetime "subauto_bill_me_at"
+  end
+
+  add_index "series", ["account_id"], :name => "index_series_on_account_id"
+
+  create_table "series_images", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "content_type"
+    t.string   "filename"
+    t.string   "thumbnail"
+    t.integer  "size"
+    t.integer  "width"
+    t.integer  "height"
+    t.float    "aspect_ratio"
+    t.integer  "series_id"
+    t.string   "caption"
+    t.string   "credit"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "series_images", ["series_id"], :name => "series_images_series_id_fk"
+
+  create_table "users", :force => true do |t|
+    t.string   "login"
+    t.string   "email"
+    t.string   "crypted_password",          :limit => 40
+    t.string   "salt",                      :limit => 40
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "remember_token"
+    t.datetime "remember_token_expires_at"
+    t.string   "activation_code",           :limit => 40
+    t.datetime "activated_at"
+    t.string   "password_reset_code",       :limit => 40
+    t.string   "first_name"
+    t.string   "last_name"
+    t.datetime "deleted_at"
+    t.datetime "migrated_at"
+    t.string   "old_password"
+    t.datetime "user_agreement_at"
+    t.datetime "subscribed_at"
+    t.string   "day_phone"
+    t.string   "eve_phone"
+    t.string   "im_name"
+    t.text     "bio"
+    t.integer  "account_id"
+    t.string   "title"
+    t.string   "favorite_shows"
+    t.string   "influences"
+    t.boolean  "available"
+    t.boolean  "has_car"
+    t.string   "will_travel"
+    t.string   "aired_on"
+    t.string   "im_service"
+    t.string   "role"
+    t.integer  "merged_into_user_id"
+    t.string   "time_zone"
+    t.string   "ftp_password"
+    t.integer  "daily_message_quota"
+    t.string   "category"
+  end
+
+  add_index "users", ["account_id"], :name => "index_users_on_account_id"
+
+  create_table "memberships", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "user_id"
+    t.text     "request"
+    t.boolean  "approved"
+    t.datetime "created_at"
+    t.string   "role"
+  end
+
+  create_table "musical_works", :force => true do |t|
+    t.integer "position"
+    t.integer "piece_id"
+    t.string  "title"
+    t.string  "artist"
+    t.string  "album"
+    t.string  "label"
+    t.integer "year"
+    t.integer "excerpt_length"
+  end
+
+  add_index "musical_works", ["piece_id"], :name => "musical_works_piece_id_fk"
+
+  create_table "producers", :force => true do |t|
+    t.integer  "piece_id"
+    t.integer  "user_id"
+    t.string   "name"
+    t.datetime "invited_at"
+    t.string   "email"
+    t.datetime "deleted_at"
+  end
+
+  add_index "producers", ["piece_id"], :name => "producers_piece_id_fk"
+  add_index "producers", ["user_id"], :name => "producers_user_id_fk"
+
 end

@@ -32,8 +32,8 @@ describe PagedCollection do
     paged_collection.item_decorator.must_equal(Api::TestObjectRepresenter)
   end
 
-  it 'has a url_helper' do
-    paged_collection.url_helper.must_equal 'api_test_objects_path'
-  end
+  # it 'has a url_helper' do
+  #   paged_collection.url_helper.must_equal 'api_test_objects_path'
+  # end
 
 end

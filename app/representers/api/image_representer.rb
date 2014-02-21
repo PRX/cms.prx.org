@@ -7,7 +7,7 @@ class Api::ImageRepresenter < Roar::Decorator
   property :url
 
   link :self do 
-    polymorphic_path([:api, represented.owner, represented])
+    polymorphic_path([:api, represented])
   end
 
 end

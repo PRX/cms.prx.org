@@ -12,4 +12,5 @@ class Api::AccountRepresenter < Roar::Decorator
   link :self do
     api_account_path(represented)
   end
+
 end

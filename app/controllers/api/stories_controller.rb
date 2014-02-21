@@ -2,13 +2,10 @@ class Api::StoriesController < Api::BaseController
 
   api_versions :v1
 
-  def show
-    respond_with Story.find(params[:id].to_i)
-  end
+  filter_resources_by :series_id, :account_id
 
-  def index
-    @stories = Story.published.order(created_at: :desc).page(params[:page])
-    respond_with PagedCollection.new(@stories, request)
+  def resources
+    @stories ||=  Story.published.order(created_at: :desc).page(params[:page])
   end
 
 end

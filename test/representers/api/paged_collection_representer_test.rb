@@ -8,7 +8,8 @@ describe Api::PagedCollectionRepresenter do
 
   let(:items)            { (0..25).collect{|t| TestObject.new("test #{t}") } }
   let(:paged_items)      { Kaminari.paginate_array(items).page(1).per(10) }
-  let(:paged_collection) { PagedCollection.new(paged_items, OpenStruct.new(params: {})) }
+  let(:request)          { OpenStruct.new(params: {"page"=>"1", "action"=>"index", "api_version"=>"v1", "controller"=>"api/test_objects", "format"=>"json"}) }
+  let(:paged_collection) { PagedCollection.new(paged_items, request) }
   let(:representer)      { Api::PagedCollectionRepresenter.new(paged_collection) }
   let(:json)             { JSON.parse(representer.to_json) }
 

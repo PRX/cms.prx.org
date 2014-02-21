@@ -15,4 +15,5 @@ class Api::AudioFileRepresenter < Roar::Decorator
   link :self do
     api_audio_file_path(represented)
   end
+
 end

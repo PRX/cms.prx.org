@@ -5,7 +5,6 @@ class Api::MusicalWorkRepresenter < Roar::Decorator
 
   property :id
   property :position
-  property :story_id
   property :title
   property :artist
   property :label
@@ -14,7 +13,7 @@ class Api::MusicalWorkRepresenter < Roar::Decorator
   property :excerpt_length, as: :length
 
   link :self do 
-    api_story_musical_work_path(represented.story, represented)
+    api_musical_work_path(represented)
   end
 
 end

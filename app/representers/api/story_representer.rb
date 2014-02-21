@@ -56,7 +56,7 @@ class Api::StoryRepresenter < Roar::Decorator
   property :account, embedded: true, class: Account, decorator: Api::AccountRepresenter
 
   link :image do
-    api_story_story_image_path(represented, represented.default_image.id) if represented.default_image
+    api_story_image_path(represented.default_image.id) if represented.default_image
   end
   property :default_image, as: :image, embedded: true, class: StoryImage, decorator: Api::ImageRepresenter
 
@@ -66,8 +66,14 @@ class Api::StoryRepresenter < Roar::Decorator
   end
   collection :default_audio, as: :audio, embedded: true, class: AudioFile, decorator: Api::AudioFileRepresenter
 
+  link :series do
+    { href: api_series_path(represented.series), name: represented.series.title } if represented.series_id
+  end
+  property :series, embedded: true, class: Series, decorator: Api::SeriesRepresenter
+
+# * Licensing terms
   link :license do
-    api_story_license_path(represented, represented.license.id)
+    api_license_path(represented.license.id) if represented.license
   end
 
 # * Musical Works
@@ -81,14 +87,13 @@ class Api::StoryRepresenter < Roar::Decorator
 
 # * image(s)
   links :images do
-    represented.images.collect{ |a| { href: api_story_story_image_path(represented, a) } } unless represented.images.empty?
+    represented.images.collect{ |a| { href: api_story_image_path(a) } } unless represented.images.empty?
   end
 
 end
 
 # TODO:
 # * List of Producers
-# * Licensing terms
 # * tags
 
 # WAIT:

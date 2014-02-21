@@ -9,7 +9,7 @@ class Api::LicenseRepresenter < Roar::Decorator
   property :additional_terms
 
   link :self do 
-    api_story_license_path(represented.story, represented)
+    api_license_path(represented)
   end
 
 end

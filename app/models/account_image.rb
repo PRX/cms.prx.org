@@ -6,10 +6,6 @@ class AccountImage < PRXModel
 
   mount_uploader :file, ImageUploader, mount_on: :filename
 
-  def owner
-    account.becomes(Account)
-  end
-
   def url(options={})
     v = options[:version]
     v = nil if (v.blank? || v.to_s == 'original')

@@ -10,4 +10,5 @@ class Api::AudioVersionRepresenter < Roar::Decorator
   link :self do
     api_audio_version_path(represented)
   end
+
 end
