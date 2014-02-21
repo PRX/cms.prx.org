@@ -10,6 +10,7 @@ describe Api::LicensesController do
   end
 
   it 'should list' do
+    license.id.wont_be_nil
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
   end

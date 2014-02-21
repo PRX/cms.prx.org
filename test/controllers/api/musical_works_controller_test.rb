@@ -10,6 +10,7 @@ describe Api::MusicalWorksController do
   end
 
   it 'should list' do
+    musical_work.id.wont_be_nil
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
   end
