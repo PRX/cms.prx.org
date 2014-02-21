@@ -56,7 +56,7 @@ class Api::BaseController < ApplicationController
   end
 
   def collection
-    PagedCollection.new(with_params(self.class.resources_params, resources), request, item_class: self.class.resource_class)
+    PagedCollection.new(with_params(self.class.resources_params, resources), request, item_class: self.class.resource_class, item_decorator: self.class.resource_representer )
   end
 
   def resources
