@@ -10,6 +10,7 @@ describe Api::AccountImagesController do
   end
 
   it 'should list' do
+    account_image.id.wont_be_nil
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
   end

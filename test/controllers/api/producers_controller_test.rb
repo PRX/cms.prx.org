@@ -10,6 +10,7 @@ describe Api::ProducersController do
   end
 
   it 'should list' do
+    producer.id.wont_be_nil
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
   end

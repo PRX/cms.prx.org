@@ -9,4 +9,10 @@ describe Api::AudioVersionsController do
     assert_response :success
   end
 
+  it 'should list' do
+    audio_version.id.wont_be_nil
+    get(:index, { api_version: 'v1', format: 'json' } )
+    assert_response :success
+  end
+
 end
