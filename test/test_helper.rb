@@ -28,4 +28,9 @@ end
 
 class MiniTest::Spec
   include FactoryGirl::Syntax::Methods
+
+  def extract_filename(uri)
+    URI.parse(uri).path.split('?')[0].split('/').last  
+  end
+
 end

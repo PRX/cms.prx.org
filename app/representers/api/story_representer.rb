@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::StoryRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
 
@@ -37,15 +39,9 @@ class Api::StoryRepresenter < Roar::Decorator
     represented.default_audio_version.try(:timing_and_cues)
   end
 
-# * Audio Files
-  collection :default_audio, as: :audio, embedded: true, class: AudioFile, decorator: Api::AudioFileRepresenter
-
-
   link :self do 
     api_story_path(represented)
   end
-
-end
 
 # * Producer Name (producing account?)
 # * Producing Account
@@ -54,15 +50,56 @@ end
 #   * Location
 #   * Photo
 #   * Social Media Links
-# * Producing Account's other Pieces (Doesn't make sense for right now)
-# * List of Producers
+  link :account do
+    { href: api_account_path(represented.account), name: represented.account.name }
+  end
+  property :account, embedded: true, class: Account, decorator: Api::AccountRepresenter
+
+  link :image do
+    api_story_image_path(represented.default_image.id) if represented.default_image
+  end
+  property :default_image, as: :image, embedded: true, class: StoryImage, decorator: Api::ImageRepresenter
+
+# * Audio Files
+  links :audio do
+    represented.default_audio.collect{ |a| { href: api_audio_file_path(a), name: a.label } }
+  end
+  collection :default_audio, as: :audio, embedded: true, class: AudioFile, decorator: Api::AudioFileRepresenter
+
+  link :series do
+    { href: api_series_path(represented.series), name: represented.series.title } if represented.series_id
+  end
+  property :series, embedded: true, class: Series, decorator: Api::SeriesRepresenter
 
 # * Licensing terms
-# * Musical Works
-# * tags
-# * image(s)
+  link :license do
+    api_license_path(represented.license.id) if represented.license
+  end
 
-# require castle integration
+# * Musical Works
+  link :musical_works do
+    api_story_musical_works_path(represented)
+  end
+
+  links :audio_versions do
+    represented.audio_versions.collect{ |a| { href: api_audio_version_path(a), name: a.label } }
+  end
+
+# * image(s)
+  links :images do
+    represented.images.collect{ |a| { href: api_story_image_path(a) } } unless represented.images.empty?
+  end
+
+end
+
+# TODO:
+# * List of Producers
+# * tags
+
+# WAIT:
+# * Producing Account's other Pieces (Doesn't make sense for right now)
+
+# requires castle integration
 # * Purchase Count
 # * Listen Count (don't know if this makes sense to have here)
 

@@ -1,6 +1,6 @@
 require 'test_helper'
-require 'test_models'
 require 'paged_collection'
+require 'test_models'
 
 describe PagedCollection do
 
@@ -9,7 +9,6 @@ describe PagedCollection do
   let(:paged_collection) { PagedCollection.new(paged_items, OpenStruct.new(params: {})) }
 
   it 'creates a paged collection' do
-    paged_collection = PagedCollection.new(paged_items, OpenStruct.new(params: {}))
     paged_collection.wont_be_nil
     paged_collection.items.wont_be_nil
     paged_collection.request.wont_be_nil
@@ -24,5 +23,17 @@ describe PagedCollection do
     paged_collection.items.total_count.must_equal 26
     paged_collection.total.must_equal 26
   end
+
+  it 'has an item_class' do
+    paged_collection.item_class.must_equal(TestObject)
+  end
+
+  it 'has an item_decorator' do
+    paged_collection.item_decorator.must_equal(Api::TestObjectRepresenter)
+  end
+
+  # it 'has a url_helper' do
+  #   paged_collection.url_helper.must_equal 'api_test_objects_path'
+  # end
 
 end

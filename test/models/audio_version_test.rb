@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe AudioVersion do
 
-  let(:audio_version) { FactoryGirl.create(:audio_version) }
+  let(:audio_version) { FactoryGirl.create(:audio_version, audio_files_count: 1) }
 
   it 'has a table defined' do
     AudioVersion.table_name.must_equal 'audio_versions'

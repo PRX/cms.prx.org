@@ -30,7 +30,7 @@ describe AudioFileUploader do
     extract_filename(uploader.url(:preview)).must_equal 'test_preview.mp3'
   end
 
-  it 'has a whitelist for audio only' do
+  it 'has a whitelist' do
     uploader.extension_white_list.must_include 'mp2'
   end
 

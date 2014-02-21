@@ -1,4 +1,6 @@
-module Api::PagedCollectionRepresenter
+# encoding: utf-8
+
+class Api::PagedCollectionRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
 
   property :count
@@ -24,20 +26,18 @@ module Api::PagedCollectionRepresenter
     helper(params.merge(page: represented.total_pages))
   end
 
+  collection :items, embedded: true, decorator: lambda{|*| item_decorator }, class: lambda{|*| item_class }
+
   def params
     represented.params
   end
 
-  def helper(*args)
-    self.send(url_helper, *args)
+  def helper(options={})
+    url_helper ? self.send(url_helper, options) : url_for(options.merge(only_path: true))
   end
 
   def url_helper
-    @_url_helper ||= (represented.try(:url_helper) || url_helper_method_from_class_name)
-  end
-
-  def url_helper_method_from_class_name
-    self.class.name.underscore.gsub(/_representer$/, '').gsub('/', '_') + '_path'
+    represented.try(:url_helper) 
   end
 
 end

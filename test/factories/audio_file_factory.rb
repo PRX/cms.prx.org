@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :audio_file do
 
-    association :audio_version, factory: :audio_version
+    audio_version
 
     length 60
 

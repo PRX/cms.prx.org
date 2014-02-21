@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # collect together values that work for the PRX economy
 # with the logic to come up with interesting info such as calculating the values for bonuses or something.
 class Economy

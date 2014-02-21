@@ -1,6 +1,6 @@
-require 'test_helper'
-SimpleCov.command_name 'test:representers'
+# encoding: utf-8
 
+require 'test_helper'
 require 'api' if !defined?(Api)
 
 describe Api::ApiRepresenter do

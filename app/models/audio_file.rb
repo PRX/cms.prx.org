@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class AudioFile < PRXModel
 
   include PublicAsset
@@ -27,12 +29,6 @@ class AudioFile < PRXModel
 
   def public_asset_filename
     File.basename(file.path)
-  end
-
-  def update_file!(name)
-    filename_will_change!
-    raw_write_attribute(:filename, name)
-    save!
   end
 
 end

@@ -1,7 +1,7 @@
 language: ruby
 rvm:
   - 2.0.0-p353
-env: TEST_DATABASE=prx_test RAILS_ENV=test
+env: TEST_DATABASE=prx_test RAILS_ENV=test RAILS_SECRET_KEY=secret AWS_BUCKET=travis AWS_ACCESS_KEY_ID=aaki AWS_SECRET_ACCESS_KEY=asak PUBLIC_ASSET_SECRET=secret
 bundler_args: --without development
 services: mysql
 before_script:
