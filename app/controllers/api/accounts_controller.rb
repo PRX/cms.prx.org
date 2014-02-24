@@ -4,4 +4,6 @@ class Api::AccountsController < Api::BaseController
 
   filter_resources_by :user_id
 
+  represent_with Api::AccountRepresenter
+
 end

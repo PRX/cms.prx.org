@@ -6,10 +6,13 @@ class Api::AudioFileRepresenter < Roar::Decorator
   property :id
   property :filename
   property :label
-  property :url, decorator_scope: true
+  property :length, as: :duration
   
-  def url
-    represented.public_url(version: :download, extension: 'mp3')
+  link :enclosure do
+    {
+      href: represented.public_url(version: :download, extension: 'mp3'),
+      type: 'audio/mpeg'
+    }
   end
 
   link :self do
