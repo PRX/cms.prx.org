@@ -4,6 +4,10 @@ class Api::StoriesController < Api::BaseController
 
   filter_resources_by :series_id, :account_id
 
+  def resource
+    @story ||= Story.published.find_by_id(params[:id])
+  end
+
   def resources
     @stories ||=  Story.published.order(created_at: :desc).page(params[:page])
   end
