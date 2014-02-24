@@ -31,7 +31,7 @@ describe PublicAsset do
   end
 
   it 'generates a public url' do
-    public_asset.public_url.must_equal "http://prx-backend.dev/pub/5033d06991dc5b69e38275253bfb3b24/0/web/test_public_asset/1/original/test.mp3"
+    public_asset.public_url.must_equal "/pub/5033d06991dc5b69e38275253bfb3b24/0/web/test_public_asset/1/original/test.mp3"
   end
   
   it 'sets default options' do
