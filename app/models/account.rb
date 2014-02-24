@@ -6,6 +6,7 @@ class Account < PRXModel
   # belongs_to :opener, class_name: 'User', foreign_key: 'opener_id', with_deleted: true
   has_one :address, as: :addressable
   has_one :image, -> { where(parent_id: nil) }, class_name: 'AccountImage'
+  belongs_to :opener, class_name: 'User', foreign_key: 'opener_id', with_deleted: true
 
   acts_as_paranoid
 
@@ -13,10 +14,3 @@ class Account < PRXModel
   scope :active, -> { where status: :open }
 
 end
-
-# * Producing Account
-#   * Name
-#   * Username
-#   * Location
-#   * Photo
-#   * Social Media Links

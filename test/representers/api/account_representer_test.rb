@@ -19,4 +19,12 @@ describe Api::AccountRepresenter do
     json['id'].must_equal account.id
   end
 
+  describe "individual accounts" do
+
+    let(:individual_account)  { FactoryGirl.create(:individual_account) }
+    let(:ia_representer) { Api::AccountRepresenter.new(account) }
+    let(:json)        { JSON.parse(representer.to_json) }
+
+  end
+
 end
