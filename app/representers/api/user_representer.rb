@@ -6,6 +6,7 @@ class Api::UserRepresenter < Roar::Decorator
   property :id
   property :first_name
   property :last_name
+  property :login
 
   link :self do
     api_user_path(represented)
