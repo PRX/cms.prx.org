@@ -297,6 +297,20 @@ ActiveRecord::Schema.define(version: 0) do
 
   add_index "users", ["account_id"], :name => "index_users_on_account_id"
 
+  create_table "user_images", :force => true do |t|
+    t.integer "parent_id"
+    t.string  "content_type"
+    t.string  "filename"
+    t.string  "thumbnail"
+    t.integer "size"
+    t.integer "width"
+    t.integer "height"
+    t.float   "aspect_ratio"
+    t.integer "user_id"
+  end
+
+  add_index "user_images", ["user_id"], :name => "user_images_user_id_fk"
+
   create_table "memberships", :force => true do |t|
     t.integer  "account_id"
     t.integer  "user_id"

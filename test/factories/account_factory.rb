@@ -1,9 +1,7 @@
 FactoryGirl.define do
-  factory :account do
+  factory :account, class: GroupAccount do
 
     name 'name'
-
-    opener
 
     address
 
@@ -15,8 +13,10 @@ FactoryGirl.define do
       FactoryGirl.create_list(:story, evaluator.stories_count, account: account)
     end
 
-    factory :individual_account do
-      type 'IndividualAccount'
+    factory :individual_account, class: IndividualAccount do
+
+      opener
+
     end
 
   end
