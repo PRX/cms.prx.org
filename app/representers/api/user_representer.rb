@@ -12,6 +12,10 @@ class Api::UserRepresenter < Roar::Decorator
     api_user_path(represented)
   end
 
+  link :accounts do
+    api_user_accounts_path(represented)
+  end
+
   link :image do
     api_user_image_path(represented.image) if represented.image
   end
