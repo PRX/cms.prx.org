@@ -2,11 +2,12 @@ TestObject = Struct.new(:title)
 
 class Api::TestObjectRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
-
+  include Api::UrlRepresenterHelper
   property :title
 
-  def api_tests_path(represented)
-    "/api/tests/#{represented.title}"
+  def api_tests_path(rep)
+    title = rep.respond_to?('[]') ? rep[:title] : rep.try(:title)
+    "/api/tests/#{title}"
   end
 
   link :self do

@@ -23,10 +23,15 @@ module Api::UrlRepresenterHelper
   def prx_model_uri(obj)
     name = if obj.is_a?(String) || obj.is_a?(Symbol)
       obj
-    elsif obj.is_a?(Class)
-      obj.name.underscore
     else
-      obj.class.name.underscore
+      klass = obj.is_a?(Class) ? obj : obj.class
+      if klass.respond_to?(:base_class) && (klass.base_class != klass)
+        base = klass.base_class.name.underscore
+        child = klass.name.underscore.gsub(/_#{base}$/, "")
+        "#{base}/#{child}"
+      else
+        klass.name.underscore
+      end
     end
 
     "http://meta.prx.org/model/#{name}"
