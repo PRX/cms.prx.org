@@ -15,6 +15,7 @@ class Api::AccountRepresenter < Roar::Decorator
   link :opener do
     api_user_path(represented.opener) if represented.opener
   end
+  property :opener, embedded: true, class: User, decorator: Api::UserRepresenter, if: -> { self.class == IndividualAccount }
 
   link :image do
     polymorphic_path(represented.image) if represented.image
