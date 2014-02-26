@@ -6,6 +6,7 @@ class Api::AudioFileRepresenter < Roar::Decorator
   property :id
   property :filename
   property :label
+  property :size
   property :length, as: :duration
   
   link :enclosure do
