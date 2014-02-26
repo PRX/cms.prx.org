@@ -21,14 +21,4 @@ class AudioFile < PRXModel
 
   mount_uploader :file, AudioFileUploader, mount_on: :filename
 
-  def asset_url(options={})
-    v = options[:version]
-    v = nil if (v.blank? || v.to_s == 'original')
-    file.try(:url, *v)
-  end
-
-  def public_asset_filename
-    File.basename(file.path)
-  end
-
 end

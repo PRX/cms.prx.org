@@ -4,8 +4,9 @@ class Api::AccountRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
 
   property :id
-  property :name
   property :type
+  property :name
+  property :path
 
   link :self do
     api_account_path(represented)
@@ -16,11 +17,10 @@ class Api::AccountRepresenter < Roar::Decorator
   end
   property :opener, embedded: true, class: User, decorator: Api::UserRepresenter, if: -> { self.class == IndividualAccount }
 
-
   link :image do
-    api_account_image_path(represented.image) if represented.image
+    polymorphic_path([:api, represented.image]) if represented.image
   end
-  property :image, embedded: true, class: AccountImage, decorator: Api::ImageRepresenter
+  property :image, embedded: true, class: Image, decorator: Api::ImageRepresenter
   
   link :address do
     api_address_path(represented.address) if represented.address

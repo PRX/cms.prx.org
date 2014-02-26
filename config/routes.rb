@@ -14,34 +14,36 @@ PRX::Application.routes.draw do
       resources :producers
       resources :series_images
       resources :story_images
+      resources :user_images
 
       resources :audio_versions do
         get 'audio_files',    to: 'audio_files#index'        
       end
 
       resources :stories do
-        get 'audio_versions', to: 'audio_versions#index'
         get 'audio_files',    to: 'audio_files#index'
+        get 'audio_versions', to: 'audio_versions#index'
+        get 'images',         to: 'story_images#index'
         get 'musical_works',  to: 'musical_works#index'
         get 'producers',      to: 'producers#index'
-        get 'images',         to: 'story_images#index'
       end
 
       resources :series do
-        get 'stories', to: 'stories#index'
-        get 'images',  to: 'series_images#index'
+        get 'images',         to: 'series_images#index'
+        get 'stories',        to: 'stories#index'
       end
 
       resources :accounts do
-        get 'images',      to: 'account_images#index'
-        get 'series',      to: 'series#index'
-        get 'stories',     to: 'stories#index'
-        get 'memberships', to: 'memberships#index'
+        get 'images',         to: 'account_images#index' # is this necessary when there is always one? - AK
+        get 'memberships',    to: 'memberships#index'
+        get 'series',         to: 'series#index'
+        get 'stories',        to: 'stories#index'
       end
 
       resources :users do
-        get 'accounts',    to: 'accounts#index'
-        get 'memberships', to: 'memberships#index'
+        get 'accounts',       to: 'accounts#index'
+        get 'images',         to: 'user_images#index'  # is this necessary when there is always one? - AK
+        get 'memberships',    to: 'memberships#index'
       end
 
     end
