@@ -8,7 +8,7 @@ class Api::AccountsController < Api::BaseController
     @accounts ||= if params[:user_id]
       User.find(params[:user_id]).accounts.order(created_at: :desc).page(params[:page])
     else
-      Account.active.membership.order(created_at: :desc).page(params[:page])
+      Account.active.member.order(created_at: :desc).page(params[:page])
     end
   end
 

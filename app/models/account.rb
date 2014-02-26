@@ -14,6 +14,6 @@ class Account < PRXModel
 
   scope :pending, -> { where status: :pending }
   scope :active, -> { where status: :open }
-  scope :membership,  -> { where type: ['StationAccount', 'GroupAccount'] }
+  scope :member,  -> { where type: ['StationAccount', 'GroupAccount'] }
 
 end
