@@ -49,13 +49,13 @@ describe PublicAsset do
     bare_public_asset.token_secret.wont_be_nil
   end
 
-  it 'needs to have asset_url implemented' do
-    proc{ bare_public_asset.asset_url}.must_raise NotImplementedError
-  end
+  # it 'needs to have asset_url implemented' do
+  #   proc{ bare_public_asset.asset_url}.must_raise NotImplementedError
+  # end
 
-  it 'needs to have public_asset_filename implemented' do
-    proc{ bare_public_asset.public_asset_filename }.must_raise NotImplementedError
-  end
+  # it 'needs to have public_asset_filename implemented' do
+  #   proc{ bare_public_asset.public_asset_filename }.must_raise NotImplementedError
+  # end
 
   it 'tests if valid' do    
     public_asset.public_url_valid?({}).must_equal false

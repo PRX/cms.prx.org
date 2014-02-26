@@ -38,15 +38,13 @@ module PublicAsset
   end
 
   def asset_url(options={})
-    # v = options[:version]
-    # v = nil if (v.blank? || v.to_s == 'original')
-    # file.try(:url, *v)
-    raise NotImplementedError.new("You must implement asset_url.")
+    v = options[:version]
+    v = nil if (v.blank? || v.to_s == 'original')
+    file.try(:url, *v)
   end
 
   def public_asset_filename
-    # File.basename(file.path)
-    raise NotImplementedError.new("You must implement public_asset_filename.")
+    File.basename(file.path)
   end
 
   def public_url_valid?(options={})
