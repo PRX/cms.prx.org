@@ -11,4 +11,8 @@ class Series < PRXModel
 
   acts_as_paranoid
 
+  def story_count
+    @story_count ||= self.stories.published.count
+  end
+
 end
