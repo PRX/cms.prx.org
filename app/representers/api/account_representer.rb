@@ -18,7 +18,11 @@ class Api::AccountRepresenter < Roar::Decorator
   property :opener, embedded: true, class: User, decorator: Api::UserRepresenter, if: -> { self.class == IndividualAccount }
 
   link :image do
-    polymorphic_path([:api, represented.image]) if represented.image
+    {
+      href:    polymorphic_path(represented.image),
+      name:    represented.image.filename,
+      profile: prx_model_uri(represented.image)
+    } if represented.image
   end
   property :image, embedded: true, class: Image, decorator: Api::ImageRepresenter
   

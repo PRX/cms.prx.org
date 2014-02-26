@@ -2,6 +2,7 @@
 
 class Api::StoryRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
+  include Api::UrlRepresenterHelper
 
   property :id
 
@@ -51,7 +52,11 @@ class Api::StoryRepresenter < Roar::Decorator
 #   * Photo
 #   * Social Media Links
   link :account do
-    { href: api_account_path(represented.account), name: represented.account.name }
+    {
+      href: api_account_path(represented.account),
+      name: represented.account.name,
+      profile: prx_model_uri(represented.account)
+    }
   end
   property :account, embedded: true, class: Account, decorator: Api::AccountRepresenter
 
