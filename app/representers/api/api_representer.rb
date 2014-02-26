@@ -25,4 +25,19 @@ class Api::ApiRepresenter < Roar::Decorator
     ]
   end
 
+  links :series do
+    [
+      {
+        profile:   prx_model_uri(:series),
+        href:      api_series_index_path_template(api_version: represented.version) + '{?page}',
+        templated: true
+      },
+      {
+        profile:   prx_model_uri(:series),
+        href:      api_series_path_template(api_version: represented.version, id: '{id}'),
+        templated: true
+      }
+    ]
+  end
+
 end

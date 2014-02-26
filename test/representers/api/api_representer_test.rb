@@ -21,6 +21,7 @@ describe Api::ApiRepresenter do
   it 'return root doc with links for an api version' do
     json['_links']['self']['href'].must_equal '/api/1.0'
     json['_links']['stories'].size.must_equal 2
+    json['_links']['series'].size.must_equal 2
   end
 
 end

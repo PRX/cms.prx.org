@@ -2,6 +2,7 @@
 
 class Api::AccountRepresenter < Roar::Decorator
   include Roar::Representer::JSON::HAL
+  include Api::UrlRepresenterHelper
 
   property :id
   property :type
@@ -13,13 +14,16 @@ class Api::AccountRepresenter < Roar::Decorator
   end
 
   link :opener do
-    api_user_path(represented.opener) if represented.opener
+    {
+      href: api_user_path(represented.opener),
+      name: represented.opener.login
+    } if represented.opener
   end
   property :opener, embedded: true, class: User, decorator: Api::UserRepresenter, if: -> { self.class == IndividualAccount }
 
   link :image do
     {
-      href:    polymorphic_path(represented.image),
+      href:    polymorphic_path([:api, represented.image]),
       name:    represented.image.filename,
       profile: prx_model_uri(represented.image)
     } if represented.image

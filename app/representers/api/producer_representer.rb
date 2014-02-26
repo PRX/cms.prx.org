@@ -12,7 +12,10 @@ class Api::ProducerRepresenter < Roar::Decorator
   end
 
   link :user do
-    {href: api_user_path(represented.user), name: represented.user.login } if represented.user_id
+    {
+      href: api_user_path(represented.user),
+      name: represented.user.login
+    } if represented.user
   end
 
 end
