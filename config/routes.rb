@@ -34,7 +34,7 @@ PRX::Application.routes.draw do
       end
 
       resources :accounts do
-        get 'images',         to: 'account_images#index'
+        get 'images',         to: 'account_images#index' # is this necessary when there is always one? - AK
         get 'memberships',    to: 'memberships#index'
         get 'series',         to: 'series#index'
         get 'stories',        to: 'stories#index'
@@ -42,7 +42,7 @@ PRX::Application.routes.draw do
 
       resources :users do
         get 'accounts',       to: 'accounts#index'
-        get 'images',         to: 'user_images#index'
+        get 'images',         to: 'user_images#index'  # is this necessary when there is always one? - AK
         get 'memberships',    to: 'memberships#index'
       end
 
