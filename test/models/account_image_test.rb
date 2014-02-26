@@ -8,8 +8,12 @@ describe AccountImage do
     AccountImage.table_name.must_equal 'account_images'
   end
 
-  it 'has an url' do
-    account_image.url.must_match "/public/account_images/#{account_image.id}/test.png"
+  it 'has an asset_url' do
+    account_image.asset_url.must_match "/public/account_images/#{account_image.id}/test.png"
+  end
+
+  it 'has an public_asset_filename' do
+    account_image.public_asset_filename.must_equal account_image.filename
   end
 
 end

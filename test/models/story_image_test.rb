@@ -1,15 +1,19 @@
 require 'test_helper'
 
-describe SeriesImage do
+describe StoryImage do
 
-  let(:series_image) { FactoryGirl.create(:series_image) }
+  let(:story_image) { FactoryGirl.create(:story_image) }
 
   it 'has a table defined' do
-    SeriesImage.table_name.must_equal 'series_images'
+    StoryImage.table_name.must_equal 'piece_images'
   end
 
-  it 'has an url' do
-    series_image.url.must_match "/public/series_images/#{series_image.id}/test.png"
+  it 'has an asset_url' do
+    story_image.asset_url.must_match "/public/piece_images/#{story_image.id}/test.png"
+  end
+
+  it 'has an public_asset_filename' do
+    story_image.public_asset_filename.must_equal story_image.filename
   end
 
 end
