@@ -19,6 +19,10 @@ describe Api::UrlRepresenterHelper do
     uri = "http://meta.prx.org/model/account/individual"
     helper.prx_model_uri(IndividualAccount).must_equal uri
     helper.prx_model_uri(IndividualAccount.new).must_equal uri
+
+    uri = "http://meta.prx.org/model/image/account"
+    helper.prx_model_uri(AccountImage).must_equal uri
+    helper.prx_model_uri(AccountImage.new).must_equal uri
   end
 
   it 'uses path template' do

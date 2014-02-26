@@ -25,8 +25,8 @@ module Api::UrlRepresenterHelper
       obj
     else
       klass = obj.is_a?(Class) ? obj : obj.class
-      if klass.respond_to?(:base_class) && (klass.base_class != klass)
-        base = klass.base_class.name.underscore
+      if klass.respond_to?(:base_class) && (klass.superclass != PRXModel)
+        base = klass.superclass.name.underscore
         child = klass.name.underscore.gsub(/_#{base}$/, "")
         "#{base}/#{child}"
       else
