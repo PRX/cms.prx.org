@@ -55,7 +55,7 @@ class Api::StoryRepresenter < Roar::Decorator
     {
       href: api_account_path(represented.account),
       name: represented.account.name,
-      profile: model_profile_uri(represented.account)
+      profile: prx_model_uri(represented.account)
     }
   end
   property :account, embedded: true, class: Account, decorator: Api::AccountRepresenter

@@ -20,9 +20,15 @@ module Api::UrlRepresenterHelper
     path
   end
 
-  def model_profile_uri(obj)
-    klass = obj.is_a?(Class) ? obj : obj.class
-    name = klass.name.underscore || ""
+  def prx_model_uri(obj)
+    name = if obj.is_a?(String) || obj.is_a?(Symbol)
+      obj
+    elsif obj.is_a?(Class)
+      obj.name.underscore
+    else
+      obj.class.name.underscore
+    end
+
     "http://meta.prx.org/model/#{name}"
   end
 

@@ -13,13 +13,13 @@ class Api::ApiRepresenter < Roar::Decorator
   links :stories do
     [
       {
-        profile: 'http://meta.prx.org/model/story',
-        href: api_stories_path_template(api_version: represented.version) + '{?page}',
+        profile:   prx_model_uri(:story),
+        href:      api_stories_path_template(api_version: represented.version) + '{?page}',
         templated: true
       },
       {
-        profile: 'http://meta.prx.org/model/story',
-        href: api_story_path_template(api_version: represented.version, id: '{id}'),
+        profile:   prx_model_uri(:story),
+        href:      api_story_path_template(api_version: represented.version, id: '{id}'),
         templated: true
       }
     ]
