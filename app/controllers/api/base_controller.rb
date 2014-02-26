@@ -71,8 +71,9 @@ class Api::BaseController < ApplicationController
   end
 
   def with_params(keys, arel)
-    where_hash = params.slice(keys || [])
-    where_hash[:piece_id] = where_hash.delete(:story_id) if where_hash.key?(:story_id)
+    keys ||= []
+    where_hash = params.slice(*keys)
+    where_hash['piece_id'] = where_hash.delete('story_id') if where_hash.key?('story_id')
     arel = arel.where(where_hash) unless where_hash.blank?
     arel
   end
@@ -89,4 +90,5 @@ class Api::BaseController < ApplicationController
       false
     end
   end
+
 end
