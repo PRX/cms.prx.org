@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class AudioFile < PRXModel
+class AudioFile < BaseModel
 
   include PublicAsset
 

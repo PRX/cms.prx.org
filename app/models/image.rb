@@ -1,4 +1,4 @@
-class Image < PRXModel
+class Image < BaseModel
 
   self.abstract_class = true
 

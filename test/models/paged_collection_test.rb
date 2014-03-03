@@ -24,6 +24,12 @@ describe PagedCollection do
     paged_collection.total.must_equal 26
   end
 
+  it 'can be a root resource from options' do
+    paged_collection.is_root_resource.must_equal false
+    paged_collection.options[:is_root_resource] = true
+    paged_collection.is_root_resource.must_equal true    
+  end
+
   it 'has an item_class' do
     paged_collection.item_class.must_equal(TestObject)
   end
@@ -31,9 +37,5 @@ describe PagedCollection do
   it 'has an item_decorator' do
     paged_collection.item_decorator.must_equal(Api::TestObjectRepresenter)
   end
-
-  # it 'has a url_helper' do
-  #   paged_collection.url_helper.must_equal 'api_test_objects_path'
-  # end
 
 end

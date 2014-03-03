@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class MusicalWork < PRXModel
+class MusicalWork < BaseModel
 
   belongs_to :story, class_name: 'Story', foreign_key: 'piece_id', with_deleted: true 
 

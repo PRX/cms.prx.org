@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Account < PRXModel
+class Account < BaseModel
 
   belongs_to :opener, class_name: 'User', foreign_key: 'opener_id', with_deleted: true
 

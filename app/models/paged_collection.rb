@@ -3,6 +3,7 @@
 require 'forwardable'
 
 class PagedCollection
+  extend ActiveModel::Naming
   extend Forwardable
 
   attr_accessor :items, :request, :options
@@ -18,8 +19,12 @@ class PagedCollection
     self.options = options
   end
 
+  def is_root_resource
+    !!self.options[:is_root_resource]
+  end
+
   def item_class
-    options[:item_class] || self.items.first.class
+    options[:item_class] || self.items.first.try(:item_class) || self.items.first.class
   end
 
   def item_decorator

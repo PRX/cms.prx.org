@@ -2,6 +2,8 @@
 
 class Api
 
+  extend ActiveModel::Naming
+
   def self.version(version)
     new(version)
   end
