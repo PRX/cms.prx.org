@@ -31,7 +31,14 @@ class Api::BaseController < ApplicationController
   end
 
   def show
-    respond_with resource, show_options
+    respond_with show_resource, show_options
+  end
+
+  def show_resource
+    res = self.resource
+    raise ActiveRecord::RecordNotFound.new unless res
+    res.is_root_resource = true
+    res
   end
 
   def resource
@@ -56,7 +63,7 @@ class Api::BaseController < ApplicationController
   end
 
   def collection
-    PagedCollection.new(with_params(self.class.resources_params, resources), request, item_class: self.class.resource_class, item_decorator: self.class.resource_representer )
+    PagedCollection.new(with_params(self.class.resources_params, resources), request, item_class: self.class.resource_class, item_decorator: self.class.resource_representer, is_root_resource: true )
   end
 
   def resources
