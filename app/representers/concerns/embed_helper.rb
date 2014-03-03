@@ -19,12 +19,14 @@ module EmbedHelper
 
   module Resources
 
-    # experimenting with detecting depth here
-    # and if the proprty is marked root only, don't include
-    # eventually, compare current depth to max depth option
+    # this doesn't do anything, just messing around and
+    # experimenting with detecting depth here.
+    # The thought was if the property is marked root only,
+    # don't include if at some lower depth.
+    # Eventually, compare current depth to max depth option
     def skip_property?(binding, options)
       embedded = binding.options[:embedded]
-      root_only = binding.options[:root_only]
+      # root_only = binding.options[:root_only]
       super(binding, options) #|| (embedded && root_only)
     end
   end
@@ -33,15 +35,15 @@ module EmbedHelper
 
     def embed(name, options={})
       options[:embedded] = true
-      options[:root_only] = true
-      # options[:if] ||= ->{ self.is_root_resource }
+      # options[:root_only] = true
+      options[:if] ||= ->{ self.is_root_resource }
       property(name, options)
     end
 
     def embeds(name, options={})
       options[:embedded] = true
-      options[:root_only] = true
-      # options[:if] ||= ->{ self.is_root_resource }
+      # options[:root_only] = true
+      options[:if] ||= ->{ self.is_root_resource }
       collection(name, options)
     end
 
