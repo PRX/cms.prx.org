@@ -1,25 +1,26 @@
 # encoding: utf-8
 
-class Api::ApiRepresenter < Roar::Decorator
-  include Roar::Representer::JSON::HAL
-  include Api::UrlRepresenterHelper
+class Api::ApiRepresenter < Api::BaseRepresenter
 
   property :version
 
-  link :self do
-    api_root_path(represented.version)
+  link(:self) { api_root_path(represented.version) }
+
+  links :story do
+    [
+      {
+        profile:   prx_model_uri(:story),
+        href:      api_story_path_template(api_version: represented.version, id: '{id}'),
+        templated: true
+      }
+    ]
   end
 
   links :stories do
     [
       {
-        profile:   prx_model_uri(:story),
+        profile:   prx_model_uri(:collection, :story),
         href:      api_stories_path_template(api_version: represented.version) + '{?page}',
-        templated: true
-      },
-      {
-        profile:   prx_model_uri(:story),
-        href:      api_story_path_template(api_version: represented.version, id: '{id}'),
         templated: true
       }
     ]
@@ -29,12 +30,12 @@ class Api::ApiRepresenter < Roar::Decorator
     [
       {
         profile:   prx_model_uri(:series),
-        href:      api_series_index_path_template(api_version: represented.version) + '{?page}',
+        href:      api_series_path_template(api_version: represented.version, id: '{id}'),
         templated: true
       },
       {
-        profile:   prx_model_uri(:series),
-        href:      api_series_path_template(api_version: represented.version, id: '{id}'),
+        profile:   prx_model_uri(:collection, :series),
+        href:      api_series_index_path_template(api_version: represented.version) + '{?page}',
         templated: true
       }
     ]

@@ -1,16 +1,11 @@
 # encoding: utf-8
 
-class Api::MembershipRepresenter < Roar::Decorator
-  include Roar::Representer::JSON::HAL
+class Api::MembershipRepresenter < Api::BaseRepresenter
 
   property :id
   property :role
   property :approved
   property :request
-
-  link :self do
-    api_membership_path(represented)
-  end
 
   link :account do
     api_account_path(represented.account)

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
-class Api::AddressRepresenter < Roar::Decorator
-  include Roar::Representer::JSON::HAL
+class Api::AddressRepresenter < Api::BaseRepresenter
 
   property :id
   property :street_1
@@ -11,9 +10,5 @@ class Api::AddressRepresenter < Roar::Decorator
   property :city
   property :state
   property :country
-
-  link :self do
-    api_address_path(represented)
-  end
-
+  
 end

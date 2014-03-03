@@ -1,13 +1,15 @@
 # encoding: utf-8
 
-class Api::PagedCollectionRepresenter < Roar::Decorator
-  include Roar::Representer::JSON::HAL
+class Api::PagedCollectionRepresenter < Api::BaseRepresenter
 
   property :count
   property :total
 
   link :self do
-    helper(params)
+    {
+      href:    helper(params),
+      profile: prx_model_uri(:collection, represented.item_class)
+    }
   end
 
   link :prev do
@@ -26,7 +28,7 @@ class Api::PagedCollectionRepresenter < Roar::Decorator
     helper(params.merge(page: represented.total_pages))
   end
 
-  collection :items, embedded: true, decorator: lambda{|*| item_decorator }, class: lambda{|*| item_class }
+  embeds :items, decorator: lambda{|*| item_decorator }, class: lambda{|*| item_class }
 
   def params
     represented.params

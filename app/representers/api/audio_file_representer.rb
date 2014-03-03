@@ -1,7 +1,6 @@
 # encoding: utf-8
 
-class Api::AudioFileRepresenter < Roar::Decorator
-  include Roar::Representer::JSON::HAL
+class Api::AudioFileRepresenter < Api::BaseRepresenter
 
   property :id
   property :filename
@@ -14,10 +13,6 @@ class Api::AudioFileRepresenter < Roar::Decorator
       href: represented.public_url(version: :download, extension: 'mp3'),
       type: 'audio/mpeg'
     }
-  end
-
-  link :self do
-    api_audio_file_path(represented)
   end
 
 end
