@@ -1,12 +1,6 @@
 class Api::BaseController < ApplicationController
   protect_from_forgery with: :null_session
 
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-
-  def record_not_found
-    render text: '{"error": "404 Not Found"}', status: 404
-  end
-
   class << self
 
     attr_accessor :understood_api_versions, :resource_class, :resources_params, :resource_representer
