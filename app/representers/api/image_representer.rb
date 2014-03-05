@@ -1,7 +1,6 @@
 # encoding: utf-8
 
-class Api::ImageRepresenter < Roar::Decorator
-  include Roar::Representer::JSON::HAL
+class Api::ImageRepresenter < Api::BaseRepresenter
 
   property :id
   property :filename
@@ -12,10 +11,6 @@ class Api::ImageRepresenter < Roar::Decorator
       href: represented.public_url,
       type: represented.content_type || 'image'
     }
-  end
-
-  link :self do 
-    polymorphic_path([:api, represented])
   end
 
 end

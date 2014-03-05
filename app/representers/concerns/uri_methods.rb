@@ -3,7 +3,7 @@
 require 'active_support/concern'
 
 # expects underlying model to have filename, class, and id attributes
-module Api::UrlRepresenterHelper
+module UriMethods
   extend ActiveSupport::Concern
 
   def method_missing(method_name, *args, &block)
@@ -20,21 +20,27 @@ module Api::UrlRepresenterHelper
     path
   end
 
-  def prx_model_uri(obj)
-    name = if obj.is_a?(String) || obj.is_a?(Symbol)
-      obj
+  def prx_model_uri(*args)    
+    "http://meta.prx.org/model/#{joined_names(args)}"
+  end
+
+  def joined_names(args)
+    args.collect{|arg| prx_model_uri_part_to_string(arg)}.flatten.compact.join("/")
+  end
+
+  def prx_model_uri_part_to_string(part)
+    if part.is_a?(String) || part.is_a?(Symbol)
+      part.to_s
     else
-      klass = obj.is_a?(Class) ? obj : obj.class
-      if klass.respond_to?(:base_class) && (klass.superclass != PRXModel)
+      klass = part.is_a?(Class) ? part : (part.try(:item_class) || part.class)
+      if klass.respond_to?(:base_class) && (klass.superclass != BaseModel)
         base = klass.superclass.name.underscore
         child = klass.name.underscore.gsub(/_#{base}$/, "")
-        "#{base}/#{child}"
+        [base, child]
       else
         klass.name.underscore
       end
     end
-
-    "http://meta.prx.org/model/#{name}"
   end
 
 end

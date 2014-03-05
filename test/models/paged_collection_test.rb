@@ -4,7 +4,7 @@ require 'test_models'
 
 describe PagedCollection do
 
-  let(:items)            { (0..25).collect{|t| TestObject.new("test #{t}") } }
+  let(:items)            { (0..25).collect{|t| TestObject.new("test #{t}", true) } }
   let(:paged_items)      { Kaminari.paginate_array(items).page(1).per(10) }
   let(:paged_collection) { PagedCollection.new(paged_items, OpenStruct.new(params: {})) }
 
@@ -24,6 +24,20 @@ describe PagedCollection do
     paged_collection.total.must_equal 26
   end
 
+  it 'has a stubbed request by default' do
+    paged_collection = PagedCollection.new([])
+    paged_collection.params.must_equal Hash.new
+  end
+
+  it 'will be a root resource be default' do
+    paged_collection.is_root_resource.must_equal true
+  end
+
+  it 'will be a root resource based on options' do
+    paged_collection.options[:is_root_resource] = false
+    paged_collection.is_root_resource.must_equal false
+  end
+
   it 'has an item_class' do
     paged_collection.item_class.must_equal(TestObject)
   end
@@ -32,8 +46,14 @@ describe PagedCollection do
     paged_collection.item_decorator.must_equal(Api::TestObjectRepresenter)
   end
 
-  # it 'has a url_helper' do
-  #   paged_collection.url_helper.must_equal 'api_test_objects_path'
-  # end
+  it 'has an url' do
+    paged_collection.options[:url] = "test"
+    paged_collection.url.must_equal "test"
+  end
+
+  it 'has a parent' do
+    paged_collection.options[:parent] = "test"
+    paged_collection.parent.must_equal "test"
+  end
 
 end

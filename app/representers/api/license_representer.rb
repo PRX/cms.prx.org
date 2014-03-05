@@ -1,15 +1,10 @@
 # encoding: utf-8
 
-class Api::LicenseRepresenter < Roar::Decorator
-  include Roar::Representer::JSON::HAL
+class Api::LicenseRepresenter < Api::BaseRepresenter
 
   property :id
   property :website_usage
   property :allow_edit
   property :additional_terms
-
-  link :self do 
-    api_license_path(represented)
-  end
 
 end

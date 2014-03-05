@@ -1,0 +1,76 @@
+# encoding: utf-8
+
+require 'active_support/concern'
+
+# expects underlying model to have filename, class, and id attributes
+module Embeds
+  extend ActiveSupport::Concern
+
+  included do
+    Representable::Mapper.send(:include, Embeds::Resources) if !Representable::Mapper.include?(Embeds::Resources)
+  end
+
+  module Resources
+
+    def skip_property?(binding, options)
+      super(binding, options) || suppress_embed?(binding, options)
+    end
+
+    # embed if zoomed
+    def suppress_embed?(binding, options)
+      name     = (binding.options[:as] || binding.name).to_s
+      embedded = !!binding.options[:embedded]
+
+      # not embedded, return false - nothing to suppress
+      return false if !embedded
+
+      # check if it should be zoomed, suppress if not
+      !embed_zoomed?(name, !!represented.try(:is_root_resource), binding.options[:zoom], options[:zoom_param])
+    end
+
+    def embed_zoomed?(name, is_root=false, zoom_def=false, zoom_param=nil)
+      # if the embed in the representer definition has `zoom: :always` defined
+      # always embed it, even if it is in another embed
+      return true if zoom_def == :always
+
+      # if this is not the root resource, skip all other embeds
+      return false unless is_root
+
+      # if this is the root doc, then look at zoom param, and zoom option in combination
+
+      # if there is no zoom specified in the request params (options)
+      # then embed based on the zoom option in the representer definition
+
+      # if there is a zoom specified in the request params (options)
+      # then do not zoom when this name is not in the request
+      zoom_param.nil? ? zoom_def : zoom_param.include?(name)
+    end
+
+  end
+
+  # Possible values for zoom option in the embed representer definition
+  # * false - will be zoomed only if in the root doc and in the zoom param
+  # * true - zoomed in root doc if no zoom_param, or if included in zoom_param
+  # * always - zoomed no matter what is in zoom param, and even if in embed
+  module ClassMethods
+
+    def embed(name, options={})
+      options[:embedded] = true
+
+      if options[:paged]
+        opts = {no_curies: true, item_class: options.delete(:item_class), url: options.delete(:url)}
+        options[:getter] ||= ->(*){ PagedCollection.new(self.send(name).page(1), nil, opts.merge({parent: self})) }
+        options[:decorator] = Api::PagedCollectionRepresenter
+      end
+
+      property(name, options)
+    end
+
+    def embeds(name, options={})
+      options[:embedded] = true
+      collection(name, options)
+    end
+
+  end
+
+end

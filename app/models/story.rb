@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Story < PRXModel
+class Story < BaseModel
 
   self.table_name = 'pieces'
 
@@ -12,6 +12,7 @@ class Story < PRXModel
   has_many :audio_versions, -> { where(promos: false).includes(:audio_files) }, foreign_key: :piece_id
   has_many :audio_files, through: :audio_versions
   has_many :producers
+  has_many :musical_works, -> { order(:position) }, foreign_key: :piece_id
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
@@ -30,18 +31,21 @@ class Story < PRXModel
   # lets us override the number of points
   event_attribute :has_custom_points_at
 
-  scope :published, -> { where('published_at is not null') }
+  # indicates the piece is not publically available, only to the network
+  event_attribute :network_only_at
+
+  scope :published, -> { where('published_at is not null and network_only_at is null') }
 
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)
   end
 
   def default_image
-    images.first
+    @default_image ||= images.first
   end
 
   def default_audio_version
-    @_default_audio_version ||= if promos_only?
+    @default_audio_version ||= if promos_only?
       promos
     else
       audio_versions.reject{|av| av.audio_files.size < 1 }.sort{|a, b| compare_versions(a,b) }.first
@@ -49,9 +53,13 @@ class Story < PRXModel
   end
 
   def default_audio
-    return [] unless default_audio_version
-    return [default_audio_version.audio_files.max_by{|af| af.length }] if default_audio_version.promos?
-    default_audio_version.audio_files
+    @default_audio ||= if !default_audio_version
+      []
+    elsif default_audio_version.promos?
+      [default_audio_version.audio_files.max_by{|af| af.length }]
+    else
+      default_audio_version.audio_files
+    end
   end
 
   def compare_versions(a,b)

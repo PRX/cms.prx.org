@@ -9,7 +9,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def resources
-    @stories ||=  Story.published.order(created_at: :desc).page(params[:page])
+    @stories ||=  Story.published.order(created_at: :desc).includes({audio_versions: [:audio_files]}, {account: [:image, :address, {opener:[:image]}]}, {series:[:image, :account]}, :images, :license).page(params[:page])
   end
 
 end

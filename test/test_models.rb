@@ -1,8 +1,8 @@
-TestObject = Struct.new(:title)
+TestObject = Struct.new(:title, :is_root_resource)
+TestObject.send(:extend, ActiveModel::Naming)
 
-class Api::TestObjectRepresenter < Roar::Decorator
-  include Roar::Representer::JSON::HAL
-  include Api::UrlRepresenterHelper
+class Api::TestObjectRepresenter < Api::BaseRepresenter
+
   property :title
 
   def api_tests_path(rep)
@@ -10,9 +10,6 @@ class Api::TestObjectRepresenter < Roar::Decorator
     "/api/tests/#{title}"
   end
 
-  link :self do
-    api_tests_path(represented)
-  end
 end
 
 test_routes = Proc.new do

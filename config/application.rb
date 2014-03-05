@@ -25,6 +25,8 @@ module PRX
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    config.autoload_paths += %W( #{config.root}/app/representers/concerns )
+
     # Disable the asset pipeline.
     config.assets.enabled = false
 
@@ -32,7 +34,7 @@ module PRX
       g.test_framework :mini_test, spec: true, fixture: false
     end
 
-    config.middleware.insert_before ActionDispatch::Static, Rack::Cors do
+    config.middleware.insert_before Rack::Sendfile, Rack::Cors do
       allow do
         origins '*'
         resource '/api/*', methods: [:get]

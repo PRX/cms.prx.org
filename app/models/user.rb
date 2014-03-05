@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class User < PRXModel
+class User < BaseModel
 
   belongs_to :default_account, class_name: 'Account', foreign_key: 'account_id', with_deleted: true
 

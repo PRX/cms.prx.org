@@ -1,12 +1,11 @@
 # encoding: utf-8
 
 require 'test_helper'
-require 'url_representer_helper' if !defined?(Api::UrlRepresenterHelper)
 
-describe Api::UrlRepresenterHelper do
+describe UriMethods do
 
-  let(:helper) { class TestUrlHelper; include Api::UrlRepresenterHelper; end.new }
-  let(:test_object) { TestObject.new("test") }
+  let(:helper) { class TestUriMethods; include UriMethods; end.new }
+  let(:test_object) { TestObject.new("test", true) }
   let(:representer) { Api::TestObjectRepresenter.new(test_object) }
 
   it 'creates a uri for a model' do
