@@ -4,7 +4,7 @@ require 'test_helper'
 
 describe Api::BaseRepresenter do
 
-  let(:test_object) { TestObject.new("test") }
+  let(:test_object) { TestObject.new("test", true) }
   let(:representer) { Api::BaseRepresenter.new(test_object) }
   let(:json)        { JSON.parse(representer.to_json) }
 

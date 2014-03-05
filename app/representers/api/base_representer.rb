@@ -3,9 +3,9 @@
 class Api::BaseRepresenter < Roar::Decorator
 
   include Roar::Representer::JSON::HAL
-  include UriHelper
-  include CurieHelper
-  include EmbedHelper
+  include UriMethods
+  include Curies
+  include Embeds
 
   curies(:prx) do
     [{ name: :prx, href: "http://meta.prx.org/relation/{rel}", templated: true }]
