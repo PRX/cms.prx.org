@@ -10,6 +10,10 @@ class Api
 
   attr_accessor :version
 
+  def show_curies
+    true
+  end
+
   def initialize(version)
     @version = version
   end

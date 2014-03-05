@@ -1,6 +1,12 @@
 class Api::BaseController < ApplicationController
   protect_from_forgery with: :null_session
 
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
+  def record_not_found
+    render text: '{"error": "404 Not Found"}', status: 404
+  end
+
   class << self
 
     attr_accessor :understood_api_versions, :resource_class, :resources_params, :resource_representer
@@ -55,7 +61,14 @@ class Api::BaseController < ApplicationController
   def show_options
     options = {}
     options[:represent_with] = self.class.resource_representer if self.class.resource_representer
+    options[:zoom_param] = zoom_param
     options
+  end
+
+  def zoom_param
+    zp = (params[:z] || params[:zoom])
+    return nil if zp.blank?
+    zp.split(',').map(&:strip).compact
   end
 
   def index
@@ -63,7 +76,7 @@ class Api::BaseController < ApplicationController
   end
 
   def collection
-    PagedCollection.new(with_params(self.class.resources_params, resources), request, item_class: self.class.resource_class, item_decorator: self.class.resource_representer, is_root_resource: true )
+    PagedCollection.new(with_params(self.class.resources_params, resources), request, item_class: self.class.resource_class, item_decorator: self.class.resource_representer)
   end
 
   def resources

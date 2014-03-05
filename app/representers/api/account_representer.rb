@@ -18,11 +18,11 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   link :image do
     {
       href:    polymorphic_path([:api, represented.image]),
-      title:    represented.image.filename,
+      title:   represented.image.filename,
       profile: prx_model_uri(represented.image)
     } if represented.image
   end
-  embed :image, class: Image, decorator: Api::ImageRepresenter
+  embed :image, class: Image, decorator: Api::ImageRepresenter, zoom: :always
   
   link :address do
     api_address_path(represented.address) if represented.address

@@ -13,14 +13,23 @@ class PagedCollection
 
   def_delegators :request, :params
 
-  def initialize(items, request, options={})
+  def initialize(items, request=nil, options=nil)
     self.items   = items
-    self.request = request
-    self.options = options
+    self.request = request || request_stub
+    self.options = options || {}
+    self.options[:is_root_resource] = true unless (self.options[:is_root_resource] == false)
+  end
+
+  def request_stub
+    OpenStruct.new(params: {})
   end
 
   def is_root_resource
     !!self.options[:is_root_resource]
+  end
+
+  def show_curies
+    is_root_resource && !options[:no_curies]
   end
 
   def item_class
@@ -31,8 +40,14 @@ class PagedCollection
     options[:item_decorator] || "Api::#{item_class.name}Representer".constantize
   end
 
-  def url_helper
-    options[:url_helper] #|| "api_#{item_class.name.underscore.pluralize}_path"
+  # url to use for the self:href, can be a string or proc
+  def url
+    options[:url]
+  end
+
+  # If this is an embedded collection, the parent will be set here for use in urls
+  def parent
+    options[:parent]
   end
 
 end

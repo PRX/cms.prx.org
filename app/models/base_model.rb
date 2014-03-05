@@ -11,6 +11,10 @@ class BaseModel < ActiveRecord::Base
     !!@is_root_resource
   end
 
+  def show_curies
+    is_root_resource
+  end
+
   def update_file!(name)
     filename_will_change!
     raw_write_attribute(:filename, name)

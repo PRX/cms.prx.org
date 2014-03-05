@@ -14,6 +14,6 @@ class Api::UserRepresenter < Api::BaseRepresenter
   link :image do
     api_user_image_path(represented.image) if represented.image
   end
-  embed :image, class: Image, decorator: Api::ImageRepresenter
+  embed :image, class: Image, decorator: Api::ImageRepresenter, zoom: :always
 
 end

@@ -12,6 +12,7 @@ class Story < BaseModel
   has_many :audio_versions, -> { where(promos: false).includes(:audio_files) }, foreign_key: :piece_id
   has_many :audio_files, through: :audio_versions
   has_many :producers
+  has_many :musical_works, -> { order(:position) }, foreign_key: :piece_id
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
