@@ -55,7 +55,7 @@ class Api::BaseController < ApplicationController
   def show_options
     options = {}
     options[:represent_with] = self.class.resource_representer if self.class.resource_representer
-    options[:zoom_param] = zoom_param
+    options[:_roar_zoom] = zoom_param
     options
   end
 

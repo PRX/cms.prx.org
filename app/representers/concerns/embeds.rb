@@ -25,7 +25,7 @@ module Embeds
       return false if !embedded
 
       # check if it should be zoomed, suppress if not
-      !embed_zoomed?(name, !!represented.try(:is_root_resource), binding.options[:zoom], options[:zoom_param])
+      !embed_zoomed?(name, !!represented.try(:is_root_resource), binding.options[:zoom], options[:_roar_zoom])
     end
 
     def embed_zoomed?(name, is_root=false, zoom_def=false, zoom_param=nil)

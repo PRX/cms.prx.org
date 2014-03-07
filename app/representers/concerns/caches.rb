@@ -19,14 +19,36 @@ module Caches
     undef_method :as_json
   end
 
-  def to_json(*args)
-    Rails.logger.debug "\nAK - #{self.class.name} to_json #{args.inspect}\n"
+  def to_json(options={})
+    options[:_roar_format] = :json
+    # Rails.logger.debug "\n\nAK - #{self.class.name} to_json #{options.inspect}\n\n"
+    super(options)
+  end
+
+  def create_representation_with(doc, options, format)
+
+    key = representer_cache_key(represented, options)
+
+    Rails.logger.debug "\n\nAK - cache key: #{key} for #{self.class.name} : #{options.inspect}\n\n"
+
+
+    # Rails.logger.debug "\n\nAK - #{self.class.name} create_representation_with #{options.inspect}\n\n"
     super
   end
 
-  def create_representation_with(*args)
-    Rails.logger.debug "\nAK - #{self.class.name} create_representation_with #{args.inspect}\n"
-    super
+  def representer_cache_key(obj, options)
+    cache_options = options.select{|k,v| k.to_s.starts_with?('_roar_') || representer_cache_key_options.include?(k.to_s)}
+
+    key_components = []
+    key_components << Rails.application.class.parent_name
+    key_components << self.class.name.underscore
+    key_components << obj
+    key_components << ActiveSupport::Cache.expand_cache_key(cache_options)
+    ActiveSupport::Cache.expand_cache_key(key_components)
+  end
+
+  def representer_cache_key_options
+    ['page']
   end
 
   # def create_representation_with(*args)
