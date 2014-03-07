@@ -19,7 +19,7 @@ gem 'fog'
 gem 'unf'
 gem 'capistrano', '~> 3.1'
 gem 'capistrano-rails', '~> 1.1'
-
+gem 'dotenv-rails'
 gem 'newrelic_rpm'
 
 group :doc do
@@ -28,7 +28,6 @@ group :doc do
 end
 
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'rake'
 
   gem 'minitest-rails'
