@@ -17,6 +17,8 @@ gem 'event_attribute'
 gem 'carrierwave'
 gem 'fog'
 gem 'unf'
+gem 'capistrano', '~> 3.1'
+gem 'capistrano-rails', '~> 1.1'
 
 gem 'newrelic_rpm'
 
