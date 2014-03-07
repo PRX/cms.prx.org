@@ -6,6 +6,7 @@ class Api::BaseRepresenter < Roar::Decorator
   include UriMethods
   include Curies
   include Embeds
+  include Caches
 
   curies(:prx) do
     [{ name: :prx, href: "http://meta.prx.org/relation/{rel}", templated: true }]

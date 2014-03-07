@@ -22,6 +22,9 @@ gem 'capistrano-rails', '~> 1.1'
 gem 'dotenv-rails'
 gem 'newrelic_rpm'
 
+gem 'rails-patch-json-encode'
+gem 'oj'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
