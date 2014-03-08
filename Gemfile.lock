@@ -111,6 +111,7 @@ GEM
       guard (~> 2.0)
       minitest (>= 3.0)
     hashie (2.0.5)
+    highline (1.6.21)
     hike (1.2.3)
     hooks (0.3.3)
     i18n (0.6.9)
@@ -261,6 +262,7 @@ DEPENDENCIES
   guard
   guard-bundler
   guard-minitest
+  highline
   kaminari
   minitest-rails
   minitest-reporters
