@@ -20,25 +20,32 @@ module UriMethods
     path
   end
 
-  def prx_model_uri(*args)    
+  def prx_model_uri(*args)
     "http://meta.prx.org/model/#{joined_names(args)}"
   end
 
   def joined_names(args)
-    args.collect{|arg| prx_model_uri_part_to_string(arg)}.flatten.compact.join("/")
+    ( Array(args.collect{|arg| prx_model_uri_part_to_string(arg)}) + 
+      prx_model_uri_suffix(args) ).flatten.compact.join("/")
+  end
+
+  def prx_model_uri_suffix(args)
+    represented = args.last
+    klass = represented.try(:item_decorator) || self.class
+    klass.name.deconstantize.underscore.dasherize.split('/')[1..-1] || []
   end
 
   def prx_model_uri_part_to_string(part)
     if part.is_a?(String) || part.is_a?(Symbol)
-      part.to_s
+      part.to_s.dasherize
     else
       klass = part.is_a?(Class) ? part : (part.try(:item_class) || part.class)
       if klass.respond_to?(:base_class) && (klass.superclass != BaseModel)
-        base = klass.superclass.name.underscore
-        child = klass.name.underscore.gsub(/_#{base}$/, "")
+        base = klass.superclass.name.underscore.dasherize
+        child = klass.name.underscore.gsub(/_#{base}$/, "").dasherize
         [base, child]
       else
-        klass.name.underscore
+        klass.name.underscore.dasherize
       end
     end
   end

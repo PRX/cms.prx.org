@@ -11,6 +11,7 @@ require "action_mailer/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env)
 
+
 module PRX
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -24,6 +25,10 @@ module PRX
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+
+    I18n.config.enforce_available_locales = true
+    config.i18n.enforce_available_locales = true
+    config.i18n.default_locale = :en
 
     config.autoload_paths += %W( #{config.root}/app/representers/concerns )
 

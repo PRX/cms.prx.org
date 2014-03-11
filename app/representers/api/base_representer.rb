@@ -3,6 +3,7 @@
 class Api::BaseRepresenter < Roar::Decorator
 
   include Roar::Representer::JSON::HAL
+  include FormatKeys
   include UriMethods
   include Curies
   include Embeds

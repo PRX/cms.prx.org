@@ -35,21 +35,23 @@ describe Embeds do
     mapper.suppress_embed?(binding, {}).must_equal true
 
     binding.options[:zoom] = false
-    mapper.suppress_embed?(binding, {_roar_zoom: ['prx:none']}).must_equal true
+    mapper.suppress_embed?(binding, {zoom: ['prx:none']}).must_equal true
   end
 
   it "when embed true, and zoom true, and root true, don't skip" do
     binding.options = {as: 't:test', embedded: true}
-    mapper.suppress_embed?(binding, {_roar_zoom: ['t:test']}).must_equal false
+    mapper.suppress_embed?(binding, {zoom: ['t:test']}).must_equal false
   end
 
-  it "when embed true, and zoom true, and root false, skip!" do
+  it "when embed true, and zoom true, and root false, don't skip!" do
     binding.options = {as: 't:test', embedded: true}
     mapper.represented.is_root_resource = false
-    mapper.suppress_embed?(binding, {_roar_zoom: ['t:test']}).must_equal true
+    mapper.suppress_embed?(binding, {zoom: ['t:none']}).must_equal true
+    mapper.suppress_embed?(binding, {zoom: ['t:test']}).must_equal false
 
-    binding.options[:zoom] = true
     mapper.suppress_embed?(binding, {}).must_equal true
+    binding.options[:zoom] = true
+    mapper.suppress_embed?(binding, {}).must_equal false
   end
 
   it "when zoom :always, do not skip" do

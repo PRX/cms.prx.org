@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.0'
 
+
 ## Model
 # Use mysql as the database for Active Record
 gem 'mysql2'
@@ -17,6 +18,7 @@ gem 'carrierwave'
 gem 'fog'
 gem 'unf'
 
+
 ## Controller
 # auth
 gem 'rack-cors', :require => 'rack/cors'
@@ -24,6 +26,9 @@ gem 'rack-cors', :require => 'rack/cors'
 # paging
 gem 'kaminari'
 
+# caching
+gem 'dalli' # perhaps only production?
+gem 'actionpack-action_caching'
 
 ## View
 # json handling

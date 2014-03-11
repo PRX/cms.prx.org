@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Api::UserRepresenter < Api::BaseRepresenter
+class Api::Min::UserRepresenter < Api::BaseRepresenter
 
   property :id
   property :first_name

@@ -8,6 +8,7 @@ module Caches
   extend ActiveSupport::Concern
 
   # Wrapper for string that is already json
+  # inspired by: http://grosser.it/2013/10/16/compiled-json-for-partially-cached-json-response-precompiled-handlebar-templates/
   class SerializedJson
     def initialize(s); @s = s; end
     def to_json(*args); @s; end
@@ -19,45 +20,41 @@ module Caches
     undef_method :as_json
   end
 
+  # Pass in an option for the format this is going `to_`
+  # used in caching the final string format of the obj
+  # rather than the intermediary `Hash`, a modest accelerant
   def to_json(options={})
-    options[:_roar_format] = :json
-    # Rails.logger.debug "\n\nAK - #{self.class.name} to_json #{options.inspect}\n\n"
+    options[:to_] = :json
     super(options)
   end
 
   def create_representation_with(doc, options, format)
-
-    key = representer_cache_key(represented, options)
-
-    Rails.logger.debug "\n\nAK - cache key: #{key} for #{self.class.name} : #{options.inspect}\n\n"
-
-
-    # Rails.logger.debug "\n\nAK - #{self.class.name} create_representation_with #{options.inspect}\n\n"
-    super
+    cache.fetch(cache_key(represented, options), cache_options) do
+      response = super(doc, options, format)
+      response = SerializedJson.new(MultiJson.dump(response)) if (options[:to_] == :json)
+      response
+    end
   end
 
-  def representer_cache_key(obj, options)
-    cache_options = options.select{|k,v| k.to_s.starts_with?('_roar_') || representer_cache_key_options.include?(k.to_s)}
-
-    key_components = []
-    key_components << Rails.application.class.parent_name
-    key_components << self.class.name.underscore
+  def cache_key(obj, options)
+    key_components = [cache_key_class_name]
+    key_components << (obj.try(:is_root_resource) ? 'r' : 'l')
     key_components << obj
-    key_components << ActiveSupport::Cache.expand_cache_key(cache_options)
+    key_components << options.select{|k,v| Array(options['_keys']).include?(k.to_s)}
+
     ActiveSupport::Cache.expand_cache_key(key_components)
   end
 
-  def representer_cache_key_options
-    ['page']
+  def cache
+    Rails.cache
   end
 
-  # def create_representation_with(*args)
-  #   SerializedJson.new('{ "_links": { "enclosure": { "href": "/pub/1b8544e498bebd7298fbf754cfc78325/0/web/user_image/6840/original/67joshualightshow50.jpg", "type": "image/pjpeg" }, "self": { "href": "/api/v1/user_images/6840", "profile": "http://meta.prx.org/model/image/user" } }, "filename": "67joshualightshow50.jpg", "id": 6840, "size": 33608 }')
-  # end
+  def cache_key_class_name
+    self.class.name.underscore.gsub(/_representer$/, "")
+  end
 
-  # def to_hash(*args)
-  #   Rails.logger.debug "\n#{self.class.name} to_hash #{args.inspect}\n"
-  #   super
-  # end
+  def cache_options
+    {race_condition_ttl: 10, expires_in: 1.hour, raw: true}
+  end
 
 end
