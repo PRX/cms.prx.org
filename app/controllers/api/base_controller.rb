@@ -24,6 +24,10 @@ class Api::BaseController < ApplicationController
     c.valid_params_for_action(:index).merge({_c: index_cache_path })
   }
 
+  caches_action :entrypoint, cache_path: ->(c){
+    {_c: Api.version(api_version).cache_key }
+  }
+
   def entrypoint
     respond_with Api.version(api_version)
   end

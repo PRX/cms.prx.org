@@ -22,6 +22,9 @@ class Api
     true
   end
 
+  def is_root_resource=(is_root)
+  end
+
   def show_curies
     true
   end
