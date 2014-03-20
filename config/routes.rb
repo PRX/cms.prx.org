@@ -1,7 +1,7 @@
 PRX::Application.routes.draw do
 
   namespace :api do
-    scope ':api_version', format: 'json', api_version: 'v1' do
+    scope ':api_version', format: 'hal', api_version: 'v1' do
 
       root to: 'base#entrypoint'
 

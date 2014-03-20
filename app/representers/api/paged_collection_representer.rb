@@ -11,6 +11,8 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
       profile: prx_model_uri(:collection, represented.item_class)
     }
   end
+  embeds :items, decorator: lambda{|*| item_decorator }, class: lambda{|*| item_class }, zoom: :always
+
 
   link :prev do
     href_url_helper(params.merge(page: represented.prev_page)) unless represented.first_page?
@@ -28,8 +30,6 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
     href_url_helper(params.merge(page: represented.total_pages))
   end
 
-  embeds :items, decorator: lambda{|*| item_decorator }, class: lambda{|*| item_class }, zoom: :always
-
   def params
     represented.params
   end
@@ -41,7 +41,6 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
   def href_url_helper(options={})
 
     if represented_url.nil?
-      # Rails.logger.debug("href_url_helper: #{options.inspect}, ")
       result = url_for(options.merge(only_path: true)) rescue nil
       result ||= polymorphic_path([:api, represented.parent, represented.item_class], options) if represented.parent
       result ||= polymorphic_path([:api, represented.item_class], options)

@@ -6,4 +6,13 @@ class Image < BaseModel
 
   mount_uploader :file, ImageUploader, mount_on: :filename
 
+  # not all the tables have these columns, story images do
+  def caption
+    self.try(:read_attribute, :caption)
+  end
+
+  def credit
+    self.try(:read_attribute, :caption)
+  end
+
 end

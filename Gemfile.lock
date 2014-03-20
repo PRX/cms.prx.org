@@ -18,6 +18,8 @@ GEM
       erubis (~> 2.7.0)
       rack (~> 1.5.2)
       rack-test (~> 0.6.2)
+    actionpack-action_caching (1.1.1)
+      actionpack (>= 4.0.0, < 5.0)
     activemodel (4.0.3)
       activesupport (= 4.0.3)
       builder (~> 3.1.0)
@@ -72,6 +74,7 @@ GEM
       simplecov (>= 0.7)
       term-ansicolor
       thor
+    dalli (2.7.0)
     debug_inspector (0.0.2)
     docile (1.1.3)
     dotenv (0.9.0)
@@ -111,6 +114,7 @@ GEM
       guard (~> 2.0)
       minitest (>= 3.0)
     hashie (2.0.5)
+    highline (1.6.21)
     hike (1.2.3)
     hooks (0.3.3)
     i18n (0.6.9)
@@ -144,10 +148,11 @@ GEM
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.8.0)
-    newrelic_rpm (3.7.2.195)
+    newrelic_rpm (3.7.3.199)
     nio4r (1.0.0)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
+    oj (2.5.5)
     polyglot (0.3.4)
     powerbar (1.0.11)
       ansi (~> 1.4.0)
@@ -172,6 +177,8 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.0.3)
       sprockets-rails (~> 2.0.0)
+    rails-patch-json-encode (0.0.1)
+      multi_json
     railties (4.0.3)
       actionpack (= 4.0.3)
       activesupport (= 4.0.3)
@@ -241,6 +248,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionpack-action_caching
   acts_as_list
   acts_as_paranoid!
   better_errors
@@ -250,6 +258,7 @@ DEPENDENCIES
   carrierwave
   codeclimate-test-reporter
   coveralls
+  dalli
   dotenv-rails
   event_attribute
   factory_girl_rails
@@ -258,15 +267,18 @@ DEPENDENCIES
   guard
   guard-bundler
   guard-minitest
+  highline
   kaminari
   minitest-rails
   minitest-reporters
   mysql2
   newrelic_rpm
+  oj
   pry-rails
   quiet_assets
   rack-cors
   rails (~> 4.0)
+  rails-patch-json-encode
   rake
   roar-rails
   sdoc

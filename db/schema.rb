@@ -103,6 +103,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.boolean  "promos"
     t.datetime "deleted_at"
     t.integer  "audio_version_template_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "audio_versions", ["piece_id"], :name => "audio_versions_piece_id_fk"
@@ -163,6 +165,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.string  "city"
     t.string  "state"
     t.string  "country"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "addresses", ["addressable_type", "addressable_id"], :name => "index_addresses_on_addressable_type_and_addressable_id"
@@ -177,6 +181,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "height"
     t.float   "aspect_ratio"
     t.integer "account_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "account_images", ["account_id"], :name => "account_images_account_id_fk"
@@ -208,6 +214,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer  "version_user_id"
     t.integer  "version"
     t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "licenses", ["piece_id"], :name => "licenses_piece_id_fk"
@@ -307,6 +315,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "height"
     t.float   "aspect_ratio"
     t.integer "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "user_images", ["user_id"], :name => "user_images_user_id_fk"
@@ -318,6 +328,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.boolean  "approved"
     t.datetime "created_at"
     t.string   "role"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "musical_works", :force => true do |t|
@@ -329,6 +341,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.string  "label"
     t.integer "year"
     t.integer "excerpt_length"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "musical_works", ["piece_id"], :name => "musical_works_piece_id_fk"
@@ -340,6 +354,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "invited_at"
     t.string   "email"
     t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "producers", ["piece_id"], :name => "producers_piece_id_fk"

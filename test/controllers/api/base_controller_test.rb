@@ -9,7 +9,7 @@ describe Api::BaseController do
 
   it "determines show action options for roar" do
     @controller.class.resource_representer = "rr"
-    @controller.show_options.must_equal({zoom_param: nil, represent_with: "rr"})
+    @controller.show_options[:represent_with].must_equal "rr"
   end
 
   it "can parse a zoom parameter" do

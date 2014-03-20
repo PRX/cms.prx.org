@@ -10,6 +10,18 @@ class Api
 
   attr_accessor :version
 
+  def cache_key
+    "api/#{version}-#{updated_at.utc.to_i}"
+  end
+
+  def updated_at
+    File.mtime(__FILE__)
+  end
+
+  def is_root_resource
+    true
+  end
+
   def show_curies
     true
   end
