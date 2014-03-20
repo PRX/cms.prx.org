@@ -1,7 +1,7 @@
 PRX::Application.routes.draw do
 
   namespace :api do
-    scope ':api_version', format: 'hal', api_version: 'v1' do
+    scope ':api_version', api_version: 'v1' do
 
       root to: 'base#entrypoint'
 
@@ -17,7 +17,7 @@ PRX::Application.routes.draw do
       resources :user_images
 
       resources :audio_versions do
-        get 'audio_files',    to: 'audio_files#index'        
+        get 'audio_files',    to: 'audio_files#index'
       end
 
       resources :stories do
