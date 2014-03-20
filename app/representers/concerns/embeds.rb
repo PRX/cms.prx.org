@@ -25,18 +25,14 @@ module Embeds
       return false if !embedded
 
       # check if it should be zoomed, suppress if not
-      !embed_zoomed?(name, !!represented.try(:is_root_resource), binding.options[:zoom], options[:zoom_param])
+      !embed_zoomed?(name, binding.options[:zoom], options[:zoom])
     end
 
-    def embed_zoomed?(name, is_root=false, zoom_def=false, zoom_param=nil)
+    def embed_zoomed?(name, zoom_def=false, zoom_param=nil)
       # if the embed in the representer definition has `zoom: :always` defined
       # always embed it, even if it is in another embed
+      # (this is really meant for collections where embedded items must be included)
       return true if zoom_def == :always
-
-      # if this is not the root resource, skip all other embeds
-      return false unless is_root
-
-      # if this is the root doc, then look at zoom param, and zoom option in combination
 
       # if there is no zoom specified in the request params (options)
       # then embed based on the zoom option in the representer definition
@@ -58,7 +54,7 @@ module Embeds
       options[:embedded] = true
 
       if options[:paged]
-        opts = {no_curies: true, item_class: options.delete(:item_class), url: options.delete(:url)}
+        opts = {no_curies: true, item_class: options.delete(:item_class), url: options.delete(:url), item_decorator: options.delete(:item_decorator)}
         options[:getter] ||= ->(*){ PagedCollection.new(self.send(name).page(1), nil, opts.merge({parent: self})) }
         options[:decorator] = Api::PagedCollectionRepresenter
       end

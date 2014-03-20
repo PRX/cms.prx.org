@@ -19,5 +19,8 @@ pickle-email-*.html
 .powder
 .DS_Store
 
+# Ignore developer notes
+/notes
+
 # Ignore application configuration
 .env*

@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'test_helper'
+require 'test_models'
 
 describe UriMethods do
 
@@ -9,7 +10,7 @@ describe UriMethods do
   let(:representer) { Api::TestObjectRepresenter.new(test_object) }
 
   it 'creates a uri for a model' do
-    uri = "http://meta.prx.org/model/test_object"
+    uri = "http://meta.prx.org/model/test-object"
     helper.prx_model_uri('test_object').must_equal uri
     helper.prx_model_uri(:test_object).must_equal uri
     helper.prx_model_uri(TestObject).must_equal uri

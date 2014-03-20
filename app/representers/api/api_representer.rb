@@ -9,8 +9,9 @@ class Api::ApiRepresenter < Api::BaseRepresenter
   links :story do
     [
       {
+        title:     "Get a single story",
         profile:   prx_model_uri(:story),
-        href:      api_story_path_template(api_version: represented.version, id: '{id}'),
+        href:      api_story_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
         templated: true
       }
     ]
@@ -19,8 +20,9 @@ class Api::ApiRepresenter < Api::BaseRepresenter
   links :stories do
     [
       {
+        title:     "Get a paged collection of stories",
         profile:   prx_model_uri(:collection, :story),
-        href:      api_stories_path_template(api_version: represented.version) + '{?page}',
+        href:      api_stories_path_template(api_version: represented.version) + '{?page,zoom}',
         templated: true
       }
     ]
@@ -29,13 +31,15 @@ class Api::ApiRepresenter < Api::BaseRepresenter
   links :series do
     [
       {
+        title:     "Get a single series",
         profile:   prx_model_uri(:series),
-        href:      api_series_path_template(api_version: represented.version, id: '{id}'),
+        href:      api_series_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
         templated: true
       },
       {
+        title:     "Get a paged collection of series",
         profile:   prx_model_uri(:collection, :series),
-        href:      api_series_index_path_template(api_version: represented.version) + '{?page}',
+        href:      api_series_index_path_template(api_version: represented.version) + '{?page,zoom}',
         templated: true
       }
     ]
