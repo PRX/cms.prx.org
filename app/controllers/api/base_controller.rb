@@ -4,6 +4,8 @@ class Api::BaseController < ApplicationController
 
   protect_from_forgery with: :null_session
 
+  before_action :set_accepts
+
   include ApiVersioning
   include HalActions
   include Roar::Rails::ControllerAdditions
@@ -24,6 +26,12 @@ class Api::BaseController < ApplicationController
 
   def entrypoint
     respond_with Api.version(api_version)
+  end
+
+  private
+
+  def set_accepts
+    request.format = :json if request.format == Mime::HTML
   end
 
 end
