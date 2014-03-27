@@ -13,7 +13,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def resources_base
-    Story.published.order(created_at: :desc).page(params[:page])
+    Story.published.order(published_at: :desc).page(params[:page])
   end
 
 end
