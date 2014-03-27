@@ -33,7 +33,6 @@ gem 'actionpack-action_caching'
 ## View
 # json handling
 gem 'roar-rails'
-gem 'rails-patch-json-encode'
 gem 'oj'
 
 
