@@ -45,4 +45,26 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     ]
   end
 
+  links :account do
+    [
+      {
+        title:     "Get a single account",
+        profile:   prx_model_uri(:account),
+        href:      api_account_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
+        templated: true
+      }
+    ]
+  end
+
+  links :accounts do
+    [
+      {
+        title:     "Get a paged collection of accounts",
+        profile:   prx_model_uri(:collection, :account),
+        href:      api_accounts_path_template(api_version: represented.version) + '{?page,zoom}',
+        templated: true
+      }
+    ]
+  end
+
 end

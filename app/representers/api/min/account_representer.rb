@@ -7,13 +7,10 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
   property :name
   property :path
 
-  link :opener do
-    {
-      href: api_user_path(represented.opener),
-      title: represented.opener.login
-    } if represented.opener
+  link :address do
+    api_address_path(represented.address) if represented.address
   end
-  embed :opener, class: User, decorator: Api::Min::UserRepresenter
+  embed :address, class: Address, decorator: Api::AddressRepresenter
 
   link :image do
     {
@@ -24,9 +21,17 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter, zoom: true
   
-  link :address do
-    api_address_path(represented.address) if represented.address
+  link :opener do
+    {
+      href: api_user_path(represented.opener),
+      title: represented.opener.login
+    } if represented.opener
   end
-  embed :address, class: Address, decorator: Api::AddressRepresenter
+  embed :opener, class: User, decorator: Api::Min::UserRepresenter
+
+  link :stories do
+    api_account_stories_path(represented)
+  end
+  embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
 
 end
