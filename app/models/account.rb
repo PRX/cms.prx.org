@@ -7,7 +7,7 @@ class Account < BaseModel
   has_one :address, as: :addressable
   has_one :image, -> { where(parent_id: nil) }, class_name: 'AccountImage'
 
-  has_many :stories
+  has_many :stories, -> { where('published_at is not null and network_only_at is null').order(published_at: :desc) }
   has_many :memberships
 
   acts_as_paranoid
