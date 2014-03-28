@@ -18,4 +18,8 @@ class IndividualAccount < Account
     opener.try(:address)
   end
 
+  def description
+    opener.try(:bio)
+  end
+
 end

@@ -6,6 +6,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   property :type
   property :name
   property :path
+  property :description
 
   link :address do
     api_address_path(represented.address) if represented.address
