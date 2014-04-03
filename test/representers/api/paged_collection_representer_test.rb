@@ -12,7 +12,6 @@ describe Api::PagedCollectionRepresenter do
   let(:paged_collection) { PagedCollection.new(paged_items, request, is_root_resource: true) }
   let(:representer)      { Api::PagedCollectionRepresenter.new(paged_collection) }
   let(:json)             { JSON.parse(representer.to_json) }
-  let(:account)          { FactoryGirl.create(:individual_account) }
 
   it 'creates a paged collection representer' do
     representer.wont_be_nil
