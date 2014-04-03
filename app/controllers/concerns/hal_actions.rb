@@ -7,12 +7,12 @@ module HalActions
 
   extend ActiveSupport::Concern
 
-  def show
-    respond_with show_resource, show_options
-  end
-
   def show_cache_path
     show_resource.updated_at.utc.to_i
+  end
+
+  def show
+    respond_with show_resource, show_options
   end
 
   def show_resource
@@ -33,17 +33,17 @@ module HalActions
     self.class.resource_class.name.underscore
   end
 
-  def valid_params_for_action(action)
-    p = params.slice(*self.class.valid_params_list(action)) || {}
-    p[:zoom] = zoom_param if zoom_param
-    p
-  end
-
   def show_options
     o = valid_params_for_action(:show)
     o[:_keys] = o.keys
     o[:represent_with] = self.class.resource_representer if self.class.resource_representer
     o
+  end
+
+  def valid_params_for_action(action)
+    p = params.slice(*self.class.valid_params_list(action)) || {}
+    p[:zoom] = zoom_param if zoom_param
+    p
   end
 
   def zoom_param
@@ -54,15 +54,6 @@ module HalActions
     }.call
   end
 
-  def index
-    respond_with index_collection, index_options
-  end
-
-  def index_options
-    o = valid_params_for_action(:index)
-    o[:_keys] = o.keys
-    o
-  end
 
   def index_cache_path
     index_resources = self.try(:resources_base) || resources
@@ -72,6 +63,10 @@ module HalActions
       item_class: self.class.resource_class,
       item_decorator: self.class.resource_representer
     ).cache_key
+  end
+
+  def index
+    respond_with index_collection, index_options
   end
 
   def index_collection
@@ -102,6 +97,12 @@ module HalActions
     arel
   end
 
+  def index_options
+    o = valid_params_for_action(:index)
+    o[:_keys] = o.keys
+    o
+  end
+
   module ClassMethods
 
     attr_accessor :resource_class, :resources_params, :resource_representer, :valid_params
@@ -125,6 +126,18 @@ module HalActions
 
     def valid_params_list(action)
       (valid_params || {})[action.to_sym]
+    end
+
+    def cache_options
+      {compress: true, expires_in: 1.hour, race_condition_ttl: 30}
+    end
+
+    def cache_api_action(action, options={})
+      options = cache_options.merge(options || {})
+      cache_path_method = options.delete(:cache_path_method) || "#{action}_cache_path"
+      options[:cache_path] = ->(c){ c.valid_params_for_action(action).merge({_c: self.send(cache_path_method) }) } if !options[:cache_path]
+
+      caches_action(action, options)
     end
 
   end

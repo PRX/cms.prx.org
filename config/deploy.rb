@@ -46,13 +46,18 @@ namespace :deploy do
 
   after :publishing, :restart
 
-  # after :restart, :clear_cache do
-  #   on roles(:web), in: :groups, limit: 3, wait: 10 do
-  #     # Here we can do anything such as:
-  #     # within release_path do
-  #     #   execute :rake, 'cache:clear'
-  #     # end
-  #   end
-  # end
+  desc "Flushes cache"
+  task :flush_cache do
+    on roles(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'cache:flush'
+        end
+      end
+    end
+  end
+
+  # not sure we always want to flush the cache
+  # after :restart, :flush_cache
 
 end
