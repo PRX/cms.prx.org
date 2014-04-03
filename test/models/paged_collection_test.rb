@@ -52,8 +52,10 @@ describe PagedCollection do
   end
 
   it 'has a parent' do
-    paged_collection.options[:parent] = "test"
-    paged_collection.parent.must_equal "test"
+    a = IndividualAccount.new
+    a.wont_be_instance_of Account
+    paged_collection.options[:parent] = a
+    paged_collection.parent.must_be_instance_of Account
   end
 
 end

@@ -12,6 +12,7 @@ describe Api::PagedCollectionRepresenter do
   let(:paged_collection) { PagedCollection.new(paged_items, request, is_root_resource: true) }
   let(:representer)      { Api::PagedCollectionRepresenter.new(paged_collection) }
   let(:json)             { JSON.parse(representer.to_json) }
+  let(:account)          { FactoryGirl.create(:individual_account) }
 
   it 'creates a paged collection representer' do
     representer.wont_be_nil
@@ -30,6 +31,12 @@ describe Api::PagedCollectionRepresenter do
   it 'gets a route url helper method' do
     representer.represented.options[:url] = "api_stories_path"
     representer.href_url_helper({page: 1}).must_equal "/api/v1/stories?page=1"
+  end
+
+  it 'gets a route url helper method with parent' do
+    representer.represented.options[:parent] = account
+    representer.represented.options[:item_class] = Story
+    representer.href_url_helper({page: 1}).must_equal "/api/v1/accounts/#{account.id}/stories?page=1"
   end
 
   it 'uses a lambda for a url method' do
