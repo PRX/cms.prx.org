@@ -59,7 +59,10 @@ class PagedCollection
 
   # If this is an embedded collection, the parent will be set here for use in urls
   def parent
-    options[:parent]
+    rep = options[:parent]
+    return rep unless rep.respond_to?(:becomes)
+    klass = rep.class.try(:base_class)
+    (klass && (klass != rep.class)) ? rep.becomes(klass) : rep
   end
 
 end

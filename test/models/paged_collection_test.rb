@@ -52,8 +52,20 @@ describe PagedCollection do
   end
 
   it 'has a parent' do
-    paged_collection.options[:parent] = "test"
-    paged_collection.parent.must_equal "test"
+
+    class TestFoo < ActiveRecord::Base
+      def self.columns
+        @columns ||= [];
+      end
+    end
+
+    class TestBar < TestFoo
+    end
+
+    a = TestBar.new
+    a.wont_be_instance_of TestFoo
+    paged_collection.options[:parent] = a
+    paged_collection.parent.must_be_instance_of TestFoo
   end
 
 end

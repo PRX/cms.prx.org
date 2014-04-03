@@ -39,7 +39,6 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
   # if it is a sym/string, but self does not respond to it, then just use that string
   # if it is a lambda, execute in the context against the represented.parent (if there is one) or represented
   def href_url_helper(options={})
-
     if represented_url.nil?
       result = url_for(options.merge(only_path: true)) rescue nil
       result ||= polymorphic_path([:api, represented.parent, represented.item_class], options) if represented.parent
