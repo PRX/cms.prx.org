@@ -34,9 +34,9 @@ describe Api::PagedCollectionRepresenter do
   end
 
   it 'gets a route url helper method with parent' do
-    representer.represented.options[:parent] = account
-    representer.represented.options[:item_class] = Story
-    representer.href_url_helper({page: 1}).must_equal "/api/v1/accounts/#{account.id}/stories?page=1"
+    representer.represented.options[:parent] = TestParent.new(1, true)
+    representer.represented.options[:item_class] = TestObject
+    representer.href_url_helper({page: 1}).must_equal "/api/test_parent/1/test_objects?page=1"
   end
 
   it 'uses a lambda for a url method' do
