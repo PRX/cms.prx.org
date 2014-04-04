@@ -16,17 +16,11 @@ class Api::BaseController < ApplicationController
   allow_params :show, :zoom
   allow_params :index, [:page, :zoom]
 
-  caches_action :show, cache_path: ->(c){
-    c.valid_params_for_action(:show).merge({_c: show_cache_path })
-  }
+  cache_api_action :show
 
-  caches_action :index, cache_path: ->(c){
-    c.valid_params_for_action(:index).merge({_c: index_cache_path })
-  }
+  cache_api_action :index
 
-  caches_action :entrypoint, cache_path: ->(c){
-    {_c: Api.version(api_version).cache_key }
-  }
+  caches_action :entrypoint, cache_path: ->(c){ {_c: Api.version(api_version).cache_key } }
 
   def entrypoint
     respond_with Api.version(api_version)

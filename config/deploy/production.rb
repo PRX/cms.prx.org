@@ -1,3 +1,5 @@
+set :rails_env, 'production'
+
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary
