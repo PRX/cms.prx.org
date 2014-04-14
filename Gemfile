@@ -71,7 +71,7 @@ group :development, :test do
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'
   gem "codeclimate-test-reporter", require: false
-  gem 'simplecov' #, '~> 0.7.1'
+  gem 'simplecov', '~> 0.7.1', require: false
   gem 'coveralls', require: false
 end
 

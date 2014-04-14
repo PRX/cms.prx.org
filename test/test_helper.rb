@@ -1,4 +1,5 @@
 ENV["RAILS_ENV"] = "test"
+require 'simplecov'
 
 if ENV['TRAVIS']
   require "codeclimate-test-reporter"
@@ -30,7 +31,7 @@ class MiniTest::Spec
   include FactoryGirl::Syntax::Methods
 
   def extract_filename(uri)
-    URI.parse(uri).path.split('?')[0].split('/').last  
+    URI.parse(uri).path.split('?')[0].split('/').last
   end
 
 end

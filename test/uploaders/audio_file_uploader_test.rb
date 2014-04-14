@@ -1,11 +1,10 @@
 require 'test_helper'
-SimpleCov.command_name 'test:uploaders'
 
 require 'audio_file'
 require 'audio_version'
 
 def extract_filename(uri)
-  URI.parse(uri).path.split('?')[0].split('/').last  
+  URI.parse(uri).path.split('?')[0].split('/').last
 end
 
 describe AudioFileUploader do
