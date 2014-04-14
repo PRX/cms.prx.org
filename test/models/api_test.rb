@@ -8,4 +8,5 @@ describe Api do
     api.version.must_equal '1.0'
   end
 
+
 end
