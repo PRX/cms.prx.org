@@ -1,21 +1,19 @@
 ENV["RAILS_ENV"] = "test"
 
-if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
-  p 'loading coverage'
-  require 'simplecov'
-end
-
+require 'simplecov' if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
 if ENV['TRAVIS']
-  require "codeclimate-test-reporter"
-  CodeClimate::TestReporter.start
+  require 'codeclimate-test-reporter'
+  SimpleCov.formatter = Class.new(SimpleCov.formatter) do
+    define_method :formatters do
+      @formatters ||= super() + [CodeClimate::TestReporter::Formatter]
+    end
+  end
 end
 
 require File.expand_path("../../config/environment", __FILE__)
 
 require "rails/test_help"
-
 require 'factory_girl'
-
 require "minitest/rails"
 require "minitest/reporters"
 require 'minitest/autorun'
