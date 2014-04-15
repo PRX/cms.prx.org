@@ -17,4 +17,10 @@ describe Api::ImageRepresenter do
     json['id'].must_equal image.id
   end
 
+  it 'gets the medium representation of an image' do
+    image.stub :public_url, ->(opts){ opts[:version] } do
+      json['_links']['enclosure']['href'].must_equal 'medium'
+    end
+  end
+
 end
