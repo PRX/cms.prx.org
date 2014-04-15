@@ -3,11 +3,10 @@ ENV["RAILS_ENV"] = "test"
 require 'simplecov' if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
 if ENV['TRAVIS']
   require 'codeclimate-test-reporter'
-  SimpleCov.formatter = Class.new(SimpleCov.formatter) do
-    define_method :formatters do
-      @formatters ||= super() + [CodeClimate::TestReporter::Formatter]
-    end
-  end
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+    SimpleCov.formatter,
+    CodeClimate::TestReporter::Formatter
+  ]
 end
 
 require File.expand_path("../../config/environment", __FILE__)
