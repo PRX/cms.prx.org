@@ -1,5 +1,8 @@
 ENV["RAILS_ENV"] = "test"
-require 'simplecov'
+
+if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
+  require 'simplecov'
+end
 
 if ENV['TRAVIS']
   require "codeclimate-test-reporter"

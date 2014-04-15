@@ -61,7 +61,7 @@ group :development do
 
   gem 'growl', require: false
   gem 'guard'
-  gem 'guard-minitest'
+  gem 'guard-minitest', github: 'chrisrhoden/guard-minitest', branch: 'feat/env_settings'
   gem 'guard-bundler'
   gem 'spring'
 end
