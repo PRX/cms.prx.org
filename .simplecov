@@ -1,5 +1,5 @@
 require 'coveralls'
-
+p 'loading from .simplecov file'
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter

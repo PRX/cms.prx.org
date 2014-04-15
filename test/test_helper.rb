@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 
 if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
+  p 'loading coverage'
   require 'simplecov'
 end
 
