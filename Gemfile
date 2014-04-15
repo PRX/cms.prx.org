@@ -61,7 +61,7 @@ group :development do
 
   gem 'growl', require: false
   gem 'guard'
-  gem 'guard-minitest'
+  gem 'guard-minitest', github: 'chrisrhoden/guard-minitest', branch: 'feat/env_settings'
   gem 'guard-bundler'
   gem 'spring'
 end
@@ -71,7 +71,7 @@ group :development, :test do
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'
   gem "codeclimate-test-reporter", require: false
-  gem 'simplecov' #, '~> 0.7.1'
+  gem 'simplecov', '~> 0.7.1', require: false
   gem 'coveralls', require: false
 end
 
