@@ -8,4 +8,4 @@ before_script:
   - mysqladmin create prx_test
 addons:
   code_climate:
-    repo_token: 78c896adecc52c38b7778a7e7b3c28193798a9fac704dddc3a506006b948e591
+    repo_token: ebfac87c9771363e81853bb34670f1da585f085a58e8199a6bd8813822f6ff14
