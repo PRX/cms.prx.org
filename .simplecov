@@ -1,9 +1,4 @@
-require 'coveralls'
-
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-]
+SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
 
 SimpleCov.use_merging true
 SimpleCov.merge_timeout 3600

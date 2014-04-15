@@ -1,10 +1,13 @@
 ENV["RAILS_ENV"] = "test"
 
 require 'simplecov' if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
+
 if ENV['TRAVIS']
   require 'codeclimate-test-reporter'
+  require 'coveralls'
   SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
     SimpleCov.formatter,
+    Coveralls::SimpleCov::Formatter,
     CodeClimate::TestReporter::Formatter
   ]
 end
