@@ -1,7 +1,19 @@
 language: ruby
 rvm:
   - 2.1.1
-env: TEST_DATABASE=prx_test RAILS_ENV=test RAILS_SECRET_KEY=secret AWS_BUCKET=travis AWS_ACCESS_KEY_ID=aaki AWS_SECRET_ACCESS_KEY=asak PUBLIC_ASSET_SECRET=secret
+install: travis_retry bin/wad
+env:
+  global:
+    - TEST_DATABASE=prx_test
+    - RAILS_ENV=test
+    - RAILS_SECRET_KEY=secret
+    - AWS_BUCKET=travis
+    - AWS_ACCESS_KEY_ID=aaki
+    - AWS_SECRET_ACCESS_KEY=asak
+    - PUBLIC_ASSET_SECRET=secret
+    - S3_REGION=us-east-1
+    - S3_BUCKET_NAME=prx-backend-wad
+    - secure: "Uv+2/zdfV8xUhiM9809au4dXGJMOn9fAmkQ99oM11uhsmx/6b+QwdfQdg5CLGlqR5oE6tmBnGd61dOfufHb+qmU3XHD9WBMeepYS+t2wuy1YP+GeyeyViAF7F5yjnuyUAc22I54fkS+ow2iii9S2etXTP2jyAYkDIsiiZQQPTgg="
 bundler_args: --without development
 services: mysql
 before_script:
