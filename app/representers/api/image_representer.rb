@@ -10,7 +10,7 @@ class Api::ImageRepresenter < Api::BaseRepresenter
 
   link :enclosure do
     {
-      href: represented.public_url,
+      href: represented.public_url(version: 'medium'),
       type: represented.content_type || 'image'
     }
   end
