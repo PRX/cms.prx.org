@@ -3,11 +3,9 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-begin
-  require 'minitest/rails/testing'
+begin; require 'minitest/rails/testing'; rescue LoadError; end
+if defined?(MiniTest::Rails::Testing)
   MiniTest::Rails::Testing.default_tasks << 'representers' << 'uploaders'
-rescue
-
 end
 
 PRX::Application.load_tasks
