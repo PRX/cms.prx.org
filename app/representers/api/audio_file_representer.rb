@@ -7,10 +7,10 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
   property :label
   property :size
   property :length, as: :duration
-  
+
   link :enclosure do
     {
-      href: represented.public_url(version: :download, extension: 'mp3'),
+      href: represented.public_url(version: :broadcast, extension: 'mp3'),
       type: 'audio/mpeg'
     }
   end
