@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Account < BaseModel
+  acts_as_paranoid
 
   belongs_to :opener, class_name: 'User', foreign_key: 'opener_id', with_deleted: true
 
@@ -9,8 +10,6 @@ class Account < BaseModel
 
   has_many :stories, -> { where('published_at is not null and network_only_at is null').order(published_at: :desc) }
   has_many :memberships
-
-  acts_as_paranoid
 
   scope :pending, -> { where status: :pending }
   scope :active, -> { where status: :open }

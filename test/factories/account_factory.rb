@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :account, class: GroupAccount do
+  factory :account, class: 'GroupAccount' do
 
     name 'name'
 
@@ -13,12 +13,12 @@ FactoryGirl.define do
       FactoryGirl.create_list(:story, evaluator.stories_count, account: account)
     end
 
-    factory :individual_account, class: IndividualAccount, aliases: [:default_account] do
+    factory :individual_account, class: 'IndividualAccount', aliases: [:default_account] do
       name 'individual'
     end
 
 
-    factory :individual_account_with_owner, class: IndividualAccount do
+    factory :individual_account_with_owner, class: 'IndividualAccount' do
       name 'individual with opener'
       opener
     end

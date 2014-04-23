@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.0'
+gem 'rails', '~> 4.1.0'
 
 
 ## Model
@@ -9,7 +9,7 @@ gem 'rails', '~> 4.0'
 gem 'mysql2'
 
 # ActiveRecord model additions
-gem 'acts_as_paranoid', github: 'byroot/rails3_acts_as_paranoid', branch: 'rails4.0'
+gem 'paranoia'
 gem 'acts_as_list'
 gem 'event_attribute'
 
@@ -76,18 +76,5 @@ group :development, :test do
 end
 
 group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]

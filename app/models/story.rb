@@ -2,6 +2,8 @@
 
 class Story < BaseModel
 
+  acts_as_paranoid
+
   self.table_name = 'pieces'
 
   belongs_to :account, with_deleted: true
@@ -16,8 +18,6 @@ class Story < BaseModel
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
-
-  acts_as_paranoid
 
   # indicates piece is published
   event_attribute :published_at
