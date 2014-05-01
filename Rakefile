@@ -3,9 +3,14 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-begin; require 'minitest/rails/testing'; rescue LoadError; end
-if defined?(MiniTest::Rails::Testing)
-  MiniTest::Rails::Testing.default_tasks << 'representers' << 'uploaders'
+PRX::Application.load_tasks
+
+Rails::TestTask.new("test:representers" => "test:prepare") do |t|
+  t.pattern = "test/representers/**/*_test.rb"
 end
 
-PRX::Application.load_tasks
+Rails::TestTask.new("test:uploaders" => "test:prepare") do |t|
+  t.pattern = "test/uploaders/**/*_test.rb"
+end
+
+Rake::Task["test:run"].enhance ["test:representers", "test:uploaders"]

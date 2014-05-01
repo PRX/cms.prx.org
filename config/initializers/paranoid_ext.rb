@@ -8,7 +8,7 @@ class ActiveRecord::Base
       new_scope = -> (o) {
         (scope ? scope.call(o) : self).unscope(where: column) }
       belongs_to_without_deleted(target, new_scope, options).tap do
-        column = reflect_on_association(target).klass.paranoia_column
+        column = reflect_on_association(target).klass.try(:paranoia_column) || column
       end
     else
       belongs_to_without_deleted(target, scope, options)
