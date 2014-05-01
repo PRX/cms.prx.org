@@ -13,11 +13,6 @@ module Caches
     def initialize(s); @s = s; end
     def to_json(*args); @s; end
     def to_s; @s; end
-
-    # ActiveSupport adds as_json to Object
-    # Oj will try to call this before to_json
-    # by undefining, lets Oj use to_json
-    undef_method :as_json
   end
 
   # Pass in an option for the format this is going `to_`
@@ -31,7 +26,7 @@ module Caches
   def create_representation_with(doc, options, format)
     cache.fetch(cache_key(represented, options), cache_options) do
       response = super(doc, options, format)
-      response = SerializedJson.new(MultiJson.dump(response)) if (options[:to_] == :json)
+      response = SerializedJson.new(response.to_json) if (options[:to_] == :json)
       response
     end
   end
