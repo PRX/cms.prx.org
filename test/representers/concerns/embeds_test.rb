@@ -16,10 +16,10 @@ EmbedsTest = Struct.new(:title)
 describe Embeds do
 
   let(:helper) { class TestUriMethods; include Embeds; end.new }
-  let(:object) { TestObject.new("test", true) }
+  let(:t_object) { TestObject.new("test", true) }
   let(:mapper) {
     m = TestEmbedsMapper.new
-    m.represented = object
+    m.represented = t_object
     m
   }
 

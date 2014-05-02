@@ -6,12 +6,12 @@ require 'test_models'
 describe Caches do
 
   let(:helper) { class TestCaches; include Caches; end.new }
-  let(:object) { TestObject.new("test", true) }
-  let(:representer) { Api::TestObjectRepresenter.new(object) }
+  let(:t_object) { TestObject.new("test", true) }
+  let(:representer) { Api::TestObjectRepresenter.new(t_object) }
 
   it 'creates a cache key for a model' do
     expect = "api/test_object/r/test/true/zoom/foo/bar/page/1"
-    key = representer.cache_key(object, { 'zoom' => ['foo', 'bar'], 'to_' => :json, 'page' => 1, '_keys' => ['zoom', 'page'] })
+    key = representer.cache_key(t_object, { 'zoom' => ['foo', 'bar'], 'to_' => :json, 'page' => 1, '_keys' => ['zoom', 'page'] })
     key.must_equal expect
   end
 

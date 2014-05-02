@@ -6,15 +6,15 @@ require 'test_models'
 describe UriMethods do
 
   let(:helper) { class TestUriMethods; include UriMethods; end.new }
-  let(:object) { TestObject.new("test", true) }
-  let(:representer) { Api::TestObjectRepresenter.new(object) }
+  let(:t_object) { TestObject.new("test", true) }
+  let(:representer) { Api::TestObjectRepresenter.new(t_object) }
 
   it 'creates a uri for a model' do
     uri = "http://meta.prx.org/model/test-object"
     helper.prx_model_uri('test_object').must_equal uri
     helper.prx_model_uri(:test_object).must_equal uri
     helper.prx_model_uri(TestObject).must_equal uri
-    helper.prx_model_uri(object).must_equal uri
+    helper.prx_model_uri(t_object).must_equal uri
 
     uri = "http://meta.prx.org/model/account/individual"
     helper.prx_model_uri(IndividualAccount).must_equal uri
