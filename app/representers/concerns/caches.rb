@@ -7,19 +7,6 @@ module Caches
 
   extend ActiveSupport::Concern
 
-  # Wrapper for string that is already json
-  # inspired by: http://grosser.it/2013/10/16/compiled-json-for-partially-cached-json-response-precompiled-handlebar-templates/
-  class SerializedJson
-    def initialize(s); @s = s; end
-    def to_json(*args); @s; end
-    def to_s; @s; end
-
-    # ActiveSupport adds as_json to Object
-    # Oj will try to call this before to_json
-    # by undefining, lets Oj use to_json
-    undef_method :as_json
-  end
-
   # Pass in an option for the format this is going `to_`
   # used in caching the final string format of the obj
   # rather than the intermediary `Hash`, a modest accelerant
@@ -31,7 +18,7 @@ module Caches
   def create_representation_with(doc, options, format)
     cache.fetch(cache_key(represented, options), cache_options) do
       response = super(doc, options, format)
-      response = SerializedJson.new(MultiJson.dump(response)) if (options[:to_] == :json)
+      response = Caches::SerializedJson.new(JSON.dump(response)) if (options[:to_] == :json)
       response
     end
   end
