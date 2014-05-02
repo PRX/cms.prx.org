@@ -6,7 +6,7 @@ require 'account' if !defined?(AudioFile)
 
 describe Api::AccountRepresenter do
 
-  let(:account)  { FactoryGirl.create(:account) }
+  let(:account)     { FactoryGirl.create(:account) }
   let(:representer) { Api::AccountRepresenter.new(account) }
   let(:json)        { JSON.parse(representer.to_json) }
 

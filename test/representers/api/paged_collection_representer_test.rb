@@ -32,6 +32,7 @@ describe Api::PagedCollectionRepresenter do
     representer.href_url_helper({page: 1}).must_equal "/api/v1/stories?page=1"
   end
 
+  # TODO Find out why this is broken
   it 'gets a route url helper method with parent' do
     define_routes
     representer.represented.options[:parent] = TestParent.new(1, true)
