@@ -19,13 +19,12 @@ describe Caches do
     representer.cache_key_class_name.must_equal 'api/test_object'
   end
 
-  it 'handles json strings for caching'
-  # do
-  #   test_string = {"key" => "value"}.to_json
-  #   test_string.to_json.must_equal "\"{\\\"key\\\":\\\"value\\\"}\""
-  #   sj = Caches::SerializedJson.new(test_string)
-  #   sj.to_json.must_equal test_string
-  # end
+  it 'handles json strings for caching' do
+    test_string = {"key" => "value"}.to_json
+    test_string.to_json.must_equal "\"{\\\"key\\\":\\\"value\\\"}\""
+    sj = Caches::SerializedJson.new(test_string)
+    sj.to_json.must_equal test_string
+  end
 
   it "adds a hint as to final format for cache optimizations" do
     options = {}
@@ -33,13 +32,12 @@ describe Caches do
     options[:to_].must_equal :json
   end
 
-  it 'caches regular representation when not hinted to be json'
-  # do
-  #   response = representer.create_representation_with({}, {}, Representable::Hash::PropertyBinding)
-  #   response.must_be_instance_of(Hash)
+  it 'caches regular representation when not hinted to be json' do
+    response = representer.create_representation_with({}, {}, Representable::Hash::PropertyBinding)
+    response.must_be_instance_of(Hash)
 
-  #   response = representer.create_representation_with({}, {to_: :json}, Representable::Hash::PropertyBinding)
-  #   response.must_be_instance_of(Caches::SerializedJson)
-  # end
+    response = representer.create_representation_with({}, {to_: :json}, Representable::Hash::PropertyBinding)
+    response.must_be_instance_of(Caches::SerializedJson)
+  end
 
 end
