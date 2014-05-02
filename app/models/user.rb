@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class User < BaseModel
+  acts_as_paranoid
 
   belongs_to :default_account, class_name: 'Account', foreign_key: 'account_id', with_deleted: true
 
@@ -11,8 +12,6 @@ class User < BaseModel
   has_many :memberships
   has_many :member_accounts, through: :memberships, source: :account
   has_many :producers
-
-  acts_as_paranoid
 
   def accounts
     Account.
