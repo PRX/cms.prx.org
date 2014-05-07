@@ -15,6 +15,7 @@ PRX::Application.routes.draw do
       resources :series_images
       resources :story_images
       resources :user_images
+      resources :picks
 
       resources :audio_versions do
         get 'audio_files',    to: 'audio_files#index'
@@ -44,6 +45,12 @@ PRX::Application.routes.draw do
         get 'accounts',       to: 'accounts#index'
         get 'images',         to: 'user_images#index'  # is this necessary when there is always one? - AK
         get 'memberships',    to: 'memberships#index'
+      end
+
+      resources :pick_lists do
+        resources :picks do
+          get 'stories',      to: 'stories#index'
+        end
       end
 
     end

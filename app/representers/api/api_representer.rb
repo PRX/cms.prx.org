@@ -67,4 +67,15 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     ]
   end
 
+  links :pick_list do
+    [
+      {
+        title:     "Get a single pick list",
+        profile:   prx_model_uri(:pick_list),
+        href:      api_pick_list_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
+        templated: true
+      }
+    ]
+  end
+
 end
