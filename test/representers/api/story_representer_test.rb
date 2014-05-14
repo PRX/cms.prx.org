@@ -17,4 +17,13 @@ describe Api::StoryRepresenter do
     json['id'].must_equal story.id
   end
 
+  it 'does not serialize a length property' do
+    json.keys.wont_include('length')
+  end
+
+  it 'serializes the length of the story as duration' do
+    story.length = 666
+    json['duration'].must_equal 666
+  end
+
 end
