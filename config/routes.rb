@@ -48,9 +48,7 @@ PRX::Application.routes.draw do
       end
 
       resources :pick_lists do
-        resources :picks do
-          get 'stories',      to: 'stories#index'
-        end
+        resources :picks
       end
 
     end
