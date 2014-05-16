@@ -3,10 +3,11 @@ FactoryGirl.define do
 
     label 'Audio Version'
     timing_and_cues 'Timing and cues'
+    content_advisory 'Content Advisory'
     promos false
 
     ignore do
-      audio_files_count 0 
+      audio_files_count 0
     end
 
     after(:create) do |audio_version, evaluator|
