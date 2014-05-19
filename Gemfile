@@ -68,7 +68,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'minitest-rails'
+  gem 'minitest-spec-rails'
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'
   gem "codeclimate-test-reporter", require: false
