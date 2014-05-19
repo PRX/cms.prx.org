@@ -27,6 +27,7 @@ require "minitest/pride"
 # require "minitest/rails/capybara"
 
 class ActiveSupport::TestCase
+  include FactoryGirl::Syntax::Methods
 end
 
 class MiniTest::Spec
