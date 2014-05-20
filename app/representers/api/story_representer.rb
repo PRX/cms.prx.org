@@ -37,7 +37,10 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   embed :series, class: Series, decorator: Api::Min::SeriesRepresenter, zoom: true
 
   link :image do
-    polymorphic_path([:api, represented.default_image]) if represented.default_image
+    {
+      href: polymorphic_path([:api, represented.default_image]),
+      profile: prx_model_uri(represented.default_image)
+    } if represented.default_image
   end
 
   embed :default_image, as: :image, decorator: Api::ImageRepresenter, zoom: true
