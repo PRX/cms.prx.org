@@ -62,6 +62,10 @@ class Story < BaseModel
     end
   end
 
+  def duration
+    default_audio_version.try(:length)
+  end
+
   def compare_versions(a,b)
     if a.audio_files.size == b.audio_files.size
       b.length <=> a.length

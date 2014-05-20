@@ -30,4 +30,9 @@ describe Story do
     story.default_image.wont_be_nil
   end
 
+  it 'pulls the duration from the default_audio_version' do
+    story.default_audio_version.stub(:length, 212) do
+      story.duration.must_equal 212
+    end
+  end
 end

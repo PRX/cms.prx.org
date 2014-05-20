@@ -22,8 +22,9 @@ describe Api::StoryRepresenter do
   end
 
   it 'serializes the length of the story as duration' do
-    story.length = 666
-    json['duration'].must_equal 666
+    story.stub(:duration, 212) do
+      json['duration'].must_equal 212
+    end
   end
 
 end
