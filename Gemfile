@@ -67,7 +67,7 @@ group :development do
   gem 'spring'
 end
 
-group :development, :test do
+group :test do
   gem 'minitest-spec-rails'
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'
