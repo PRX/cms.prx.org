@@ -14,7 +14,7 @@ PRX::Application.configure do
 
   # config.action_controller.perform_caching = true
   # config.cache_store = :mem_cache_store, *ENV['MEMCACHE_SERVERS'].split(',')
-  
+
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
 
@@ -29,5 +29,7 @@ PRX::Application.configure do
 
   config.action_mailer.default_url_options = { host: 'prx-backend.dev', protocol: 'http' }
   Rails.application.routes.default_url_options = { host: 'prx-backend.dev', protocol: 'http' }
+
+  STAFF_PICKS_LIST_ID = '30783'
 
 end

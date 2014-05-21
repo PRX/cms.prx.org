@@ -23,6 +23,12 @@ describe Api::ApiRepresenter do
     json['_links']['prx:story'].size.must_equal 1
     json['_links']['prx:stories'].size.must_equal 1
     json['_links']['prx:series'].size.must_equal 2
+    json['_links']['prx:pick-list'].size.must_equal 1
+    json['_links']['prx:pick-lists'].size.must_equal 1
+  end
+
+  it 'includes staff pick list in root doc' do
+    json['_links']['prx:staff-picks-list'].size.must_equal 1
   end
 
 end

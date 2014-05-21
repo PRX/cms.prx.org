@@ -78,4 +78,26 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     ]
   end
 
+  links :pick_lists do
+    [
+      {
+        title:     "Get a paged collection of pick lists",
+        profile:   prx_model_uri(:collection, :pick_list),
+        href:      api_pick_lists_path_template(api_version: represented.version) + '{?page,zoom}',
+        templated: true
+      }
+    ]
+  end
+
+  links :staff_picks_list do
+    [
+      {
+        title:    "Get the staff picks list",
+        profile:   prx_model_uri(:pick_list),
+        href:      api_pick_list_path_template(api_version: represented.version, id: STAFF_PICKS_LIST_ID) + '{?zoom}',
+        templated: true
+      }
+    ]
+  end
+
 end
