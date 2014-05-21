@@ -41,7 +41,7 @@ class Story < BaseModel
   end
 
   def default_image
-    @default_image ||= images.first
+    @default_image ||= images.first || series.try(:image)
   end
 
   def default_audio_version

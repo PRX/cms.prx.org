@@ -1,10 +1,8 @@
 require 'test_helper'
-require 'story'
 
 describe Story do
 
   let(:story) { build_stubbed(:story_with_audio, audio_versions_count: 10) }
-
   let(:story_promos_only) { build_stubbed(:story_promos_only) }
 
   it 'has a table defined' do
@@ -26,8 +24,28 @@ describe Story do
     story.points.must_equal 10
   end
 
-  it "has default image" do
-    story.default_image.wont_be_nil
+  describe '#default_image' do
+
+    it 'returns the first image when one is present' do
+      story.stub(:images, [:image, :second_image]) do
+        story.default_image.must_equal :image
+      end
+    end
+
+    it 'returns nil when no image is present' do
+      story.stub(:images, []) do
+        story.default_image.must_equal nil
+      end
+    end
+
+    it 'falls back to series image when present' do
+      series = build_stubbed(:series, image: build_stubbed(:series_image))
+      story.images = []
+      story.stub(:series, series) do
+        story.default_image.must_equal series.image
+      end
+    end
+
   end
 
   it 'pulls the duration from the default_audio_version' do
