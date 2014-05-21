@@ -26,15 +26,6 @@ describe Api::StoryRepresenter do
     json['duration'].must_equal 666
   end
 
-  it 'takes content advisory from audio version' do
-    json['contentAdvisory'].must_equal story.default_audio_version.content_advisory
-  end
-
-  it 'produces a null content advisory when there is no default audio version' do
-    story.audio_versions = []
-    json['contentAdvisory'].must_be_nil
-  end
-
   it 'serializes the default image' do
     image = create(:story_image)
     story.stub(:default_image, image) do

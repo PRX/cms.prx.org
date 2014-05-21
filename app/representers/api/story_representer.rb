@@ -12,16 +12,8 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :points
   property :related_website
   property :broadcast_history
-  property :timing_and_cues, decorator_scope: true
-  property :content_advisory, decorator_scope: true
-
-  def timing_and_cues
-    represented.default_audio_version.try(:timing_and_cues)
-  end
-
-  def content_advisory
-    represented.default_audio_version.try(:content_advisory)
-  end
+  property :timing_and_cues
+  property :content_advisory
 
   # default zoom
   link :account do

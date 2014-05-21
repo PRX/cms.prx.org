@@ -25,6 +25,27 @@ describe Story do
     story.points.must_equal 10
   end
 
+  it 'has a content advisory from the default audio version' do
+    story.content_advisory.must_equal story.default_audio_version.content_advisory
+  end
+
+  it 'produces a nil content advisory when there is no default audio version' do
+    story.stub(:default_audio_version, nil) do
+      story.content_advisory.must_be_nil
+    end
+  end
+
+
+  it 'has timing and cues from the default audio version' do
+    story.timing_and_cues.must_equal story.default_audio_version.timing_and_cues
+  end
+
+  it 'produces a nil timing and cues when there is no default audio version' do
+    story.stub(:default_audio_version, nil) do
+      story.timing_and_cues.must_be_nil
+    end
+  end
+
   describe '#default_image' do
 
     it 'returns the first image when one is present' do

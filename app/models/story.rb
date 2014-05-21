@@ -70,4 +70,12 @@ class Story < BaseModel
     end
   end
 
+  def timing_and_cues
+    default_audio_version.try(:timing_and_cues)
+  end
+
+  def content_advisory
+    default_audio_version.try(:content_advisory)
+  end
+
 end
