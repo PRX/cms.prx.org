@@ -62,13 +62,13 @@ group :development do
 
   gem 'growl', require: false
   gem 'guard'
-  gem 'guard-minitest', github: 'chrisrhoden/guard-minitest', branch: 'feat/env_settings'
+  gem 'guard-minitest'
   gem 'guard-bundler'
   gem 'spring'
 end
 
-group :development, :test do
-  gem 'minitest-rails'
+group :test do
+  gem 'minitest-spec-rails'
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'
   gem "codeclimate-test-reporter", require: false
