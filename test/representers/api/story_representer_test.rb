@@ -48,4 +48,18 @@ describe Api::StoryRepresenter do
     end
   end
 
+  it 'includes a content advisory' do
+    sigil = 'sigil'
+    story.stub(:content_advisory, sigil) do
+      json['contentAdvisory'].must_equal sigil
+    end
+  end
+
+  it 'includes timing and cues' do
+    sigil = 'sigil'
+    story.stub(:content_advisory, sigil) do
+      json['contentAdvisory'].must_equal sigil
+    end
+  end
+
 end
