@@ -3,8 +3,8 @@ FactoryGirl.define do
 
     account
 
-    after(:create) do |picklist, evaluator|
-      FactoryGirl.create_list(:playlist_section, 2, pick_list: picklist)
+    after(:create, :stub) do |picklist, evaluator|
+      create_list(:playlist_section, 2, pick_list: picklist)
     end
 
   end
