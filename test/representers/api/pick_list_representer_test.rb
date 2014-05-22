@@ -1,6 +1,6 @@
 describe Api::PickListRepresenter do
 
-  let(:pick_list)   { FactoryGirl.create(:pick_list) }
+  let(:pick_list)   { create(:pick_list) }
   let(:representer) { Api::PickListRepresenter.new(pick_list) }
   let(:json)        { JSON.parse(representer.to_json) }
 
