@@ -94,7 +94,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:    "Get the staff picks list",
         profile:   prx_model_uri(:pick_list),
-        href:      api_pick_list_path_template(api_version: represented.version, id: STAFF_PICKS_LIST_ID) + '{?zoom}',
+        href:      api_pick_list_path_template(api_version: represented.version, id: ENV['STAFF_PICKS_LIST_ID']) + '{?zoom}',
         templated: true
       }
     ]

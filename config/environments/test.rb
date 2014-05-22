@@ -38,5 +38,4 @@ PRX::Application.configure do
   config.action_mailer.default_url_options = { host: 'prx-backend.dev', protocol: 'http' }
   Rails.application.routes.default_url_options = { host: 'prx-backend.dev', protocol: 'http' }
 
-  STAFF_PICKS_LIST_ID = '30783'
 end
