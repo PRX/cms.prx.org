@@ -15,7 +15,6 @@ PRX::Application.routes.draw do
       resources :series_images
       resources :story_images
       resources :user_images
-      resources :picks
 
       resources :audio_versions do
         get 'audio_files',    to: 'audio_files#index'
