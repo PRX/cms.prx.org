@@ -4,7 +4,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   property :id
   property :title
-  property :length, as: :duration
+  property :duration
   property :short_description
   property :description
   property :published_at

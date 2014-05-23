@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'story'
 
 describe Story do
 
@@ -49,4 +48,27 @@ describe Story do
 
   end
 
+  it 'pulls the duration from the default_audio_version' do
+    story.default_audio_version.stub(:default_audio_duration, 212) do
+      story.duration.must_equal 212
+    end
+  end
+
+  it 'pulls the default audio from the default_audio_version' do
+    story.default_audio_version.stub(:as_default_audio, :audio) do
+      story.default_audio.must_equal :audio
+    end
+  end
+
+  it 'has empty default audio with no default_audio_version' do
+    story.stub(:default_audio_version, nil) do
+      story.default_audio.must_equal []
+    end
+  end
+
+  it 'returns 0 for duration when there is no default audio version' do
+    story.stub(:default_audio_version, nil) do
+      story.duration.must_equal 0
+    end
+  end
 end

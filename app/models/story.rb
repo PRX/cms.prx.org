@@ -53,13 +53,11 @@ class Story < BaseModel
   end
 
   def default_audio
-    @default_audio ||= if !default_audio_version
-      []
-    elsif default_audio_version.promos?
-      [default_audio_version.audio_files.max_by{|af| af.length }]
-    else
-      default_audio_version.audio_files
-    end
+    @default_audio ||= default_audio_version.try(:as_default_audio) || []
+  end
+
+  def duration
+    default_audio_version.try(:default_audio_duration) || 0
   end
 
   def compare_versions(a,b)

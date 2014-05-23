@@ -24,22 +24,19 @@ FactoryGirl.define do
         images_count 1
       end
 
-      after :create, :stub do |story, evaluator|
+      after(:create, :stub) do |story, evaluator|
         create_list(:audio_version, evaluator.audio_versions_count, story: story)
         create_list(:story_image, evaluator.images_count, story: story)
       end
     end
 
     factory :story_promos_only do
-
       published_at nil
       promos_only_at 1.week.ago
 
-      after(:stub, :create) do |story, evaluator|
+      after(:create, :stub) do |story, evaluator|
         create(:promos, story: story)
       end
-
     end
-
   end
 end
