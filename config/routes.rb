@@ -49,6 +49,7 @@ PRX::Application.routes.draw do
       resources :pick_lists do
         resources :picks
       end
+      resources :picks
 
     end
   end

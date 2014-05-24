@@ -9,7 +9,7 @@ class Api::PickRepresenter < Api::BaseRepresenter
   link :pick_list do
     {
       href: api_pick_list_path(represented.pick_list),
-      title: represented.pick_list.title,
+      title: represented.pick_list,
       profile: prx_model_uri(represented.pick_list)
     }
   end

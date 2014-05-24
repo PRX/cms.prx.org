@@ -394,6 +394,7 @@ ActiveRecord::Schema.define(version: 1) do
     t.datetime "deleted_at"
     t.datetime "published_at"
     t.datetime "allow_free_purchase_at"
+    t.string   "path"
   end
 
 end

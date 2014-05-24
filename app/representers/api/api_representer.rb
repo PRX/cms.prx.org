@@ -70,9 +70,9 @@ class Api::ApiRepresenter < Api::BaseRepresenter
   links :pick_list do
     [
       {
-        title:     "Get a single pick list",
+        title:     "Get a single named pick list",
         profile:   prx_model_uri(:pick_list),
-        href:      api_pick_list_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
+        href:      api_pick_list_path_template(api_version: represented.version, id: '{name_or_id}') + '{?zoom}',
         templated: true
       }
     ]
@@ -81,7 +81,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
   links :pick_lists do
     [
       {
-        title:     "Get a paged collection of pick lists",
+        title:     "Get a paged collection of named pick lists",
         profile:   prx_model_uri(:collection, :pick_list),
         href:      api_pick_lists_path_template(api_version: represented.version) + '{?page,zoom}',
         templated: true
@@ -89,12 +89,12 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     ]
   end
 
-  links :staff_picks_list do
+  links :picks do
     [
       {
-        title:    "Get the staff picks list",
-        profile:   prx_model_uri(:pick_list),
-        href:      api_pick_list_path_template(api_version: represented.version, id: ENV['STAFF_PICKS_LIST_ID']) + '{?zoom}',
+        title:     "Get a paged collection of the most recent picks optionally filtered by a tag",
+        profile:   prx_model_uri(:collection, :pick),
+        href:      api_picks_path_template(api_version: represented.version) + '{?tag,page,zoom}',
         templated: true
       }
     ]
