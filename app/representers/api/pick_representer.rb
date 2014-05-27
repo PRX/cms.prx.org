@@ -6,19 +6,11 @@ class Api::PickRepresenter < Api::BaseRepresenter
   property :comment
   property :editors_title
 
-  link :pick_list do
-    {
-      href: api_pick_list_path(represented.pick_list),
-      title: represented.pick_list,
-      profile: prx_model_uri(represented.pick_list)
-    }
-  end
-
   link :account do
     {
-      href: api_account_path(represented.pick_list.account),
-      title: represented.pick_list.account.name,
-      profile: prx_model_uri(represented.pick_list.account)
+      href: api_account_path(represented.playlist.account),
+      title: represented.playlist.account.name,
+      profile: prx_model_uri(represented.playlist.account)
     }
   end
   embed :account, as: :account, item_class: Account, decorator: Api::Min::AccountRepresenter, zoom: true

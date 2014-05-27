@@ -4,9 +4,9 @@ class PlaylistSection < BaseModel
 
   self.table_name = 'playlist_sections'
 
-  belongs_to :pick_list, :foreign_key => 'playlist_id'
+  belongs_to :playlist
   has_many :picks
-  has_one :account, :through => :pick_list
+  has_one :account, :through => :playlist
 
 end
 

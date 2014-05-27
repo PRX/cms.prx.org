@@ -20,10 +20,6 @@ describe Api::PickRepresenter do
     json['comment'].must_equal pick.comment
   end
 
-  it 'links the pick list' do
-    json['_links']['prx:pick-list']['href'].must_match /#{pick.pick_list.id}/
-  end
-
   it 'links the account' do
     json['_links']['prx:account']['href'].must_match /#{pick.account.id}/
   end
