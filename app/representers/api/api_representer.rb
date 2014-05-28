@@ -67,4 +67,15 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     ]
   end
 
+  links :picks do
+    [
+      {
+        title:     "Get a paged collection of the most recent picks",
+        profile:   prx_model_uri(:collection, :pick),
+        href:      api_picks_path_template(api_version: represented.version) + '{?page,zoom}',
+        templated: true
+      }
+    ]
+  end
+
 end

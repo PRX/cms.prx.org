@@ -14,7 +14,7 @@ PRX::Application.configure do
 
   # config.action_controller.perform_caching = true
   # config.cache_store = :mem_cache_store, *ENV['MEMCACHE_SERVERS'].split(',')
-  
+
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
 

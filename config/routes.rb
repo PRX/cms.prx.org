@@ -46,6 +46,11 @@ PRX::Application.routes.draw do
         get 'memberships',    to: 'memberships#index'
       end
 
+      resources :pick_lists do
+        resources :picks
+      end
+      resources :picks
+
     end
   end
 

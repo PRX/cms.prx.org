@@ -361,4 +361,40 @@ ActiveRecord::Schema.define(version: 1) do
   add_index "producers", ["piece_id"], :name => "producers_piece_id_fk"
   add_index "producers", ["user_id"], :name => "producers_user_id_fk"
 
+  create_table "playlist_sections", :force => true do |t|
+    t.integer  "playlist_id"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "position"
+    t.text     "comment"
+  end
+
+  create_table "playlistings", :force => true do |t|
+    t.integer  "playlist_section_id"
+    t.integer  "playlistable_id"
+    t.string   "playlistable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "position"
+    t.text     "comment"
+    t.string   "editors_title"
+  end
+
+  create_table "playlists", :force => true do |t|
+    t.string   "title"
+    t.integer  "account_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "description"
+    t.integer  "position"
+    t.datetime "curated_at"
+    t.datetime "featured_at"
+    t.string   "type"
+    t.datetime "deleted_at"
+    t.datetime "published_at"
+    t.datetime "allow_free_purchase_at"
+    t.string   "path"
+  end
+
 end
