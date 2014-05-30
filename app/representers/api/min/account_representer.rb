@@ -6,6 +6,7 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
   property :type
   property :name
   property :path
+  property :short_name
 
   link :address do
     api_address_path(represented.address) if represented.address
@@ -20,7 +21,7 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
     } if represented.image
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter, zoom: true
-  
+
   link :opener do
     {
       href: api_user_path(represented.opener),
