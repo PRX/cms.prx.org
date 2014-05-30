@@ -15,4 +15,8 @@ class Account < BaseModel
   scope :active, -> { where status: :open }
   scope :member,  -> { where type: ['StationAccount', 'GroupAccount'] }
 
+  def short_name
+    name
+  end
+
 end

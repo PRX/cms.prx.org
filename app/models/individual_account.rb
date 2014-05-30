@@ -6,6 +6,10 @@ class IndividualAccount < Account
     opener.try(:name)
   end
 
+  def short_name
+    opener.try(:first_name)
+  end
+
   def path
     opener.try(:login)
   end

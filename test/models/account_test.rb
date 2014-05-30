@@ -12,4 +12,8 @@ describe Account do
     account.stories.count.must_be :>, 0
   end
 
+  it 'has name as short name' do
+    account.short_name.must_equal account.name
+  end
+
 end
