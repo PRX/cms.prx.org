@@ -15,4 +15,14 @@ class Account < BaseModel
   scope :active, -> { where status: :open }
   scope :member,  -> { where type: ['StationAccount', 'GroupAccount'] }
 
+  def short_name
+    if type == 'IndividualAccount'
+        opener.first_name
+    elsif type == 'StationAccount'
+        station_call_letters
+    else
+        name
+    end
+  end
+
 end

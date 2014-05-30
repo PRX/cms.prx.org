@@ -18,6 +18,10 @@ describe Api::AccountRepresenter do
     json['id'].must_equal account.id
   end
 
+  it 'includes short name in json' do
+    json['shortName'].must_equal account.short_name
+  end
+
   describe "individual accounts" do
 
     let(:individual_account)  { FactoryGirl.create(:individual_account) }
