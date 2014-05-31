@@ -49,7 +49,7 @@ gem 'rake'
 
 # monitoring
 gem 'newrelic_rpm'
-
+gem 'capistrano-newrelic'
 
 # These will not be installed on travis - keep all
 # developer-specific gems here so our travis builds
