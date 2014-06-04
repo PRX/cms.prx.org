@@ -23,39 +23,36 @@ describe Embeds do
     m
   }
 
-  let(:binding) { Struct.new(:options).new({}) }
+  let(:binding) { Struct.new(:as, :embedded, :zoom).new('t:test', true, nil) }
 
   it "when embedded false, don't skip it" do
-    binding.options = {as: 't:test', embedded: false}
+    binding.embedded = false
     mapper.suppress_embed?(binding, {}).must_equal false
   end
 
   it "when embed true, skip if zoom not indicated" do
-    binding.options = {as: 't:test', embedded: true}
     mapper.suppress_embed?(binding, {}).must_equal true
 
-    binding.options[:zoom] = false
+    binding.zoom = false
     mapper.suppress_embed?(binding, {zoom: ['prx:none']}).must_equal true
   end
 
   it "when embed true, and zoom true, and root true, don't skip" do
-    binding.options = {as: 't:test', embedded: true}
     mapper.suppress_embed?(binding, {zoom: ['t:test']}).must_equal false
   end
 
   it "when embed true, and zoom true, and root false, don't skip!" do
-    binding.options = {as: 't:test', embedded: true}
     mapper.represented.is_root_resource = false
     mapper.suppress_embed?(binding, {zoom: ['t:none']}).must_equal true
     mapper.suppress_embed?(binding, {zoom: ['t:test']}).must_equal false
 
     mapper.suppress_embed?(binding, {}).must_equal true
-    binding.options[:zoom] = true
+    binding.zoom = true
     mapper.suppress_embed?(binding, {}).must_equal false
   end
 
   it "when zoom :always, do not skip" do
-    binding.options = {as: 't:test', embedded: true, zoom: :always}
+    binding.zoom = :always
     mapper.suppress_embed?(binding, {}).must_equal false
 
     mapper.represented.is_root_resource = true
@@ -70,9 +67,9 @@ describe Embeds do
 
     embed_definition = Embeds1TestRepresenter.representable_attrs[:test_object]
     embed_definition.wont_be_nil
-    embed_definition.options[:embedded].must_equal true
-    embed_definition.options[:class].must_equal TestObject
-    embed_definition.options[:zoom].must_equal :always
+    embed_definition[:embedded].must_equal true
+    embed_definition[:class].evaluate(nil).must_equal TestObject
+    embed_definition[:zoom].must_equal :always
   end
 
   it "defines an embed to set a representable property" do
@@ -83,9 +80,9 @@ describe Embeds do
 
     embed_definition = Embeds2TestRepresenter.representable_attrs[:test_objects]
     embed_definition.wont_be_nil
-    embed_definition.options[:embedded].must_equal true
-    embed_definition.options[:class].must_equal TestObject
-    embed_definition.options[:zoom].must_equal :always
+    embed_definition[:embedded].must_equal true
+    embed_definition[:class].evaluate(nil).must_equal TestObject
+    embed_definition[:zoom].must_equal :always
   end
 
 end

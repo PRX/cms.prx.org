@@ -18,14 +18,14 @@ module Embeds
 
     # embed if zoomed
     def suppress_embed?(binding, options)
-      name     = (binding.options[:as] || binding.name).to_s
-      embedded = !!binding.options[:embedded]
+      name     = (binding[:as] || binding.name).to_s
+      embedded = !!binding[:embedded]
 
       # not embedded, return false - nothing to suppress
       return false if !embedded
 
       # check if it should be zoomed, suppress if not
-      !embed_zoomed?(name, binding.options[:zoom], options[:zoom])
+      !embed_zoomed?(name, binding[:zoom], options[:zoom])
     end
 
     def embed_zoomed?(name, zoom_def=false, zoom_param=nil)
