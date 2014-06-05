@@ -225,7 +225,7 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
-    sshkit (1.5.0)
+    sshkit (1.5.1)
       colorize
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
