@@ -225,7 +225,7 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
-    sshkit (1.5.0)
+    sshkit (1.5.1)
       colorize
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -256,9 +256,9 @@ DEPENDENCIES
   acts_as_list
   better_errors
   binding_of_caller
-  capistrano (~> 3.1)
+  capistrano
   capistrano-newrelic
-  capistrano-rails (~> 1.1)
+  capistrano-rails
   carrierwave
   codeclimate-test-reporter
   coveralls
