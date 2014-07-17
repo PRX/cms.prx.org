@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require 'test_helper'
-require 'story' if !defined?(Story)
 
 describe Api::StoryRepresenter do
 
@@ -61,6 +60,17 @@ describe Api::StoryRepresenter do
     story.stub(:timing_and_cues, sigil) do
       json['timingAndCues'].must_equal sigil
     end
+  end
+
+  describe Api::Min::StoryRepresenter do
+    let(:representer) { Api::Min::StoryRepresenter.new(story) }
+
+    it 'serializes the length of the story as duration' do
+      story.stub(:duration, 212) do
+        json['duration'].must_equal 212
+      end
+    end
+
   end
 
 end
