@@ -42,8 +42,8 @@ gem 'oj_mimic_json'
 gem 'dotenv-rails'
 
 # scripting
-gem 'capistrano', '~> 3.1'
-gem 'capistrano-rails', '~> 1.1'
+gem 'capistrano', '~> 3.2.0'
+gem 'capistrano-rails', '~> 1.1.0'
 gem 'highline'
 gem 'rake'
 
