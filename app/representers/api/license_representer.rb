@@ -2,9 +2,7 @@
 
 class Api::LicenseRepresenter < Api::BaseRepresenter
 
-  property :id
-  property :website_usage
-  property :allow_edit
-  property :additional_terms
+  property :streamable
+  property :editable
 
 end
