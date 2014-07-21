@@ -13,7 +13,7 @@ describe Api::LicenseRepresenter do
     representer.wont_be_nil
   end
 
-  it 'pases through streamable attribute' do
+  it 'passes through streamable attribute' do
     license.stub(:streamable, 1) do
       json['streamable'].must_equal 1
     end
