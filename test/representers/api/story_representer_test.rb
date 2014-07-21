@@ -62,6 +62,12 @@ describe Api::StoryRepresenter do
     end
   end
 
+  it 'includes breaks' do
+    story.stub(:breaks, ['floating']) do
+      json['breaks'].must_equal ['floating']
+    end
+  end
+
   describe Api::Min::StoryRepresenter do
     let(:representer) { Api::Min::StoryRepresenter.new(story) }
 

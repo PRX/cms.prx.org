@@ -14,6 +14,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :broadcast_history
   property :timing_and_cues
   property :content_advisory
+  property :breaks
 
   # default zoom
   link :account do

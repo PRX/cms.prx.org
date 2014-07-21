@@ -76,4 +76,8 @@ class Story < BaseModel
     default_audio_version.try(:content_advisory)
   end
 
+  def breaks
+    default_audio_version.try(:breaks)
+  end
+
 end

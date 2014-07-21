@@ -34,4 +34,28 @@ describe AudioVersion do
       audio_version.default_audio_duration.must_equal 571
     end
   end
+
+  describe '#breaks' do
+    BREAK_TYPES = {
+      :news_hole_break? => 'News Hole',
+      :floating_break? => 'Floating',
+      :bottom_of_hour_break? => 'Bottom of the Hour',
+      :twenty_forty_break? => '20 and 40 min'
+    }
+
+    BREAK_TYPES.each do |method, text|
+      it "includes '#{text}' when ##{method}" do
+        audio_version.stub(method, true) do
+          audio_version.breaks.must_include text
+        end
+      end
+
+      it "does not include '#{text}' when ##{method} is false" do
+        audio_version.stub(method, false) do
+          audio_version.breaks.wont_include text
+        end
+      end
+    end
+
+  end
 end
