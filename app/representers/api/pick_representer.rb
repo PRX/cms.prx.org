@@ -13,7 +13,7 @@ class Api::PickRepresenter < Api::BaseRepresenter
       profile: prx_model_uri(represented.playlist.account)
     }
   end
-  embed :account, as: :account, item_class: Account, decorator: Api::Min::AccountRepresenter, zoom: true
+  embed :account, as: :account, item_class: Account, decorator: Api::Min::AccountRepresenter
 
   link :story do
     {
@@ -22,7 +22,6 @@ class Api::PickRepresenter < Api::BaseRepresenter
       profile: prx_model_uri(represented.story)
     }
   end
-  embed :story, as: :story, item_class: Story, decorator: Api::Min::StoryRepresenter, zoom: true
+  embed :story, as: :story, item_class: Story, decorator: Api::Min::StoryRepresenter
 
 end
-

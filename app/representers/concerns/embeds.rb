@@ -28,18 +28,22 @@ module Embeds
       !embed_zoomed?(name, binding[:zoom], options[:zoom])
     end
 
-    def embed_zoomed?(name, zoom_def=false, zoom_param=nil)
+    def embed_zoomed?(name, zoom_def=nil, zoom_param=nil)
       # if the embed in the representer definition has `zoom: :always` defined
       # always embed it, even if it is in another embed
       # (this is really meant for collections where embedded items must be included)
       return true if zoom_def == :always
+
+      # passing nil explicitly overwrites defaults in signature,
+      # so we default to nil and fix in the method body
+      zoom_def = true if zoom_def.nil?
 
       # if there is no zoom specified in the request params (options)
       # then embed based on the zoom option in the representer definition
 
       # if there is a zoom specified in the request params (options)
       # then do not zoom when this name is not in the request
-      zoom_param.nil? ? zoom_def : zoom_param.include?(name)
+      zoom_param.nil? ? zoom_def && @represented.is_root_resource : zoom_param.include?(name)
     end
 
   end

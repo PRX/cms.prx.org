@@ -6,7 +6,7 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
   property :title
   property :short_description
   property :story_count
-  
+
   link :stories do
     api_series_stories_path(represented)
   end
@@ -24,6 +24,6 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
       profile: prx_model_uri(represented.account)
     }
   end
-  embed :account, class: Account, decorator: Api::AccountRepresenter
+  embed :account, class: Account, decorator: Api::AccountRepresenter, zoom: false
 
 end

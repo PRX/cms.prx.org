@@ -25,38 +25,82 @@ describe Embeds do
 
   let(:binding) { Struct.new(:as, :embedded, :zoom).new('t:test', true, nil) }
 
-  it "when embedded false, don't skip it" do
-    binding.embedded = false
-    mapper.suppress_embed?(binding, {}).must_equal false
+  describe "non embedded property" do
+    let (:non_embed_binding) { binding.tap{|b| b.embedded = false } }
+
+    it "is never suppressed" do
+      mapper.suppress_embed?(non_embed_binding, {}).must_equal false
+    end
   end
 
-  it "when embed true, skip if zoom not indicated" do
-    mapper.suppress_embed?(binding, {}).must_equal true
+  describe "default zoom" do
+    let (:default_binding) { binding.tap{|b| b.zoom = nil } }
 
-    binding.zoom = false
-    mapper.suppress_embed?(binding, {zoom: ['prx:none']}).must_equal true
+    it "is not suppressed on root documents" do
+      mapper.represented.is_root_resource = true
+      mapper.suppress_embed?(default_binding, {}).must_equal false
+    end
+
+    it "is suppressed when specifically unrequested on root documents" do
+      mapper.represented.is_root_resource = true
+      mapper.suppress_embed?(default_binding, {zoom: ['t:none']}).must_equal true
+    end
+
+    it "is suppressed on nested documents" do
+      mapper.represented.is_root_resource = false
+      mapper.suppress_embed?(default_binding, {}).must_equal true
+    end
+
+    it "is not suppressed on nested documents when requested" do
+      mapper.represented.is_root_resource = false
+      mapper.suppress_embed?(default_binding, {zoom: ['t:test']}).must_equal false
+    end
   end
 
-  it "when embed true, and zoom true, and root true, don't skip" do
-    mapper.suppress_embed?(binding, {zoom: ['t:test']}).must_equal false
+  describe "zoom: true" do
+    let (:true_binding) { binding.tap{|b| b.zoom = true } }
+
+    it "is not suppressed on root documents" do
+      mapper.represented.is_root_resource = true
+      mapper.suppress_embed?(true_binding, {}).must_equal false
+    end
+
+    it "is suppressed when specifically unrequested on root documents" do
+      mapper.represented.is_root_resource = true
+      mapper.suppress_embed?(true_binding, {zoom: ['t:none']}).must_equal true
+    end
+
+    it "is suppressed on nested documents" do
+      mapper.represented.is_root_resource = false
+      mapper.suppress_embed?(true_binding, {}).must_equal true
+    end
+
+    it "is unsuppressed on nested documents when requested" do
+      mapper.represented.is_root_resource = false
+      mapper.suppress_embed?(true_binding, {zoom: ['t:test']}).must_equal false
+    end
   end
 
-  it "when embed true, and zoom true, and root false, don't skip!" do
-    mapper.represented.is_root_resource = false
-    mapper.suppress_embed?(binding, {zoom: ['t:none']}).must_equal true
-    mapper.suppress_embed?(binding, {zoom: ['t:test']}).must_equal false
+  describe "zoom: always" do
+    let (:always_binding) { binding.tap{|b| b.zoom = :always } }
 
-    mapper.suppress_embed?(binding, {}).must_equal true
-    binding.zoom = true
-    mapper.suppress_embed?(binding, {}).must_equal false
+    it "is not suppressed when specifically unrequested" do
+      mapper.suppress_embed?(always_binding, {zoom: ['t:test']}).must_equal false
+    end
+
+    it "is not suppressed on nested documents" do
+      mapper.represented.is_root_resource = false
+      mapper.suppress_embed?(always_binding, {}).must_equal false
+    end
   end
 
-  it "when zoom :always, do not skip" do
-    binding.zoom = :always
-    mapper.suppress_embed?(binding, {}).must_equal false
+  describe "zoom: false" do
+    let (:false_binding) { binding.tap{|b| b.zoom = false } }
 
-    mapper.represented.is_root_resource = true
-    mapper.suppress_embed?(binding, {}).must_equal false
+    it "is suppressed on root documents" do
+      mapper.represented.is_root_resource = true
+      mapper.suppress_embed?(false_binding, {}).must_equal true
+    end
   end
 
   it "defines an embed to set a representable property" do
