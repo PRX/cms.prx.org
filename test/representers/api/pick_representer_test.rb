@@ -1,6 +1,6 @@
 describe Api::PickRepresenter do
 
-  let(:pick)        { create(:pick) }
+  let(:pick)        { create(:pick, is_root_resource: true) }
   let(:representer) { Api::PickRepresenter.new(pick) }
   let(:json)        { JSON.parse(representer.to_json) }
 

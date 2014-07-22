@@ -23,7 +23,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
       profile: prx_model_uri(represented.account)
     }
   end
-  embed :account, class: Account, decorator: Api::Min::AccountRepresenter, zoom: true
+  embed :account, class: Account, decorator: Api::Min::AccountRepresenter
 
   link :series do
     {
@@ -31,7 +31,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
       title: represented.series.title
     } if represented.series_id
   end
-  embed :series, class: Series, decorator: Api::Min::SeriesRepresenter, zoom: true
+  embed :series, class: Series, decorator: Api::Min::SeriesRepresenter
 
   link :image do
     {
@@ -40,28 +40,28 @@ class Api::StoryRepresenter < Api::BaseRepresenter
     } if represented.default_image
   end
 
-  embed :default_image, as: :image, decorator: Api::ImageRepresenter, zoom: true
+  embed :default_image, as: :image, decorator: Api::ImageRepresenter
 
   links :audio do
     represented.default_audio.collect{ |a| { href: api_audio_file_path(a), title: a.label } }
   end
-  embeds :default_audio, as: :audio, class: AudioFile, decorator: Api::AudioFileRepresenter, zoom: true
+  embeds :default_audio, as: :audio, class: AudioFile, decorator: Api::AudioFileRepresenter
 
   # default links
   link :promos do
     api_audio_version_path(represented.promos.id) if represented.promos.audio_file_ids.size > 1
   end
-  embed :promos, class: AudioVersion, decorator: Api::AudioVersionRepresenter
+  embed :promos, class: AudioVersion, decorator: Api::AudioVersionRepresenter, zoom: false
 
   links :audio_versions do
     represented.audio_versions.collect{ |a| { href: api_audio_version_path(a), title: a.label } }
   end
-  embeds :audio_versions, class: AudioVersion, decorator: Api::AudioVersionRepresenter
+  embeds :audio_versions, class: AudioVersion, decorator: Api::AudioVersionRepresenter, zoom: false
 
   links :images do
     represented.images.collect{ |a| { href: api_story_image_path(a) } } unless represented.image_ids.size > 0
   end
-  embeds :images, class: StoryImage, decorator: Api::ImageRepresenter
+  embeds :images, class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
 
   link :'prx:license' do
     api_license_path(represented.license.id) if represented.license
@@ -71,7 +71,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   link :musical_works do
     api_story_musical_works_path(represented)
   end
-  embed :musical_works, paged: true, item_class: MusicalWork
+  embed :musical_works, paged: true, item_class: MusicalWork, zoom: false
 
 end
 
