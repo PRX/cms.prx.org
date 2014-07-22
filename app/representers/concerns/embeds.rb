@@ -43,7 +43,7 @@ module Embeds
 
       # if there is a zoom specified in the request params (options)
       # then do not zoom when this name is not in the request
-      zoom_param.nil? ? zoom_def && @represented.is_root_resource : zoom_param.include?(name)
+      zoom_param.nil? ? zoom_def : zoom_param.include?(name)
     end
 
   end

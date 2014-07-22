@@ -36,47 +36,27 @@ describe Embeds do
   describe "default zoom" do
     let (:default_binding) { binding.tap{|b| b.zoom = nil } }
 
-    it "is not suppressed on root documents" do
-      mapper.represented.is_root_resource = true
+    it "is not suppressed by default" do
       mapper.suppress_embed?(default_binding, {}).must_equal false
     end
 
-    it "is suppressed when specifically unrequested on root documents" do
-      mapper.represented.is_root_resource = true
+    it "is suppressed when specifically unrequested" do
       mapper.suppress_embed?(default_binding, {zoom: ['t:none']}).must_equal true
-    end
-
-    it "is suppressed on nested documents" do
-      mapper.represented.is_root_resource = false
-      mapper.suppress_embed?(default_binding, {}).must_equal true
-    end
-
-    it "is not suppressed on nested documents when requested" do
-      mapper.represented.is_root_resource = false
-      mapper.suppress_embed?(default_binding, {zoom: ['t:test']}).must_equal false
     end
   end
 
   describe "zoom: true" do
     let (:true_binding) { binding.tap{|b| b.zoom = true } }
 
-    it "is not suppressed on root documents" do
-      mapper.represented.is_root_resource = true
+    it "is not suppressed by default" do
       mapper.suppress_embed?(true_binding, {}).must_equal false
     end
 
-    it "is suppressed when specifically unrequested on root documents" do
-      mapper.represented.is_root_resource = true
+    it "is suppressed when specifically unrequested" do
       mapper.suppress_embed?(true_binding, {zoom: ['t:none']}).must_equal true
     end
 
-    it "is suppressed on nested documents" do
-      mapper.represented.is_root_resource = false
-      mapper.suppress_embed?(true_binding, {}).must_equal true
-    end
-
-    it "is unsuppressed on nested documents when requested" do
-      mapper.represented.is_root_resource = false
+    it "is unsuppressed when requested" do
       mapper.suppress_embed?(true_binding, {zoom: ['t:test']}).must_equal false
     end
   end
@@ -87,18 +67,12 @@ describe Embeds do
     it "is not suppressed when specifically unrequested" do
       mapper.suppress_embed?(always_binding, {zoom: ['t:test']}).must_equal false
     end
-
-    it "is not suppressed on nested documents" do
-      mapper.represented.is_root_resource = false
-      mapper.suppress_embed?(always_binding, {}).must_equal false
-    end
   end
 
   describe "zoom: false" do
     let (:false_binding) { binding.tap{|b| b.zoom = false } }
 
-    it "is suppressed on root documents" do
-      mapper.represented.is_root_resource = true
+    it "is suppressed by default" do
       mapper.suppress_embed?(false_binding, {}).must_equal true
     end
   end
