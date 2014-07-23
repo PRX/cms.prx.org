@@ -13,8 +13,16 @@ describe Api::LicenseRepresenter do
     representer.wont_be_nil
   end
 
-  it 'use representer to create json' do
-    json['id'].must_equal license.id
+  it 'passes through streamable attribute' do
+    license.stub(:streamable, 1) do
+      json['streamable'].must_equal 1
+    end
+  end
+
+  it 'passes through the editable attribute' do
+    license.stub(:editable, 2) do
+      json['editable'].must_equal 2
+    end
   end
 
 end
