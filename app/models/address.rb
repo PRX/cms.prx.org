@@ -2,6 +2,6 @@
 
 class Address < BaseModel
 
-  belongs_to :addressable, :polymorphic => true
+  belongs_to :addressable, polymorphic: true
 
 end
