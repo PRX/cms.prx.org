@@ -1,4 +1,7 @@
-# config valid only for Capistrano 3.1
+require 'dotenv'
+Dotenv.load
+
+# config valid only for Capistrano 3.2
 lock '~> 3.2.0'
 
 set :application, 'prx.org-backend'
