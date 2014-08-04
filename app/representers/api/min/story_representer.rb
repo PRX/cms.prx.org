@@ -18,7 +18,7 @@ class Api::Min::StoryRepresenter < Api::BaseRepresenter
       profile: prx_model_uri(represented.account)
     }
   end
-  embed :account, class: Account, decorator: Api::Min::AccountRepresenter
+  embed :account, class: Account, decorator: Api::Min::AccountRepresenter, zoom: false
 
   link :image do
     api_story_image_path(represented.default_image.id) if represented.default_image
@@ -31,7 +31,7 @@ class Api::Min::StoryRepresenter < Api::BaseRepresenter
       title: represented.series.title
     } if represented.series_id
   end
-  embed :series, class: Series, decorator: Api::Min::SeriesRepresenter
+  embed :series, class: Series, decorator: Api::Min::SeriesRepresenter, zoom: false
 
   links :audio do
     represented.default_audio.collect{ |a| { href: api_audio_file_path(a), title: a.label } }

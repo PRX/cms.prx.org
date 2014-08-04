@@ -397,4 +397,12 @@ ActiveRecord::Schema.define(version: 1) do
     t.string   "path"
   end
 
+  create_table "websites", :force => true do |t|
+    t.integer "browsable_id"
+    t.string  "browsable_type"
+    t.string  "url"
+  end
+
+  add_index "websites", ["browsable_id", "browsable_type"], :name => "websites_browsable_fk"
+
 end
