@@ -36,4 +36,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   end
   embed :stories, as: :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
 
+  links :external do
+    represented.websites.map(&:as_link)
+  end
 end

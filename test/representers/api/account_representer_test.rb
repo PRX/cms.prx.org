@@ -6,13 +6,9 @@ require 'account' if !defined?(AudioFile)
 
 describe Api::AccountRepresenter do
 
-  let(:account)     { FactoryGirl.create(:account) }
+  let(:account)     { build_stubbed(:account) }
   let(:representer) { Api::AccountRepresenter.new(account) }
   let(:json)        { JSON.parse(representer.to_json) }
-
-  it 'create representer' do
-    representer.wont_be_nil
-  end
 
   it 'use representer to create json' do
     json['id'].must_equal account.id
@@ -22,12 +18,15 @@ describe Api::AccountRepresenter do
     json['shortName'].must_equal account.short_name
   end
 
-  describe "individual accounts" do
-
-    let(:individual_account)  { FactoryGirl.create(:individual_account) }
-    let(:ia_representer) { Api::AccountRepresenter.new(account) }
-    let(:json)        { JSON.parse(representer.to_json) }
-
+  it 'includes external urls' do
+    websites = [
+      build_stubbed(:website, url: 'http://prx.org'),
+      build_stubbed(:website, url: 'http://example.com')
+    ]
+    account.stub(:websites, websites) do
+      json['_links']['prx:external'].must_include 'href' => 'http://prx.org'
+      json['_links']['prx:external'].must_include 'href' => 'http://example.com'
+    end
   end
 
 end
