@@ -45,6 +45,12 @@ describe Story do
     end
   end
 
+  it 'has breaks from the default audio version' do
+    story.default_audio_version.stub(:breaks, ['floating']) do
+      story.breaks.must_equal ['floating']
+    end
+  end
+
   describe '#default_image' do
 
     it 'returns the first image when one is present' do

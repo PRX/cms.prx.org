@@ -2,6 +2,13 @@
 
 class AudioVersion < BaseModel
 
+  BREAK_TYPES = {
+    :news_hole_break? => 'News Hole',
+    :floating_break? => 'Floating',
+    :bottom_of_hour_break? => 'Bottom of the Hour',
+    :twenty_forty_break? => '20 and 40 min'
+  }
+
   belongs_to :story, class_name: 'Story', foreign_key: 'piece_id', with_deleted: true
   has_many :audio_files, -> { order :position }, dependent: :destroy
 
@@ -36,6 +43,14 @@ class AudioVersion < BaseModel
       as_default_audio.first.length
     else
       length
+    end
+  end
+
+  def breaks
+    @_breaks ||= [].tap do |array|
+      BREAK_TYPES.each do |method, text|
+        array.push text if send method
+      end
     end
   end
 
