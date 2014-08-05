@@ -1,5 +1,8 @@
-# config valid only for Capistrano 3.1
+# config valid only for Capistrano 3.2
 lock '~> 3.2.0'
+
+require 'dotenv'
+Dotenv.load
 
 set :application, 'prx.org-backend'
 set :repo_url, 'git://github.com/PRX/PRX.org-Backend.git'

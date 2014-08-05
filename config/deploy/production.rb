@@ -10,6 +10,11 @@ role :app, %w{deploy@hal.prx.org}
 role :web, %w{deploy@hal.prx.org}
 role :db,  %w{deploy@hal.prx.org}
 
+# https://github.com/seuros/capistrano-newrelic
+namespace :deploy do
+  before :finished, 'newrelic:notice_deployment'
+end
+
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server
