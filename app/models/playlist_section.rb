@@ -6,7 +6,6 @@ class PlaylistSection < BaseModel
 
   belongs_to :playlist
   has_many :picks
-  has_one :account, :through => :playlist
+  has_one :account, through: :playlist
 
 end
-
