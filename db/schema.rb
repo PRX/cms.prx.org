@@ -405,4 +405,11 @@ ActiveRecord::Schema.define(version: 1) do
 
   add_index "websites", ["browsable_id", "browsable_type"], :name => "websites_browsable_fk"
 
+  create_table "topics", :force => true do |t|
+    t.integer "piece_id"
+    t.string  "name"
+  end
+
+  add_index "topics", ["piece_id"], :name => "topics_piece_id_fk"
+
 end
