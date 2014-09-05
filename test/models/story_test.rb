@@ -104,7 +104,7 @@ describe Story do
     it 'returns tone and topic names with #tags' do
       topics = create_list(:topic, 2, story: story)
       tones = create_list(:tone, 2, story: story)
-      names = (topics + tones).map(&:name)
+      names = (topics + tones).map(&:name).sort
 
       story.tags.must_equal names
     end
