@@ -17,4 +17,12 @@ describe Tone do
 
     tone.valid?.must_equal false
   end
+
+  it 'validates uniqueness of tone to story' do
+    story = create(:story)
+    tone1 = create(:tone, story: story)
+    tone2 = build(:tone, name: tone1.name, story: story)
+
+    tone2.valid?.must_equal false
+  end
 end

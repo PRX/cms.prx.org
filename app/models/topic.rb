@@ -32,6 +32,7 @@ class Topic < BaseModel
 
   belongs_to :story, class_name: 'Story', foreign_key: 'piece_id'
   validates_inclusion_of :name, in: TOPIC_NAMES
+  validates_uniqueness_of :name, scope: :story
 
   def npr_topic_id
     NPR_TOPIC_MAPPING[name]

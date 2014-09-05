@@ -29,4 +29,12 @@ describe Topic do
 
     topic.npr_topic_id.must_be_nil
   end
+
+  it 'validates uniqueness of topic to story' do
+    story = create(:story)
+    topic1 = create(:topic, story: story)
+    topic2 = build(:topic, name: topic1.name, story: story)
+
+    topic2.valid?.must_equal false
+  end
 end
