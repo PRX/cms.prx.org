@@ -15,7 +15,7 @@ describe Tone do
   it 'validates that name is included in list' do
     tone.name = 'not a tone'
 
-    tone.valid?.must_equal false
+    tone.wont_be :valid?
   end
 
   it 'validates uniqueness of tone to story' do
@@ -23,6 +23,6 @@ describe Tone do
     tone1 = create(:tone, story: story)
     tone2 = build(:tone, name: tone1.name, story: story)
 
-    tone2.valid?.must_equal false
+    tone2.wont_be :valid?
   end
 end

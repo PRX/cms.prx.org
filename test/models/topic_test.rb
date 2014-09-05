@@ -15,7 +15,7 @@ describe Topic do
   it 'validates that name is in topics array' do
     topic.name = 'something else'
 
-    topic.valid?.must_equal false
+    topic.wont_be :valid?
   end
 
   it 'has an NPR topic id when appropriate' do
@@ -35,6 +35,6 @@ describe Topic do
     topic1 = create(:topic, story: story)
     topic2 = build(:topic, name: topic1.name, story: story)
 
-    topic2.valid?.must_equal false
+    topic2.wont_be :valid?
   end
 end
