@@ -62,6 +62,13 @@ describe Api::StoryRepresenter do
     end
   end
 
+  it 'includes topics and tones as tags' do
+    tags = ['Art', 'Women', 'Fresh Air-ish']
+    story.stub(:tags, tags) do
+      json['tags'].must_equal tags
+    end
+  end
+
   describe Api::Min::StoryRepresenter do
     let(:representer) { Api::Min::StoryRepresenter.new(story) }
 

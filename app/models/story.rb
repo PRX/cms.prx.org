@@ -15,6 +15,8 @@ class Story < BaseModel
   has_many :audio_files, through: :audio_versions
   has_many :producers
   has_many :musical_works, -> { order(:position) }, foreign_key: :piece_id
+  has_many :topics, foreign_key: :piece_id
+  has_many :tones, foreign_key: :piece_id
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
@@ -74,6 +76,10 @@ class Story < BaseModel
 
   def content_advisory
     default_audio_version.try(:content_advisory)
+  end
+
+  def tags
+    (topics + tones).map(&:name).sort
   end
 
 end
