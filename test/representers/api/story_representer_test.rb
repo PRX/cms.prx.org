@@ -63,10 +63,9 @@ describe Api::StoryRepresenter do
   end
 
   it 'includes topics and tones as tags' do
-    topics = create_list(:topic, 2, story: story)
-    tones = create_list(:tone, 2, story: story)
-    story.stub(:tags, story.tags) do
-      json['tags'].must_equal story.tags
+    tags = ['Art', 'Women', 'Fresh Air-ish']
+    story.stub(:tags, tags) do
+      json['tags'].must_equal tags
     end
   end
 
