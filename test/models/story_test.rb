@@ -101,11 +101,12 @@ describe Story do
       story.must_respond_to(:tones)
     end
 
-    it 'returns tones and topics with #tags' do
+    it 'returns tone and topic names with #tags' do
       topics = create_list(:topic, 2, story: story)
       tones = create_list(:tone, 2, story: story)
+      names = (topics + tones).map(&:name)
 
-      story.tags.must_equal topics + tones
+      story.tags.must_equal names
     end
   end
 

@@ -62,6 +62,14 @@ describe Api::StoryRepresenter do
     end
   end
 
+  it 'includes topics and tones as tags' do
+    topics = create_list(:topic, 2, story: story)
+    tones = create_list(:tone, 2, story: story)
+    story.stub(:tags, story.tags) do
+      json['tags'].must_equal story.tags
+    end
+  end
+
   describe Api::Min::StoryRepresenter do
     let(:representer) { Api::Min::StoryRepresenter.new(story) }
 

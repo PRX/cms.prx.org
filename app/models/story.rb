@@ -79,7 +79,7 @@ class Story < BaseModel
   end
 
   def tags
-    topics + tones
+    (topics + tones).map(&:name)
   end
 
 end
