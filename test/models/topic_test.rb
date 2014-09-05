@@ -18,18 +18,6 @@ describe Topic do
     topic.wont_be :valid?
   end
 
-  it 'has an NPR topic id when appropriate' do
-    topic.name = 'Art'
-
-    topic.npr_topic_id.must_equal 1047
-  end
-
-  it 'does not have an NPR topic id when appropriate' do
-    topic.name = 'African-American'
-
-    topic.npr_topic_id.must_be_nil
-  end
-
   it 'validates uniqueness of topic to story' do
     story = create(:story)
     topic1 = create(:topic, story: story)
