@@ -34,7 +34,6 @@ describe Story do
     end
   end
 
-
   it 'has timing and cues from the default audio version' do
     story.timing_and_cues.must_equal story.default_audio_version.timing_and_cues
   end
@@ -92,4 +91,22 @@ describe Story do
       story.duration.must_equal 0
     end
   end
+
+  describe '#tags' do
+    it 'has topics' do
+      story.must_respond_to(:topics)
+    end
+
+    it 'has tones' do
+      story.must_respond_to(:tones)
+    end
+
+    it 'returns tones and topics with #tags' do
+      topics = create_list(:topic, 2, story: story)
+      tones = create_list(:tone, 2, story: story)
+
+      story.tags.must_equal topics + tones
+    end
+  end
+
 end
