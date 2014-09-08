@@ -105,11 +105,12 @@ describe Story do
       story.must_respond_to(:formats)
     end
 
-    it 'returns tone and topic names with #tags' do
+    it 'returns tone, topic and format names with #tags' do
       topics = create_list(:topic, 2, story: story)
       tones = create_list(:tone, 2, story: story)
-      formats = create_list(:format, 2, story: story)
-      names = (topics + tones + formats).map(&:name).sort
+      format = build(:format, story: story, name: 'Fundraising for Air')
+      format.save(validate: false)
+      names = ((topics + tones).map(&:name) + ['Fundraising']).sort
 
       story.tags.must_equal names
     end

@@ -25,4 +25,26 @@ describe Format do
 
     format2.wont_be :valid?
   end
+
+  describe '#to_tag' do
+
+    it 'returns the format name if category is unchanged' do
+      format.name = 'Special'
+
+      format.to_tag.must_equal 'Special'
+    end
+
+    it 'returns Fundraising for fundraising-related formats' do
+      format.name = 'Fundraising for Air: Music'
+
+      format.to_tag.must_equal 'Fundraising'
+    end
+
+    it 'returns Debut for debut format' do
+      format.name = 'Debut (not aired nationally)'
+
+      format.to_tag.must_equal 'Debut'
+    end
+
+  end
 end
