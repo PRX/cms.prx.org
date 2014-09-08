@@ -106,13 +106,14 @@ describe Story do
     end
 
     it 'returns tone, topic and format names with #tags' do
-      topics = create_list(:topic, 2, story: story)
-      tones = create_list(:tone, 2, story: story)
+      topic = create(:topic, story: story, name: 'Asian')
+      tones = create(:tone, story: story, name: 'Amusing')
       format = build(:format, story: story, name: 'Fundraising for Air')
       format.save(validate: false)
-      names = ((topics + tones).map(&:name) + ['Fundraising']).sort
 
-      story.tags.must_equal names
+      story.tags.must_include 'Asian'
+      story.tags.must_include 'Amusing'
+      story.tags.must_include 'Fundraising'
     end
   end
 
