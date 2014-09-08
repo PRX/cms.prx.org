@@ -7,4 +7,8 @@ class Tone < BaseModel
   validates_inclusion_of :name, :in => TONE_NAMES
   validates_uniqueness_of :name, scope: :story
 
+  def to_tag
+    name
+  end
+
 end

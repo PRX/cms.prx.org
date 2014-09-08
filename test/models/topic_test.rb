@@ -25,4 +25,10 @@ describe Topic do
 
     topic2.wont_be :valid?
   end
+
+  describe '#to_tag' do
+    it 'returns the topic name' do
+      topic.to_tag.must_equal topic.name
+    end
+  end
 end
