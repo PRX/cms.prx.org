@@ -105,15 +105,22 @@ describe Story do
       story.must_respond_to(:formats)
     end
 
-    it 'returns tone, topic and format names with #tags' do
+    it 'can have user tags' do
+      story.must_respond_to(:user_tags)
+    end
+
+    it 'returns tones, topics, formats, and user tags with #tags' do
       topic = create(:topic, story: story, name: 'Asian')
       tones = create(:tone, story: story, name: 'Amusing')
       format = build(:format, story: story, name: 'Fundraising for Air')
       format.save(validate: false)
+      user_tag = create(:user_tag, name: 'user_tag')
+      tagging = create(:tagging, taggable: story, user_tag: user_tag)
 
       story.tags.must_include 'Asian'
       story.tags.must_include 'Amusing'
       story.tags.must_include 'Fundraising'
+      story.tags.must_include 'user_tag'
     end
   end
 
