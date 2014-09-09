@@ -82,7 +82,7 @@ class Story < BaseModel
   end
 
   def tags
-    (topics + tones + formats + user_tags).uniq.map(&:to_tag).sort
+    (topics + tones + formats + user_tags).map(&:to_tag).uniq.sort
   end
 
 end
