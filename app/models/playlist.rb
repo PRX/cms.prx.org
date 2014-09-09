@@ -8,6 +8,8 @@ class Playlist < BaseModel
 
   has_many :playlist_sections, foreign_key: 'playlist_id'
   has_many :picks, through: :playlist_sections
+  has_many :taggings, as: :taggable
+  has_many :user_tags, through: :taggings
 
   default_scope { where(type: nil) }  # no portfolios
   scope :named, ->(name=nil) {
