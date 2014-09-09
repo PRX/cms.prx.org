@@ -22,4 +22,14 @@ describe Tagging do
 
     tagging2.wont_be :valid?
   end
+
+  it 'allows a story and a playlist to have the same tag' do
+    story = create(:story)
+    playlist = create(:playlist, id: story.id)
+    tag = create(:user_tag)
+    tagging1 = create(:tagging, user_tag: tag, taggable: story)
+    tagging2 = build(:tagging, user_tag: tag, taggable: playlist)
+
+    tagging2.must_be :valid?
+  end
 end
