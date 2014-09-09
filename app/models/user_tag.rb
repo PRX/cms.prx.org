@@ -7,4 +7,6 @@ class UserTag < BaseModel
   def to_tag
     name
   end
+
+  # TO DO: replace this with acts_as_taggable_on gem
 end
