@@ -419,4 +419,11 @@ ActiveRecord::Schema.define(version: 1) do
 
   add_index "tones", ["piece_id"], :name => "tones_piece_id_fk"
 
+  create_table "formats", :force => true do |t|
+    t.integer "piece_id"
+    t.string  "name"
+  end
+
+  add_index "formats", ["piece_id"], :name => "formats_piece_id_fk"
+
 end

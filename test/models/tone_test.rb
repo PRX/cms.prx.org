@@ -25,4 +25,10 @@ describe Tone do
 
     tone2.wont_be :valid?
   end
+
+  describe '#to_tag' do
+    it 'returns the tone name' do
+      tone.to_tag.must_equal tone.name
+    end
+  end
 end

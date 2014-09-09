@@ -17,6 +17,7 @@ class Story < BaseModel
   has_many :musical_works, -> { order(:position) }, foreign_key: :piece_id
   has_many :topics, foreign_key: :piece_id
   has_many :tones, foreign_key: :piece_id
+  has_many :formats, foreign_key: :piece_id
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
@@ -79,7 +80,7 @@ class Story < BaseModel
   end
 
   def tags
-    (topics + tones).map(&:name).sort
+    (topics + tones + formats).map(&:to_tag).sort
   end
 
 end

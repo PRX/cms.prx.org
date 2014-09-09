@@ -9,4 +9,7 @@ class Topic < BaseModel
   validates_inclusion_of :name, in: TOPIC_NAMES
   validates_uniqueness_of :name, scope: :story
 
+  def to_tag
+    name
+  end
 end
