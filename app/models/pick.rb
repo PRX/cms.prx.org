@@ -11,6 +11,6 @@ class Pick < BaseModel
   has_one :account, through: :playlist_section
 
   # we only want picks from named playlists for now
-  default_scope { joins(:playlist).merge(Playlist.named).order(updated_at: :desc) }
+  scope :named_playlists, -> { joins(:playlist).merge(Playlist.named).order(updated_at: :desc) }
 
 end
