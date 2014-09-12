@@ -11,6 +11,8 @@ class Account < BaseModel
   has_many :stories, -> { where('published_at is not null and network_only_at is null').order(published_at: :desc) }
   has_many :memberships
   has_many :websites, as: :browsable
+  has_many :playlists
+  has_one :portfolio
 
   scope :pending, -> { where status: :pending }
   scope :active, -> { where status: :open }
