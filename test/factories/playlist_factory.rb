@@ -8,4 +8,8 @@ FactoryGirl.define do
     end
 
   end
+
+  factory :portfolio do
+    account
+  end
 end
