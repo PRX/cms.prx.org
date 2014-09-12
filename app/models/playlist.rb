@@ -8,6 +8,7 @@ class Playlist < BaseModel
 
   has_many :playlist_sections, foreign_key: 'playlist_id'
   has_many :picks, through: :playlist_sections
+  has_many :stories, through: :picks
   has_many :taggings, as: :taggable
   has_many :user_tags, through: :taggings
 

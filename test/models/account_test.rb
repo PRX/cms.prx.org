@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Account do
 
-  let(:account) { FactoryGirl.create(:account) }
+  let(:account) { create(:account) }
 
   it 'has a table defined' do
     Account.table_name.must_equal 'accounts'
@@ -14,6 +14,26 @@ describe Account do
 
   it 'has name as short name' do
     account.short_name.must_equal account.name
+  end
+
+  it 'has playlists' do
+    account.must_respond_to :playlists
+  end
+
+  it 'has a portfolio' do
+    account.must_respond_to :portfolio
+  end
+
+  describe '#portfolio_stories' do
+    it 'returns only stories in portfolio' do
+      portfolio = create(:portfolio, account: account)
+      section = create(:playlist_section, playlist: portfolio)
+      pick1 = create(:pick, playlist_section: section)
+      pick2 = create(:pick)
+
+      account.portfolio_stories.must_include pick1.story
+      account.portfolio_stories.wont_include pick2.story
+    end
   end
 
 end

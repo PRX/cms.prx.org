@@ -20,6 +20,8 @@ class Story < BaseModel
   has_many :formats, foreign_key: :piece_id
   has_many :taggings, as: :taggable
   has_many :user_tags, through: :taggings
+  has_many :picks, foreign_key: 'playlistable_id'
+  has_many :playlists, through: :picks
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
