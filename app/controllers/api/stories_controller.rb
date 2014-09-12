@@ -14,7 +14,7 @@ class Api::StoriesController < Api::BaseController
 
   def resources_base
     if params[:account_id] && params[:filters].try(:include?, 'highlighted')
-      Account.find(params[:account_id]).portfolio.stories.order(published_at: :desc).page(params[:page])
+      Account.find(params[:account_id]).portfolio_stories.page(params[:page])
     else
       Story.published.order(published_at: :desc).page(params[:page])
     end

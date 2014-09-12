@@ -22,4 +22,8 @@ class Account < BaseModel
     name
   end
 
+  def portfolio_stories
+    portfolio.stories.order(published_at: :desc)
+  end
+
 end

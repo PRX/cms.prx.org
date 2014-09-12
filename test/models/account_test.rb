@@ -24,4 +24,16 @@ describe Account do
     account.must_respond_to :portfolio
   end
 
+  describe '#portfolio_stories' do
+    it 'returns only stories in portfolio' do
+      portfolio = create(:portfolio, account: account)
+      section = create(:playlist_section, playlist: portfolio)
+      pick1 = create(:pick, playlist_section: section)
+      pick2 = create(:pick)
+
+      account.portfolio_stories.must_include pick1.story
+      account.portfolio_stories.wont_include pick2.story
+    end
+  end
+
 end
