@@ -5,8 +5,6 @@ FactoryGirl.define do
 
     promos
 
-    license
-
     title 'Story Title'
     length 120
     point_level 1
@@ -16,6 +14,20 @@ FactoryGirl.define do
     produced_on 2.weeks.ago
     related_website 'http://prx.org'
     broadcast_history 'Broadcast history'
+
+    factory :story_with_license do
+      license
+    end
+
+    factory :story_with_purchases do
+      ignore do
+        purchases_count 2
+      end
+
+      after(:create, :stub) do |story, evaluator|
+        create_list(:purchase, evaluator.purchases_count, purchased: story)
+      end
+    end
 
     factory :story_with_audio do
 

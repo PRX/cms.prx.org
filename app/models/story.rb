@@ -22,6 +22,7 @@ class Story < BaseModel
   has_many :user_tags, through: :taggings
   has_many :picks, foreign_key: 'playlistable_id'
   has_many :playlists, through: :picks
+  has_many :purchases, foreign_key: :purchased_id
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
@@ -42,6 +43,8 @@ class Story < BaseModel
   event_attribute :network_only_at
 
   scope :published, -> { where('published_at is not null and network_only_at is null') }
+  scope :licensed, -> { joins(:license) }
+  scope :purchased, -> { joins(:purchases).select('pieces.*', 'COUNT(purchases.id) AS purchase_count').group('pieces.id') }
 
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)
@@ -85,6 +88,10 @@ class Story < BaseModel
 
   def tags
     (topics + tones + formats + user_tags).map(&:to_tag).uniq.sort
+  end
+
+  def license_count
+    purchases.size
   end
 
 end

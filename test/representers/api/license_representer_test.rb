@@ -5,7 +5,7 @@ require 'license' if !defined?(License)
 
 describe Api::LicenseRepresenter do
 
-  let(:license)     { FactoryGirl.create(:story).license }
+  let(:license)     { FactoryGirl.create(:story_with_license).license }
   let(:representer) { Api::LicenseRepresenter.new(license) }
   let(:json)        { JSON.parse(representer.to_json) }
 

@@ -440,4 +440,29 @@ ActiveRecord::Schema.define(version: 1) do
     t.string "name"
   end
 
+  create_table "purchases", :force => true do |t|
+    t.integer  "seller_account_id"
+    t.integer  "purchaser_account_id"
+    t.integer  "purchaser_id"
+    t.integer  "purchased_id"
+    t.integer  "license_version"
+    t.datetime "purchased_at"
+    t.date     "expires_on"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.decimal  "price",                :precision => 9, :scale => 2
+    t.string   "unit"
+    t.string   "payment_type"
+    t.decimal  "royalty_base",         :precision => 9, :scale => 2
+    t.decimal  "royalty_bonus",        :precision => 9, :scale => 2
+    t.decimal  "royalty_subsidy",      :precision => 9, :scale => 2
+    t.string   "purchased_type"
+    t.integer  "network_id"
+  end
+
+  add_index "purchases", ["purchaser_account_id"], :name => "purchases_purchaser_account_id_fk"
+  add_index "purchases", ["purchaser_id"], :name => "purchases_purchaser_id_fk"
+  add_index "purchases", ["seller_account_id"], :name => "purchases_seller_account_id_fk"
+
+
 end

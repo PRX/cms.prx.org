@@ -8,7 +8,7 @@ class PagedCollection
 
   attr_accessor :items, :request, :options
 
-  def_delegators :items, :count, :total_count, :prev_page, :next_page, :total_pages, :first_page?, :last_page?
+  def_delegators :items, :total_count, :prev_page, :next_page, :total_pages, :first_page?, :last_page?
   alias_method :total, :total_count
 
   def_delegators :request, :params
@@ -64,5 +64,10 @@ class PagedCollection
     klass = rep.class.try(:base_class)
     (klass && (klass != rep.class)) ? rep.becomes(klass) : rep
   end
+
+  def count
+    items.length
+  end
+
 
 end
