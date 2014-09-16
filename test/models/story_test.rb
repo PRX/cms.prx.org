@@ -128,12 +128,4 @@ describe Story do
     story.must_respond_to :purchases
   end
 
-  describe '#license_count' do
-    it 'returns the number of times the story has been purchased' do
-      list = create_list(:purchase, 3, purchased: story)
-
-      story.license_count.must_equal 3
-    end
-  end
-
 end
