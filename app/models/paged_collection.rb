@@ -69,5 +69,4 @@ class PagedCollection
     items.length
   end
 
-
 end
