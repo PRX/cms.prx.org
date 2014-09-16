@@ -43,7 +43,6 @@ class Story < BaseModel
   event_attribute :network_only_at
 
   scope :published, -> { where('published_at is not null and network_only_at is null') }
-  scope :licensed, -> { joins(:license) }
   scope :purchased, -> { joins(:purchases).select('pieces.*', 'COUNT(purchases.id) AS purchase_count').group('pieces.id') }
 
   def points(level=point_level)
