@@ -13,11 +13,21 @@ class Api::StoriesController < Api::BaseController
   end
 
   def resources_base
-    if params[:account_id] && params[:filters].try(:include?, 'highlighted')
-      Account.find(params[:account_id]).portfolio_stories.page(params[:page])
+    filters = params[:filters].try(:split, ',') || []
+
+    if params[:account_id].present? && filters.include?('highlighted')
+      stories = Account.find(params[:account_id]).portfolio_stories
     else
-      Story.published.order(published_at: :desc).page(params[:page])
+      stories = Story
     end
+
+    if filters.include?('purchased')
+      stories = stories.purchased.order('purchase_count DESC')
+    else
+      stories = stories.order('published_at desc')
+    end
+
+    stories.published.page(params[:page])
   end
 
 end

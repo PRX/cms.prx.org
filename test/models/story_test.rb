@@ -124,4 +124,8 @@ describe Story do
     end
   end
 
+  it 'has purchases' do
+    story.must_respond_to :purchases
+  end
+
 end

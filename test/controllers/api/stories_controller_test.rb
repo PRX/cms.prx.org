@@ -31,6 +31,21 @@ describe Api::StoriesController do
     assigns[:stories].wont_include pick2.story
   end
 
+  it 'should list purchased stories' do
+    create_list(:purchase, 3, purchased: story)
+    story2 = create(:story, account: story.account)
+    story3 = create(:story_with_purchases, account: story.account)
+
+    get(:index, { api_version: 'v1',
+                  format: 'json',
+                  account_id: story.account_id,
+                  filters: 'purchased'})
+
+    assert_response :success
+    assert_not_nil assigns[:stories]
+    assigns[:stories].must_equal [story, story3]
+  end
+
   it 'should error on bad version' do
     get(:index, { api_version: 'v2', format: 'json' } )
     assert_response :not_acceptable
