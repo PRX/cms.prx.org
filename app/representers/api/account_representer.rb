@@ -32,7 +32,10 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   embed :opener, class: User, decorator: Api::Min::UserRepresenter, zoom: false
 
   link :stories do
-    api_account_stories_path(represented)
+    {
+      href: "#{api_account_stories_path(represented)}{?filters[]*}",
+      templated: true
+    }
   end
   embed :stories, as: :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
 
