@@ -33,7 +33,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
 
   link :stories do
     {
-      href: "#{api_account_stories_path(represented)}{?filters[]*}",
+      href: "#{api_account_stories_path(represented)}{?filters}",
       templated: true
     }
   end
