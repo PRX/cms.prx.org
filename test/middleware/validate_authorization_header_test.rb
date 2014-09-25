@@ -4,6 +4,7 @@ describe ValidateAuthorizationHeader do
   let(:app) { Proc.new {|env| env } }
   let(:valauth) { ValidateAuthorizationHeader.new(app) }
   let(:access_token) { 'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJzdWIiOm51bGwsImV4cCI6MzYwMCwiaWF0IjoxNDExNjY4NDIyLCJ0b2tlbl90eXBlIjoiYmVhcmVyIiwic2NvcGUiOm51bGx9.MEUCICZEJN1c-oCAteB7nH6QA7hvD6a66jTRi4E2dTb0vNHOAiEA5f9HK04GnsDnaNpA_SdwyW-nrCerb96M4PHLxmHrQ9U' }
+  # TODO: Generate a test access token instead of hardcoding
 
   describe '#call' do
     it 'does nothing if there is no authorization header' do
