@@ -26,6 +26,12 @@ class Api::BaseController < ApplicationController
     respond_with Api.version(api_version)
   end
 
+  def current_user
+    if request.env['prx.auth']
+      User.find(request.env['prx.auth']['sub'])
+    end
+  end
+
   private
 
   def set_accepts
