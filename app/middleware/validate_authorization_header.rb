@@ -1,4 +1,3 @@
-require 'pry'
 class ValidateAuthorizationHeader
   attr_reader :public_key
 
