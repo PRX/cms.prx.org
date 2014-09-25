@@ -9,7 +9,6 @@ class ValidateAuthorizationHeader
   def call(env)
     if env['HTTP_AUTHORIZATION'] =~ /\ABearer/
         token = env['HTTP_AUTHORIZATION'].split[1]
-        @public_key.refresh_key
       begin
         claims = JSON::JWT.decode(token, @public_key.key)
       rescue JSON::JWT::VerificationFailed => e
@@ -25,8 +24,6 @@ class ValidateAuthorizationHeader
   end
 
   class PublicKey
-    attr_reader :key
-
     EXPIRES_IN = 12.hours
     AUTH_URI = URI('https://auth.prx.org/api/v1/certs')
 
@@ -46,6 +43,11 @@ class ValidateAuthorizationHeader
       cert_string = certs["certificates"].values[0]
       certificate = OpenSSL::X509::Certificate.new(cert_string)
       @key = certificate.public_key
+    end
+
+    def key
+      refresh_key
+      @key
     end
   end
 end
