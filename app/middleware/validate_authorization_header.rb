@@ -7,16 +7,20 @@ class ValidateAuthorizationHeader
   end
 
   def call(env)
-    if env['Authorization'] =~ /\ABearer/
-        token = env['Authorization'].split[1]
+    if env['HTTP_AUTHORIZATION'] =~ /\ABearer/
+        token = env['HTTP_AUTHORIZATION'].split[1]
         @public_key.refresh_key
       begin
         claims = JSON::JWT.decode(token, @public_key.key)
       rescue JSON::JWT::VerificationFailed => e
         [401, {'Content-Type' => 'application/json'}, [{status: 401, error: 'Invalid JSON Web Token'}.to_json]]
       else
-        env = env.merge(claims)
+        env['prx.auth'] = claims
+
+        @app.call(env)
       end
+    else
+      @app.call(env)
     end
   end
 
