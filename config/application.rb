@@ -44,5 +44,7 @@ module PRX
         resource '/api/*', methods: [:get]
       end
     end
+
+    config.middleware.insert_before ActionDispatch::ParamsParser, "ValidateAuthorizationHeader"
   end
 end
