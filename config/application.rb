@@ -45,6 +45,5 @@ module PRX
       end
     end
 
-    config.middleware.insert_before ActionDispatch::ParamsParser, "ValidateAuthorizationHeader"
   end
 end
