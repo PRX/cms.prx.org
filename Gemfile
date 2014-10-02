@@ -25,6 +25,7 @@ gem 'unf'
 ## Controller
 # auth
 gem 'rack-cors', :require => 'rack/cors'
+gem 'pundit'
 
 # paging
 gem 'kaminari'
@@ -61,7 +62,6 @@ group :development do
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'pry-rails'
 
   gem 'growl', require: false
   gem 'guard'
@@ -77,6 +77,10 @@ group :test do
   gem "codeclimate-test-reporter", require: false
   gem 'simplecov', '~> 0.7.1', require: false
   gem 'coveralls', require: false
+end
+
+group :development, :test do
+  gem 'pry-rails'
 end
 
 group :doc do
