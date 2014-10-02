@@ -176,6 +176,10 @@ GEM
       railties (>= 3.1, < 5.0)
     rack (1.5.2)
     rack-cors (0.2.9)
+    rack-prx_auth (0.0.1)
+      json (~> 1.8, >= 1.8.1)
+      json-jwt (~> 0.7, >= 0.7.0)
+      rack (~> 1.5, >= 1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
     rails (4.1.1)
@@ -293,6 +297,7 @@ DEPENDENCIES
   pry-rails
   quiet_assets
   rack-cors
+  rack-prx_auth
   rails (~> 4.1.0)
   rake
   roar-rails
