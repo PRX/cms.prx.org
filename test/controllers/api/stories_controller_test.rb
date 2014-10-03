@@ -52,28 +52,36 @@ describe Api::StoriesController do
     assert_response :not_acceptable
   end
 
-  it 'should update if user has permission' do
+  it "should update if user has permission" do
     create(:membership, user: user, account: story.account)
 
     @controller.stub(:current_user, user) do
-      get(:update, { api_version: 'v1',
-                     format: 'json',
+      get(:update, { api_version: "v1",
+                     format: "json",
                      id: story.id })
     end
 
     assert_response :success
     assert_not_nil assigns[:story]
-
   end
 
-  it 'should error if user cannot update' do
+  it "should error if user cannot update" do
     @controller.stub(:current_user, user) do
-      get(:update, { api_version: 'v1',
-                     format: 'json',
+      get(:update, { api_version: "v1",
+                     format: "json",
                      id: story.id })
     end
 
     assert_response :unauthorized
   end
 
+  it "should error if there is no current user" do
+    @controller.stub(:current_user, nil) do
+      get(:update, { api_version: "v1",
+                     format: "json",
+                     id: story.id })
+    end
+
+    assert_response :unauthorized
+  end
 end

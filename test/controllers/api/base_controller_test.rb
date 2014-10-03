@@ -17,18 +17,18 @@ describe Api::BaseController do
     @controller.zoom_param.must_equal ['a', 'test']
   end
 
-  describe '#current_user' do
-    it 'returns nil if there is no current user' do
-      get(:entrypoint, { api_version: 'v1' })
+  describe "#current_user" do
+    it "returns nil if there is no current user" do
+      get(:entrypoint, api_version: "v1")
 
       @controller.current_user.must_be_nil
     end
 
-    it 'returns a user if there is one' do
+    it "returns a user if there is one" do
       TokenData = Struct.new(:user_id)
       user = create(:user)
-      get(:entrypoint, { api_version: 'v1' })
-      @request.env['prx.auth'] = TokenData.new(user.id)
+      get(:entrypoint, api_version: "v1")
+      @request.env["prx.auth"] = TokenData.new(user.id)
 
       @controller.current_user.must_equal user
     end

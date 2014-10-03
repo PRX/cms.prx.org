@@ -7,6 +7,6 @@ class StoryPolicy < ApplicationPolicy
   end
 
   def update?
-    user.accounts.include? story.account
+    user && user.accounts.include?(story.account)
   end
 end
