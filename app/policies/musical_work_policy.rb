@@ -1,2 +1,3 @@
-class MusicalWorkPolicy < StoryAttributePolicy
+class MusicalWorkPolicy < ApplicationPolicy
+  include StoryAttributePolicy
 end

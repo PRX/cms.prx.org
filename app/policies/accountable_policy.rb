@@ -1,4 +1,4 @@
-class AccountablePolicy < ApplicationPolicy
+module AccountablePolicy
   attr_reader :user, :record
 
   def initialize(user, record)

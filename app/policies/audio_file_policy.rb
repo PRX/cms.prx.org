@@ -1,2 +1,3 @@
-class AudioFilePolicy < StoryAttributePolicy
+class AudioFilePolicy < ApplicationPolicy
+  include StoryAttributePolicy
 end

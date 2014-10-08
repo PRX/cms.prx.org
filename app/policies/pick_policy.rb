@@ -1,2 +1,3 @@
-class PickPolicy < AccountablePolicy
+class PickPolicy < ApplicationPolicy
+  include AccountablePolicy
 end

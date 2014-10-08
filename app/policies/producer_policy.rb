@@ -6,6 +6,10 @@ class ProducerPolicy < ApplicationPolicy
     @producer = producer
   end
 
+  def create?
+    !!user
+  end
+
   def update?
     user && (producer.user == user || StoryPolicy.new(user, producer.story).update?)
   end

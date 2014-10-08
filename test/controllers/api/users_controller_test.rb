@@ -7,9 +7,9 @@ describe Api::UsersController do
   describe '#update' do
     it 'does not let a user update another user' do
       @controller.stub(:current_user, bad_user) do
-        get(:update, { api_version: 'v1',
-                       format: 'json',
-                       id: user.id })
+        get(:update, api_version: 'v1',
+                     format: 'json',
+                     id: user.id)
       end
 
       assert_response :unauthorized
@@ -17,9 +17,9 @@ describe Api::UsersController do
 
     it 'lets a user update themself' do
       @controller.stub(:current_user, user) do
-        get(:update, { api_version: 'v1',
-                       format: 'json',
-                       id: user.id })
+        get(:update,  api_version: 'v1',
+                      format: 'json',
+                      id: user.id)
       end
 
       assert_response :success

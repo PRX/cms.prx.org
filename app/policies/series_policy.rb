@@ -1,2 +1,3 @@
-class SeriesPolicy < AccountablePolicy
+class SeriesPolicy < ApplicationPolicy
+  include AccountablePolicy
 end

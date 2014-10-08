@@ -1,2 +1,3 @@
-class StoryPolicy < AccountablePolicy
+class StoryPolicy < ApplicationPolicy
+  include AccountablePolicy
 end

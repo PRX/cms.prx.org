@@ -1,9 +1,13 @@
-class ImagePolicy < ApplicationPolicy
+module ImagePolicy
   attr_reader :user, :image
 
   def initialize(user, image)
     @user = user
     @image = image
+  end
+
+  def create?
+    policy_type.new(user, image_owner).create?
   end
 
   def update?

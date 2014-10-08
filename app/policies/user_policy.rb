@@ -6,6 +6,10 @@ class UserPolicy < ApplicationPolicy
     @other_user = other_user
   end
 
+  def create?
+    true
+  end
+
   def update?
     user == other_user
   end

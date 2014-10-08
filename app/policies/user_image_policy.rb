@@ -1,2 +1,3 @@
-class UserImagePolicy < ImagePolicy
+class UserImagePolicy < ApplicationPolicy
+  include ImagePolicy
 end

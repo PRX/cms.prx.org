@@ -1,2 +1,3 @@
-class SeriesImagePolicy < ImagePolicy
+class SeriesImagePolicy < ApplicationPolicy
+  include ImagePolicy
 end

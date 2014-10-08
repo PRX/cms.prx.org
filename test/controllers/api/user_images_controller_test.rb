@@ -17,7 +17,7 @@ describe Api::UserImagesController do
 
   it 'should update if user has permission' do
     @controller.stub(:current_user, user_image.user) do
-      get(:update, { api_version: 'v1', format: 'json', id: user_image.id })
+      get(:update, api_version: 'v1', format: 'json', id: user_image.id)
     end
 
     assert_response :success
@@ -25,7 +25,7 @@ describe Api::UserImagesController do
 
   it 'should not update if user does not have permission' do
     @controller.stub(:current_user, create(:user)) do
-      get(:update, { api_version: 'v1', format: 'json', id: user_image.id })
+      get(:update, api_version: 'v1', format: 'json', id: user_image.id)
     end
 
     assert_response :unauthorized

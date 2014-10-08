@@ -1,2 +1,3 @@
-class StoryImagePolicy < ImagePolicy
+class StoryImagePolicy < ApplicationPolicy
+  include ImagePolicy
 end
