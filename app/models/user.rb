@@ -23,4 +23,10 @@ class User < BaseModel
     "#{first_name} #{last_name}"
   end
 
+  def approved_accounts
+    Account.
+      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
+      where(['accounts.id = ? OR (memberships.user_id = ? and memberships.approved is true)', self.individual_account.id, self.id])
+  end
+
 end
