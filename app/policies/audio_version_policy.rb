@@ -1,0 +1,2 @@
+class AudioVersionPolicy < StoryAttributePolicy
+end

@@ -1,0 +1,2 @@
+class LicensePolicy < StoryAttributePolicy
+end

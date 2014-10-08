@@ -1,0 +1,2 @@
+class UserImagePolicy < ImagePolicy
+end

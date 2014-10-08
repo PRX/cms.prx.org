@@ -1,0 +1,2 @@
+class MusicalWorkPolicy < StoryAttributePolicy
+end

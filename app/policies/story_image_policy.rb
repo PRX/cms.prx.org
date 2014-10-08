@@ -1,0 +1,2 @@
+class StoryImagePolicy < ImagePolicy
+end

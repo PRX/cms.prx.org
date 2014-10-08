@@ -1,0 +1,2 @@
+class SeriesImagePolicy < ImagePolicy
+end

@@ -1,0 +1,2 @@
+class AccountImagePolicy < ImagePolicy
+end
