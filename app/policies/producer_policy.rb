@@ -11,6 +11,8 @@ class ProducerPolicy < ApplicationPolicy
   end
 
   def update?
-    user && (producer.user == user || StoryPolicy.new(user, producer.story).update?)
+    user &&
+      (producer.user == user ||
+       AccountablePolicy.new(user, producer.story).update?)
   end
 end

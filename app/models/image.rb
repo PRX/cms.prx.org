@@ -15,4 +15,7 @@ class Image < BaseModel
     self.try(:read_attribute, :caption)
   end
 
+  def self.policy_class
+    ImagePolicy
+  end
 end

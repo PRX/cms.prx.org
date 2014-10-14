@@ -1,4 +1,4 @@
-module ImagePolicy
+class ImagePolicy
   attr_reader :user, :image
 
   def initialize(user, image)
@@ -7,7 +7,7 @@ module ImagePolicy
   end
 
   def create?
-    policy_type.new(user, image_owner).create?
+    update?
   end
 
   def update?
@@ -17,7 +17,7 @@ module ImagePolicy
   private
 
   def policy_type
-    (image_owner_class + 'Policy').constantize
+    Pundit::PolicyFinder.new(image_owner_class.constantize).policy!
   end
 
   def image_owner_class

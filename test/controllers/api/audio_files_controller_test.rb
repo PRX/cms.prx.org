@@ -1,8 +1,9 @@
 require 'test_helper'
 
 describe Api::AudioFilesController do
-
-  let(:audio_file) { FactoryGirl.create(:audio_file) }
+  let(:user) { create(:user) }
+  let(:story) { create(:story, account: user.individual_account) }
+  let(:audio_file) { create(:audio_file, story: story) }
 
   it 'should show' do
     get :show, id: audio_file.id, format: 'json', api_version: 'v1'
@@ -14,5 +15,4 @@ describe Api::AudioFilesController do
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
   end
-
 end

@@ -1,4 +1,4 @@
-module StoryAttributePolicy
+class StoryAttributePolicy
   attr_reader :user, :record
 
   def initialize(user, record)
@@ -7,10 +7,10 @@ module StoryAttributePolicy
   end
 
   def create?
-    StoryPolicy.new(user, record.story).create?
+    update?
   end
 
   def update?
-    StoryPolicy.new(user, record.story).update?
+    AccountablePolicy.new(user, record.story).update?
   end
 end

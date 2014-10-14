@@ -89,4 +89,7 @@ class Story < BaseModel
     (topics + tones + formats + user_tags).map(&:to_tag).uniq.sort
   end
 
+  def self.policy_class
+    AccountablePolicy
+  end
 end
