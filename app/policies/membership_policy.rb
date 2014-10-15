@@ -7,7 +7,7 @@ class MembershipPolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    update?|| (user == membership.user && !membership.approved?)
   end
 
   def update?
