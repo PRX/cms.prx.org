@@ -28,4 +28,8 @@ class User < BaseModel
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
       where(['accounts.id = ? OR (memberships.user_id = ? and memberships.approved is true)', individual_account.id, id])
   end
+
+  def role_for(account)
+    Membership.where(account: account, user: self).first.try(:role)
+  end
 end

@@ -11,9 +11,10 @@ class MembershipPolicy < ApplicationPolicy
   end
 
   def update?
+    user && user.role_for(membership.account) == 'admin'
   end
 
   def destroy?
-    user == membership.user
+    user == membership.user || user.role_for(membership.account) == 'admin'
   end
 end
