@@ -7,7 +7,7 @@ class AccountPolicy < ApplicationPolicy
   end
 
   def create?
-    !!user
+    user.present?
   end
 
   def update?
