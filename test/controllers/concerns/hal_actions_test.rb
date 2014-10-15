@@ -20,31 +20,9 @@ describe HalActions do
   end
 
   describe '#update' do
-    it 'raises a pundit error if user is not authorized' do
-      controller.stub(:resource, account) do
-        begin
-          controller.update
-        rescue Pundit::NotAuthorizedError
-          assert true
-        else
-          assert false
-        end
-      end
-    end
-
-    it 'does not raise a pundit error if user is authorized' do
-      mem = create(:membership, account: account, user: create(:user))
-
-      controller.stub(:resource, account) do
-        controller.stub(:current_user, mem.user) do
-          begin
-            controller.update
-          rescue Pundit::NotAuthorizedError
-            assert false
-          rescue => e
-            assert true
-          end
-        end
+    it 'authorizes the resource' do
+      controller.stub(:authorize, true) do
+        assert_send([controller, :authorize, account])
       end
     end
   end
