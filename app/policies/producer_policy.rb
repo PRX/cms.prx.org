@@ -7,7 +7,7 @@ class ProducerPolicy < ApplicationPolicy
   end
 
   def create?
-    !!user
+    update?
   end
 
   def update?

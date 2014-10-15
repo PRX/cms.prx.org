@@ -6,24 +6,6 @@ describe AccountablePolicy do
   let(:account) { mem.account }
   let(:story) { build_stubbed(:story, account: mem.account) }
 
-  describe '#create?' do
-    it 'returns false if user is not present' do
-      assert !AccountablePolicy.new(nil, story).create?
-    end
-
-    it 'returns false if user has no approved accounts' do
-      user.stub(:approved_accounts, []) do
-        assert !AccountablePolicy.new(user, story).create?
-      end
-    end
-
-    it 'returns true if user has approved accounts' do
-      user.stub(:approved_accounts, [account]) do
-        assert AccountablePolicy.new(user, story).create?
-      end
-    end
-  end
-
   describe '#update?' do
     it 'returns false if user is not present' do
       assert !AccountablePolicy.new(nil, story).update?
@@ -35,7 +17,7 @@ describe AccountablePolicy do
       end
     end
 
-    it 'returns true if user has approved accounts' do
+    it 'returns true if is a member of the account' do
       user.stub(:approved_accounts, [account]) do
         assert AccountablePolicy.new(user, story).create?
       end

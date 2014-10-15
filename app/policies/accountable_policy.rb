@@ -7,7 +7,7 @@ class AccountablePolicy
   end
 
   def create?
-    user && !user.approved_accounts.empty?
+    update?
   end
 
   def update?

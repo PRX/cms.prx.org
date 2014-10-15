@@ -5,16 +5,6 @@ describe ProducerPolicy do
   let(:producer) { build_stubbed(:producer_with_user_and_story) }
   let(:story) { producer.story }
 
-  describe '#create?' do
-    it 'returns false if user is not present' do
-      assert !ProducerPolicy.new(nil, producer).create?
-    end
-
-    it 'returns true if user is present' do
-      assert ProducerPolicy.new(user, producer).create?
-    end
-  end
-
   describe '#update?' do
     it 'returns true if user is the producer' do
       assert ProducerPolicy.new(producer.user, producer).update?
