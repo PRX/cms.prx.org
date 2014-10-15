@@ -6,11 +6,11 @@ describe UserPolicy do
 
   describe '#update?' do
     it 'lets users update themselves' do
-      assert UserPolicy.new(user1, user1).update?
+      UserPolicy.new(user1, user1).must_allow :update?
     end
 
     it 'does not let users update each other' do
-      assert !UserPolicy.new(user1, user2).update?
+      UserPolicy.new(user1, user2).wont_allow :update?
     end
   end
 end

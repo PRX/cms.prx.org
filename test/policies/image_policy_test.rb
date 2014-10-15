@@ -10,13 +10,13 @@ describe ImagePolicy do
 
     it 'returns true if user is a member of account' do
       user.stub(:approved_accounts, [account]) do
-        assert ImagePolicy.new(user, series_image).update?
+        ImagePolicy.new(user, series_image).must_allow :update?
       end
     end
 
     it 'returns false if user is not a member' do
       user.stub(:approved_accounts, []) do
-        assert !ImagePolicy.new(user, series_image).update?
+        ImagePolicy.new(user, series_image).wont_allow :update?
       end
     end
   end
@@ -26,11 +26,11 @@ describe ImagePolicy do
     let(:user2) { build_stubbed(:user) }
 
     it 'returns true if users are the same' do
-      assert ImagePolicy.new(user, user_image).update?
+      ImagePolicy.new(user, user_image).must_allow :update?
     end
 
     it 'returns false if users are different' do
-      assert !ImagePolicy.new(user2, user_image).update?
+      ImagePolicy.new(user2, user_image).wont_allow :update?
     end
   end
 end

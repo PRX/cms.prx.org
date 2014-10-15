@@ -9,17 +9,17 @@ describe StoryAttributePolicy do
 
     it 'returns true if user is a member of story account' do
       user.stub(:approved_accounts, [story.account]) do
-        assert StoryAttributePolicy.new(user, musical_work).update?
+        StoryAttributePolicy.new(user, musical_work).must_allow :update?
       end
     end
 
     it 'returns false if user is not present' do
-      assert !StoryAttributePolicy.new(user, musical_work).update?
+      StoryAttributePolicy.new(user, musical_work).wont_allow :update?
     end
 
     it 'returns false if user is not a member of story account' do
       user.stub(:approved_accounts, []) do
-        assert !StoryAttributePolicy.new(user2, musical_work).update?
+        StoryAttributePolicy.new(user2, musical_work).wont_allow :update?
       end
     end
   end

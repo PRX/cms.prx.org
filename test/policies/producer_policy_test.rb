@@ -7,17 +7,17 @@ describe ProducerPolicy do
 
   describe '#update?' do
     it 'returns true if user is the producer' do
-      assert ProducerPolicy.new(producer.user, producer).update?
+      ProducerPolicy.new(producer.user, producer).must_allow :update?
     end
 
     it 'returns true if user is associated with story' do
       user.stub(:approved_accounts, [story.account]) do
-        assert ProducerPolicy.new(user, producer).update?
+        ProducerPolicy.new(user, producer).must_allow :update?
       end
     end
 
     it 'returns false otherwise' do
-      assert !ProducerPolicy.new(user, producer).update?
+      ProducerPolicy.new(user, producer).wont_allow :update?
     end
   end
 end

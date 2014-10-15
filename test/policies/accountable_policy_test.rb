@@ -8,18 +8,18 @@ describe AccountablePolicy do
 
   describe '#update?' do
     it 'returns false if user is not present' do
-      assert !AccountablePolicy.new(nil, story).update?
+      AccountablePolicy.new(nil, story).wont_allow :update?
     end
 
     it 'returns false if user is not a member of the account' do
       user.stub(:approved_accounts, []) do
-        assert !AccountablePolicy.new(user, story).create?
+        AccountablePolicy.new(user, story).wont_allow :update?
       end
     end
 
     it 'returns true if is a member of the account' do
       user.stub(:approved_accounts, [account]) do
-        assert AccountablePolicy.new(user, story).create?
+        AccountablePolicy.new(user, story).must_allow :update?
       end
     end
   end

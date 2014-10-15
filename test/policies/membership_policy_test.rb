@@ -9,33 +9,33 @@ describe MembershipPolicy do
 
   describe '#update?' do
     it 'returns true if user is admin' do
-      assert MembershipPolicy.new(user1, mem2).update?
+      MembershipPolicy.new(user1, mem2).must_allow :update?
     end
 
     it 'returns false if user is not a member' do
-      assert !MembershipPolicy.new(user1, build_stubbed(:membership)).update?
+      MembershipPolicy.new(create(:user), mem1).wont_allow :update?
     end
 
     it 'returns false if user is not an admin' do
-      assert !MembershipPolicy.new(user2, mem1).update?
+      MembershipPolicy.new(user2, mem1).wont_allow :update?
     end
 
     it 'returns false if user is not present' do
-      assert !MembershipPolicy.new(nil, mem1).update?
+      MembershipPolicy.new(nil, mem1).wont_allow :update?
     end
   end
 
   describe '#destroy?' do
     it 'returns true if user is the member' do
-      assert MembershipPolicy.new(user1, mem1).destroy?
+      MembershipPolicy.new(user1, mem1).must_allow :destroy?
     end
 
     it 'returns true if user is an admin' do
-      assert MembershipPolicy.new(user1, mem2).destroy?
+      MembershipPolicy.new(user1, mem2).must_allow :destroy?
     end
 
     it 'returns false otherwise' do
-      assert !MembershipPolicy.new(user2, mem1).destroy?
+      MembershipPolicy.new(user2, mem1).wont_allow :destroy?
     end
   end
 end
