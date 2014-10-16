@@ -69,6 +69,34 @@ describe Api::StoryRepresenter do
     end
   end
 
+  describe 'series info' do
+    let(:schedule) { create(:schedule) }
+    let(:series) { schedule.series }
+    let(:story) { build_stubbed(:story, series: series, episode_number: 2) }
+    let(:representer) { Api::StoryRepresenter.new(story) }
+    let(:json) { JSON.parse(representer.to_json) }
+
+    it 'links to the series' do
+      json['_links']['prx:series']['href'].must_match /#{series.id}/
+    end
+
+    it 'includes episode number' do
+      json['episodeNumber'].must_equal 2
+    end
+
+    it 'includes episode date' do
+      json['episodeDate'].must_equal story.episode_date
+    end
+
+    it 'has none of this when story is not in a series' do
+      story2 = build_stubbed(:story)
+      json = JSON.parse(Api::StoryRepresenter.new(story2).to_json)
+      json['_links'].keys.wont_include('prx:series')
+      json.keys.wont_include('episode_number')
+      json.keys.wont_include('episode_date')
+    end
+  end
+
   describe Api::Min::StoryRepresenter do
     let(:representer) { Api::Min::StoryRepresenter.new(story) }
 
@@ -77,7 +105,5 @@ describe Api::StoryRepresenter do
         json['duration'].must_equal 212
       end
     end
-
   end
-
 end

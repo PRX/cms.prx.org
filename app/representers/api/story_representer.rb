@@ -7,6 +7,8 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :duration
   property :short_description
   property :description
+  property :episode_number
+  property :episode_date
   property :published_at
   property :produced_on
   property :points
