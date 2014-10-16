@@ -464,5 +464,13 @@ ActiveRecord::Schema.define(version: 1) do
   add_index "purchases", ["purchaser_id"], :name => "purchases_purchaser_id_fk"
   add_index "purchases", ["seller_account_id"], :name => "purchases_seller_account_id_fk"
 
+  create_table "schedules", :force => true do |t|
+    t.integer  "series_id"
+    t.integer  "day"
+    t.integer  "hour"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
+  add_index "schedules", ["series_id"], :name => "index_schedules_on_series_id"
 end
