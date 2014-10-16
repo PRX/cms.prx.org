@@ -72,9 +72,8 @@ describe Api::StoryRepresenter do
   describe 'series info' do
     let(:schedule) { create(:schedule) }
     let(:series) { schedule.series }
-    let(:story) { build_stubbed(:story,
-                                series: series,
-                                episode_identifier: '#2') }
+    let(:story) { build_stubbed(:story, series: series,
+                                        episode_identifier: '#2') }
     let(:representer) { Api::StoryRepresenter.new(story) }
     let(:json) { JSON.parse(representer.to_json) }
 

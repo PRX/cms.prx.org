@@ -2,10 +2,10 @@
 
 class Series < BaseModel
   SUBSCRIPTION_STATES = [
-    SUBSCRIPTION_NEW           = "New",
-    SUBSCRIPTION_STARTED       = "Started",
-    SUBSCRIPTION_USER_APPROVED = "User Approved",
-    SUBSCRIPTION_PRX_APPROVED  = "PRX Approved"
+    SUBSCRIPTION_NEW           = 'New',
+    SUBSCRIPTION_STARTED       = 'Started',
+    SUBSCRIPTION_USER_APPROVED = 'User Approved',
+    SUBSCRIPTION_PRX_APPROVED  = 'PRX Approved'
   ]
 
   belongs_to :account, with_deleted: true
@@ -27,7 +27,7 @@ class Series < BaseModel
   end
 
   def get_datetime_for_episode_number(episode_number)
-    raise 'cannot calculate date for that episode number' if (!episode_start_at || (episode_number < episode_start_number))
+    raise 'cannot calculate date for that episode number' if !episode_start_at || (episode_number < episode_start_number)
     # determine the number of episodes in a week
     episodes_per_week = schedules.length
 
@@ -43,17 +43,17 @@ class Series < BaseModel
     # get the days between
     days_between = schedules[current_schedule].day - schedules[start_schedule].day
     days_between = days_between + 7 if days_between < 0
-    days_between = 7 if (days_between == 0 && schedules[start_schedule].hour > schedules[current_schedule].hour)
+    days_between = 7 if days_between == 0 && (schedules[start_schedule].hour > schedules[current_schedule].hour)
 
     #  add up the start, prior weeks, and the part of the final week
     # result = start_time + hours_between.hours + weeks_between.weeks
     result = start_time + weeks_between.weeks + days_between.days
-    result = result.change(:hour=>schedules[current_schedule].hour)
+    result = result.change(hour: schedules[current_schedule].hour)
     result
   end
 
   def start_info
-    start_time = episode_start_at.in_time_zone(self.time_zone)
+    start_time = episode_start_at.in_time_zone(time_zone)
     # start_time = start_time.change(:hour=>0, :min=>0, :sec=>0)
     # start_schedule = schedule_for_datetime(start_time)
 
@@ -71,7 +71,7 @@ class Series < BaseModel
     day_diff = schedules[start_schedule].day - start_time.wday
     day_diff = day_diff + 7 if day_diff < 0
 
-    start_time = start_time.change(:hour=>schedules[start_schedule].hour.to_i)
+    start_time = start_time.change(hour: schedules[start_schedule].hour.to_i)
     start_time = start_time + day_diff.days
 
     [start_time, start_schedule]
