@@ -15,6 +15,6 @@ class AccountPolicy < ApplicationPolicy
   end
 
   def destroy?
-    account.opener == user
+    user && user.role_for(account) == 'admin'
   end
 end

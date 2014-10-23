@@ -30,6 +30,6 @@ class User < BaseModel
   end
 
   def role_for(account)
-    Membership.where(account: account, user: self).first.try(:role)
+    memberships.where(account: account).first.try(:role)
   end
 end

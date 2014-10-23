@@ -3,8 +3,7 @@ require 'test_helper'
 describe AccountPolicy do
   let(:user) { build_stubbed(:user) }
   let(:user2) { build_stubbed(:user) }
-  let(:opener) { build_stubbed(:user) }
-  let(:account) { build_stubbed(:account, opener: opener) }
+  let(:account) { build_stubbed(:account) }
 
   describe '#create?' do
     it 'returns true if user exists' do
@@ -35,12 +34,16 @@ describe AccountPolicy do
   end
 
   describe '#destroy?' do
-    it 'returns true if user opened the account' do
-      AccountPolicy.new(opener, account).must_allow :destroy?
+    it 'returns true if user is an admin' do
+      user.stub(:role_for, 'admin') do
+        AccountPolicy.new(user, account).must_allow :destroy?
+      end
     end
 
-    it 'returns false if user did not open the account' do
-      AccountPolicy.new(user, account).wont_allow :destroy?
+    it 'returns false if user is not an admin' do
+      user.stub(:role_for, nil) do
+        AccountPolicy.new(user, account).wont_allow :destroy?
+      end
     end
   end
 end
