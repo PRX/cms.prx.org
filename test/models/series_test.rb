@@ -30,7 +30,7 @@ describe Series do
 
   describe 'subauto methods' do
     before :each do
-      (0..6).each{|d| (0..23).each{|h| create(:schedule, day: d, hour: h, series: series) }}
+      (0..6).each { |d| (0..23).each { |h| create(:schedule, day: d, hour: h, series: series) } }
     end
 
     it 'can get the datetime from first episode number' do
