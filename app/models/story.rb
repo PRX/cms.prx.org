@@ -92,4 +92,14 @@ class Story < BaseModel
   def self.policy_class
     AccountablePolicy
   end
+
+  def episode_date
+    @episode_date || if subscription_episode? && episode_number
+      series.get_datetime_for_episode_number(episode_number)
+    end
+  end
+
+  def subscription_episode?
+    series && series.subscribable?
+  end
 end
