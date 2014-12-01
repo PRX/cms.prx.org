@@ -81,12 +81,24 @@ class Story < BaseModel
     default_audio_version.try(:timing_and_cues)
   end
 
+  def timing_and_cues=(taq)
+    default_audio_version.try(:timing_and_cues=, taq)
+  end
+
   def content_advisory
     default_audio_version.try(:content_advisory)
   end
 
+  def content_advisory=(ca)
+    default_audio_version.try(:content_advisory=, ca)
+  end
+
   def tags
     (topics + tones + formats + user_tags).map(&:to_tag).uniq.sort
+  end
+
+  def tags=(ts)
+    self.user_tags = ts.uniq.sort.collect{|t| UserTag.new(name: t) }
   end
 
 end
