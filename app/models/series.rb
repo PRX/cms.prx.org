@@ -105,5 +105,4 @@ class Series < BaseModel
 
     schedule_index
   end
-
 end

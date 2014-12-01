@@ -43,10 +43,16 @@ class Story < BaseModel
   event_attribute :network_only_at
 
   scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
-  scope :purchased, -> { joins(:purchases).select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`') }
+
+  scope :purchased, -> {
+    joins(:purchases).
+    select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
+  }
+
   scope :visible,   -> {
     joins('LEFT OUTER JOIN `series` ON `pieces`.`series_id` = `series`.`id`').
-    where(["`series`.`subscription_approval_status` != ? OR `series`.`subscriber_only_at` IS NULL", Series::SUBSCRIPTION_PRX_APPROVED])
+    where(['`series`.`subscription_approval_status` != ? OR `series`.`subscriber_only_at` IS NULL',
+      Series::SUBSCRIPTION_PRX_APPROVED])
   }
 
   def points(level=point_level)
