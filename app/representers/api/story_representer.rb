@@ -4,17 +4,17 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   property :id
   property :title
-  property :duration
   property :short_description
   property :description
   property :published_at
   property :produced_on
-  property :points
   property :related_website
   property :broadcast_history
   property :timing_and_cues
   property :content_advisory
   property :tags
+  property :duration, writeable: false
+  property :points, writeable: false
 
   # default zoom
   link :account do
@@ -78,7 +78,6 @@ end
 
 # TODO:
 # * List of Producers
-# * tags
 
 # WAIT:
 # * Producing Account's other Pieces (Doesn't make sense for right now)
