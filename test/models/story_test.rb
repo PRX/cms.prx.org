@@ -128,4 +128,31 @@ describe Story do
     story.must_respond_to :purchases
   end
 
+  describe '#subscription_episode?' do
+    let(:series) { build_stubbed(:series) }
+
+    before :each do
+      story.series = series
+    end
+
+    it 'returns true if series is subscribable' do
+      story.must_be :subscription_episode?
+    end
+
+    it 'returns false otherwise' do
+      series.subscription_approval_status = Series::SUBSCRIPTION_NEW
+
+      story.wont_be :subscription_episode?
+    end
+
+    describe '#episode_date' do
+      it 'returns the episode date' do
+        story.episode_number = 3
+        create(:schedule, series: series)
+
+        story.episode_date.must_equal series.get_datetime_for_episode_number(3)
+      end
+    end
+  end
+
 end
