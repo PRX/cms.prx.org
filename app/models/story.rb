@@ -89,6 +89,10 @@ class Story < BaseModel
     (topics + tones + formats + user_tags).map(&:to_tag).uniq.sort
   end
 
+  def self.policy_class
+    AccountablePolicy
+  end
+
   def episode_date
     @episode_date || if subscription_episode? && episode_number
       series.get_datetime_for_episode_number(episode_number)

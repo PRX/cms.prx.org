@@ -21,4 +21,7 @@ class AudioFile < BaseModel
 
   mount_uploader :file, AudioFileUploader, mount_on: :filename
 
+  def self.policy_class
+    StoryAttributePolicy
+  end
 end

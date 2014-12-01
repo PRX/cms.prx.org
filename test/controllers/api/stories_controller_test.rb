@@ -1,7 +1,6 @@
 require 'test_helper'
 
 describe Api::StoriesController do
-
   let(:story) { create(:story) }
 
   it 'should show' do
@@ -50,5 +49,4 @@ describe Api::StoriesController do
     get(:index, { api_version: 'v2', format: 'json' } )
     assert_response :not_acceptable
   end
-
 end

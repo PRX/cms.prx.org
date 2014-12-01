@@ -19,6 +19,5 @@ FactoryGirl.define do
     factory :promos do
       promos true
     end
-
   end
 end

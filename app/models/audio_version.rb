@@ -39,4 +39,7 @@ class AudioVersion < BaseModel
     end
   end
 
+  def self.policy_class
+    StoryAttributePolicy
+  end
 end
