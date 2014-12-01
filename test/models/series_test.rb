@@ -49,5 +49,15 @@ describe Series do
 
       schedule.must_equal((sa.wday * 24) + sa.hour)
     end
+
+    it 'returns if the series is subscriber only' do
+      series.subscription_approval_status = Series::SUBSCRIPTION_STARTED
+      series.subscriber_only_at = Time.now
+      series.wont_be :subscriber_only?
+
+      series.subscription_approval_status = Series::SUBSCRIPTION_PRX_APPROVED
+      series.must_be :subscriber_only?
+    end
+
   end
 end
