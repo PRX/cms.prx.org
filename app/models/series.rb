@@ -8,6 +8,8 @@ class Series < BaseModel
     SUBSCRIPTION_PRX_APPROVED  = 'PRX Approved'
   ]
 
+  acts_as_paranoid
+
   belongs_to :account, with_deleted: true
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id', with_deleted: true
 
@@ -17,7 +19,7 @@ class Series < BaseModel
 
   has_one :image, -> { where(parent_id: nil) }, class_name: 'SeriesImage'
 
-  acts_as_paranoid
+  event_attribute :subscriber_only_at
 
   def story_count
     @story_count ||= self.stories.published.count
@@ -29,6 +31,10 @@ class Series < BaseModel
 
   def subscribable?
     subscription_approval_status == SUBSCRIPTION_PRX_APPROVED
+  end
+
+  def subscriber_only?
+    subscribable? && subscriber_only_at.present?
   end
 
   def get_datetime_for_episode_number(episode_number)

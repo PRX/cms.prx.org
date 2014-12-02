@@ -241,6 +241,7 @@ ActiveRecord::Schema.define(version: 1) do
     t.datetime "prx_billing_at"
     t.integer  "promos_days_early"
     t.datetime "subauto_bill_me_at"
+    t.datetime "subscriber_only_at"
   end
 
   add_index "series", ["account_id"], :name => "index_series_on_account_id"

@@ -2,9 +2,9 @@
 
 class Story < BaseModel
 
-  acts_as_paranoid
-
   self.table_name = 'pieces'
+
+  acts_as_paranoid
 
   belongs_to :account, with_deleted: true
   belongs_to :creator, class_name: 'User',foreign_key: 'creator_id', with_deleted: true
@@ -42,8 +42,18 @@ class Story < BaseModel
   # indicates the piece is not publically available, only to the network
   event_attribute :network_only_at
 
-  scope :published, -> { where('published_at is not null and network_only_at is null') }
-  scope :purchased, -> { joins(:purchases).select('pieces.*', 'COUNT(purchases.id) AS purchase_count').group('pieces.id') }
+  scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
+
+  scope :purchased, -> {
+    joins(:purchases).
+    select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
+  }
+
+  scope :visible,   -> {
+    joins('LEFT OUTER JOIN `series` ON `pieces`.`series_id` = `series`.`id`').
+    where(['`series`.`subscription_approval_status` != ? OR `series`.`subscriber_only_at` IS NULL',
+           Series::SUBSCRIPTION_PRX_APPROVED])
+  }
 
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)
