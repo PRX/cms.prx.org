@@ -2,6 +2,18 @@
 
 require 'active_support/concern'
 
+# monkey patch Representable 1.8.5 (a debateable idea, got it from roar)
+# so that an embedded attribute is not writeable
+# https://github.com/apotonick/representable/blob/v1.8.5/lib/representable/readable_writeable.rb#L19
+Representable::Definition.class_eval do
+  # Checks and returns if the property is writeable
+  def writeable?
+    return !self[:embedded] if self.has_key?(:embedded)
+    return self[:writeable] if self.has_key?(:writeable)
+    true
+  end
+end
+
 # expects underlying model to have filename, class, and id attributes
 module Embeds
   extend ActiveSupport::Concern
@@ -24,8 +36,12 @@ module Embeds
       # not embedded, return false - nothing to suppress
       return false if !embedded
 
+      # prevent embed deserialize in Representable 2.x
+      # https://github.com/apotonick/representable/blob/v2.0.0/lib/representable/mapper.rb#L34
+      return true if options[:action] && options[:action] == :deserialize
+
       # check if it should be zoomed, suppress if not
-      !embed_zoomed?(name, binding[:zoom], options[:zoom])
+      return !embed_zoomed?(name, binding[:zoom], options[:zoom])
     end
 
     def embed_zoomed?(name, zoom_def=nil, zoom_param=nil)
