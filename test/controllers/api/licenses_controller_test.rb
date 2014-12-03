@@ -1,8 +1,9 @@
 require 'test_helper'
 
 describe Api::LicensesController do
-
-  let(:license) { FactoryGirl.create(:license) }
+  let(:user) { create(:user) }
+  let(:story) { create(:story, account: user.individual_account) }
+  let(:license) { create(:license, story: story) }
 
   it 'should show' do
     get(:show, { api_version: 'v1', format: 'json', id: license.id } )
@@ -14,5 +15,4 @@ describe Api::LicensesController do
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
   end
-
 end

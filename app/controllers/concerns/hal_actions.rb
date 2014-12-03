@@ -15,6 +15,11 @@ module HalActions
     respond_with show_resource, show_options
   end
 
+  def update
+    authorize resource
+    respond_with show_resource, show_options
+  end
+
   def show_resource
     res = self.resource
     raise ActiveRecord::RecordNotFound.new unless res
@@ -93,6 +98,7 @@ module HalActions
     keys ||= []
     where_hash = params.slice(*keys)
     where_hash['piece_id'] = where_hash.delete('story_id') if where_hash.key?('story_id')
+    where_hash = where_hash.permit(where_hash.keys)
     arel = arel.where(where_hash) unless where_hash.blank?
     arel
   end

@@ -13,4 +13,7 @@ class Pick < BaseModel
   # we only want picks from named playlists for now
   scope :named_playlists, -> { joins(:playlist).merge(Playlist.named).order(updated_at: :desc) }
 
+  def self.policy_class
+    AccountablePolicy
+  end
 end

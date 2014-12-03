@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 class Api::BaseController < ApplicationController
 
   protect_from_forgery with: :null_session
@@ -22,8 +21,16 @@ class Api::BaseController < ApplicationController
 
   caches_action :entrypoint, cache_path: ->(c){ {_c: Api.version(api_version).cache_key } }
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   def entrypoint
     respond_with Api.version(api_version)
+  end
+
+  def current_user
+    if prx_auth_token
+      User.find_by(id: prx_auth_token.user_id)
+    end
   end
 
   private
@@ -32,4 +39,8 @@ class Api::BaseController < ApplicationController
     request.format = :json if request.format == Mime::HTML
   end
 
+  def user_not_authorized
+    render json: { error: 'You are not authorized to perform this action' },
+                   status: 401
+  end
 end

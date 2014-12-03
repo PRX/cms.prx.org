@@ -16,11 +16,20 @@ class User < BaseModel
   def accounts
     Account.
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
-      where(['accounts.id = ? OR memberships.user_id = ?', self.individual_account.id, self.id])
+      where(['accounts.id = ? OR memberships.user_id = ?', individual_account.id, id])
   end
 
   def name
     "#{first_name} #{last_name}"
   end
 
+  def approved_accounts
+    Account.
+      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
+      where(['accounts.id = ? OR (memberships.user_id = ? and memberships.approved is true)', individual_account.id, id])
+  end
+
+  def role_for(account)
+    memberships.where(account: account).first.try(:role)
+  end
 end

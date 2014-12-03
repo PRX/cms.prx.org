@@ -1,8 +1,8 @@
 require 'test_helper'
 
 describe Api::SeriesController do
-
-  let(:series) { FactoryGirl.create(:series) }
+  let(:user) { create(:user) }
+  let(:series) { create(:series, account: user.individual_account) }
 
   it 'should show' do
     get(:show, { api_version: 'v1', format: 'json', id: series.id } )
@@ -14,5 +14,4 @@ describe Api::SeriesController do
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
   end
-
 end

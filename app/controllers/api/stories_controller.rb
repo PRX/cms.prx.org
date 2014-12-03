@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::StoriesController < Api::BaseController
 
   api_versions :v1
@@ -5,7 +7,7 @@ class Api::StoriesController < Api::BaseController
   filter_resources_by :series_id, :account_id
 
   def resource
-    @story ||= Story.published.find_by_id(params[:id])
+    @story ||= Story.published.visible.find_by_id(params[:id])
   end
 
   def resources
@@ -27,7 +29,7 @@ class Api::StoriesController < Api::BaseController
       stories = stories.order('published_at desc')
     end
 
-    stories.published.page(params[:page])
+    stories.published.visible.page(params[:page])
   end
 
 end

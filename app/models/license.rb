@@ -17,4 +17,7 @@ class License < BaseModel
     ALLOW_EDIT[1] == allow_edit
   end
 
+  def self.policy_class
+    StoryAttributePolicy
+  end
 end

@@ -6,6 +6,8 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :title
   property :short_description
   property :description
+  property :episode_number
+  property :episode_identifier
   property :published_at
   property :produced_on
   property :related_website

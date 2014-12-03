@@ -26,4 +26,7 @@ class Account < BaseModel
     portfolio.stories.order(published_at: :desc)
   end
 
+  def self.policy_class
+    AccountPolicy
+  end
 end
