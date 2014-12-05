@@ -39,6 +39,7 @@ gem 'actionpack-action_caching'
 gem 'roar-rails'
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'actionback'
 
 
 ## Deployment
