@@ -12,7 +12,7 @@ describe HalActions do
     end
   end
 
-  let (:controller) { HalActionsTestController.new }
+  let(:controller) { HalActionsTestController.new }
   let(:account) { create(:account) }
 
   it 'has cache options' do
@@ -26,4 +26,5 @@ describe HalActions do
       end
     end
   end
+
 end
