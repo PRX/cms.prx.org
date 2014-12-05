@@ -7,11 +7,21 @@ class Api::StoriesController < Api::BaseController
   filter_resources_by :series_id, :account_id
 
   def resource
-    @story ||= params[:id] ? Story.published.visible.find_by_id(params[:id]) : Story.new
+    @story ||= if params[:id]
+      Story.published.visible.find_by_id(params[:id])
+    else
+      Story.new
+    end
   end
 
   def resources
-    @stories ||= resources_base.includes({audio_versions: [:audio_files]}, {account: [:image, :address, {opener:[:image]}]}, {series:[:image, :account]}, :images, :license)
+    @stories ||= resources_base.includes(
+      { audio_versions: [:audio_files] },
+      { account: [:image, :address, { opener: [:image] } ] },
+      { series: [:image, :account] },
+      :images,
+      :license
+    )
   end
 
   def resources_base

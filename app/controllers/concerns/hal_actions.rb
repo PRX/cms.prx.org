@@ -37,12 +37,10 @@ module HalActions
   end
 
   def resource
-    instance_variable_get("@#{resource_name}") || begin
-      self.resource = if params[:id]
-        self.class.resource_class.find(params[:id].to_i)
-      else
-        self.class.resource_class.new
-      end
+    instance_variable_get("@#{resource_name}") || self.resource = if params[:id]
+      self.class.resource_class.find(params[:id].to_i)
+    else
+      self.class.resource_class.new
     end
   end
 

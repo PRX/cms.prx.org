@@ -3,7 +3,7 @@ require 'test_helper'
 describe Story do
 
   let(:story) { build_stubbed(:story_with_audio, audio_versions_count: 10) }
-  let(:story_promos_only) { build_stubbed(:story_promos_only) }
+  let(:promos_only) { build_stubbed(:story_promos_only) }
 
   describe 'basics' do
 
@@ -11,7 +11,7 @@ describe Story do
       Story.table_name.must_equal 'pieces'
     end
 
-    it "has points" do
+    it 'has points' do
       story.points.must_equal 10
     end
 
@@ -29,15 +29,15 @@ describe Story do
     end
 
     it 'can have promos only' do
-      story_promos_only.promos_only_at.wont_be_nil
-      story_promos_only.default_audio_version.must_equal story_promos_only.promos
+      promos_only.promos_only_at.wont_be_nil
+      promos_only.default_audio_version.must_equal promos_only.promos
     end
 
     it 'has a content advisory from the default audio version' do
       story.content_advisory.must_equal story.default_audio_version.content_advisory
     end
 
-    it 'produces a nil content advisory when there is no default audio version' do
+    it 'produces a nil content advisory for no default audio version' do
       story.stub(:default_audio_version, nil) do
         story.content_advisory.must_be_nil
       end
@@ -47,7 +47,7 @@ describe Story do
       story.timing_and_cues.must_equal story.default_audio_version.timing_and_cues
     end
 
-    it 'produces a nil timing and cues when there is no default audio version' do
+    it 'produces a nil timing and cues for no default audio version' do
       story.stub(:default_audio_version, nil) do
         story.timing_and_cues.must_be_nil
       end

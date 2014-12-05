@@ -18,13 +18,12 @@ describe Api::StoryRepresenter do
     end
 
     it 'can set the account' do
-      story_hash = {title: 'title', set_account_uri: 'api/v1/accounts/8'}
+      story_hash = { title: 'title', set_account_uri: 'api/v1/accounts/8' }
       d_representer = Api::StoryRepresenter.new(Story.new)
       d_story = d_representer.from_json(story_hash.to_json)
       d_story.title.must_equal 'title'
       d_story.account_id.must_equal 8
     end
-
   end
 
   describe 'serialize' do
@@ -92,7 +91,6 @@ describe Api::StoryRepresenter do
       end
     end
   end
-
 
   describe 'series info' do
     let(:schedule) { create(:schedule) }

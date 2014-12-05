@@ -13,8 +13,8 @@ describe Api::StoriesController do
     before { @controller.current_user = user }
 
     it 'can create a new story' do
-      story_hash = {title: 'create story', set_account_uri: "/api/v1/accounts/#{account.id}"}
-      post :create, story_hash.to_json, { api_version: 'v1', format: 'json' }
+      story_hash = { title: 'create story', set_account_uri: "/api/v1/accounts/#{account.id}" }
+      post :create, story_hash.to_json, api_version: 'v1', format: 'json'
       assert_response :success
     end
   end

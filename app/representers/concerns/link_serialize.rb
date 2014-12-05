@@ -3,21 +3,22 @@
 require 'active_support/concern'
 
 module LinkSerialize
+
   extend ActiveSupport::Concern
 
   module ClassMethods
 
     def link(options, &block)
-      if options.is_a?(Hash) && (options.delete(:writeable)|| options[:reader])
+      if options.is_a?(Hash) && (options.delete(:writeable) || options[:reader])
         name   = options[:rel].to_s.split(':').last.split('/').last
         pname  = "set_#{name}_uri"
-        reader = options.delete(:reader) || ->(doc, args){ self.try("#{name}_id=", id_from_url(doc[pname])) if doc[pname] }
+        reader = options.delete(:reader) || ->(doc, _args) {
+          self.try("#{name}_id=", id_from_url(doc[pname])) if doc[pname]
+        }
 
-        self.property( pname, readable: false, reader: reader)
+        property(pname, readable: false, reader: reader)
       end
       super(options, &block)
     end
-
   end
-
 end
