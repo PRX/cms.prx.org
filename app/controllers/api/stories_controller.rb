@@ -17,7 +17,7 @@ class Api::StoriesController < Api::BaseController
   def resources
     @stories ||= resources_base.includes(
       { audio_versions: [:audio_files] },
-      { account: [:image, :address, { opener: [:image] } ] },
+      { account: [:image, :address, { opener: [:image] }] },
       { series: [:image, :account] },
       :images,
       :license
