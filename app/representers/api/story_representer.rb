@@ -19,16 +19,16 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :points, writeable: false
 
   # default zoom
-  link :account do
+  link rel: :account, writeable: true do
     {
       href: api_account_path(represented.account),
       title: represented.account.name,
       profile: prx_model_uri(represented.account)
-    }
+    } if represented.account
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
 
-  link :series do
+  link rel: :series, writeable: true do
     {
       href: api_series_path(represented.series),
       title: represented.series.title
@@ -52,7 +52,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   # default links
   link :promos do
-    api_audio_version_path(represented.promos.id) if represented.promos.audio_file_ids.size > 1
+    api_audio_version_path(represented.promos.id) if represented.promos
   end
   embed :promos, class: AudioVersion, decorator: Api::AudioVersionRepresenter, zoom: false
 
@@ -72,7 +72,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   embed :license, as: :'prx:license', class: License, decorator: Api::LicenseRepresenter
 
   link :musical_works do
-    api_story_musical_works_path(represented)
+    api_story_musical_works_path(represented) if represented.id
   end
   embed :musical_works, paged: true, item_class: MusicalWork, zoom: false
 

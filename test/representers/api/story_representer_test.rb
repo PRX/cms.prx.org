@@ -14,11 +14,26 @@ describe Api::StoryRepresenter do
       json = representer.to_json
       d_representer = Api::StoryRepresenter.new(Story.new)
       d_story = d_representer.from_json(json)
-      puts d_story.inspect
+      d_story.wont_be_nil
     end
+
+    it 'can set the account' do
+      story_hash = {title: 'title', set_account_uri: 'api/v1/accounts/8'}
+      d_representer = Api::StoryRepresenter.new(Story.new)
+      d_story = d_representer.from_json(story_hash.to_json)
+      d_story.title.must_equal 'title'
+      d_story.account_id.must_equal 8
+    end
+
   end
 
   describe 'serialize' do
+
+    it 'can serialize an unsaved story' do
+      story_with_audio = build(:story_with_audio)
+      json = Api::StoryRepresenter.new(story_with_audio).to_json
+      json.wont_be_nil
+    end
 
     it 'use representer to create json' do
       json['id'].must_equal story.id
