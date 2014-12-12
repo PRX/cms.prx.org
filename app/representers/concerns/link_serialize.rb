@@ -9,6 +9,11 @@ module LinkSerialize
   module ClassMethods
 
     def link(options, &block)
+      set_link_property(options)
+      super(options, &block)
+    end
+
+    def set_link_property(options)
       if options.is_a?(Hash) && (options.delete(:writeable) || options[:reader])
         name   = options[:rel].to_s.split(':').last.split('/').last
         pname  = "set_#{name}_uri"
@@ -18,7 +23,7 @@ module LinkSerialize
 
         property(pname, readable: false, reader: reader)
       end
-      super(options, &block)
     end
+
   end
 end
