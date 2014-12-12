@@ -28,11 +28,6 @@ describe Story do
       story.default_audio.wont_be_nil
     end
 
-    it 'can have promos only' do
-      promos_only.promos_only_at.wont_be_nil
-      promos_only.default_audio_version.must_equal promos_only.promos
-    end
-
     it 'has a content advisory from the default audio version' do
       story.content_advisory.must_equal story.default_audio_version.content_advisory
     end
@@ -50,18 +45,6 @@ describe Story do
     it 'produces a nil timing and cues for no default audio version' do
       story.stub(:default_audio_version, nil) do
         story.timing_and_cues.must_be_nil
-      end
-    end
-
-    it 'pulls the duration from the default_audio_version' do
-      story.default_audio_version.stub(:default_audio_duration, 212) do
-        story.duration.must_equal 212
-      end
-    end
-
-    it 'pulls the default audio from the default_audio_version' do
-      story.default_audio_version.stub(:as_default_audio, :audio) do
-        story.default_audio.must_equal :audio
       end
     end
 

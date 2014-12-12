@@ -64,15 +64,15 @@ class Story < BaseModel
   end
 
   def default_audio_version
-    @default_audio_version ||= if promos_only?
-      promos
-    else
-      audio_versions.reject{|av| av.audio_files.size < 1 }.sort{|a, b| compare_versions(a,b) }.first
-    end
+    @default_audio_version ||= audio_versions.reject{|av| av.audio_files.size < 1 }.sort{|a, b| compare_versions(a,b) }.first || audio_versions.first
+  end
+
+  def promos_audio
+    @promos_audio ||= promos.try(:audio_files) || Kaminari.paginate_array([])
   end
 
   def default_audio
-    @default_audio ||= default_audio_version.try(:as_default_audio) || []
+    @default_audio ||= default_audio_version.try(:audio_files) || Kaminari.paginate_array([])
   end
 
   def duration
