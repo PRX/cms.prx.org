@@ -97,10 +97,12 @@ module HalActions
   end
 
   def resources
-    instance_variable_get("@#{resources_name}") || begin
-      res = self.class.resource_class.order(id: :desc).page(params[:page])
-      instance_variable_set("@#{resources_name}", res)
-    end
+    instance_variable_get("@#{resources_name}") ||
+    self.resources = self.class.resource_class.order(id: :desc).page(params[:page])
+  end
+
+  def resources=(res)
+    instance_variable_set("@#{resources_name}", res)
   end
 
   def resources_name
