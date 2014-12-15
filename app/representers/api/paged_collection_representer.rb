@@ -23,11 +23,11 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
   end
 
   link :first do
-    href_url_helper(params.merge(page: nil))
+    href_url_helper(params.merge(page: nil)) if represented.total_pages > 1
   end
 
   link :last do
-    href_url_helper(params.merge(page: represented.total_pages))
+    href_url_helper(params.merge(page: represented.total_pages)) if represented.total_pages > 1
   end
 
   def params
