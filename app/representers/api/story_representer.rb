@@ -15,10 +15,12 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :timing_and_cues
   property :content_advisory
   property :tags
+
   property :duration, writeable: false
   property :points, writeable: false
 
-  # default zoom
+  property :license, class: License, decorator: Api::LicenseRepresenter
+
   link rel: :account, writeable: true do
     {
       href: api_account_path(represented.account),
@@ -36,40 +38,34 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   end
   embed :series, class: Series, decorator: Api::Min::SeriesRepresenter
 
+  # to set default image, add to collection of images, first one is the default.
   link :image do
     {
       href: polymorphic_path([:api, represented.default_image]),
       profile: prx_model_uri(represented.default_image)
     } if represented.default_image
   end
-
   embed :default_image, as: :image, decorator: Api::ImageRepresenter
 
-  links :audio do
-    represented.default_audio.collect{ |a| { href: api_audio_file_path(a), title: a.label } }
+  link :audio do
+    api_story_audio_files_path(represented.id) if represented.id
   end
-  embeds :default_audio, as: :audio, class: AudioFile, decorator: Api::AudioFileRepresenter
+  embed :default_audio, as: :audio, paged: true, item_class: AudioFile
 
-  # default links
   link :promos do
-    api_audio_version_path(represented.promos.id) if represented.promos
+    api_story_promos_path(represented.id) if represented.id
   end
-  embed :promos, class: AudioVersion, decorator: Api::AudioVersionRepresenter, zoom: false
+  embed :promos_audio, as: :promos, paged: true, item_class: AudioFile
 
-  links :audio_versions do
-    represented.audio_versions.collect{ |a| { href: api_audio_version_path(a), title: a.label } }
+  link :audio_versions do
+    api_story_audio_versions_path(represented.id) if represented.id
   end
-  embeds :audio_versions, class: AudioVersion, decorator: Api::AudioVersionRepresenter, zoom: false
+  embed :audio_versions, paged: true, item_class: AudioVersion, zoom: false
 
-  links :images do
-    represented.images.collect{ |a| { href: api_story_image_path(a) } } unless represented.image_ids.size > 0
+  link :images do
+    api_story_story_images_path(represented) if represented.id
   end
-  embeds :images, class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
-
-  link :'prx:license' do
-    api_license_path(represented.license.id) if represented.license
-  end
-  embed :license, as: :'prx:license', class: License, decorator: Api::LicenseRepresenter
+  embed :images, paged:true, item_class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
 
   link :musical_works do
     api_story_musical_works_path(represented) if represented.id
