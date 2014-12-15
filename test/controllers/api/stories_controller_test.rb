@@ -53,7 +53,7 @@ describe Api::StoriesController do
   it 'should get a random story' do
     story.published_at = Time.now
 
-    get(:random, { api_version: 'v1', format: 'json' } )
+    get(:random, api_version: 'v1', format: 'json')
 
     assert_response :success
     assert_not_nil assigns[:story]
