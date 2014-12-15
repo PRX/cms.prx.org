@@ -64,7 +64,7 @@ class Story < BaseModel
   end
 
   def default_audio_version
-    @default_audio_version ||= audio_versions.reject{|av| av.audio_files.size < 1 }.sort{|a, b| compare_versions(a,b) }.first || audio_versions.first
+    @default_audio_version ||= audio_versions.sort_by(&:length).last
   end
 
   def promos_audio
@@ -76,10 +76,10 @@ class Story < BaseModel
   end
 
   def duration
-    default_audio_version.try(:default_audio_duration) || 0
+    default_audio_version.try(:duration) || 0
   end
 
-  def compare_versions(a,b)
+  def compare_versions(a, b)
     if a.audio_files.size == b.audio_files.size
       b.length <=> a.length
     else
