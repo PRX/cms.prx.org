@@ -10,7 +10,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   property :short_name
 
   link :address do
-    api_address_path(represented.address) if represented.address
+    api_account_address_path(represented.id) if represented.id
   end
   embed :address, class: Address, decorator: Api::AddressRepresenter
 
