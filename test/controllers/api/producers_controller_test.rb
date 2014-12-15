@@ -7,13 +7,13 @@ describe Api::ProducersController do
   let(:producer) { create(:producer, story: story) }
 
   it 'should show' do
-    get(:show, api_version: 'v1', format: 'json', story_id: story.id, id: producer.id)
+    get :show, api_request_opts(story_id: story.id, id: producer.id)
     assert_response :success
   end
 
   it 'should list' do
     producer.id.wont_be_nil
-    get(:index, api_version: 'v1', format: 'json', story_id: story.id)
+    get :index, api_request_opts(story_id: story.id)
     assert_response :success
   end
 end

@@ -5,8 +5,7 @@ describe Api::PromosController do
   let(:story) { create(:story, account: user.individual_account) }
 
   it 'should show' do
-    get(:index, { api_version: 'v1', format: 'json', story_id: story.id } )
+    get :index, api_request_opts(story_id: story.id)
     assert_response :success
   end
-
 end
