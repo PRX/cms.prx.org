@@ -10,9 +10,16 @@ describe Api::AudioFilesController do
     assert_response :success
   end
 
-  it 'should list' do
+  it 'should list for version' do
     audio_file.id.wont_be_nil
-    get(:index, { api_version: 'v1', format: 'json' } )
+    get(:index, audio_version_id: audio_file.audio_version_id, api_version: 'v1', format: 'json' )
     assert_response :success
   end
+
+  it 'should list for story' do
+    audio_file.id.wont_be_nil
+    get(:index, story_id: story.id, api_version: 'v1', format: 'json' )
+    assert_response :success
+  end
+
 end
