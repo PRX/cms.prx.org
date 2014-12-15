@@ -6,6 +6,11 @@ class Api::StoriesController < Api::BaseController
 
   filter_resources_by :series_id, :account_id
 
+  def random
+    @story = Story.published.limit(1).order("RAND()")[0]
+    render json: Api::StoryRepresenter.new(@story).as_json
+  end
+
   def resource
     @story ||= Story.published.visible.find_by_id(params[:id])
   end
