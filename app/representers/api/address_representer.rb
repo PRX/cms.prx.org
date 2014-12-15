@@ -16,5 +16,4 @@ class Api::AddressRepresenter < Api::BaseRepresenter
     addressable = addressable.becomes(Account) if addressable.is_a?(Account)
     polymorphic_path([:api, addressable, address])
   end
-
 end

@@ -57,7 +57,7 @@ module Embeds
     def embed(name, options={})
       options[:embedded] = true
       options[:writeable] = false
-      options[:if] ||= ->(a){ self.id } unless options[:zoom] == :always
+      options[:if] ||= ->(_a){ self.id } unless options[:zoom] == :always
 
       if options[:paged]
         opts = {no_curies: true, item_class: options.delete(:item_class), url: options.delete(:url), item_decorator: options.delete(:item_decorator)}
@@ -71,7 +71,7 @@ module Embeds
     def embeds(name, options={})
       options[:embedded] = true
       options[:writeable] = false
-      options[:if] ||= ->(a){ self.id } unless options[:zoom] == :always
+      options[:if] ||= ->(_a){ self.id } unless options[:zoom] == :always
 
       collection(name, options)
     end

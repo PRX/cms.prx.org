@@ -65,13 +65,12 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   link :images do
     api_story_story_images_path(represented) if represented.id
   end
-  embed :images, paged:true, item_class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
+  embed :images, paged: true, item_class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
 
   link :musical_works do
     api_story_musical_works_path(represented) if represented.id
   end
   embed :musical_works, paged: true, item_class: MusicalWork, zoom: false
-
 end
 
 # TODO:

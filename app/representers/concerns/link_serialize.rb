@@ -18,12 +18,11 @@ module LinkSerialize
         name   = options[:rel].to_s.split(':').last.split('/').last
         pname  = "set_#{name}_uri"
         reader = options.delete(:reader) || ->(doc, _args) do
-          self.try("#{name}_id=", id_from_url(doc[pname])) if doc[pname]
+          try("#{name}_id=", id_from_url(doc[pname])) if doc[pname]
         end
 
         property(pname, readable: false, reader: reader)
       end
     end
-
   end
 end

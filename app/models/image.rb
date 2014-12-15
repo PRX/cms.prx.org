@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Image < BaseModel
 
   self.abstract_class = true

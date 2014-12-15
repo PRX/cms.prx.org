@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Purchase < BaseModel
   belongs_to :purchased, class_name: 'Story'
   belongs_to :purchaser, class_name: "User", with_deleted: true

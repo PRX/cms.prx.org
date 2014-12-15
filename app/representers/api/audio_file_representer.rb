@@ -20,5 +20,4 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
   def self_url(audio_file)
     polymorphic_path([:api, audio_file.audio_version, audio_file])
   end
-
 end
