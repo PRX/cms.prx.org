@@ -27,6 +27,10 @@ require 'minitest/pride'
 
 class ActiveSupport::TestCase
   include FactoryGirl::Syntax::Methods
+
+  def api_request_opts(opts)
+    {format: 'json', api_version: 'v1'}.merge(opts)
+  end
 end
 
 class MiniTest::Spec
