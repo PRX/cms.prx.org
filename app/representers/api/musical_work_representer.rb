@@ -10,5 +10,4 @@ class Api::MusicalWorkRepresenter < Api::BaseRepresenter
   property :album
   property :year
   property :excerpt_length, as: :length
-
 end

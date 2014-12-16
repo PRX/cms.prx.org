@@ -7,5 +7,4 @@ class Api::LicenseRepresenter < Roar::Decorator
 
   property :streamable
   property :editable
-
 end
