@@ -212,7 +212,7 @@ GEM
     newrelic_rpm (3.9.5.251)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
-    oj (2.10.2)
+    oj (2.11.1)
     oj_mimic_json (1.0.1)
     paranoia (2.0.2)
       activerecord (~> 4.0)
