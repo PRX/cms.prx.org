@@ -17,7 +17,7 @@ class Api::AudioFilesController < Api::BaseController
 
   def resources
     return super unless story
-    self.resources = story.default_audio_version.audio_files.page(params[:page])
+    @audio_files ||= story.default_audio_version.audio_files.page(params[:page])
   end
 
   def story
