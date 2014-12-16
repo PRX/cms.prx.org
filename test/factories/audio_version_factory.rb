@@ -6,7 +6,7 @@ FactoryGirl.define do
     content_advisory 'Content Advisory'
     promos false
 
-    ignore do
+    transient do
       audio_files_count 0
     end
 

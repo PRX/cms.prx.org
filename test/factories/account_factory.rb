@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     address
 
-    ignore do
+    transient do
       stories_count 2
     end
 

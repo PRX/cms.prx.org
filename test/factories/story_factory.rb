@@ -20,7 +20,7 @@ FactoryGirl.define do
     end
 
     factory :story_with_purchases do
-      ignore do
+      transient do
         purchases_count 2
       end
 
@@ -31,7 +31,7 @@ FactoryGirl.define do
 
     factory :story_with_audio do
 
-      ignore do
+      transient do
         audio_versions_count 1
         images_count 1
       end
