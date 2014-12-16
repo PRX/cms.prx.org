@@ -6,10 +6,12 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   property :title
   property :short_description
   property :description
-  property :story_count
 
   link :stories do
-    api_series_stories_path(represented)
+    {
+      href: api_series_stories_path(represented),
+      count: represented.story_count
+    }
   end
   embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
 
