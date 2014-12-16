@@ -9,7 +9,9 @@ class Api::AudioFilesController < Api::BaseController
   # if the audio version is not set, and story is, set default av
   def resource
     r = super
-    r.audio_version_id = story.default_audio_version if story && !r.audio_version_id
+    if story && !r.audio_version_id
+      r.audio_version_id = story.default_audio_version.id
+    end
     r
   end
 
