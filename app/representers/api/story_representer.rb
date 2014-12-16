@@ -48,27 +48,42 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   embed :default_image, as: :image, decorator: Api::ImageRepresenter
 
   link :audio do
-    api_story_audio_files_path(represented.id) if represented.id
+    {
+      href: api_story_audio_files_path(represented.id),
+      count: represented.default_audio.count
+    } if represented.id
   end
   embed :default_audio, as: :audio, paged: true, item_class: AudioFile
 
   link :promos do
-    api_story_promos_path(represented.id) if represented.id
+    {
+      href: api_story_promos_path(represented.id),
+      count: represented.promos_audio.count
+    } if represented.id
   end
   embed :promos_audio, as: :promos, paged: true, item_class: AudioFile
 
   link :audio_versions do
-    api_story_audio_versions_path(represented.id) if represented.id
+    {
+      href: api_story_audio_versions_path(represented.id),
+      count: represented.audio_versions.count
+    } if represented.id
   end
   embed :audio_versions, paged: true, item_class: AudioVersion, zoom: false
 
   link :images do
-    api_story_story_images_path(represented) if represented.id
+    {
+      href: api_story_story_images_path(represented),
+      count: represented.images.count
+    } if represented.id
   end
   embed :images, paged: true, item_class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
 
   link :musical_works do
-    api_story_musical_works_path(represented) if represented.id
+    {
+      href: api_story_musical_works_path(represented),
+      count: represented.musical_works.count
+    } if represented.id
   end
   embed :musical_works, paged: true, item_class: MusicalWork, zoom: false
 end
