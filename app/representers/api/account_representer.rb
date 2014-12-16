@@ -6,8 +6,8 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   property :type
   property :name
   property :path
-  property :description
   property :short_name
+  property :description
 
   link :address do
     api_account_address_path(represented.id) if represented.id
@@ -37,7 +37,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
       templated: true
     }
   end
-  embed :stories, as: :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
+  embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
 
   links :external do
     represented.websites.map(&:as_link)
