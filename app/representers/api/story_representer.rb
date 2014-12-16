@@ -5,19 +5,20 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :id
   property :title
   property :short_description
-  property :description
   property :episode_number
   property :episode_identifier
   property :published_at
   property :produced_on
+
+  property :duration, writeable: false
+  property :points, writeable: false
+
+  property :description
   property :related_website
   property :broadcast_history
   property :timing_and_cues
   property :content_advisory
   property :tags
-
-  property :duration, writeable: false
-  property :points, writeable: false
 
   property :license, class: License, decorator: Api::LicenseRepresenter
 
@@ -38,7 +39,6 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   end
   embed :series, class: Series, decorator: Api::Min::SeriesRepresenter
 
-  # to set default image, add to collection of images, first one is the default.
   link :image do
     {
       href: polymorphic_path([:api, represented.default_image]),
