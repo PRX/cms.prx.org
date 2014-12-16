@@ -7,7 +7,7 @@ class Api::PicksController < Api::BaseController
   represent_with Api::PickRepresenter
 
   def resources
-    @picks = Pick.named_playlists.page(params[:page])
+    @picks ||= Pick.named_playlists.page(params[:page])
   end
 
 end
