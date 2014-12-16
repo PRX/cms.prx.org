@@ -57,7 +57,7 @@ module Embeds
     def embed(name, options={})
       options[:embedded] = true
       options[:writeable] = false
-      options[:if] ||= ->(_a){ self.id } unless options[:zoom] == :always
+      options[:if] ||= ->(_a) { id } unless options[:zoom] == :always
 
       if options[:paged]
         opts = {
@@ -82,7 +82,7 @@ module Embeds
     def embeds(name, options={})
       options[:embedded] = true
       options[:writeable] = false
-      options[:if] ||= ->(_a){ self.id } unless options[:zoom] == :always
+      options[:if] ||= ->(_a) { id } unless options[:zoom] == :always
 
       collection(name, options)
     end
