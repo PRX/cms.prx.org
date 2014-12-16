@@ -14,7 +14,7 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
     {
       href: represented.public_url(version: :broadcast, extension: 'mp3'),
       type: 'audio/mpeg'
-    }
+    } if represented.id
   end
 
   def self_url(audio_file)
