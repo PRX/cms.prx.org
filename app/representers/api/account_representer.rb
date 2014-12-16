@@ -14,7 +14,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   end
   embed :address, class: Address, decorator: Api::AddressRepresenter
 
-  link :image do
+  link rel: :image, writeable: true do
     {
       href:    polymorphic_path([:api, represented.image]),
       title:   represented.image.filename,
@@ -23,7 +23,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter
 
-  link :opener do
+  link rel: :opener, writeable: true do
     {
       href: api_user_path(represented.opener),
       title: represented.opener.login
