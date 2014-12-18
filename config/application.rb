@@ -34,10 +34,6 @@ module PRX
     # Disable the asset pipeline.
     config.assets.enabled = false
 
-    config.generators do |g|
-      g.test_framework :mini_test, spec: true, fixture: false
-    end
-
     config.middleware.insert_before Rack::Sendfile, Rack::Cors do
       allow do
         origins '*'
