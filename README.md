@@ -59,8 +59,8 @@ bundle exec rake
 powder link
 
 # see the development status page
-open http://prx-backend.dev
+open http://cms.prx.dev
 
 # see the api root json doc
-open http://prx-backend.dev/api
+open http://cms.prx.dev/api
 ```
