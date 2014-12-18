@@ -474,4 +474,16 @@ ActiveRecord::Schema.define(version: 1) do
   end
 
   add_index "schedules", ["series_id"], :name => "index_schedules_on_series_id"
+
+  create_table "tasks", force: true do |t|
+    t.string   "type"
+    t.integer  "status",     default: 0
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tasks", ["owner_id", "owner_type"], name: "index_tasks_on_owner_id_and_owner_type", using: :btree
+
 end
