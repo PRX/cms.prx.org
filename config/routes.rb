@@ -26,6 +26,8 @@ PRX::Application.routes.draw do
         get 'images',         to: 'story_images#index'
         get 'musical_works',  to: 'musical_works#index'
         get 'producers',      to: 'producers#index'
+
+        get 'random', on: :collection
       end
 
       resources :series do
