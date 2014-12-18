@@ -56,7 +56,7 @@ module PublicAsset
     return false if (expires == 0)
     now     = DateTime.now.to_i
     (expires < now)
-  end    
+  end
 
   def token_valid?(options)
     token = options[:token]
