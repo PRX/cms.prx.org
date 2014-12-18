@@ -8,7 +8,7 @@ class Api::StoriesController < Api::BaseController
 
   def random
     @story = Story.published.limit(1).order('RAND()').first
-    render json: Api::StoryRepresenter.new(@story).as_json
+    show
   end
 
   def resource
