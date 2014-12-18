@@ -3,9 +3,13 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.1.0'
 
+# Rails 4.1 backport, remove on upgrade to 4.2
+gem 'activejob_backport'
+
 # JWS
 gem 'json-jwt', '~> 0.7.0'
 gem 'rack-prx_auth'
+
 
 ## Model
 # Use mysql as the database for Active Record
@@ -34,11 +38,15 @@ gem 'kaminari'
 gem 'dalli' # perhaps only production?
 gem 'actionpack-action_caching'
 
+
 ## View
 # json handling
 gem 'roar-rails'
 gem 'oj'
 gem 'oj_mimic_json'
+
+## Integration
+gem 'media_monster_client'
 
 
 ## Deployment
