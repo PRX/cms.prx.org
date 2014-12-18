@@ -57,6 +57,8 @@ PRX::Application.routes.draw do
   match '/api', via: [:get], to: redirect("/api/v1")
   match '/', via: [:get], to: redirect("/api/v1")
 
+  post 'callbacks/:kind/:class/:id' => 'callbacks#update', as: :callback
+
   get 'pub/:token/:expires/:use/:class/:id/:version/:name.:extension' => 'public_assets#show', as: :public_asset, constraints: {name: /[^\/]+/}
 
 end
