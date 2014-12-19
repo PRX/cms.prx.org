@@ -72,7 +72,11 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   embed :license, as: :'prx:license', class: License, decorator: Api::LicenseRepresenter
 
   link :musical_works do
-    api_story_musical_works_path(represented)
+    {
+      href: "#{api_story_musical_works_path(represented)}{?page,per,zoom}",
+      templated: true,
+      count: represented.musical_works.count
+    } if represented.id
   end
   embed :musical_works, paged: true, item_class: MusicalWork, zoom: false
 
