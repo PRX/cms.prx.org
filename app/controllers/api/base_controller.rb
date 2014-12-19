@@ -13,7 +13,7 @@ class Api::BaseController < ApplicationController
   respond_to :hal, :json
 
   allow_params :show, :zoom
-  allow_params :index, [:page, :zoom]
+  allow_params :index, [:page, :per, :zoom]
 
   cache_api_action :show
 
