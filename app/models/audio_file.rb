@@ -21,9 +21,10 @@ class AudioFile < BaseModel
 
   mount_uploader :file, AudioFileUploader, mount_on: :filename
 
-  after_commit :process_audio_file
+  after_commit :process_audio_file, on: :create
 
   def process_audio_file
+    # start a copy & validate task
 
   end
 
