@@ -67,14 +67,6 @@ class Story < BaseModel
     @default_audio_version ||= longest_single_file_version || longest_version
   end
 
-  def longest_single_file_version
-    audio_versions.reject{|av| av.audio_files.size != 1 }.sort_by(&:length).last
-  end
-
-  def longest_version
-    audio_versions.sort_by(&:length).last
-  end
-
   def promos_audio
     @promos_audio ||= promos.try(:audio_files) || Kaminari.paginate_array([])
   end
@@ -132,4 +124,15 @@ class Story < BaseModel
   def subscription_episode?
     series && series.subscribable?
   end
+
+  private
+
+  def longest_single_file_version
+    audio_versions.reject { |av| av.audio_files.size != 1 }.sort_by(&:length).last
+  end
+
+  def longest_version
+    audio_versions.sort_by(&:length).last
+  end
+
 end
