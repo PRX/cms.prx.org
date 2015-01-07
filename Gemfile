@@ -36,7 +36,8 @@ gem 'actionpack-action_caching'
 
 ## View
 # json handling
-gem 'roar-rails'
+gem 'roar', '~> 0.12'
+gem 'roar-rails', '~> 0.1'
 gem 'oj'
 gem 'oj_mimic_json'
 gem 'actionback'
@@ -47,8 +48,8 @@ gem 'actionback'
 gem 'dotenv-rails'
 
 # scripting
-gem 'capistrano', '~> 3.2.0'
-gem 'capistrano-rails', '~> 1.1.0'
+gem 'capistrano', '~> 3.2'
+gem 'capistrano-rails', '~> 1.1'
 gem 'highline'
 gem 'rake'
 
@@ -63,9 +64,8 @@ group :development do
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
-
-  gem 'growl', require: false
-  gem 'guard'
+  gem 'growl'
+  gem 'guard', '~> 2.10.0'
   gem 'guard-minitest'
   gem 'guard-bundler'
   gem 'spring'

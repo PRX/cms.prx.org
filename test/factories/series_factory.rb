@@ -7,7 +7,7 @@ FactoryGirl.define do
     episode_start_at 1.year.ago
     episode_start_number 1
 
-    ignore do
+    transient do
       stories_count 2
     end
 
