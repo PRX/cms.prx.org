@@ -314,6 +314,6 @@ DEPENDENCIES
   rake
   roar-rails
   sdoc
-  simplecov (~> 0.7.1)
+  simplecov
   spring
   unf

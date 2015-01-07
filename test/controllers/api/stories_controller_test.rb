@@ -65,4 +65,13 @@ describe Api::StoriesController do
     get(:index, { api_version: 'v2', format: 'json' } )
     assert_response :not_acceptable
   end
+
+  it 'should get a random story' do
+    story.published_at = Time.now
+
+    get(:random, api_version: 'v1', format: 'json')
+
+    assert_response :success
+    assert_not_nil assigns[:story]
+  end
 end

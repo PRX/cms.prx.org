@@ -22,6 +22,7 @@ PRX::Application.routes.draw do
         resources :story_images, path: 'images', except: [:new, :edit]
         resources :musical_works, except: [:new, :edit]
         resources :producers, except: [:new, :edit]
+        get 'random', on: :collection
       end
 
       resources :series, except: [:new, :edit] do
