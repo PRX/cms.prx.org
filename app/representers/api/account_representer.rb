@@ -14,18 +14,17 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   end
   embed :address, class: Address, decorator: Api::AddressRepresenter
 
-  link rel: :image, writeable: true do
+  link :image do
     {
-      href:    polymorphic_path([:api, represented.image]),
-      title:   represented.image.filename,
-      profile: prx_model_uri(represented.image)
-    } if represented.image
+      href:  api_account_account_image_path(represented),
+      title: represented.image.try(:filename)
+    } if represented.id
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter
 
   link rel: :opener, writeable: true do
     {
-      href: api_user_path(represented.opener),
+      href:  api_user_path(represented.opener),
       title: represented.opener.login
     } if represented.opener
   end
