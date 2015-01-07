@@ -134,5 +134,4 @@ class Story < BaseModel
   def longest_version
     audio_versions.sort_by(&:length).last
   end
-
 end
