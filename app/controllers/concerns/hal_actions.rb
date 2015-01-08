@@ -98,7 +98,7 @@ module HalActions
 
   def resources
     instance_variable_get("@#{resources_name}") ||
-    self.resources = self.class.resource_class.order(id: :desc)
+    self.resources = self.class.resource_class
   end
 
   def resources=(res)
