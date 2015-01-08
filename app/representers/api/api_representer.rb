@@ -22,7 +22,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of stories",
         profile:   prx_model_uri(:collection, :story),
-        href:      api_stories_path_template(api_version: represented.version) + '{?page,zoom}',
+        href:      api_stories_path_template(api_version: represented.version) + '{?page,per,zoom,filters}',
         templated: true
       }
     ]
@@ -39,7 +39,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of series",
         profile:   prx_model_uri(:collection, :series),
-        href:      api_series_index_path_template(api_version: represented.version) + '{?page,zoom}',
+        href:      api_series_index_path_template(api_version: represented.version) + '{?page,per,zoom}',
         templated: true
       }
     ]
@@ -61,7 +61,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of accounts",
         profile:   prx_model_uri(:collection, :account),
-        href:      api_accounts_path_template(api_version: represented.version) + '{?page,zoom}',
+        href:      api_accounts_path_template(api_version: represented.version) + '{?page,per,zoom}',
         templated: true
       }
     ]
@@ -72,7 +72,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of the most recent picks",
         profile:   prx_model_uri(:collection, :pick),
-        href:      api_picks_path_template(api_version: represented.version) + '{?page,zoom}',
+        href:      api_picks_path_template(api_version: represented.version) + '{?page,per,zoom}',
         templated: true
       }
     ]

@@ -43,7 +43,10 @@ class Api::StoriesController < Api::BaseController
     else
       stories = stories.order('published_at desc')
     end
+  end
 
-    stories.published.visible.page(params[:page])
+  # don't add another order, handled in the resources_base
+  def with_ordering(res)
+    res
   end
 end

@@ -81,7 +81,8 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   link :musical_works do
     {
-      href: api_story_musical_works_path(represented),
+      href: "#{api_story_musical_works_path(represented)}{?page,per,zoom}",
+      templated: true,
       count: represented.musical_works.count
     } if represented.id
   end

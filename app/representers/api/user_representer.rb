@@ -9,7 +9,8 @@ class Api::UserRepresenter < Api::BaseRepresenter
 
   link :accounts do
     {
-      href: api_user_accounts_path(represented),
+      href: "#{api_user_accounts_path(represented)}{?page,per,zoom}",
+      templated: true,
       count: represented.accounts.count
     } if represented.id
   end
