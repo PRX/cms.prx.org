@@ -15,6 +15,9 @@ namespace :deploy do
   before :finished, 'newrelic:notice_deployment'
 end
 
+set :slack_webhook, 'https://hooks.slack.com/services/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'
+set :slack_username, -> { 'capistrano' }
+
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server
