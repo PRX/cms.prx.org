@@ -22,7 +22,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of stories",
         profile:   prx_model_uri(:collection, :story),
-        href:      api_stories_path_template(api_version: represented.version) + '{?page,per,filters,zoom}',
+        href:      api_stories_path_template(api_version: represented.version) + '{?page,per,zoom,filters}',
         templated: true
       }
     ]

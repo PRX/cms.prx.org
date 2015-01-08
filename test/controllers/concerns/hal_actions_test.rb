@@ -8,12 +8,12 @@ describe HalActions do
 
     self._id = 1
 
-    def self.find(*args)
-      Foo.new.tap { |f|
+    def self.find(*_args)
+      Foo.new.tap do |f|
         f.id = _id
         self._id += 1
         f.updated_at = DateTime.parse('1970-01-01 00:01:00')
-      }
+      end
     end
 
     def self.inject(*args, &block)
@@ -21,9 +21,9 @@ describe HalActions do
       [find, find].inject(*args, &block)
     end
 
-    def self.order(*args); self; end
-    def self.page(*args); self; end
-    def self.per(*args); self; end
+    def self.order(*_args); self; end
+    def self.page(*_args); self; end
+    def self.per(*_args); self; end
   end
 
   class FooRepresenter
@@ -38,7 +38,7 @@ describe HalActions do
     attr_accessor :_respond_with
 
     def params
-      ActionController::Parameters.new({ action: 'update' })
+      ActionController::Parameters.new(action: 'update')
     end
 
     def current_user
@@ -49,7 +49,7 @@ describe HalActions do
       self._respond_with = args
     end
 
-    def self.caches_action(action, options={})
+    def self.caches_action(action, options = {})
       self._caches_action ||= {}
       self._caches_action[action] = options
     end
@@ -65,7 +65,7 @@ describe HalActions do
     end
 
     it 'determines the resources id for caching' do
-      controller.index_cache_path.must_equal "c/foos/3-60"
+      controller.index_cache_path.must_equal 'c/foos/3-60'
     end
 
     it 'responds to show request' do
@@ -105,12 +105,14 @@ describe HalActions do
 
     it 'specify allowed params for an action' do
       FoosController.allow_params :index, [:page, :per, :zoom]
-      FoosController.valid_params.must_equal :index => [:page, :per, :zoom]
-      FoosController.valid_params_list(:index).must_equal [:page, :per, :zoom]
+
+      FoosController.valid_params.must_equal(index: [:page, :per, :zoom])
+      FoosController.valid_params_list(:index).must_equal([:page, :per, :zoom])
     end
 
     it 'sets default cache options' do
-      FoosController.cache_options.must_equal({compress: true, expires_in: 1.hour, race_condition_ttl: 30})
+      default_opts = { compress: true, expires_in: 1.hour, race_condition_ttl: 30 }
+      FoosController.cache_options.must_equal(default_opts)
     end
 
     it 'caches api actions' do
@@ -118,5 +120,4 @@ describe HalActions do
       FoosController._caches_action[:index][:bar].must_equal true
     end
   end
-
 end
