@@ -32,7 +32,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
 
   link :stories do
     {
-      href: "#{api_account_stories_path(represented)}{?filters,page,per,zoom}",
+      href: "#{api_account_stories_path(represented)}{?page,per,zoom,filters}",
       templated: true,
       count: represented.stories.count
     } if represented.id
