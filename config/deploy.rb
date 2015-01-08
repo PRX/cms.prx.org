@@ -4,8 +4,8 @@ lock '~> 3.2.0'
 require 'dotenv'
 Dotenv.load
 
-set :application, 'prx.org-backend'
-set :repo_url, 'git://github.com/PRX/PRX.org-Backend.git'
+set :application, 'cms.prx.org'
+set :repo_url, 'git://github.com/PRX/cms.prx.org'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
