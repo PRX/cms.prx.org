@@ -13,7 +13,6 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
   end
   embeds :items, decorator: lambda{|*| item_decorator }, class: lambda{|*| item_class }, zoom: :always
 
-
   link :prev do
     href_url_helper(params.merge(page: represented.prev_page)) unless represented.first_page?
   end
@@ -23,11 +22,11 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
   end
 
   link :first do
-    href_url_helper(params.merge(page: nil))
+    href_url_helper(params.merge(page: nil)) if represented.total_pages > 1
   end
 
   link :last do
-    href_url_helper(params.merge(page: represented.total_pages))
+    href_url_helper(params.merge(page: represented.total_pages)) if represented.total_pages > 1
   end
 
   def params
@@ -41,8 +40,10 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
   def href_url_helper(options={})
     if represented_url.nil?
       result = url_for(options.merge(only_path: true)) rescue nil
-      result ||= polymorphic_path([:api, represented.parent, represented.item_class], options) if represented.parent
-      result ||= polymorphic_path([:api, represented.item_class], options)
+      if represented.parent
+        result ||= polymorphic_path([:api, represented.parent, represented.item_class], options) rescue nil
+      end
+      result ||= polymorphic_path([:api, represented.item_class], options) rescue nil
       return result
     end
 

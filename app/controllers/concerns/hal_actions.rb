@@ -15,8 +15,17 @@ module HalActions
     respond_with show_resource, show_options
   end
 
-  def update
+  def create
+    self.resource = consume!(resource)
     authorize resource
+    resource.save!
+    respond_with show_resource, show_options
+  end
+
+  def update
+    self.resource = consume!(resource)
+    authorize resource
+    resource.save!
     respond_with show_resource, show_options
   end
 
@@ -28,10 +37,15 @@ module HalActions
   end
 
   def resource
-    instance_variable_get("@#{resource_name}") || begin
-      res = self.class.resource_class.find(params[:id].to_i)
-      instance_variable_set("@#{resource_name}", res)
+    instance_variable_get("@#{resource_name}") || self.resource = if params[:id]
+      self.class.resource_class.find(params[:id].to_i)
+    else
+      self.class.resource_class.new
     end
+  end
+
+  def resource=(res)
+    instance_variable_set("@#{resource_name}", res)
   end
 
   def resource_name
@@ -62,7 +76,7 @@ module HalActions
   def index_cache_path
     index_resources = self.try(:resources_base) || resources
     PagedCollection.new(
-      with_params(self.class.resources_params, index_resources),
+      decorate_query(index_resources),
       request,
       item_class: self.class.resource_class,
       item_decorator: self.class.resource_representer
@@ -75,7 +89,7 @@ module HalActions
 
   def index_collection
     PagedCollection.new(
-      with_params(self.class.resources_params, resources),
+      decorate_query(resources),
       request,
       item_class: self.class.resource_class,
       item_decorator: self.class.resource_representer
@@ -83,18 +97,35 @@ module HalActions
   end
 
   def resources
-    instance_variable_get("@#{resources_name}") || begin
-      res = self.class.resource_class.order(id: :desc).page(params[:page])
-      instance_variable_set("@#{resources_name}", res)
-    end
+    instance_variable_get("@#{resources_name}") ||
+    self.resources = self.class.resource_class
+  end
+
+  def resources=(res)
+    instance_variable_set("@#{resources_name}", res)
   end
 
   def resources_name
     resource_name.pluralize
   end
 
-  def with_params(keys, arel)
-    keys ||= []
+  def decorate_query(res)
+    res = with_sorting(res)
+    res = with_paging(res)
+    res = with_params(res)
+    res
+  end
+
+  def with_sorting(arel)
+    arel.order(id: :desc)
+  end
+
+  def with_paging(arel)
+    arel.page(params[:page]).per(params[:per])
+  end
+
+  def with_params(arel)
+    keys = self.class.resources_params || []
     where_hash = params.slice(*keys)
     where_hash['piece_id'] = where_hash.delete('story_id') if where_hash.key?('story_id')
     where_hash = where_hash.permit(where_hash.keys)
@@ -125,7 +156,7 @@ module HalActions
     end
 
     def allow_params(action, *params)
-      valid_params ||= {}
+      self.valid_params ||= {}
       valid_params[action.to_sym] = Array(params).flatten
     end
 
@@ -137,7 +168,7 @@ module HalActions
       {compress: true, expires_in: 1.hour, race_condition_ttl: 30}
     end
 
-    def cache_api_action(action, options={})
+    def cache_api_action(action, options = {})
       options = cache_options.merge(options || {})
       cache_path_method = options.delete(:cache_path_method) || "#{action}_cache_path"
       options[:cache_path] ||= ->(c) { c.valid_params_for_action(action).merge({ _c: send(cache_path_method) }) }

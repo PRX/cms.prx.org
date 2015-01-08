@@ -12,7 +12,6 @@ class Api::ImageRepresenter < Api::BaseRepresenter
     {
       href: represented.public_url(version: 'medium'),
       type: represented.content_type || 'image'
-    }
+    } if represented.id
   end
-
 end

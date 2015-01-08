@@ -1,41 +1,44 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    actionmailer (4.1.6)
-      actionpack (= 4.1.6)
-      actionview (= 4.1.6)
+    CFPropertyList (2.2.8)
+    actionback (0.0.1)
+      rails (>= 3.0)
+    actionmailer (4.1.9)
+      actionpack (= 4.1.9)
+      actionview (= 4.1.9)
       mail (~> 2.5, >= 2.5.4)
-    actionpack (4.1.6)
-      actionview (= 4.1.6)
-      activesupport (= 4.1.6)
+    actionpack (4.1.9)
+      actionview (= 4.1.9)
+      activesupport (= 4.1.9)
       rack (~> 1.5.2)
       rack-test (~> 0.6.2)
     actionpack-action_caching (1.1.1)
       actionpack (>= 4.0.0, < 5.0)
-    actionview (4.1.6)
-      activesupport (= 4.1.6)
+    actionview (4.1.9)
+      activesupport (= 4.1.9)
       builder (~> 3.1)
       erubis (~> 2.7.0)
     activejob_backport (0.0.3)
       activesupport (>= 4.0.0)
-    activemodel (4.1.6)
-      activesupport (= 4.1.6)
+    activemodel (4.1.9)
+      activesupport (= 4.1.9)
       builder (~> 3.1)
-    activerecord (4.1.6)
-      activemodel (= 4.1.6)
-      activesupport (= 4.1.6)
+    activerecord (4.1.9)
+      activemodel (= 4.1.9)
+      activesupport (= 4.1.9)
       arel (~> 5.0.0)
-    activesupport (4.1.6)
+    activesupport (4.1.9)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
-    acts_as_list (0.4.0)
+    acts_as_list (0.6.0)
       activerecord (>= 3.0)
     ansi (1.4.3)
     arel (5.0.1.20140414130214)
-    better_errors (2.0.0)
+    better_errors (2.1.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
       rack (>= 0.9.0)
@@ -43,7 +46,8 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
-    capistrano (3.2.1)
+    capistrano (3.3.5)
+      capistrano-stats (~> 1.1.0)
       i18n
       rake (>= 10.0.0)
       sshkit (~> 1.3)
@@ -56,6 +60,7 @@ GEM
     capistrano-rails (1.1.2)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+    capistrano-stats (1.1.1)
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -63,10 +68,10 @@ GEM
       mime-types (>= 1.16)
     celluloid (0.16.0)
       timers (~> 4.0.0)
-    codeclimate-test-reporter (0.4.1)
+    codeclimate-test-reporter (0.4.5)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
-    colorize (0.7.3)
+    colorize (0.7.5)
     coveralls (0.7.1)
       multi_json (~> 1.3)
       rest-client
@@ -75,66 +80,113 @@ GEM
       thor
     dalli (2.7.2)
     debug_inspector (0.0.2)
-    dotenv (0.11.1)
-      dotenv-deployment (~> 0.0.2)
-    dotenv-deployment (0.0.2)
-    dotenv-rails (0.11.1)
-      dotenv (= 0.11.1)
+    diffy (3.0.7)
+    docile (1.1.5)
+    dotenv (1.0.2)
+    dotenv-rails (1.0.2)
+      dotenv (= 1.0.2)
     erubis (2.7.0)
     event_attribute (1.0.1)
       activesupport (>= 3.0.0)
-    excon (0.39.6)
-    factory_girl (4.4.0)
+    excon (0.42.1)
+    factory_girl (4.5.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.4.1)
-      factory_girl (~> 4.4.0)
+    factory_girl_rails (4.5.0)
+      factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    ffi (1.9.5)
-    fog (1.23.0)
-      fog-brightbox
-      fog-core (~> 1.23)
+    ffi (1.9.6)
+    fission (0.5.0)
+      CFPropertyList (~> 2.2)
+    fog (1.26.0)
+      fog-atmos
+      fog-brightbox (~> 0.4)
+      fog-core (~> 1.27, >= 1.27.1)
+      fog-ecloud
       fog-json
+      fog-profitbricks
+      fog-radosgw (>= 0.0.2)
+      fog-sakuracloud (>= 0.0.4)
       fog-softlayer
+      fog-storm_on_demand
+      fog-terremark
+      fog-vmfusion
+      fog-voxel
+      fog-xml (~> 0.1.1)
       ipaddress (~> 0.5)
       nokogiri (~> 1.5, >= 1.5.11)
-    fog-brightbox (0.5.1)
+    fog-atmos (0.1.0)
+      fog-core
+      fog-xml
+    fog-brightbox (0.7.1)
       fog-core (~> 1.22)
       fog-json
-      inflecto
-    fog-core (1.24.0)
+      inflecto (~> 0.0.2)
+    fog-core (1.27.2)
       builder
       excon (~> 0.38)
       formatador (~> 0.2)
       mime-types
       net-scp (~> 1.1)
       net-ssh (>= 2.1.3)
+    fog-ecloud (0.0.2)
+      fog-core
+      fog-xml
     fog-json (1.0.0)
       multi_json (~> 1.0)
-    fog-softlayer (0.3.19)
+    fog-profitbricks (0.0.1)
+      fog-core
+      fog-xml
+      nokogiri
+    fog-radosgw (0.0.3)
+      fog-core (>= 1.21.0)
+      fog-json
+      fog-xml (>= 0.0.1)
+    fog-sakuracloud (0.1.1)
       fog-core
       fog-json
+    fog-softlayer (0.3.26)
+      fog-core
+      fog-json
+    fog-storm_on_demand (0.1.0)
+      fog-core
+      fog-json
+    fog-terremark (0.0.3)
+      fog-core
+      fog-xml
+    fog-vmfusion (0.0.1)
+      fission
+      fog-core
+    fog-voxel (0.0.2)
+      fog-core
+      fog-xml
+    fog-xml (0.1.1)
+      fog-core
+      nokogiri (~> 1.5, >= 1.5.11)
     formatador (0.2.5)
     growl (1.0.3)
-    guard (2.6.1)
+    guard (2.10.5)
       formatador (>= 0.2.4)
       listen (~> 2.7)
       lumberjack (~> 1.0)
+      nenv (~> 0.1)
       pry (>= 0.9.12)
       thor (>= 0.18.1)
-    guard-bundler (2.0.0)
+    guard-bundler (2.1.0)
       bundler (~> 1.0)
       guard (~> 2.2)
+      guard-compat (~> 1.1)
+    guard-compat (1.2.0)
     guard-minitest (2.3.2)
       guard (~> 2.0)
       minitest (>= 3.0)
     highline (1.6.21)
     hike (1.2.3)
     hitimes (1.2.2)
-    i18n (0.6.11)
+    i18n (0.7.0)
     inflecto (0.0.2)
     ipaddress (0.8.0)
     json (1.8.1)
-    json-jwt (0.7.0)
+    json-jwt (0.7.1)
       activesupport
       bindata
       multi_json (>= 1.3)
@@ -143,12 +195,12 @@ GEM
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    listen (2.7.11)
+    listen (2.8.5)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     lumberjack (1.0.9)
-    mail (2.6.1)
+    mail (2.6.3)
       mime-types (>= 1.16, < 3)
     media_monster_client (2.0.5)
       activesupport
@@ -156,30 +208,31 @@ GEM
       json
       oauth
     method_source (0.8.2)
-    mime-types (2.3)
-    mini_portile (0.6.0)
-    minitest (5.4.2)
-    minitest-reporters (1.0.5)
+    mime-types (2.4.3)
+    mini_portile (0.6.2)
+    minitest (5.5.0)
+    minitest-reporters (1.0.8)
       ansi
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    minitest-spec-rails (5.1.0)
+    minitest-spec-rails (5.1.1)
       minitest (~> 5.0)
       rails (~> 4.1)
     multi_json (1.10.1)
-    mysql2 (0.3.16)
+    mysql2 (0.3.17)
+    nenv (0.1.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
-    netrc (0.7.7)
-    newrelic_rpm (3.9.5.251)
-    nokogiri (1.6.3.1)
-      mini_portile (= 0.6.0)
+    netrc (0.10.2)
+    newrelic_rpm (3.9.9.275)
+    nokogiri (1.6.5)
+      mini_portile (~> 0.6.0)
     oauth (0.4.7)
-    oj (2.10.2)
+    oj (2.11.1)
     oj_mimic_json (1.0.1)
-    paranoia (2.0.2)
+    paranoia (2.0.4)
       activerecord (~> 4.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -189,36 +242,36 @@ GEM
       pry (>= 0.9.10)
     pundit (0.3.0)
       activesupport (>= 3.0.0)
-    quiet_assets (1.0.3)
+    quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.5.2)
-    rack-cors (0.2.9)
-    rack-prx_auth (0.0.2)
+    rack-cors (0.3.1)
+    rack-prx_auth (0.0.4)
       json (~> 1.8, >= 1.8.1)
       json-jwt (~> 0.7, >= 0.7.0)
       rack (~> 1.5, >= 1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
-    rails (4.1.6)
-      actionmailer (= 4.1.6)
-      actionpack (= 4.1.6)
-      actionview (= 4.1.6)
-      activemodel (= 4.1.6)
-      activerecord (= 4.1.6)
-      activesupport (= 4.1.6)
+    rails (4.1.9)
+      actionmailer (= 4.1.9)
+      actionpack (= 4.1.9)
+      actionview (= 4.1.9)
+      activemodel (= 4.1.9)
+      activerecord (= 4.1.9)
+      activesupport (= 4.1.9)
       bundler (>= 1.3.0, < 2.0)
-      railties (= 4.1.6)
+      railties (= 4.1.9)
       sprockets-rails (~> 2.0)
-    railties (4.1.6)
-      actionpack (= 4.1.6)
-      activesupport (= 4.1.6)
+    railties (4.1.9)
+      actionpack (= 4.1.9)
+      activesupport (= 4.1.9)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.3.2)
+    rake (10.4.2)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
-    rdoc (4.1.2)
+    rdoc (4.2.0)
       json (~> 1.4)
     representable (1.8.5)
       multi_json
@@ -235,33 +288,35 @@ GEM
       roar (>= 0.11.13)
       test_xml (>= 0.1.6)
       uber
-    ruby-progressbar (1.6.0)
+    ruby-progressbar (1.7.1)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     securecompare (1.0.0)
-    simplecov (0.7.1)
+    simplecov (0.9.1)
+      docile (~> 1.1.0)
       multi_json (~> 1.0)
-      simplecov-html (~> 0.7.1)
-    simplecov-html (0.7.1)
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
     slop (3.6.0)
-    spring (1.1.3)
-    sprockets (2.12.2)
+    spring (1.2.0)
+    sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sprockets-rails (2.1.4)
+    sprockets-rails (2.2.2)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
-      sprockets (~> 2.8)
-    sshkit (1.5.1)
-      colorize
+      sprockets (>= 2.8, < 4.0)
+    sshkit (1.6.1)
+      colorize (>= 0.7.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     term-ansicolor (1.3.0)
       tins (~> 1.0)
-    test_xml (0.1.6)
+    test_xml (0.1.7)
+      diffy (~> 3.0)
       nokogiri (>= 1.3.2)
     thor (0.19.1)
     thread_safe (0.3.4)
@@ -271,7 +326,7 @@ GEM
     tins (1.3.3)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uber (0.0.8)
+    uber (0.0.12)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.6)
@@ -281,14 +336,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionback
   actionpack-action_caching
   activejob_backport
   acts_as_list
   better_errors
   binding_of_caller
-  capistrano (~> 3.2.0)
+  capistrano (~> 3.2)
   capistrano-newrelic
-  capistrano-rails (~> 1.1.0)
+  capistrano-rails (~> 1.1)
   carrierwave
   codeclimate-test-reporter
   coveralls
@@ -298,7 +354,7 @@ DEPENDENCIES
   factory_girl_rails
   fog
   growl
-  guard
+  guard (~> 2.10.0)
   guard-bundler
   guard-minitest
   highline
@@ -319,8 +375,9 @@ DEPENDENCIES
   rack-prx_auth
   rails (~> 4.1.0)
   rake
-  roar-rails
+  roar (~> 0.12)
+  roar-rails (~> 0.1)
   sdoc
-  simplecov (~> 0.7.1)
+  simplecov
   spring
   unf

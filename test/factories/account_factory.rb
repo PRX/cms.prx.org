@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     address
 
-    ignore do
+    transient do
       stories_count 2
     end
 
@@ -13,10 +13,13 @@ FactoryGirl.define do
       FactoryGirl.create_list(:story, evaluator.stories_count, account: account)
     end
 
+    factory :group_account, class: 'GroupAccount' do
+      name 'group'
+    end
+
     factory :individual_account, class: 'IndividualAccount', aliases: [:default_account] do
       name 'individual'
     end
-
 
     factory :individual_account_with_owner, class: 'IndividualAccount' do
       name 'individual with opener'

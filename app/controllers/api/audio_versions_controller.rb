@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::AudioVersionsController < Api::BaseController
 
   api_versions :v1

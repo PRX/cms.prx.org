@@ -4,19 +4,6 @@ describe PublicAssetsController do
 
   let(:audio_file) { FactoryGirl.create(:audio_file) }
 
-  before {
-    test_routes = Proc.new do
-      namespace :api do
-        resources :test_objects
-      end
-    end
-    Rails.application.routes.eval_block(test_routes)    
-  }
-
-  after {
-    Rails.application.reload_routes!
-  }
-
   it 'should get unauthorized for invalid request' do
     get(:show,
       {

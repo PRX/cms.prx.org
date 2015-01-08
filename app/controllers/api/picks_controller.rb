@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::PicksController < Api::BaseController
 
   api_versions :v1
@@ -5,7 +7,7 @@ class Api::PicksController < Api::BaseController
   represent_with Api::PickRepresenter
 
   def resources
-    @picks = Pick.named_playlists.page(params[:page])
+    @picks ||= Pick.named_playlists
   end
 
 end

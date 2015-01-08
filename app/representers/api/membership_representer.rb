@@ -14,5 +14,4 @@ class Api::MembershipRepresenter < Api::BaseRepresenter
   link :user do
     api_user_path(represented.user)
   end
-
 end
