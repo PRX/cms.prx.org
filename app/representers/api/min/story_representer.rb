@@ -4,11 +4,14 @@ class Api::Min::StoryRepresenter < Api::BaseRepresenter
 
   property :id
   property :title
-  property :duration
   property :short_description
+  property :episode_number
+  property :episode_identifier
   property :published_at
   property :produced_on
-  property :points
+
+  property :duration, writeable: false
+  property :points, writeable: false
 
   # default zoom
   link :account do
@@ -16,14 +19,9 @@ class Api::Min::StoryRepresenter < Api::BaseRepresenter
       href: api_account_path(represented.account),
       title: represented.account.name,
       profile: prx_model_uri(represented.account)
-    }
+    } if represented.account
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter, zoom: false
-
-  link :image do
-    api_story_image_path(represented.default_image.id) if represented.default_image
-  end
-  embed :default_image, as: :image, class: StoryImage, decorator: Api::ImageRepresenter
 
   link :series do
     {
@@ -33,9 +31,27 @@ class Api::Min::StoryRepresenter < Api::BaseRepresenter
   end
   embed :series, class: Series, decorator: Api::Min::SeriesRepresenter, zoom: false
 
-  links :audio do
-    represented.default_audio.collect{ |a| { href: api_audio_file_path(a), title: a.label } }
+  link :image do
+    {
+      href: polymorphic_path([:api, represented.default_image]),
+      profile: prx_model_uri(represented.default_image)
+    } if represented.default_image
   end
-  embeds :default_audio, as: :audio, class: AudioFile, decorator: Api::AudioFileRepresenter
+  embed :default_image, as: :image, decorator: Api::ImageRepresenter
 
+  link :audio do
+    {
+      href: api_story_audio_files_path(represented.id),
+      count: represented.default_audio.count
+    } if represented.id
+  end
+  embed :default_audio, as: :audio, paged: true, item_class: AudioFile, per: :all
+
+  link :promos do
+    {
+      href: api_story_promos_path(represented.id),
+      count: represented.promos_audio.count
+    } if represented.id
+  end
+  embed :promos_audio, as: :promos, paged: true, item_class: AudioFile
 end

@@ -6,13 +6,20 @@ describe Api::AudioFilesController do
   let(:audio_file) { create(:audio_file, story: story) }
 
   it 'should show' do
-    get :show, id: audio_file.id, format: 'json', api_version: 'v1'
+    get :show, api_request_opts(id: audio_file.id)
     assert_response :success
   end
 
-  it 'should list' do
+  it 'should list for version' do
     audio_file.id.wont_be_nil
-    get(:index, { api_version: 'v1', format: 'json' } )
+    get :index, api_request_opts(audio_version_id: audio_file.audio_version_id)
     assert_response :success
   end
+
+  it 'should list for story' do
+    audio_file.id.wont_be_nil
+    get :index, api_request_opts(story_id: story.id)
+    assert_response :success
+  end
+
 end

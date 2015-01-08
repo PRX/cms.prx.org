@@ -4,31 +4,34 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   property :id
   property :title
-  property :duration
   property :short_description
-  property :description
   property :episode_number
   property :episode_identifier
   property :published_at
   property :produced_on
-  property :points
+
+  property :duration, writeable: false
+  property :points, writeable: false
+
+  property :description
   property :related_website
   property :broadcast_history
   property :timing_and_cues
   property :content_advisory
   property :tags
 
-  # default zoom
-  link :account do
+  property :license, class: License, decorator: Api::LicenseRepresenter
+
+  link rel: :account, writeable: true do
     {
       href: api_account_path(represented.account),
       title: represented.account.name,
       profile: prx_model_uri(represented.account)
-    }
+    } if represented.account
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
 
-  link :series do
+  link rel: :series, writeable: true do
     {
       href: api_series_path(represented.series),
       title: represented.series.title
@@ -42,34 +45,39 @@ class Api::StoryRepresenter < Api::BaseRepresenter
       profile: prx_model_uri(represented.default_image)
     } if represented.default_image
   end
-
   embed :default_image, as: :image, decorator: Api::ImageRepresenter
 
-  links :audio do
-    represented.default_audio.collect{ |a| { href: api_audio_file_path(a), title: a.label } }
+  link :audio do
+    {
+      href: api_story_audio_files_path(represented.id),
+      count: represented.default_audio.count
+    } if represented.id
   end
-  embeds :default_audio, as: :audio, class: AudioFile, decorator: Api::AudioFileRepresenter
+  embed :default_audio, as: :audio, paged: true, item_class: AudioFile, per: :all
 
-  # default links
   link :promos do
-    api_audio_version_path(represented.promos.id) if represented.promos.audio_file_ids.size > 1
+    {
+      href: api_story_promos_path(represented.id),
+      count: represented.promos_audio.count
+    } if represented.id
   end
-  embed :promos, class: AudioVersion, decorator: Api::AudioVersionRepresenter, zoom: false
+  embed :promos_audio, as: :promos, paged: true, item_class: AudioFile
 
-  links :audio_versions do
-    represented.audio_versions.collect{ |a| { href: api_audio_version_path(a), title: a.label } }
+  link :audio_versions do
+    {
+      href: api_story_audio_versions_path(represented.id),
+      count: represented.audio_versions.count
+    } if represented.id
   end
-  embeds :audio_versions, class: AudioVersion, decorator: Api::AudioVersionRepresenter, zoom: false
+  embed :audio_versions, paged: true, item_class: AudioVersion, zoom: false
 
-  links :images do
-    represented.images.collect{ |a| { href: api_story_image_path(a) } } unless represented.image_ids.size > 0
+  link :images do
+    {
+      href: api_story_story_images_path(represented),
+      count: represented.images.count
+    } if represented.id
   end
-  embeds :images, class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
-
-  link :'prx:license' do
-    api_license_path(represented.license.id) if represented.license
-  end
-  embed :license, as: :'prx:license', class: License, decorator: Api::LicenseRepresenter
+  embed :images, paged: true, item_class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
 
   link :musical_works do
     {
@@ -79,12 +87,10 @@ class Api::StoryRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :musical_works, paged: true, item_class: MusicalWork, zoom: false
-
 end
 
 # TODO:
 # * List of Producers
-# * tags
 
 # WAIT:
 # * Producing Account's other Pieces (Doesn't make sense for right now)

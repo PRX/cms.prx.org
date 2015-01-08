@@ -64,22 +64,22 @@ class Story < BaseModel
   end
 
   def default_audio_version
-    @default_audio_version ||= if promos_only?
-      promos
-    else
-      audio_versions.reject{|av| av.audio_files.size < 1 }.sort{|a, b| compare_versions(a,b) }.first
-    end
+    @default_audio_version ||= longest_single_file_version || longest_version
+  end
+
+  def promos_audio
+    @promos_audio ||= promos.try(:audio_files) || Kaminari.paginate_array([])
   end
 
   def default_audio
-    @default_audio ||= default_audio_version.try(:as_default_audio) || []
+    @default_audio ||= default_audio_version.try(:audio_files) || Kaminari.paginate_array([])
   end
 
   def duration
-    default_audio_version.try(:default_audio_duration) || 0
+    default_audio_version.try(:duration) || 0
   end
 
-  def compare_versions(a,b)
+  def compare_versions(a, b)
     if a.audio_files.size == b.audio_files.size
       b.length <=> a.length
     else
@@ -91,12 +91,24 @@ class Story < BaseModel
     default_audio_version.try(:timing_and_cues)
   end
 
+  def timing_and_cues=(taq)
+    default_audio_version.try(:timing_and_cues=, taq)
+  end
+
   def content_advisory
     default_audio_version.try(:content_advisory)
   end
 
+  def content_advisory=(ca)
+    default_audio_version.try(:content_advisory=, ca)
+  end
+
   def tags
     (topics + tones + formats + user_tags).map(&:to_tag).uniq.sort
+  end
+
+  def tags=(ts)
+    self.user_tags = ts.uniq.sort.map { |t| UserTag.new(name: t) }
   end
 
   def self.policy_class
@@ -111,5 +123,15 @@ class Story < BaseModel
 
   def subscription_episode?
     series && series.subscribable?
+  end
+
+  private
+
+  def longest_single_file_version
+    audio_versions.reject { |av| av.audio_files.size != 1 }.sort_by(&:length).last
+  end
+
+  def longest_version
+    audio_versions.sort_by(&:length).last
   end
 end

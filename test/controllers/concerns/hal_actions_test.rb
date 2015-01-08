@@ -38,7 +38,7 @@ describe HalActions do
     attr_accessor :_respond_with
 
     def params
-      ActionController::Parameters.new(action: 'update')
+      @params ||= ActionController::Parameters.new(action: 'update', id: 1)
     end
 
     def current_user

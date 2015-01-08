@@ -23,21 +23,7 @@ class AudioVersion < BaseModel
     # end
   end
 
-  def as_default_audio
-    @_default_audio ||= if promos?
-      [audio_files.max_by(&:length)]
-    else
-      audio_files
-    end
-  end
-
-  def default_audio_duration
-    @_default_audio_duration ||= if promos?
-      as_default_audio.first.length
-    else
-      length
-    end
-  end
+  alias_method :duration, :length
 
   def self.policy_class
     StoryAttributePolicy

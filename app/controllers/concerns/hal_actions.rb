@@ -15,8 +15,17 @@ module HalActions
     respond_with show_resource, show_options
   end
 
-  def update
+  def create
+    self.resource = consume!(resource)
     authorize resource
+    resource.save!
+    respond_with show_resource, show_options
+  end
+
+  def update
+    self.resource = consume!(resource)
+    authorize resource
+    resource.save!
     respond_with show_resource, show_options
   end
 
@@ -28,10 +37,15 @@ module HalActions
   end
 
   def resource
-    instance_variable_get("@#{resource_name}") || begin
-      res = self.class.resource_class.find(params[:id].to_i)
-      instance_variable_set("@#{resource_name}", res)
+    instance_variable_get("@#{resource_name}") || self.resource = if params[:id]
+      self.class.resource_class.find(params[:id].to_i)
+    else
+      self.class.resource_class.new
     end
+  end
+
+  def resource=(res)
+    instance_variable_set("@#{resource_name}", res)
   end
 
   def resource_name
@@ -83,10 +97,12 @@ module HalActions
   end
 
   def resources
-    instance_variable_get("@#{resources_name}") || begin
-      res = self.class.resource_class
-      instance_variable_set("@#{resources_name}", res)
-    end
+    instance_variable_get("@#{resources_name}") ||
+    self.resources = self.class.resource_class
+  end
+
+  def resources=(res)
+    instance_variable_set("@#{resources_name}", res)
   end
 
   def resources_name

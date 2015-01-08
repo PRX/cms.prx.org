@@ -3,11 +3,13 @@
 class Api::BaseRepresenter < Roar::Decorator
 
   include Roar::Representer::JSON::HAL
+
   include FormatKeys
   include UriMethods
   include Curies
   include Embeds
   include Caches
+  include LinkSerialize
 
   curies(:prx) do
     [{ name: :prx, href: "http://meta.prx.org/relation/{rel}", templated: true }]
@@ -15,9 +17,14 @@ class Api::BaseRepresenter < Roar::Decorator
 
   link(:self) do
     {
-      href:    polymorphic_path([:api, becomes_represented_class(represented)]),
+      href:    self_url(represented),
       profile: prx_model_uri(represented)
     }
+  end
+
+  def self_url(represented)
+    rep = becomes_represented_class(represented)
+    polymorphic_path([:api, rep])
   end
 
   def becomes_represented_class(rep)

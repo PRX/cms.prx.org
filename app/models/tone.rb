@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Tone < BaseModel
 
   TONE_NAMES = ['Amusing','Authoritative','Contemplative','Dark','Delicate','Disturbing','Earnest','Edgy','Elaborate','Emotional','Engaging','Esoteric','Experimental','Fresh Air-ish','Humorous','Informational','Inspiring','Intimate','Intriguing','Light','Lighthearted','Melancholic','NPR NewsMagazine-y','Offbeat','Opinionated','Personal','Polished','Political','Provocative','Quirky','Raw','Real','Rough','Sad','Sentimental','Simple','Sound-Rich','Surprising','Suspenseful','Sweet','This American Life-esque','Thorough','Thoughtful','Unconventional','Unusual','Upbeat']

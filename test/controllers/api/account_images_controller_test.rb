@@ -4,13 +4,7 @@ describe Api::AccountImagesController do
   let(:account_image) { create(:account_image) }
 
   it 'should show' do
-    get(:show, { api_version: 'v1', format: 'json', id: account_image.id } )
-    assert_response :success
-  end
-
-  it 'should list' do
-    account_image.id.wont_be_nil
-    get(:index, { api_version: 'v1', format: 'json' } )
+    get(:show, api_request_opts(account_id: account_image.account_id))
     assert_response :success
   end
 end

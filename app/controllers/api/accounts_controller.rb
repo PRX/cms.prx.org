@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::AccountsController < Api::BaseController
 
   api_versions :v1

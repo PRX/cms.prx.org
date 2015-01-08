@@ -17,8 +17,10 @@ class Api::UserRepresenter < Api::BaseRepresenter
   embed :accounts, paged: true, item_class: Account, item_decorator: Api::Min::AccountRepresenter, zoom: false
 
   link :image do
-    api_user_image_path(represented.image) if represented.image
+    {
+      href:  api_user_user_image_path(represented),
+      title: represented.image.try(:filename)
+    } if represented.id
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter
-
 end

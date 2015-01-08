@@ -10,7 +10,6 @@ class Api::ProducerRepresenter < Api::BaseRepresenter
     {
       href: api_user_path(represented.user),
       title: represented.user.login
-    } if represented.user_id
+    } if represented.user
   end
-
 end

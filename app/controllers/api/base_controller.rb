@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 class Api::BaseController < ApplicationController
 
   protect_from_forgery with: :null_session
@@ -8,6 +9,7 @@ class Api::BaseController < ApplicationController
   include ApiVersioning
   include HalActions
   include Roar::Rails::ControllerAdditions
+  include ActionBack::ControllerAdditions
 
   # respond to hal or json, but always returns application/hal+json
   respond_to :hal, :json
@@ -28,9 +30,13 @@ class Api::BaseController < ApplicationController
   end
 
   def current_user
-    if prx_auth_token
+    @current_user ||= if prx_auth_token
       User.find_by(id: prx_auth_token.user_id)
     end
+  end
+
+  def current_user=(user)
+    @current_user = user
   end
 
   private
