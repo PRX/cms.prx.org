@@ -140,7 +140,7 @@ module HalActions
     end
 
     def allow_params(action, *params)
-      valid_params ||= {}
+      self.valid_params ||= {}
       valid_params[action.to_sym] = Array(params).flatten
     end
 
