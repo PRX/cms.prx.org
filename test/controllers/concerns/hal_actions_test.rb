@@ -38,13 +38,13 @@ describe HalActions do
     attr_accessor :_respond_with
 
     def params
-      ActionController::Parameters.new(action: 'update')
+      @params ||= ActionController::Parameters.new(action: 'update', id: 1)
     end
 
     def current_user
       FactoryGirl.create(:user)
     end
-    
+
     def respond_with(*args)
       self._respond_with = args
     end
