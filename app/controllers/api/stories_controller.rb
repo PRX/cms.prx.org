@@ -30,6 +30,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def resources_base
+    stories = nil
     filters = params[:filters].try(:split, ',') || []
 
     if params[:account_id].present? && filters.include?('highlighted')
@@ -43,6 +44,8 @@ class Api::StoriesController < Api::BaseController
     else
       stories = stories.order('published_at desc')
     end
+
+    stories.published.visible
   end
 
   # don't add another order, handled in the resources_base
