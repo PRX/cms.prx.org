@@ -9,7 +9,7 @@ class AudioVersion < BaseModel
 
   def length(reload=false)
     @_length = nil if reload
-    @_length ||= self.audio_files.inject(0){|sum, f| sum + f.length}
+    @_length ||= audio_files.inject(0) { |sum, f| sum + f.length.to_i }
 
     # @_length ||= if !new_record?
     #   len = AudioVersion.connection.select_one("SELECT SUM(length) as l

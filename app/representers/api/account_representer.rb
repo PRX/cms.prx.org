@@ -27,15 +27,16 @@ class Api::AccountRepresenter < Api::BaseRepresenter
     {
       href: api_user_path(represented.opener),
       title: represented.opener.login
-    } if represented.opener
+    } if represented.opener && represented.opener.id
   end
   embed :opener, class: User, decorator: Api::Min::UserRepresenter, zoom: false
 
   link :stories do
     {
-      href: "#{api_account_stories_path(represented)}{?filters}",
-      templated: true
-    }
+      href: "#{api_account_stories_path(represented)}{?filters,page,per,zoom}",
+      templated: true,
+      count: represented.stories.count
+    } if represented.id
   end
   embed :stories, as: :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
 

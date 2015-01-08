@@ -9,7 +9,11 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   property :story_count
 
   link :stories do
-    api_series_stories_path(represented)
+    {
+      href: "#{api_series_stories_path(represented)}{?page,per,zoom}",
+      templated: true,
+      count: represented.stories.count
+    } if represented.id
   end
   embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
 

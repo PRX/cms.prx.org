@@ -16,7 +16,13 @@ class Api::StoriesController < Api::BaseController
   end
 
   def resources
-    @stories ||=  resources_base.includes({audio_versions: [:audio_files]}, {account: [:image, :address, {opener:[:image]}]}, {series:[:image, :account]}, :images, :license)
+    @stories ||= resources_base.includes(
+      { audio_versions: [:audio_files] },
+      { account: [:image, :address, { opener: [:image] }] },
+      { series: [:image, :account] },
+      :images,
+      :license
+    )
   end
 
   def resources_base
@@ -33,8 +39,11 @@ class Api::StoriesController < Api::BaseController
     else
       stories = stories.order('published_at desc')
     end
+  end
 
-    stories.published.visible.page(params[:page])
+  # don't add another order, handled in the resources_base
+  def with_ordering(res)
+    res
   end
 
 end

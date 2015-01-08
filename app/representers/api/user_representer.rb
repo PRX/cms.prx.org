@@ -8,7 +8,11 @@ class Api::UserRepresenter < Api::BaseRepresenter
   property :login
 
   link :accounts do
-    api_user_accounts_path(represented)
+    {
+      href: "#{api_user_accounts_path(represented)}{?page,per,zoom}",
+      templated: true,
+      count: represented.accounts.count
+    } if represented.id
   end
   embed :accounts, paged: true, item_class: Account, item_decorator: Api::Min::AccountRepresenter, zoom: false
 
