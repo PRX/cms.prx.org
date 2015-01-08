@@ -15,7 +15,7 @@ namespace :deploy do
   before :finished, 'newrelic:notice_deployment'
 end
 
-set :slack_webhook, 'https://hooks.slack.com/services/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'
+set :slack_webhook, -> { _hook = ''; on(roles(:app)) { _hook = capture('cat /var/www/domains/prx.org/m/shared/config/slack_webhook.txt') }; _hook }
 set :slack_username, -> { 'capistrano' }
 
 # Extended Server Syntax
