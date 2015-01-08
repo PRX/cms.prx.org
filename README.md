@@ -1,6 +1,6 @@
-PRX.org Backend
+PRX.org CMS API
 ===============
-[![Build Status](https://travis-ci.org/PRX/PRX.org-Backend.png?branch=master)](https://travis-ci.org/PRX/PRX.org-Backend) [![Code Climate](https://codeclimate.com/github/PRX/PRX.org-Backend.png)](https://codeclimate.com/github/PRX/PRX.org-Backend) [![Coverage Status](https://coveralls.io/repos/PRX/PRX.org-Backend/badge.png)](https://coveralls.io/r/PRX/PRX.org-Backend) [![Dependency Status](https://gemnasium.com/PRX/PRX.org-Backend.png)](https://gemnasium.com/PRX/PRX.org-Backend)
+[![Build Status](https://travis-ci.org/PRX/cms.prx.org.png?branch=master)](https://travis-ci.org/PRX/cms.prx.org) [![Code Climate](https://codeclimate.com/github/PRX/cms.prx.org.png)](https://codeclimate.com/github/PRX/cms.prx.org) [![Coverage Status](https://coveralls.io/repos/PRX/cms.prx.org/badge.png)](https://coveralls.io/r/PRX/cms.prx.org) [![Dependency Status](https://gemnasium.com/PRX/cms.prx.org.png)](https://gemnasium.com/PRX/cms.prx.org)
 
 
 Install
@@ -39,9 +39,9 @@ gem install bundler powder
 ### Rails Project
 Consider forking the repo if you plan to make changes, otherwise you can clone it:
 ```
-# ssh repo syntax (or https `git clone https://github.com/PRX/PRX.org-Backend.git prx-backend`)
-git clone git@github.com:PRX/PRX.org-Backend.git prx-backend
-cd prx-backend
+# ssh repo syntax (or https `git clone https://github.com/PRX/cms.prx.org.git cms.prx.org`)
+git clone git@github.com:PRX/cms.prx.org.git cms.prx.org
+cd cms.prx.org
 
 # bundle to install gems dependencies
 bundle install
