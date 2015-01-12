@@ -288,8 +288,11 @@ GEM
     simplecov (0.9.1)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
-      simplecov-html (~> 0.8.0)
-    simplecov-html (0.8.0)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
+    slackistrano (0.1.4)
+      capistrano (>= 3.0.1)
+      json
     slop (3.6.0)
     spring (1.2.0)
     sprockets (2.12.3)
@@ -368,6 +371,7 @@ DEPENDENCIES
   roar (~> 0.12)
   roar-rails (~> 0.1)
   sdoc
-  simplecov
+  simplecov (~> 0.7.1)
+  slackistrano
   spring
   unf

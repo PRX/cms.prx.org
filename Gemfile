@@ -52,6 +52,7 @@ gem 'capistrano', '~> 3.2'
 gem 'capistrano-rails', '~> 1.1'
 gem 'highline'
 gem 'rake'
+gem 'slackistrano', require: false
 
 # monitoring
 gem 'newrelic_rpm'

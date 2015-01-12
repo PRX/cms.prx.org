@@ -15,6 +15,16 @@ namespace :deploy do
   before :finished, 'newrelic:notice_deployment'
 end
 
+set :slack_webhook, -> {
+  webhook = nil
+  on roles(:web) do
+    cmd = 'cat /var/www/domains/prx.org/hal/shared/config/slack_webhook.txt'
+    webhook = capture cmd
+  end
+  webhook
+}
+set :slack_username, -> { 'capistrano' }
+
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server
