@@ -12,14 +12,25 @@ class Api::StoriesController < Api::BaseController
   end
 
   def resource
-    @story ||= Story.published.visible.find_by_id(params[:id])
+    @story ||= if params[:id]
+      Story.published.visible.find_by_id(params[:id])
+    else
+      Story.new
+    end
   end
 
   def resources
-    @stories ||=  resources_base.includes({audio_versions: [:audio_files]}, {account: [:image, :address, {opener:[:image]}]}, {series:[:image, :account]}, :images, :license)
+    @stories ||= resources_base.includes(
+      { audio_versions: [:audio_files] },
+      { account: [:image, :address, { opener: [:image] }] },
+      { series: [:image, :account] },
+      :images,
+      :license
+    )
   end
 
   def resources_base
+    stories = nil
     filters = params[:filters].try(:split, ',') || []
 
     if params[:account_id].present? && filters.include?('highlighted')
@@ -34,7 +45,11 @@ class Api::StoriesController < Api::BaseController
       stories = stories.order('published_at desc')
     end
 
-    stories.published.visible.page(params[:page])
+    stories.published.visible
   end
 
+  # don't add another order, handled in the resources_base
+  def with_ordering(res)
+    res
+  end
 end

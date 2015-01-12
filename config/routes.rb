@@ -5,47 +5,44 @@ PRX::Application.routes.draw do
 
       root to: 'base#entrypoint'
 
-      resources :account_images
-      resources :addresses
       resources :audio_files
-      resources :licenses
-      resources :memberships
-      resources :musical_works
-      resources :producers
-      resources :series_images
-      resources :story_images
-      resources :user_images
+      resources :account_images, only: [:show, :index]
+      resources :series_images, only: [:show, :index]
+      resources :story_images, only: [:show, :index]
+      resources :user_images, only: [:show, :index]
 
       resources :audio_versions do
-        get 'audio_files',    to: 'audio_files#index'
+        resources :audio_files, except: [:new, :edit]
       end
 
-      resources :stories do
-        get 'audio_files',    to: 'audio_files#index'
-        get 'audio_versions', to: 'audio_versions#index'
-        get 'images',         to: 'story_images#index'
-        get 'musical_works',  to: 'musical_works#index'
-        get 'producers',      to: 'producers#index'
-
+      resources :stories, except: [:new, :edit] do
+        resources :promos, except: [:new, :edit]
+        resources :audio_files, except: [:new, :edit]
+        resources :audio_versions, except: [:new, :edit]
+        resources :story_images, path: 'images', except: [:new, :edit]
+        resources :musical_works, except: [:new, :edit]
+        resources :producers, except: [:new, :edit]
         get 'random', on: :collection
       end
 
-      resources :series do
-        get 'images',         to: 'series_images#index'
-        get 'stories',        to: 'stories#index'
+      resources :series, except: [:new, :edit] do
+        resources :series_images, path: 'images', except: [:new, :edit]
+        resources :stories, only: [:index, :post]
       end
 
       resources :accounts do
-        get 'images',         to: 'account_images#index' # is this necessary when there is always one? - AK
-        get 'memberships',    to: 'memberships#index'
-        get 'series',         to: 'series#index'
-        get 'stories',        to: 'stories#index'
+        resource :address, except: [:new, :edit]
+        resource :account_image, path: 'image', except: [:new, :edit]
+        resources :memberships, except: [:new, :edit]
+        resources :series, except: [:new, :edit]
+        resources :stories, only: [:index, :post]
       end
 
       resources :users do
-        get 'accounts',       to: 'accounts#index'
-        get 'images',         to: 'user_images#index'  # is this necessary when there is always one? - AK
-        get 'memberships',    to: 'memberships#index'
+        resource :address, except: [:new, :edit]
+        resource :user_image, path: 'image', except: [:new, :edit]
+        resources :memberships, except: [:new, :edit]
+        resources :accounts, only: [:index]
       end
 
       resources :pick_lists do

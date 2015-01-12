@@ -56,10 +56,23 @@ module Embeds
 
     def embed(name, options={})
       options[:embedded] = true
+      options[:writeable] = false
+      options[:if] ||= ->(_a) { id } unless options[:zoom] == :always
 
       if options[:paged]
-        opts = {no_curies: true, item_class: options.delete(:item_class), url: options.delete(:url), item_decorator: options.delete(:item_decorator)}
-        options[:getter] ||= ->(*){ PagedCollection.new(self.send(name).page(1), nil, opts.merge({parent: self})) }
+        opts = {
+          no_curies: true,
+          item_class: options.delete(:item_class),
+          url: options.delete(:url),
+          item_decorator: options.delete(:item_decorator),
+          per: options.delete(:per) || Kaminari.config.default_per_page
+        }
+        options[:getter] ||= ->(*) do
+          # set # per page based on default, option value integer, or special :all
+          per = opts.delete(:per)
+          per = self.send(name).count if per == :all
+          PagedCollection.new(self.send(name).page(1).per(per), nil, opts.merge({parent: self}))
+        end
         options[:decorator] = Api::PagedCollectionRepresenter
       end
 
@@ -68,6 +81,9 @@ module Embeds
 
     def embeds(name, options={})
       options[:embedded] = true
+      options[:writeable] = false
+      options[:if] ||= ->(_a) { id } unless options[:zoom] == :always
+
       collection(name, options)
     end
 

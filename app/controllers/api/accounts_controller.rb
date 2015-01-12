@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::AccountsController < Api::BaseController
 
   api_versions :v1
@@ -6,10 +8,14 @@ class Api::AccountsController < Api::BaseController
 
   def resources
     @accounts ||= if params[:user_id]
-      User.find(params[:user_id]).accounts.order(created_at: :desc).page(params[:page])
+      User.find(params[:user_id]).accounts
     else
-      Account.active.member.order(created_at: :desc).page(params[:page])
+      Account.active.member
     end
+  end
+
+  def with_sorting(arel)
+    arel.order(created_at: :desc)
   end
 
 # TODO: refactor existing app to have membership record for user to be admin of individual account

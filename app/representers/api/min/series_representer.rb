@@ -5,10 +5,13 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
   property :id
   property :title
   property :short_description
-  property :story_count
+
 
   link :stories do
-    api_series_stories_path(represented)
+    {
+      href: api_series_stories_path(represented),
+      count: represented.story_count
+    }
   end
   embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter, zoom: false
 
@@ -24,6 +27,5 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
       profile: prx_model_uri(represented.account)
     }
   end
-  embed :account, class: Account, decorator: Api::AccountRepresenter, zoom: false
-
+  embed :account, class: Account, decorator: Api::Min::AccountRepresenter, zoom: false
 end

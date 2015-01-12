@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class UserTag < BaseModel
   self.table_name = 'tags'
 

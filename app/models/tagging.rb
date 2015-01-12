@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Tagging < BaseModel
   belongs_to :user_tag, foreign_key: :tag_id
   belongs_to :taggable, polymorphic: true
