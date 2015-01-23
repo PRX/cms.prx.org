@@ -14,7 +14,7 @@ class Image < BaseModel
   end
 
   def credit
-    self.try(:read_attribute, :caption)
+    self.try(:read_attribute, :credit)
   end
 
   def self.policy_class
