@@ -371,7 +371,7 @@ DEPENDENCIES
   roar (~> 0.12)
   roar-rails (~> 0.1)
   sdoc
-  simplecov (~> 0.7.1)
+  simplecov
   slackistrano
   spring
   unf
