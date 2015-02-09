@@ -23,3 +23,6 @@ pickle-email-*.html
 
 # Ignore application configuration
 .env*
+
+# Ignore .capistrano config
+.capistrano
