@@ -19,6 +19,8 @@ class AudioFile < BaseModel
   acts_as_list scope: :audio_version
   acts_as_paranoid
 
+  alias_attribute :duration, :length
+
   mount_uploader :file, AudioFileUploader, mount_on: :filename
 
   def self.policy_class
