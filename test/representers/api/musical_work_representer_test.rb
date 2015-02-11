@@ -17,7 +17,6 @@ describe Api::MusicalWorkRepresenter do
     json['id'].must_equal musical_work.id
   end
 
-
   it 'will have a nested self link' do
     self_href = "/api/v1/stories/#{musical_work.story.id}/musical_works/#{musical_work.id}"
     json['_links']['self']['href'].must_equal self_href
