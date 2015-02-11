@@ -17,7 +17,7 @@ describe Api::AudioFileRepresenter do
     json['id'].must_equal audio_file.id
   end
 
-  it 'serializes the length of the story as duration' do
+  it 'serializes the length of the audio file as duration' do
     audio_file.stub(:duration, 123) do
       json['duration'].must_equal 123
     end
