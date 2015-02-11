@@ -6,6 +6,8 @@ class MusicalWork < BaseModel
 
   acts_as_list scope: :piece_id
 
+  alias_attribute :duration, :excerpt_length
+
   def self.policy_class
     StoryAttributePolicy
   end

@@ -22,8 +22,8 @@ describe Api::MusicalWorkRepresenter do
     json['_links']['self']['href'].must_equal self_href
   end
 
-  it 'serializes the length of the story as duration' do
-    musical_work.stub(:excerpt_length, 123) do
+  it 'serializes the length of the musical work as duration' do
+    musical_work.stub(:duration, 123) do
       json['duration'].must_equal 123
     end
   end
