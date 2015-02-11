@@ -6,7 +6,7 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
   property :filename
   property :label
   property :size
-  property :length, as: :duration
+  property :duration
 
   set_link_property(rel: :audio_version, writeable: true)
 
