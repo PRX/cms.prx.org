@@ -23,7 +23,7 @@ describe Api::MusicalWorkRepresenter do
   end
 
   it 'serializes the length of the story as duration' do
-    musical_work.stub(:excerpt_length, 123) do
+    musical_work.stub(:duration, 123) do
       json['duration'].must_equal 123
     end
   end

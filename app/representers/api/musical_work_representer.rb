@@ -9,7 +9,7 @@ class Api::MusicalWorkRepresenter < Api::BaseRepresenter
   property :label
   property :album
   property :year
-  property :excerpt_length, as: :duration
+  property :duration
 
   def self_url(musical_work)
     polymorphic_path([:api, musical_work.story, musical_work])
