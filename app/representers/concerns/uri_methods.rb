@@ -25,8 +25,8 @@ module UriMethods
   end
 
   def joined_names(args)
-    (Array(args.map { |arg| prx_model_uri_part_to_string(arg) } ) +
-      prx_model_uri_suffix(args)).flatten.compact.join("/")
+    (Array(args.map { |arg| prx_model_uri_part_to_string(arg) }) +
+      prx_model_uri_suffix(args)).flatten.compact.join('/')
   end
 
   def prx_model_uri_suffix(args)
