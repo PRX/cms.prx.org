@@ -30,6 +30,14 @@ describe Api::StoriesController do
     assert_response :success
   end
 
+  it 'should list stories for an account' do
+    story.must_be :published
+    get(:index, { api_version: 'v1',
+                  format: 'json',
+                  account_id: story.account_id })
+    assert_response :success
+  end
+
   it 'should list highlighted stories' do
     portfolio = create(:portfolio)
     playlist_section = create(:playlist_section, playlist: portfolio)
