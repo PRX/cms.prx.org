@@ -6,9 +6,9 @@ require 'account' if !defined?(AudioFile)
 
 describe Api::AccountRepresenter do
 
-  let(:account)     { create(:account) }
+  let(:account) { create(:account) }
   let(:representer) { Api::AccountRepresenter.new(account) }
-  let(:json)        { JSON.parse(representer.to_json) }
+  let(:json) { JSON.parse(representer.to_json) }
 
   it 'use representer to create json' do
     json['id'].must_equal account.id
@@ -28,5 +28,4 @@ describe Api::AccountRepresenter do
       json['_links']['prx:external'].must_include 'href' => 'http://example.com'
     end
   end
-
 end

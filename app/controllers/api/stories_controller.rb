@@ -34,12 +34,12 @@ class Api::StoriesController < Api::BaseController
     filters = params[:filters].try(:split, ',') || []
 
     stories = if account && filters.include?('highlighted')
-      account.portfolio_stories
-    elsif account
-      account.stories
-    else
-      Story
-    end
+                account.portfolio_stories
+              elsif account
+                account.stories
+              else
+                Story
+              end
 
     if filters.include?('purchased')
       stories = stories.purchased.order('purchase_count DESC')

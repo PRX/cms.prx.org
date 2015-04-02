@@ -7,6 +7,4 @@ describe Api do
   it 'create an api with a version' do
     api.version.must_equal '1.0'
   end
-
-
 end

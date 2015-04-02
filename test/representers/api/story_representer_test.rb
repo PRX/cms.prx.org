@@ -4,9 +4,9 @@ require 'test_helper'
 
 describe Api::StoryRepresenter do
 
-  let(:story)       { create(:story_with_audio, audio_versions_count: 1) }
+  let(:story) { create(:story_with_audio, audio_versions_count: 1) }
   let(:representer) { Api::StoryRepresenter.new(story) }
-  let(:json)        { JSON.parse(representer.to_json) }
+  let(:json) { JSON.parse(representer.to_json) }
 
   describe 'deserialize' do
 

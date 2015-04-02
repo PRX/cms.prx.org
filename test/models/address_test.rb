@@ -7,5 +7,4 @@ describe Address do
   it 'has a table defined' do
     Address.table_name.must_equal 'addresses'
   end
-
 end
