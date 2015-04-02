@@ -40,7 +40,7 @@ module HalActions
     instance_variable_get("@#{resource_name}") || self.resource = if params[:id]
       self.class.resource_class.find(params[:id].to_i)
     else
-      self.class.resource_class.new
+      self.class.resource_class.new if (request.put? || request.post?)
     end
   end
 
