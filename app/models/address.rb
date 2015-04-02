@@ -11,4 +11,8 @@ class Address < BaseModel
       addressable.individual_account
     end
   end
+
+  def account=(a)
+    self.addressable = a
+  end
 end
