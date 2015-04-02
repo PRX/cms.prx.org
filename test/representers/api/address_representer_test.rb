@@ -6,7 +6,7 @@ require 'address' if !defined?(AudioFile)
 
 describe Api::AddressRepresenter do
 
-  let(:address)     { FactoryGirl.create(:address) }
+  let(:address)     { create(:account).address }
   let(:representer) { Api::AddressRepresenter.new(address) }
   let(:json)        { JSON.parse(representer.to_json) }
 
