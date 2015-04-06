@@ -5,6 +5,8 @@ require 'test_helper'
 describe Api::StoriesController do
   let(:story) { create(:story) }
 
+  before(:all) { Story.delete_all }
+
   describe '#create' do
 
     let(:user) { create(:user) }
