@@ -30,10 +30,8 @@ module HalActions
   end
 
   def show_resource
-    res = self.resource
-    raise ActiveRecord::RecordNotFound.new unless res
-    res.is_root_resource = true
-    res
+    raise ActiveRecord::RecordNotFound.new unless self.resource
+    self.resource.tap { |r| r.is_root_resource = true }
   end
 
   def resource
@@ -53,10 +51,10 @@ module HalActions
   end
 
   def show_options
-    o = valid_params_for_action(:show)
-    o[:_keys] = o.keys
-    o[:represent_with] = self.class.resource_representer if self.class.resource_representer
-    o
+    valid_params_for_action(:show).tap do |o|
+      o[:_keys] = o.keys
+      o[:represent_with] = self.class.resource_representer if self.class.resource_representer
+    end
   end
 
   def valid_params_for_action(action)
