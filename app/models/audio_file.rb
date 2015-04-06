@@ -47,7 +47,7 @@ class AudioFile < BaseModel
   end
 
   def filename
-    f = read_attribute(:filename) || URI.parse(upload || '').path
+    f = self[:filename] || URI.parse(upload || '').path
     File.basename(f) if f
   end
 
