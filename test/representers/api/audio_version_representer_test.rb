@@ -17,7 +17,6 @@ describe Api::AudioVersionRepresenter do
     json['id'].must_equal audio_version.id
   end
 
-
   describe 'explicit' do
     it 'can be yes' do
       audio_version.explicit = 'yes'
@@ -34,6 +33,4 @@ describe Api::AudioVersionRepresenter do
       json['explicit'].must_equal nil
     end
   end
-
-
 end
