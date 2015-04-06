@@ -5,7 +5,13 @@ FactoryGirl.define do
 
     length 60
 
-    after(:create) { |af| af.update_file!('test.mp2') }
+    status 'complete'
 
+    after(:create) { |af| af.update_file!('test.mp2') unless af.status == 'uploaded' }
+
+    factory :audio_file_uploaded do
+      status 'uploaded'
+      upload 'http://audio.test.com/path/test.mp3'
+    end
   end
 end
