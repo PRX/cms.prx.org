@@ -4,14 +4,14 @@ class AudioFile < BaseModel
 
   include PublicAsset
 
-  UPLOADED         = "uploaded"               # audio on s3 in upload, not in audio_file yet
-  VALIDATING       = "validating"             # audio copied from upload, now checking file
-  VALID            = "valid"                  # validation passed, need to create mp3s
-  INVALID          = "invalid"                # validation failed (dead end)
-  COMPLETE         = "complete"               # dropbox or basic upload worked, need to create mp3s
-  TRANSFORMING     = "creating mp3s"          # was valid or complete, now making mp3s
-  TRANSFORM_FAILED = "creating mp3s failed"   # mp3 creation failed (dead end)
-  TRANSFORMED      = "mp3s created"           # mp3 creation worked, done! (dead end)
+  UPLOADED         = 'uploaded'
+  VALIDATING       = 'validating'
+  VALID            = 'valid'
+  INVALID          = 'invalid'
+  COMPLETE         = 'complete'
+  TRANSFORMING     = 'creating mp3s'
+  TRANSFORM_FAILED = 'creating mp3s failed'
+  TRANSFORMED      = 'mp3s created'
 
   belongs_to :account
 
