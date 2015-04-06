@@ -18,10 +18,14 @@ class Api::AudioFilesController < Api::BaseController
 
   def resources
     if story
-      @audio_files ||= story.default_audio_version.audio_files.page(params[:page])
+      @audio_files ||= story_audio.page(params[:page])
     else
       super
     end
+  end
+
+  def story_audio
+    story.default_audio_version.audio_files
   end
 
   def story
