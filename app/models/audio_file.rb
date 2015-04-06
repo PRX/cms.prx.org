@@ -36,7 +36,7 @@ class AudioFile < BaseModel
     end
   end
 
-  def asset_url(options={})
+  def asset_url(options = {})
     v = options[:version]
     v = nil if (v.blank? || v.to_s == 'original')
     final_location? ? file.try(:url, *v) : upload
