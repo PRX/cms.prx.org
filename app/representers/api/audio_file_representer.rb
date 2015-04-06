@@ -8,7 +8,12 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
   property :size
   property :duration
 
+  # provide an accessible url to the audio media file for upload
+  property :upload, readable: false
+
   set_link_property(rel: :audio_version, writeable: true)
+
+  set_link_property(rel: :account, writeable: true)
 
   link :enclosure do
     {
@@ -18,6 +23,6 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
   end
 
   def self_url(audio_file)
-    polymorphic_path([:api, audio_file.audio_version, audio_file])
+    api_audio_file_path(:api, audio_file)
   end
 end
