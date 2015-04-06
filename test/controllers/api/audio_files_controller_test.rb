@@ -10,14 +10,23 @@ describe Api::AudioFilesController do
     before { @controller.current_user = user }
 
     it 'can create an audio file for an account' do
-      audio_file_hash = { size: 1024, duration: 30, upload: 'http://thisisatest.com/guid1/test.mp3', set_account_uri: api_account_url(story.account) }
-      post :create, audio_file_hash.to_json, api_version: 'v1', format: 'json'
+      af_hash = {
+        size: 1024,
+        duration: 30,
+        upload: 'http://thisisatest.com/guid1/test.mp3',
+        set_account_uri: api_account_url(story.account)
+      }
+      post :create, af_hash.to_json, api_request_opts
       assert_response :success
     end
 
     it 'can create an audio file for a story' do
-      audio_file_hash = { upload: "http://thisisatest.com/guid1/test.mp3", size: 1024, duration: 30}
-      post :create, audio_file_hash.to_json, api_version: 'v1', format: 'json', story_id: story.id
+      af_hash = {
+        upload: "http://thisisatest.com/guid1/test.mp3",
+        size: 1024,
+        duration: 30
+      }
+      post :create, af_hash.to_json, api_request_opts(story_id: story.id)
       assert_response :success
     end
   end
