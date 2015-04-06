@@ -4,6 +4,8 @@ describe AudioFile do
 
   let(:audio_file) { FactoryGirl.create(:audio_file) }
 
+  let(:audio_file_uploaded) { FactoryGirl.create(:audio_file_uploaded) }
+
   it 'has a table defined' do
     AudioFile.table_name.must_equal 'audio_files'
   end
@@ -17,8 +19,11 @@ describe AudioFile do
   end
 
   it 'can update the underlying file' do
-    audio_file.update_file!("test2.mp3")
-    audio_file.filename.must_equal "test2.mp3"
+    audio_file.update_file!('test2.mp3')
+    audio_file.filename.must_equal 'test2.mp3'
   end
 
+  it 'can have a url from the upload' do
+    audio_file_uploaded.filename.must_equal 'test.mp3'
+  end
 end
