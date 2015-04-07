@@ -1,3 +1,5 @@
+require 'hal_actions'
+
 describe HalActions do
 
   class Foo
@@ -35,10 +37,14 @@ describe HalActions do
 
     cattr_accessor :_caches_action
 
-    attr_accessor :_respond_with
+    attr_accessor :_respond_with, :request, :params
 
     def params
       @params ||= ActionController::Parameters.new(action: 'update', id: 1)
+    end
+
+    def request
+      @request ||= OpenStruct.new('put?' => false, 'post?' => false)
     end
 
     def current_user
@@ -59,6 +65,17 @@ describe HalActions do
   let (:account) { create(:account) }
 
   describe 'instance methods' do
+
+    it 'retrieves resource' do
+      controller.resource.must_be_instance_of Foo
+    end
+
+    it 'retrieves new resource when id not found' do
+      controller.params = ActionController::Parameters.new(action: 'create')
+      controller.request = OpenStruct.new('put?' => false, 'post?' => true)
+      controller.resource.must_be_instance_of Foo
+      controller.resource.id.must_be_nil
+    end
 
     it 'determines resource id for caching' do
       controller.show_cache_path.must_equal 60

@@ -30,15 +30,23 @@ describe Api::StoriesController do
     assert_response :success
   end
 
+  it 'should list stories for an account' do
+    story.must_be :published
+    get(:index, api_version: 'v1',
+                format: 'json',
+                account_id: story.account_id)
+    assert_response :success
+  end
+
   it 'should list highlighted stories' do
     portfolio = create(:portfolio)
     playlist_section = create(:playlist_section, playlist: portfolio)
     pick1 = create(:pick, story: story, playlist_section: playlist_section)
     pick2 = create(:pick)
-    get(:index, { api_version: 'v1',
-                  format: 'json',
-                  account_id: portfolio.account_id,
-                  filters: 'highlighted'})
+    get(:index, api_version: 'v1',
+                format: 'json',
+                account_id: portfolio.account_id,
+                filters: 'highlighted')
 
     assert_response :success
     assert_not_nil assigns[:stories]
@@ -51,10 +59,10 @@ describe Api::StoriesController do
     story2 = create(:story, account: story.account)
     story3 = create(:story_with_purchases, account: story.account)
 
-    get(:index, { api_version: 'v1',
-                  format: 'json',
-                  account_id: story.account_id,
-                  filters: 'purchased'})
+    get(:index, api_version: 'v1',
+                format: 'json',
+                account_id: story.account_id,
+                filters: 'purchased')
 
     assert_response :success
     assert_not_nil assigns[:stories]

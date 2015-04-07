@@ -35,5 +35,4 @@ describe Account do
       account.portfolio_stories.wont_include pick2.story
     end
   end
-
 end

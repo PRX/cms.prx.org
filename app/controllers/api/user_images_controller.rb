@@ -8,4 +8,12 @@ class Api::UserImagesController < Api::BaseController
 
   represent_with Api::ImageRepresenter
 
+  def resource
+    @user_image = user.image if !super && user
+    @user_image
+  end
+
+  def user
+    @user ||= User.find(params[:user_id]) if params[:user_id]
+  end
 end

@@ -33,11 +33,13 @@ class Api::StoriesController < Api::BaseController
     stories = nil
     filters = params[:filters].try(:split, ',') || []
 
-    if params[:account_id].present? && filters.include?('highlighted')
-      stories = Account.find(params[:account_id]).portfolio_stories
-    else
-      stories = Story
-    end
+    stories = if account && filters.include?('highlighted')
+                account.portfolio_stories
+              elsif account
+                account.stories
+              else
+                Story
+              end
 
     if filters.include?('purchased')
       stories = stories.purchased.order('purchase_count DESC')
@@ -46,6 +48,10 @@ class Api::StoriesController < Api::BaseController
     end
 
     stories.published.visible
+  end
+
+  def account
+    @account ||= Account.find(params[:account_id]) if params[:account_id]
   end
 
   # don't add another order, handled in the resources_base

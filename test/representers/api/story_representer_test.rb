@@ -4,9 +4,9 @@ require 'test_helper'
 
 describe Api::StoryRepresenter do
 
-  let(:story)       { build_stubbed(:story_with_audio, audio_versions_count: 1, id: 212) }
+  let(:story) { create(:story_with_audio, audio_versions_count: 1) }
   let(:representer) { Api::StoryRepresenter.new(story) }
-  let(:json)        { JSON.parse(representer.to_json) }
+  let(:json) { JSON.parse(representer.to_json) }
 
   describe 'deserialize' do
 
@@ -29,7 +29,7 @@ describe Api::StoryRepresenter do
   describe 'serialize' do
 
     it 'can serialize an unsaved story' do
-      story_with_audio = build(:story_with_audio)
+      story_with_audio = create(:story_with_audio)
       json = Api::StoryRepresenter.new(story_with_audio).to_json
       json.wont_be_nil
     end
@@ -95,8 +95,7 @@ describe Api::StoryRepresenter do
   describe 'series info' do
     let(:schedule) { create(:schedule) }
     let(:series) { schedule.series }
-    let(:story) { build_stubbed(:story, series: series,
-                                        episode_identifier: '#2') }
+    let(:story) { create(:story, series: series, episode_identifier: '#2') }
     let(:representer) { Api::StoryRepresenter.new(story) }
     let(:json) { JSON.parse(representer.to_json) }
 
@@ -113,7 +112,7 @@ describe Api::StoryRepresenter do
     end
 
     it 'has none of this when story is not in a series' do
-      story2 = build_stubbed(:story)
+      story2 = create(:story)
       json = JSON.parse(Api::StoryRepresenter.new(story2).to_json)
       json['_links'].keys.wont_include('prx:series')
       json.keys.wont_include('episode_number')
