@@ -171,7 +171,7 @@ module HalActions
     def cache_api_action(action, options = {})
       options = cache_options.merge(options || {})
       cache_path_method = options.delete(:cache_path_method) || "#{action}_cache_path"
-      options[:cache_path] = ->(c){ c.valid_params_for_action(action).merge({_c: self.send(cache_path_method) }) } if !options[:cache_path]
+      options[:cache_path] ||= ->(c) { c.valid_params_for_action(action).merge({ _c: send(cache_path_method) }) }
 
       caches_action(action, options)
     end

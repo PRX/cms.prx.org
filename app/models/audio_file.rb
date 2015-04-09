@@ -23,7 +23,34 @@ class AudioFile < BaseModel
 
   mount_uploader :file, AudioFileUploader, mount_on: :filename
 
+  after_commit :process_audio_file, on: :create
+
+  def process_audio_file
+    # start a copy & validate task
+
+  end
+
   def self.policy_class
     StoryAttributePolicy
   end
+
+  # TODO: overrides handle when file not yet copied, if we want to bother
+
+  # # public asset overrides for uploaded but not copied audio
+  # def public_asset_filename
+  #   File.basename(file.path || upload_path)
+  # end
+
+  # def asset_url(options={})
+  #   return super if file.path
+  #   return nil if !upload_path
+  # end
+
 end
+
+
+# two use cases
+
+# 1) file has been uploaded to an s3 bucket via cloudfront
+#   in the api, send the path for that file to the audio_file
+#   on receiving this path, save it, and then copy to proper bucket and such

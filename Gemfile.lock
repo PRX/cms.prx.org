@@ -19,6 +19,8 @@ GEM
       activesupport (= 4.1.9)
       builder (~> 3.1)
       erubis (~> 2.7.0)
+    activejob_backport (0.0.3)
+      activesupport (>= 4.0.0)
     activemodel (4.1.9)
       activesupport (= 4.1.9)
       builder (~> 3.1)
@@ -198,6 +200,11 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    media_monster_client (2.0.5)
+      activesupport
+      i18n
+      json
+      oauth
     method_source (0.8.2)
     mime-types (2.4.3)
     mini_portile (0.6.2)
@@ -220,6 +227,7 @@ GEM
     newrelic_rpm (3.11.1.284)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
+    oauth (0.4.7)
     oj (2.11.1)
     oj_mimic_json (1.0.1)
     paranoia (2.0.4)
@@ -331,6 +339,7 @@ PLATFORMS
 DEPENDENCIES
   actionback
   actionpack-action_caching
+  activejob_backport
   acts_as_list
   better_errors
   binding_of_caller
@@ -352,6 +361,7 @@ DEPENDENCIES
   highline
   json-jwt (~> 0.7.0)
   kaminari
+  media_monster_client
   minitest-reporters
   minitest-spec-rails
   mysql2

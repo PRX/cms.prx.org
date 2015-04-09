@@ -43,5 +43,4 @@ class AudioFileUploader < CarrierWave::Uploader::Base
   def version_ext(version)
     AudioFileUploader.version_formats[version.to_s]['format']
   end
-
 end
