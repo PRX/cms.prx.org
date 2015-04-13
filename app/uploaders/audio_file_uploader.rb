@@ -23,7 +23,7 @@ class AudioFileUploader < CarrierWave::Uploader::Base
   end
 
   def extension_white_list
-    ['aac', 'aif', 'aiff', 'alac', 'flac', 'm4a', 'm4p', 'mp2', 'mp3', 'mp4', 'ogg', 'raw', 'spx', 'wav', 'wma']
+    %w[aac aif aiff alac flac m4a m4p mp2 mp3 mp4 ogg raw spx wav wma]
   end
 
   def full_filename(for_file)
@@ -43,5 +43,4 @@ class AudioFileUploader < CarrierWave::Uploader::Base
   def version_ext(version)
     AudioFileUploader.version_formats[version.to_s]['format']
   end
-
 end

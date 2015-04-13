@@ -42,6 +42,10 @@ class Story < BaseModel
   # indicates the piece is not publically available, only to the network
   event_attribute :network_only_at
 
+  after_create do
+    audio_versions.create(label: 'Main Audio')
+  end
+
   scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
 
   scope :purchased, -> {
@@ -77,14 +81,6 @@ class Story < BaseModel
 
   def duration
     default_audio_version.try(:duration) || 0
-  end
-
-  def compare_versions(a, b)
-    if a.audio_files.size == b.audio_files.size
-      b.length <=> a.length
-    else
-      a.audio_files.size <=> b.audio_files.size
-    end
   end
 
   def timing_and_cues

@@ -22,5 +22,4 @@ class BaseModel < ActiveRecord::Base
     raw_write_attribute(:filename, name)
     save!
   end
-
 end

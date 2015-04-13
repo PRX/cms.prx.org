@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.1.0'
+gem 'rails', '~> 4.1.10'
 
 # JWS
 gem 'json-jwt', '~> 0.7.0'
-gem 'rack-prx_auth'
+gem 'rack-prx_auth', github: 'PRX/rack-prx_auth'
 
 ## Model
 # Use mysql as the database for Active Record
@@ -24,7 +24,7 @@ gem 'unf'
 
 ## Controller
 # auth
-gem 'rack-cors', :require => 'rack/cors'
+gem 'rack-cors', require: 'rack/cors'
 gem 'pundit'
 
 # paging
