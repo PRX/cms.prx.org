@@ -7,23 +7,23 @@ class Account < BaseModel
 
   has_one :address, as: :addressable
   has_one :image, -> { where(parent_id: nil) }, class_name: 'AccountImage'
+  has_one :portfolio
 
   has_many :stories, -> { where('published_at is not null and network_only_at is null').order(published_at: :desc) }
   has_many :memberships
   has_many :websites, as: :browsable
   has_many :playlists
-  has_one :portfolio
 
   scope :pending, -> { where status: :pending }
   scope :active, -> { where status: :open }
-  scope :member,  -> { where type: ['StationAccount', 'GroupAccount'] }
+  scope :member, -> { where type: ['StationAccount', 'GroupAccount'] }
 
   def short_name
     name
   end
 
   def portfolio_stories
-    portfolio.stories.order(published_at: :desc)
+    portfolio ? portfolio.stories.order(published_at: :desc) : Kaminari.paginate_array([])
   end
 
   def self.policy_class
