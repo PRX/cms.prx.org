@@ -21,7 +21,7 @@ class Api::BaseController < ApplicationController
 
   cache_api_action :index
 
-  caches_action :entrypoint, cache_path: ->(c) { { _c: Api.version(api_version).cache_key } }
+  caches_action :entrypoint, cache_path: ->(_c) { { _c: Api.version(api_version).cache_key } }
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 

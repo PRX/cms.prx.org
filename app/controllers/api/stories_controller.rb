@@ -13,10 +13,10 @@ class Api::StoriesController < Api::BaseController
 
   def resource
     @story ||= if params[:id]
-      Story.published.visible.find(params[:id])
-    elsif request.put? || request.post?
-      Story.new
-    end
+                 Story.published.visible.find(params[:id])
+               elsif request.put? || request.post?
+                 Story.new
+               end
   end
 
   def resources
@@ -41,11 +41,11 @@ class Api::StoriesController < Api::BaseController
                 Story
               end.published.visible
 
-    stories = if filters.include?('purchased')
-                stories.purchased.order('purchase_count DESC')
-              else
-                stories.order('published_at desc')
-              end
+    if filters.include?('purchased')
+      stories.purchased.order('purchase_count DESC')
+    else
+      stories.order('published_at desc')
+    end
   end
 
   # don't add another order, handled in the resources_base
