@@ -9,8 +9,7 @@ class Api::AccountImagesController < Api::BaseController
   represent_with Api::ImageRepresenter
 
   def resource
-    @account_image = account.image if !super && account
-    @account_image
+    @account_image ||= account.try(:image) || super
   end
 
   def account

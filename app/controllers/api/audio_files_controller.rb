@@ -8,24 +8,16 @@ class Api::AudioFilesController < Api::BaseController
 
   # if the audio version is not set, and story is, set default av
   def resource
-    @audio_file ||= super.tap do |r|
-      if story && r.new_record?
-        r.audio_version_id ||= story.default_audio_version.id
-        r.account_id ||= story.account_id
+    super.tap do |af|
+      if story && af.new_record?
+        af.audio_version_id ||= story.default_audio_version.id
+        af.account_id ||= story.account_id
       end
     end
   end
 
   def resources
-    if story
-      @audio_files ||= story_audio.page(params[:page])
-    else
-      super
-    end
-  end
-
-  def story_audio
-    story.default_audio_version.audio_files
+    @audio_files ||= story.try(:default_audio) || super
   end
 
   def story

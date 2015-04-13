@@ -7,8 +7,7 @@ class Api::AddressesController < Api::BaseController
   filter_resources_by :account_id
 
   def resource
-    @address = account.address if !super && account
-    @address
+    @address ||= account.try(:address) || super
   end
 
   def account
