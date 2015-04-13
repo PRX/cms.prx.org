@@ -13,12 +13,5 @@ class Playlist < BaseModel
   has_many :user_tags, through: :taggings
 
   default_scope { where(type: nil) }  # no portfolios
-  scope :named, ->(name=nil) {
-    if name
-      where(path: name)
-    else
-      where 'path is not null'
-    end
-  }
-
+  scope :named, ->(name = nil) { where(name ? { path: name } : 'path IS NOT NULL') }
 end

@@ -34,5 +34,11 @@ describe Account do
       account.portfolio_stories.must_include pick1.story
       account.portfolio_stories.wont_include pick2.story
     end
+
+    it 'returns empty list when there is no portfolio' do
+      account = create(:account)
+      account.portfolio.must_be_nil
+      account.portfolio_stories.size.must_equal 0
+    end
   end
 end
