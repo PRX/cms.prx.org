@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 1) do
   create_table "audio_versions", :force => true do |t|
     t.integer  "piece_id"
     t.string   "label"
+    t.string   "explicit"
     t.text     "content_advisory"
     t.text     "timing_and_cues"
     t.text     "transcript"
