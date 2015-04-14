@@ -2,7 +2,6 @@ require 'test_helper'
 
 describe Address do
 
-  let(:address) { create(:address) }
   let(:user) { create(:user) }
   let(:account) { create(:account) }
 
@@ -14,7 +13,7 @@ describe Address do
     user.address.account.must_equal user.individual_account
   end
 
-  it 'provides underlying account for user address' do
+  it 'provides underlying account for account address' do
     account.address.account.must_equal account
   end
 end
