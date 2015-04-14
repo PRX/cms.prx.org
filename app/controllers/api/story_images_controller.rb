@@ -7,5 +7,4 @@ class Api::StoryImagesController < Api::BaseController
   filter_resources_by :story_id
 
   represent_with Api::ImageRepresenter
-
 end

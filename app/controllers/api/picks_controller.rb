@@ -9,7 +9,4 @@ class Api::PicksController < Api::BaseController
   def resources
     @picks ||= Pick.named_playlists
   end
-
 end
-
-

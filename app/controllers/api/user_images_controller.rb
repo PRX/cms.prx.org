@@ -9,8 +9,7 @@ class Api::UserImagesController < Api::BaseController
   represent_with Api::ImageRepresenter
 
   def resource
-    @user_image = user.image if !super && user
-    @user_image
+    @user_image ||= user.try(:image) || super
   end
 
   def user

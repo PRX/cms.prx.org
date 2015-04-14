@@ -7,5 +7,4 @@ class Api::SeriesImagesController < Api::BaseController
   filter_resources_by :series_id
 
   represent_with Api::ImageRepresenter
-
 end

@@ -36,7 +36,7 @@ module HalActions
 
   def resource
     instance_variable_get("@#{resource_name}") || self.resource = if params[:id]
-      self.class.resource_class.find(params[:id].to_i)
+      self.class.resource_class.find(params[:id])
     else
       self.class.resource_class.new if request.put? || request.post?
     end
@@ -66,11 +66,11 @@ module HalActions
   end
 
   def zoom_param
-    @zoom_param ||= ->() {
+    @zoom_param ||= ->() do
       zp = params[:zoom]
       return nil if zp.blank?
       zp.split(',').map(&:strip).compact.sort
-    }.call
+    end.call
   end
 
   def index_cache_path

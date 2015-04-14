@@ -5,15 +5,16 @@ class Api::PromosController < Api::BaseController
   api_versions :v1
 
   def resource
-    @promo ||= if story && params[:id]
-      story.promos.audio_files.find(params[:id])
-    else
-      story.promos.audio_files.build
+    super.tap do |af|
+      if story && af.try(:new_record?)
+        af.audio_version_id ||= story.promos.id
+        af.account_id ||= story.account_id
+      end
     end
   end
 
   def resources
-    @promos ||= story.promos.audio_files.page(params[:page])
+    @promos ||= story.try(:promos_audio)
   end
 
   def story

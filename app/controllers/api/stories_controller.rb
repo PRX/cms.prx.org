@@ -13,10 +13,10 @@ class Api::StoriesController < Api::BaseController
 
   def resource
     @story ||= if params[:id]
-      Story.published.visible.find_by_id(params[:id])
-    else
-      Story.new
-    end
+                 Story.published.visible.find(params[:id])
+               elsif request.put? || request.post?
+                 Story.new
+               end
   end
 
   def resources
@@ -31,7 +31,7 @@ class Api::StoriesController < Api::BaseController
 
   def resources_base
     stories = nil
-    filters = params[:filters].try(:split, ',') || []
+    filters = (params[:filters] || '').split(',')
 
     stories = if account && filters.include?('highlighted')
                 account.portfolio_stories
@@ -39,23 +39,21 @@ class Api::StoriesController < Api::BaseController
                 account.stories
               else
                 Story
-              end
+              end.published.visible
 
     if filters.include?('purchased')
-      stories = stories.purchased.order('purchase_count DESC')
+      stories.purchased.order('purchase_count DESC')
     else
-      stories = stories.order('published_at desc')
+      stories.order('published_at desc')
     end
-
-    stories.published.visible
-  end
-
-  def account
-    @account ||= Account.find(params[:account_id]) if params[:account_id]
   end
 
   # don't add another order, handled in the resources_base
   def with_ordering(res)
     res
+  end
+
+  def account
+    @account ||= Account.find(params[:account_id]) if params[:account_id]
   end
 end
