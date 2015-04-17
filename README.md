@@ -6,8 +6,25 @@ PRX.org CMS API
 [![Coverage Status](https://coveralls.io/repos/PRX/cms.prx.org/badge.svg?branch=master)](https://coveralls.io/r/PRX/cms.prx.org?branch=master)
 [![Dependency Status](https://gemnasium.com/PRX/cms.prx.org.svg)](https://gemnasium.com/PRX/cms.prx.org)
 
-Install
--------
+Description
+-----------
+This Rails app provides the CMS API for https://beta.prx.org.
+
+It follows the [standards for PRX services](https://github.com/PRX/meta.prx.org/wiki/Project-Standards#services).
+
+A HAL browser to try out the API is available:
+https://cms.prx.org/browser/index.html
+
+Integrations & Dependencies
+---------------------------
+- mysql - main database
+- memcached - caching API responses and JSON representations
+- AWS S3 - for private file access
+- (TBD) fixer.prx.org - validate/process media files
+- (TBD) meta.prx.org - defines link relations using for HAL resources
+
+Installation
+------------
 These instructions are written assuming Mac OS X install.
 
 ### Basics
@@ -52,6 +69,9 @@ bundle install
 # copy the config
 cp config/application.yml.example config/application.yml
 
+# copy the env-example, fill out the values
+cp env-example .env
+
 # create test database
 mysqladmin create prx_test
 
@@ -67,3 +87,12 @@ open http://cms.prx.dev
 # see the api root json doc
 open http://cms.prx.dev/api
 ```
+
+License
+-------
+[AGPL License](https://www.gnu.org/licenses/agpl-3.0.html)
+
+
+Contributing
+------------
+Completing a Contributor License Agreement (CLA) is required for PRs to be accepted.
