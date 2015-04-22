@@ -4,8 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '~> 4.1.10'
 
 # JWS
-gem 'json-jwt', '~> 0.7.0'
-gem 'rack-prx_auth', github: 'PRX/rack-prx_auth'
+gem 'prx_auth-rails', '~> 0.0.4'
 
 ## Model
 # Use mysql as the database for Active Record
@@ -20,7 +19,6 @@ gem 'event_attribute'
 gem 'carrierwave'
 gem 'fog'
 gem 'unf'
-
 
 ## Controller
 # auth
