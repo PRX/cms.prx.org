@@ -140,11 +140,16 @@ module HalActions
   end
 
   private
+
   # TODO: Remove this method when we upgrade roar-rails
   # Background: https://github.com/apotonick/roar-rails/blob/a109b40/lib/roar/rails/controller_additions.rb#L27
-  def consume_with_content_type!(model, options={})
+  def consume_with_content_type!(model, options = {})
     type = request.content_type
-    format = Mime::Type.lookup(type).try(:symbol) or raise UnsupportedMediaType.new("Cannot consume unregistered media type '#{type.inspect}'")
+    format = Mime::Type.lookup(type).try(:symbol)
+
+    if format.blank?
+      raise UnsupportedMediaType.new("Cannot consume unregistered media type '#{type.inspect}'")
+    end
 
     parse_method = compute_parsing_method(format)
     representer = prepare_model_for(format, model, options)
@@ -152,7 +157,6 @@ module HalActions
     representer.send(parse_method, incoming_string, options)
     model
   end
-
 
   module ClassMethods
 
