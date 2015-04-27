@@ -6,7 +6,7 @@ class Api::PicksController < Api::BaseController
 
   represent_with Api::PickRepresenter
 
-  def resources
-    @picks ||= Pick.named_playlists
+  def scoped(relation)
+    relation.named_playlists
   end
 end

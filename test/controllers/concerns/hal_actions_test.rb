@@ -93,7 +93,7 @@ describe HalActions do
     end
 
     it 'can adds paging to resources query' do
-      arel = FoosController.new.with_paging(Account.where('id is not null'))
+      arel = FoosController.new.paged(Account.where('id is not null'))
       arel.to_sql.must_match /LIMIT 10 OFFSET 0/
     end
 

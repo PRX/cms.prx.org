@@ -77,5 +77,4 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       }
     ]
   end
-
 end

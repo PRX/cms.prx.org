@@ -11,24 +11,6 @@ class Api::StoriesController < Api::BaseController
     show
   end
 
-  def resource
-    @story ||= if params[:id]
-                 Story.published.visible.find(params[:id])
-               elsif request.put? || request.post?
-                 Story.new
-               end
-  end
-
-  def resources
-    @stories ||= resources_base.includes(
-      { audio_versions: [:audio_files] },
-      { account: [:image, :address, { opener: [:image] }] },
-      { series: [:image, :account] },
-      :images,
-      :license
-    )
-  end
-
   def resources_base
     stories = nil
     filters = (params[:filters] || '').split(',')
@@ -39,7 +21,7 @@ class Api::StoriesController < Api::BaseController
                 account.stories
               else
                 Story
-              end.published.visible
+              end
 
     if filters.include?('purchased')
       stories.purchased.order('purchase_count DESC')
@@ -48,8 +30,22 @@ class Api::StoriesController < Api::BaseController
     end
   end
 
+  def included(relation)
+    relation.includes(
+      { audio_versions: [:audio_files] },
+      { account: [:image, :address, { opener: [:image] }] },
+      { series: [:image, :account] },
+      :images,
+      :license
+    )
+  end
+
+  def scoped(relation)
+    relation.published.visible
+  end
+
   # don't add another order, handled in the resources_base
-  def with_ordering(res)
+  def sorted(res)
     res
   end
 
