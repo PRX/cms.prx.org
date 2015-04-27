@@ -15,7 +15,7 @@
   pool: 5
   username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
-  host: <%= ENV['DATABASE_HOST'] %>
+  hostname: <%= ENV['DATABASE_HOST'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -26,4 +26,4 @@ test:
   database: <%= ENV['TEST_DATABASE'] %>
   pool: 5
   username: <%= ENV['TRAVIS'] ? 'travis' : 'root' %>
-  host: localhost
+  hostname: 127.0.0.1
