@@ -1,5 +1,4 @@
 module HalActions::Cache
-
   private
 
   def index_cache_path
@@ -18,14 +17,18 @@ module HalActions::Cache
   module ClassMethods
     def cache_api_action(action, options = {})
       options = cache_options.merge(options || {})
-      cache_path_method = options.delete(:cache_path_method) || "#{action}_cache_path"
-      options[:cache_path] = ->(c){ c.valid_params_for_action(action).merge({_c: self.send(cache_path_method) }) } if !options[:cache_path]
-
+      cache_path_method = options.delete(:cache_path_method)
+      cache_path_method ||= "#{action}_cache_path"
+      unless options[:cache_path]
+        options[:cache_path] = lambda do |c|
+          c.valid_params_for_action(action).merge _c: send(cache_path_method)
+        end
+      end
       caches_action(action, options)
     end
 
     def cache_options
-      {compress: true, expires_in: 1.hour, race_condition_ttl: 30}
+      { compress: true, expires_in: 1.hour, race_condition_ttl: 30 }
     end
   end
 end

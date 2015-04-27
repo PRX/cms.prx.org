@@ -5,7 +5,9 @@ module HalActions::Resources
   # action specific resources
 
   def index_collection
-    PagedCollection.new(resources, request,
+    PagedCollection.new(
+      resources,
+      request,
       item_class: self.class.resource_class,
       item_decorator: self.class.resource_representer
     )
@@ -28,10 +30,12 @@ module HalActions::Resources
   end
 
   def resource
-    instance_variable_get("@#{resource_name}") || self.resource = if params[:id]
-      filtered(scoped(included(resources_base))).find(params[:id])
-    else
-      filtered(resources_base).build if request.post?
+    instance_variable_get("@#{resource_name}") || self.resource = begin
+      if params[:id]
+        filtered(scoped(included(resources_base))).find(params[:id])
+      else
+        filtered(resources_base).build if request.post?
+      end
     end
   end
 
@@ -71,7 +75,9 @@ module HalActions::Resources
   def filtered(arel)
     keys = self.class.resources_params || []
     where_hash = params.slice(*keys)
-    where_hash['piece_id'] = where_hash.delete('story_id') if where_hash.key?('story_id')
+    if where_hash.key?('story_id')
+      where_hash['piece_id'] = where_hash.delete('story_id')
+    end
     where_hash = where_hash.permit(where_hash.keys)
     arel = arel.where(where_hash) unless where_hash.blank?
     arel
