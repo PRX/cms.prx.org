@@ -8,8 +8,8 @@ describe Api::BaseController do
   end
 
   it "determines show action options for roar" do
-    @controller.class.resource_representer = "rr"
-    @controller.send(:show_options)[:represent_with].must_equal "rr"
+    @controller.class.resource_representer = 'rr'
+    @controller.send(:show_options)[:represent_with].must_equal 'rr'
   end
 
   it "can parse a zoom parameter" do
@@ -33,7 +33,7 @@ describe Api::BaseController do
       TokenData = Struct.new(:user_id)
       user = create(:user)
       get(:entrypoint, api_version: "v1")
-      @request.env["prx.auth"] = TokenData.new(user.id)
+      @request.env['prx.auth'] = TokenData.new(user.id)
 
       @controller.current_user.must_equal user
     end

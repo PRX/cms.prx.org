@@ -36,7 +36,7 @@ module HalActions::Actions
   private
 
   def destroy_redirect
-    {action: 'index'}
+    { action: 'index' }
   end
 
   def index_options

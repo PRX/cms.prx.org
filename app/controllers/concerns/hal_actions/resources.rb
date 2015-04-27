@@ -1,5 +1,4 @@
 module HalActions::Resources
-
   private
 
   # action specific resources
@@ -51,7 +50,7 @@ module HalActions::Resources
 
   def resources
     instance_variable_get("@#{resources_name}") ||
-    self.resources = decorate_query(resources_base)
+      self.resources = decorate_query(resources_base)
   end
 
   def resources=(res)
@@ -111,8 +110,7 @@ module HalActions::Resources
     end
 
     def resource_class
-      @resource_class ||= self.controller_name.classify.constantize
+      @resource_class ||= controller_name.classify.constantize
     end
   end
-
 end

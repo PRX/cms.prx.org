@@ -16,7 +16,7 @@ describe Api::AudioFilesController do
         upload: 'http://thisisatest.com/guid1/test.mp3',
         set_account_uri: api_account_url(story.account)
       }
-      @request.env["CONTENT_TYPE"] = "application/json"
+      @request.env['CONTENT_TYPE'] = 'application/json'
       post :create, af_hash.to_json, api_request_opts
       assert_response :success
     end
@@ -27,7 +27,7 @@ describe Api::AudioFilesController do
         size: 1024,
         duration: 30
       }
-      @request.env["CONTENT_TYPE"] = "application/json"
+      @request.env['CONTENT_TYPE'] = 'application/json'
       post :create, af_hash.to_json, api_request_opts(story_id: story.id)
       assert_response :success
     end
