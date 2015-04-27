@@ -29,12 +29,12 @@ module HalActions::Resources
   end
 
   def resource
-    instance_variable_get("@#{resource_name}") || self.resource = begin
-      if params[:id]
-        filtered(scoped(included(resources_base))).find(params[:id])
-      else
-        filtered(resources_base).build if request.post?
-      end
+    resource = instance_variable_get("@#{resource_name}")
+    return resource if resource
+    if params[:id]
+      self.resource = find_base.find(params[:id])
+    elsif request.post?
+      self.resource = filtered(resources_base).build
     end
   end
 
@@ -63,6 +63,10 @@ module HalActions::Resources
 
   def resources_base
     self.class.resource_class.where(nil)
+  end
+
+  def find_base
+    filtered(scoped(included(resources_base)))
   end
 
   # Decorations

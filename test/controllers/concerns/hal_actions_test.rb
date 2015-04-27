@@ -68,7 +68,9 @@ describe HalActions do
 
   describe 'errors' do
     it 'handles invalid content type errors' do
-      ->() { controller.create }.must_raise HalActions::Errors::UnsupportedMediaType
+      lambda do
+        controller.create
+      end.must_raise HalActions::Errors::UnsupportedMediaType
     end
   end
 
