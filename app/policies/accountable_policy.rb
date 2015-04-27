@@ -13,4 +13,8 @@ class AccountablePolicy
   def update?
     user && user.approved_accounts.include?(record.account)
   end
+
+  def destroy?
+    update?
+  end
 end

@@ -11,22 +11,21 @@ class Api::StoriesController < Api::BaseController
     show
   end
 
+  private
+
   def resources_base
-    stories = nil
-    filters = (params[:filters] || '').split(',')
-
-    stories = if account && filters.include?('highlighted')
-                account.portfolio_stories
-              elsif account
-                account.stories
-              else
-                Story
-              end
-
-    if filters.include?('purchased')
-      stories.purchased.order('purchase_count DESC')
+    if highlighted?
+      account.portfolio_stories
     else
-      stories.order('published_at desc')
+      super
+    end
+  end
+
+  def filtered(resources)
+    if highlighted?
+      resources
+    else
+      super
     end
   end
 
@@ -44,9 +43,20 @@ class Api::StoriesController < Api::BaseController
     relation.published.visible
   end
 
-  # don't add another order, handled in the resources_base
   def sorted(res)
-    res
+    if filters.include?('purchased')
+      res.purchased.order('purchase_count DESC')
+    else
+      res.order('published_at desc')
+    end
+  end
+
+  def filters
+    @filters ||= (params[:filters] || '').split(',')
+  end
+
+  def highlighted?
+    account && filters.include?('highlighted')
   end
 
   def account

@@ -35,6 +35,10 @@ module HalActions::Actions
 
   private
 
+  def destroy_redirect
+    {action: 'index'}
+  end
+
   def index_options
     valid_params_for_action(:index).tap do |options|
       options[:_keys] = options.keys
@@ -75,7 +79,7 @@ module HalActions::Actions
     format = Mime::Type.lookup(type).try(:symbol)
 
     if format.blank?
-      raise Error.new("Cannot consume unregistered media type '#{type.inspect}'")
+      raise HalActions::Errors::UnsupportedMediaType.new(type)
     end
 
     parse_method = compute_parsing_method(format)

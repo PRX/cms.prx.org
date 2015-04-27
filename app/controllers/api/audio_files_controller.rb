@@ -16,8 +16,8 @@ class Api::AudioFilesController < Api::BaseController
     end
   end
 
-  def resources
-    @audio_files ||= story.try(:default_audio) || super
+  def resources_base
+    story.try(:default_audio) || super
   end
 
   def story

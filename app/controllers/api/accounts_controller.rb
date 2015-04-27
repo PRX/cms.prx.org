@@ -8,6 +8,10 @@ class Api::AccountsController < Api::BaseController
 
   private
 
+  def resources
+    @resources ||= super.member
+  end
+
   def resources_base
     user.try(:accounts) || Account
   end
@@ -21,7 +25,7 @@ class Api::AccountsController < Api::BaseController
   end
 
   def scoped(relation)
-    relation.active.member
+    relation.active
   end
 
 # TODO: refactor existing app to have membership record for user to be admin of individual account

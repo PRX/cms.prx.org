@@ -9,6 +9,12 @@ module HalActions
   include Cache
   include Resources
 
+  included do
+    rescue_from Errors::UnsupportedMediaType do |e|
+      respond_with e, status: e.status, represent_with: Errors::Representer
+    end
+  end
+
   module ClassMethods
     include Actions::ClassMethods
     include Cache::ClassMethods

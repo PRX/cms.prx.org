@@ -9,6 +9,8 @@ FactoryGirl.define do
       stories_count 2
     end
 
+    status 'open'
+
     after(:create) do |account, evaluator|
       FactoryGirl.create_list(:story, evaluator.stories_count, account: account)
     end
