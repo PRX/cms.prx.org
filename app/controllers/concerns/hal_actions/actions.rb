@@ -12,7 +12,7 @@ module HalActions::Actions
       consume_with_content_type! resource
       authorize resource
       resource.save!
-      respond_with show_resource(resource), show_options
+      respond_with root_resource(resource), show_options
     end
   end
 
@@ -21,7 +21,7 @@ module HalActions::Actions
       consume_with_content_type! resource
       authorize resource
       resource.save!
-      respond_with show_resource(resource), show_options
+      respond_with root_resource(resource), show_options
     end
   end
 
@@ -62,6 +62,10 @@ module HalActions::Actions
       return nil if zp.blank?
       zp.split(',').map(&:strip).compact.sort
     end.call
+  end
+
+  def root_resource(resource)
+    resource.tap { |res| res.is_root_resource = true }
   end
 
   # TODO: Remove this method when we upgrade roar-rails

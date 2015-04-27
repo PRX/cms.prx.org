@@ -43,10 +43,6 @@ module HalActions::Resources
     self.class.resource_class.name.underscore
   end
 
-  def root_resource(resource)
-    resource.tap { |resource| resource.is_root_resource = true }
-  end
-
   # Plural resources
 
   def resources
