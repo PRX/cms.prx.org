@@ -17,7 +17,7 @@ describe Api::BaseController do
     @controller.send(:zoom_param).must_equal ['a', 'test']
   end
 
-  it "has no content for options requests" do
+  it 'has no content for options requests' do
     process :options, 'OPTIONS', api_version: 'v1', any: '1'
     response.status.must_equal 204
   end

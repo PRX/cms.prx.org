@@ -16,29 +16,40 @@ describe Api::StoriesController do
 
     it 'can create a new story' do
       story_hash = { title: 'create story', set_account_uri: "/api/v1/accounts/#{account.id}" }
-      @request.env["CONTENT_TYPE"] = "application/json"
+      @request.env['CONTENT_TYPE'] = 'application/json'
       post :create, story_hash.to_json, api_version: 'v1', format: 'json'
       assert_response :success
     end
 
     it 'can create a new story with url parameters' do
-      @request.env["CONTENT_TYPE"] = "application/json"
-      post :create, {title: 'story'}.to_json, api_version: 'v1', account_id: account.id
+      @request.env['CONTENT_TYPE'] = 'application/json'
+      post :create,
+           { title: 'story' }.to_json,
+           api_version: 'v1',
+           account_id: account.id
       assert_response :success
-      Story.find(JSON.parse(response.body)['id']).account_id.must_equal account.id
+      id = JSON.parse(response.body)['id']
+      Story.find(id).account_id.must_equal account.id
     end
 
     it 'rejects new stories with an invalid account' do
       new_account = create(:account)
-      @request.env["CONTENT_TYPE"] = "application/json"
-      post :create, {title: 'story'}.to_json, api_version: 'v1', account_id: new_account.id
+      @request.env['CONTENT_TYPE'] = 'application/json'
+      post :create,
+           { title: 'story' }.to_json,
+           api_version: 'v1',
+           account_id: new_account.id
       response.status.must_equal 401
     end
 
     it 'can update a story' do
       story = create(:story, title: 'not this', account: account)
-      @request.env["CONTENT_TYPE"] = "application/json"
-      put :update, {title: 'this'}.to_json, api_version: 'v1', format: 'json', id: story.id
+      @request.env['CONTENT_TYPE'] = 'application/json'
+      put :update,
+          { title: 'this' }.to_json,
+          api_version: 'v1',
+          format: 'json',
+          id: story.id
       assert_response :success
       Story.find(story.id).title.must_equal('this')
     end
