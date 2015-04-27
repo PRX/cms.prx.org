@@ -29,6 +29,10 @@ class Api::BaseController < ApplicationController
     respond_with Api.version(api_version)
   end
 
+  def options
+    head :no_content
+  end
+
   def current_user
     @current_user ||= if prx_auth_token
       User.find_by(id: prx_auth_token.user_id)

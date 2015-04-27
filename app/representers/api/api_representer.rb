@@ -78,6 +78,14 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     ]
   end
 
+  link :audio_files do
+    {
+      profile: prx_model_uri(:collection, :audio_file),
+      href: api_audio_files_path,
+      templated: false
+    }
+  end
+
   link :authorization do
     {
       title: "Get information about the active authorization for this request",

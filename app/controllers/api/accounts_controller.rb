@@ -6,16 +6,22 @@ class Api::AccountsController < Api::BaseController
 
   represent_with Api::AccountRepresenter
 
-  def resources
-    @accounts ||= user.try(:accounts) || Account.active.member
+  private
+
+  def resources_base
+    user.try(:accounts) || Account
   end
 
-  def with_sorting(arel)
+  def sorted(arel)
     arel.order(created_at: :desc)
   end
 
   def user
     @user ||= User.find(params[:user_id]) if params[:user_id]
+  end
+
+  def scoped(relation)
+    relation.active.member
   end
 
 # TODO: refactor existing app to have membership record for user to be admin of individual account

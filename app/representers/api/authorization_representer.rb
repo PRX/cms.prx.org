@@ -2,6 +2,12 @@
 
 class Api::AuthorizationRepresenter < Api::BaseRepresenter
   property :id
+  property :name
+  link :default_account do
+    {
+      href: api_account_path(represented.default_account),
+    }
+  end
 
   link :accounts do
     {

@@ -5,16 +5,14 @@ class Api::AuthorizationsController < Api::BaseController
     Authorization.new(User.find(prx_auth_token.user_id))
   end
 
-  def resources
+  def resources_base
     Authorization.new(User.find(prx_auth_token.user_id)).accounts
   end
 
   def index_collection
-    PagedCollection.new(
-      decorate_query(resources),
-      request,
-      item_class: Account,
-      item_decorator: Api::Min::AccountRepresenter
-    )
+    super.tap do |collection|
+      collection.options[:item_class] = Account
+      collection.options[:item_decorator] = Api::Min::AccountRepresenter
+    end
   end
 end

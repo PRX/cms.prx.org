@@ -21,8 +21,4 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
       type: 'audio/mpeg'
     } if represented.id
   end
-
-  def self_url(audio_file)
-    api_audio_file_path(:api, audio_file)
-  end
 end
