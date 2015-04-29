@@ -4,32 +4,32 @@ module HalActions::Actions
   end
 
   def show
-    respond_with show_resource, show_options
+    respond_with root_resource(show_resource), show_options
   end
 
   def create
-    create_resource.tap do |resource|
-      consume_with_content_type! resource
-      authorize resource
-      resource.save!
-      respond_with root_resource(resource), show_options
+    create_resource.tap do |res|
+      consume_with_content_type! res
+      authorize res
+      res.save!
+      respond_with root_resource(res), show_options
     end
   end
 
   def update
-    update_resource.tap do |resource|
-      consume_with_content_type! resource
-      authorize resource
-      resource.save!
-      respond_with root_resource(resource), show_options
+    update_resource.tap do |res|
+      consume_with_content_type! res
+      authorize res
+      res.save!
+      respond_with root_resource(res), show_options
     end
   end
 
   def destroy
-    destroy_resource.tap do |resource|
-      authorize resource
-      resource.destroy
-      redirect_to destroy_redirect
+    destroy_resource.tap do |res|
+      authorize res
+      res.destroy
+      head :no_content
     end
   end
 
@@ -61,11 +61,11 @@ module HalActions::Actions
   end
 
   def zoom_param
-    @zoom_param ||= ->() do
-      zp = params[:zoom]
-      return nil if zp.blank?
-      zp.split(',').map(&:strip).compact.sort
-    end.call
+    @zoom_param ||= begin
+      if (zp = params[:zoom]) && zp.present?
+        zp.split(',').map(&:strip).compact.sort
+      end
+    end
   end
 
   def root_resource(resource)
