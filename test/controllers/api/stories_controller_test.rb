@@ -57,8 +57,7 @@ describe Api::StoriesController do
     it 'can delete a story' do
       story = create(:story, account: account)
       delete :destroy, api_version: 'v1', format: 'json', id: story.id
-      assert_response :redirect
-      response.location.must_equal 'http://test.host/api/v1/stories'
+      response.status.must_equal 204
       Story.where(id: story.id).must_be :empty?
     end
   end
