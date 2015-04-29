@@ -2,6 +2,14 @@
 
 class Api::AuthorizationRepresenter < Api::BaseRepresenter
   property :id
+  property :name
+
+  link :default_account do
+    {
+      href: api_account_path(represented.default_account)
+    }
+  end
+  embed :default_account, item_class: Account, item_decorator: Api::Min::AccountRepresenter
 
   link :accounts do
     {
