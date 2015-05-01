@@ -4,6 +4,7 @@ PRX::Application.routes.draw do
     scope ':api_version', api_version: 'v1' do
 
       root to: 'base#entrypoint'
+      match '*any', via: [:options], to: 'base#options'
 
       resources :audio_files
       resources :account_images, only: [:show, :index]

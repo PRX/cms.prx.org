@@ -26,6 +26,8 @@ describe HalActions do
     def self.order(*_args); self; end
     def self.page(*_args); self; end
     def self.per(*_args); self; end
+    def self.where(*_args); self; end
+    def self.build; new; end
   end
 
   class FooRepresenter
@@ -64,25 +66,33 @@ describe HalActions do
   let (:controller) { FoosController.new }
   let (:account) { create(:account) }
 
+  describe 'errors' do
+    it 'handles invalid content type errors' do
+      lambda do
+        controller.create
+      end.must_raise HalActions::Errors::UnsupportedMediaType
+    end
+  end
+
   describe 'instance methods' do
 
     it 'retrieves resource' do
-      controller.resource.must_be_instance_of Foo
+      controller.send(:resource).must_be_instance_of Foo
     end
 
     it 'retrieves new resource when id not found' do
       controller.params = ActionController::Parameters.new(action: 'create')
       controller.request = OpenStruct.new('put?' => false, 'post?' => true)
-      controller.resource.must_be_instance_of Foo
-      controller.resource.id.must_be_nil
+      controller.send(:resource).must_be_instance_of Foo
+      controller.send(:resource).id.must_be_nil
     end
 
     it 'determines resource id for caching' do
-      controller.show_cache_path.must_equal 60
+      controller.send(:show_cache_path).must_equal 60
     end
 
     it 'determines the resources id for caching' do
-      controller.index_cache_path.must_equal 'c/foos/3-60'
+      controller.send(:index_cache_path).must_equal 'c/foos/3-60'
     end
 
     it 'responds to show request' do
@@ -93,7 +103,7 @@ describe HalActions do
     end
 
     it 'can adds paging to resources query' do
-      arel = FoosController.new.with_paging(Account.where('id is not null'))
+      arel = FoosController.new.send(:paged, Account.where('id is not null'))
       arel.to_sql.must_match /LIMIT 10 OFFSET 0/
     end
 

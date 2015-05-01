@@ -37,7 +37,12 @@ module PRX
       g.test_framework :mini_test, spec: true, fixture: false
     end
 
-    config.middleware.insert_before Rack::Sendfile, Rack::Cors do
+    config.middleware.insert_after Rails::Rack::Logger, Rack::Cors do
+      allow do
+        origins /.*\.prx\.(?:org|dev)$/
+        resource '/api/*', methods: [:get, :put, :post, :options], headers: :any
+      end
+
       allow do
         origins '*'
         resource '/api/*', methods: [:get]

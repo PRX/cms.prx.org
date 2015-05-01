@@ -11,16 +11,26 @@ class Api::StoriesController < Api::BaseController
     show
   end
 
-  def resource
-    @story ||= if params[:id]
-                 Story.published.visible.find(params[:id])
-               elsif request.put? || request.post?
-                 Story.new
-               end
+  private
+
+  def resources_base
+    if highlighted?
+      account.portfolio_stories
+    else
+      super
+    end
   end
 
-  def resources
-    @stories ||= resources_base.includes(
+  def filtered(resources)
+    if highlighted?
+      resources
+    else
+      super
+    end
+  end
+
+  def included(relation)
+    relation.includes(
       { audio_versions: [:audio_files] },
       { account: [:image, :address, { opener: [:image] }] },
       { series: [:image, :account] },
@@ -29,28 +39,24 @@ class Api::StoriesController < Api::BaseController
     )
   end
 
-  def resources_base
-    stories = nil
-    filters = (params[:filters] || '').split(',')
+  def scoped(relation)
+    relation.published.visible
+  end
 
-    stories = if account && filters.include?('highlighted')
-                account.portfolio_stories
-              elsif account
-                account.stories
-              else
-                Story
-              end.published.visible
-
+  def sorted(res)
     if filters.include?('purchased')
-      stories.purchased.order('purchase_count DESC')
+      res.purchased.order('purchase_count DESC')
     else
-      stories.order('published_at desc')
+      res.order('published_at desc')
     end
   end
 
-  # don't add another order, handled in the resources_base
-  def with_ordering(res)
-    res
+  def filters
+    @filters ||= (params[:filters] || '').split(',')
+  end
+
+  def highlighted?
+    account && filters.include?('highlighted')
   end
 
   def account
