@@ -1,12 +1,13 @@
 # encoding: utf-8
 
 class Api::AuthorizationsController < Api::BaseController
+  private
   def resource
-    Authorization.new(User.find(prx_auth_token.user_id))
+    @auth ||= Authorization.new(user)
   end
 
   def resources
-    Authorization.new(User.find(prx_auth_token.user_id)).accounts
+    @accounts ||= resource.accounts
   end
 
   def index_collection
@@ -16,5 +17,9 @@ class Api::AuthorizationsController < Api::BaseController
       item_class: Account,
       item_decorator: Api::Min::AccountRepresenter
     )
+  end
+
+  def user
+    @user ||= User.find(prx_auth_token.user_id)
   end
 end

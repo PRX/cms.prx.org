@@ -80,7 +80,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
 
   link :authorization do
     {
-      title: "Get information about the active authorization for this request",
+      title: 'Get information about the active authorization for this request',
       profile: prx_model_uri(:authorization),
       href: api_authorization_path(api_version: represented.version),
       templated: false

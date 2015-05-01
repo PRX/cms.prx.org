@@ -52,7 +52,6 @@ PRX::Application.routes.draw do
       resource :authorization, only: [:show] do
         resources :accounts, only: [:index], controller: 'authorizations'
       end
-
     end
   end
 
