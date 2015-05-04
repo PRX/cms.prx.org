@@ -9,7 +9,6 @@ class Api::BaseController < ApplicationController
   include ApiVersioning
   include HalActions
   include Roar::Rails::ControllerAdditions
-  include ActionBack::ControllerAdditions
 
   # respond to hal or json, but always returns application/hal+json
   respond_to :hal, :json
