@@ -1,14 +1,20 @@
-TestObject = Struct.new(:title, :is_root_resource)
-TestObject.send(:extend, ActiveModel::Naming)
+TestObject = Struct.new(:title, :is_root_resource) do
+  extend ActiveModel::Naming
+
+  def persisted?; false; end
+  def to_model; self; end
+end
 
 
 TestParent = Struct.new(:id, :is_root_resource) do
   extend ActiveModel::Naming
 
+  def persisted?; false; end
+  def to_model; self; end
+
   def to_param
     "#{id}"
   end
-
 end
 
 class Api::TestObjectRepresenter < Api::BaseRepresenter
@@ -23,7 +29,7 @@ class Api::TestObjectRepresenter < Api::BaseRepresenter
 end
 
 def define_routes
-  test_routes = Proc.new do
+  Rails.application.routes.draw do
     namespace :api do
       resources :test_objects
 
@@ -33,8 +39,5 @@ def define_routes
 
     end
   end
-  Rails.application.routes.eval_block(test_routes)
 end
-
-define_routes
 
