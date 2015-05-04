@@ -65,14 +65,14 @@ module PublicAsset
   end
 
   def set_asset_option_defaults(options={})
-    o = HashWithIndifferentAccess.new({
+    o = {
       use:       'web',
       class:     self.class.name.demodulize.underscore,
       id:        id,
       version:   'original',
       name:      filename_base,
       extension: filename_extension
-    }).merge(options)
+    }.merge(options.symbolize_keys)
     o[:expires] = o[:expires].to_i
     o
   end
