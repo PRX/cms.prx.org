@@ -2,7 +2,7 @@
 
 class AudioVersion < BaseModel
 
-  belongs_to :story, class_name: 'Story', foreign_key: 'piece_id', with_deleted: true
+  belongs_to :story, -> { with_deleted }, class_name: 'Story', foreign_key: 'piece_id'
   has_many :audio_files, -> { order :position }, dependent: :destroy
 
   acts_as_paranoid
