@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 1) do
+ActiveRecord::Schema.define(version: 5) do
 
   create_table "pieces", :force => true do |t|
     t.integer  "position"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 1) do
     t.boolean  "publish_on_valid"
     t.datetime "promos_only_at"
     t.string   "episode_identifier"
+    t.string   "app_version", :default => 'v3', :null => false
   end
 
   add_index "pieces", ["account_id"], :name => "pieces_account_id_fk"
