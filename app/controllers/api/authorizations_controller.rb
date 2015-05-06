@@ -43,6 +43,4 @@ class Api::AuthorizationsController < ApplicationController
   def user
     @user ||= User.find(prx_auth_token.user_id)
   end
-
-  def
 end
