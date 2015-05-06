@@ -21,7 +21,7 @@ module HalActions::Cache
       cache_path_method ||= "#{action}_cache_path"
       unless options[:cache_path]
         options[:cache_path] = lambda do |c|
-          c.valid_params_for_action(action).merge _c: send(cache_path_method)
+          c.send(:valid_params_for_action, action).merge _c: send(cache_path_method)
         end
       end
       caches_action(action, options)
