@@ -13,6 +13,14 @@ class PagedCollection
 
   def_delegators :request, :params
 
+  def to_model
+    self
+  end
+
+  def persisted?
+    false
+  end
+
   def initialize(items, request=nil, options=nil)
     self.items   = items
     self.request = request || request_stub

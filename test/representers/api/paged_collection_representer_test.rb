@@ -38,6 +38,7 @@ describe Api::PagedCollectionRepresenter do
     representer.represented.options[:parent] = TestParent.new(1, true)
     representer.represented.options[:item_class] = TestObject
     representer.href_url_helper({page: 1}).must_equal "/api/test_parent/1/test_objects?page=1"
+    Rails.application.reload_routes!
   end
 
   it 'uses a lambda for a url method' do

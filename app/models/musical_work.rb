@@ -2,7 +2,7 @@
 
 class MusicalWork < BaseModel
 
-  belongs_to :story, class_name: 'Story', foreign_key: 'piece_id', with_deleted: true
+  belongs_to :story, -> { with_deleted }, class_name: 'Story', foreign_key: 'piece_id'
 
   acts_as_list scope: :piece_id
 
