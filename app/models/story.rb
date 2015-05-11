@@ -35,7 +35,7 @@ class Story < BaseModel
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
 
-  after_initialize :set_app_version
+  before_validation :set_app_version, on: :create
 
   # indicates piece is published
   event_attribute :published_at

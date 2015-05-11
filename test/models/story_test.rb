@@ -20,11 +20,11 @@ describe Story do
     end
 
     it 'is v4 by default' do
-      build(:story).must_be :v4?
+      create(:story).must_be :v4?
     end
 
     it 'is deleted by default' do
-      build(:story).must_be :deleted?
+      create(:story).must_be :deleted?
     end
   end
 
@@ -159,7 +159,8 @@ describe Story do
     end
 
     it 'does not include deleted v3 stories' do
-      story = create(:story, deleted_at: Time.now, app_version: 'v3')
+      story = create(:story, deleted_at: Time.now)
+      story.update_attribute :app_version, 'v3'
       Story.where(id: story).wont_include story
     end
 
