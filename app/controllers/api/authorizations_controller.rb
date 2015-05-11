@@ -7,7 +7,6 @@ class Api::AuthorizationsController < ApplicationController
   include ApiVersioning
   include HalActions
   include Roar::Rails::ControllerAdditions
-  include ActionBack::ControllerAdditions
 
   respond_to :hal, :json
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
