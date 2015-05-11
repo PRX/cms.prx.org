@@ -12,6 +12,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   property :duration, writeable: false
   property :points, writeable: false
+  property :app_version, writeable: false
 
   property :description
   property :related_website

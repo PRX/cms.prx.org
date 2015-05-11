@@ -12,6 +12,7 @@ class Api::Min::StoryRepresenter < Api::BaseRepresenter
 
   property :duration, writeable: false
   property :points, writeable: false
+  property :app_version, writeable: false
 
   # default zoom
   link :account do

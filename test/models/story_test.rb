@@ -18,6 +18,14 @@ describe Story do
     it 'has purchases' do
       story.must_respond_to :purchases
     end
+
+    it 'is v4 by default' do
+      create(:story).must_be :v4?
+    end
+
+    it 'is deleted by default' do
+      create(:story).must_be :deleted?
+    end
   end
 
   describe 'using default audio version' do
@@ -141,6 +149,29 @@ describe Story do
 
         story.episode_date.must_equal series.get_datetime_for_episode_number(3)
       end
+    end
+  end
+
+  describe 'default scope' do
+    it 'includes non-deleted v3 stories' do
+      story = create(:story, deleted_at: nil, app_version: 'v3')
+      Story.where(id: story.id).must_include story
+    end
+
+    it 'does not include deleted v3 stories' do
+      story = create(:story, deleted_at: Time.now)
+      story.update_attribute :app_version, 'v3'
+      Story.where(id: story).wont_include story
+    end
+
+    it 'includes non-deleted v4 stories' do
+      story = create(:story, deleted_at: nil, app_version: 'v4')
+      Story.where(id: story.id).must_include story
+    end
+
+    it 'includes "deleted" v4 stories' do
+      story = create(:story, deleted_at: Time.now, app_version: 'v4')
+      Story.where(id: story.id).must_include story
     end
   end
 

@@ -1,10 +1,18 @@
 # encoding: utf-8
 
 class Story < BaseModel
-
+  APPLICATION_VERSION = 'v4'
   self.table_name = 'pieces'
 
   acts_as_paranoid
+
+  def self.paranoia_scope
+    where(
+      arel_table[paranoia_column].eq(paranoia_sentinel_value).or(
+        arel_table['app_version'].eq(APPLICATION_VERSION)
+      )
+    )
+  end
 
   belongs_to :account, -> { with_deleted }
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
@@ -26,6 +34,8 @@ class Story < BaseModel
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
+
+  before_validation :set_app_version, on: :create
 
   # indicates piece is published
   event_attribute :published_at
@@ -121,6 +131,14 @@ class Story < BaseModel
     series && series.subscribable?
   end
 
+  def destroy
+    if v4?
+      really_destroy!
+    else
+      super
+    end
+  end
+
   private
 
   def longest_single_file_version
@@ -129,5 +147,15 @@ class Story < BaseModel
 
   def longest_version
     audio_versions.sort_by(&:length).last
+  end
+
+  def set_app_version
+    return unless new_record?
+    self.app_version = APPLICATION_VERSION
+    self.deleted_at = Time.now
+  end
+
+  def v4?
+    app_version == APPLICATION_VERSION
   end
 end
