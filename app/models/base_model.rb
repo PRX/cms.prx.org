@@ -3,8 +3,11 @@
 class BaseModel < ActiveRecord::Base
   self.abstract_class = true
 
-  include ActionBack::RouteBack
   include RepresentedModel
+
+  def id_from_url(url)
+    Rails.application.routes.recognize_path(url)[:id]
+  end
 
   def update_file!(name)
     filename_will_change!

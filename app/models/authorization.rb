@@ -3,6 +3,14 @@
 class Authorization
   include RepresentedModel
 
+  def to_model
+    self
+  end
+
+  def persisted?
+    false
+  end
+
   def initialize(user)
     @user = user
   end

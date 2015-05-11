@@ -14,8 +14,8 @@ class Story < BaseModel
     )
   end
 
-  belongs_to :account, with_deleted: true
-  belongs_to :creator, class_name: 'User',foreign_key: 'creator_id', with_deleted: true
+  belongs_to :account, -> { with_deleted }
+  belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
   belongs_to :series
 
   has_many :images, -> { where(parent_id: nil).order(:position) }, class_name: 'StoryImage', foreign_key: :piece_id

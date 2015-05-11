@@ -4,6 +4,14 @@ class Api
 
   extend ActiveModel::Naming
 
+  def to_model
+    self
+  end
+
+  def persisted?
+    false
+  end
+
   def self.version(version)
     new(version)
   end

@@ -10,8 +10,8 @@ class Series < BaseModel
 
   acts_as_paranoid
 
-  belongs_to :account, with_deleted: true
-  belongs_to :creator, class_name: 'User', foreign_key: 'creator_id', with_deleted: true
+  belongs_to :account, -> { with_deleted }
+  belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
 
   has_many :stories, -> { where('published_at is not null and network_only_at is null').order('episode_number DESC, position DESC, published_at DESC') }
 
@@ -76,7 +76,6 @@ class Series < BaseModel
           break
       end
     end
-    # puts "start_time: #{start_time}, start_schedule: #{start_schedule}"
 
     # this might be ahead or behind start
     day_diff = schedules[start_schedule].day - start_time.wday

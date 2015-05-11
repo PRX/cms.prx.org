@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.1.10'
+gem 'rails', '~> 4.2.1'
 
 # JWS
 gem 'prx_auth-rails', '~> 0.0.4'
@@ -11,7 +11,7 @@ gem 'prx_auth-rails', '~> 0.0.4'
 gem 'mysql2'
 
 # ActiveRecord model additions
-gem 'paranoia'
+gem 'paranoia',' ~> 2.0'
 gem 'acts_as_list'
 gem 'event_attribute'
 
@@ -21,6 +21,8 @@ gem 'fog'
 gem 'unf'
 
 ## Controller
+gem 'responders', '~> 2.0'
+
 # auth
 gem 'rack-cors', require: 'rack/cors'
 gem 'pundit'
@@ -32,14 +34,16 @@ gem 'kaminari'
 gem 'dalli' # perhaps only production?
 gem 'actionpack-action_caching'
 
+
 ## View
 # json handling
 gem 'roar', '~> 0.12'
 gem 'roar-rails', '~> 0.1'
 gem 'oj'
 gem 'oj_mimic_json'
-gem 'actionback'
 
+## Messaging
+gem 'shoryuken'
 
 ## Deployment
 # configuration
@@ -60,6 +64,7 @@ gem 'capistrano-newrelic'
 # developer-specific gems here so our travis builds
 # stay snappy!
 group :development do
+  gem 'web-console', '~> 2.0'
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
