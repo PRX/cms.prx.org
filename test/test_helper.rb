@@ -43,3 +43,5 @@ end
 
 Minitest::Expectations.infect_an_assertion :assert_operator, :must_allow, :reverse
 Minitest::Expectations.infect_an_assertion :refute_operator, :wont_allow, :reverse
+
+Announce.options[:adapter] = :test
