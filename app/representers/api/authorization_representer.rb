@@ -19,4 +19,8 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
     }
   end
   embed :accounts, paged: true, item_class: Account, item_decorator: Api::Min::AccountRepresenter, per: :all
+
+  def self_url(r)
+    api_authorization_path
+  end
 end
