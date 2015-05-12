@@ -1,3 +1,8 @@
+PATH
+  remote: /Users/andrew/dev/projects/announce
+  specs:
+    announce (0.1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -393,6 +398,7 @@ PLATFORMS
 DEPENDENCIES
   actionpack-action_caching
   acts_as_list
+  announce!
   better_errors
   binding_of_caller
   capistrano (~> 3.2)
