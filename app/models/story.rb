@@ -56,8 +56,6 @@ class Story < BaseModel
     audio_versions.create(label: 'Main Audio')
   end
 
-  after_commit :send_events, if: :persisted?
-
   scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
 
   scope :purchased, -> {
@@ -70,14 +68,6 @@ class Story < BaseModel
     where(['`series`.`subscription_approval_status` != ? OR `series`.`subscriber_only_at` IS NULL',
            Series::SUBSCRIPTION_PRX_APPROVED])
   }
-
-  def send_events
-    if previous_changes[:published_at] && previous_changes[:published_at].first.nil?
-      publish(:story, :published, { story_id: id, published_at: published_at } )
-    end
-
-    publish(:story, :updated, { story_id: id } )
-  end
 
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)

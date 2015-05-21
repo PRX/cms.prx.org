@@ -4,7 +4,6 @@ class BaseModel < ActiveRecord::Base
   self.abstract_class = true
 
   include RepresentedModel
-  include Announce::Publisher
 
   def id_from_url(url)
     Rails.application.routes.recognize_path(url)[:id]
