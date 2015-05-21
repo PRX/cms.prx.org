@@ -3,5 +3,7 @@ app_name: cms
 
 publish:
   story:
-    - published
-    - updated
+    - update
+    - delete
+    - publish
+    - unpublish
