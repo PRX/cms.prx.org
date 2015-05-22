@@ -44,7 +44,7 @@ gem 'oj_mimic_json'
 
 ## Messaging
 gem 'shoryuken'
-gem 'announce', path: '/Users/andrew/dev/projects/announce'
+gem 'announce'
 
 ## Deployment
 # configuration
