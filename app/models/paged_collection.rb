@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'forwardable'
+require 'openssl'
 
 class PagedCollection
   extend ActiveModel::Naming
@@ -29,14 +30,12 @@ class PagedCollection
   end
 
   def cache_key
-    key_components = ["c"]
-    key_components << item_class.model_name.cache_key
-    key_components << items.inject([0, 0]) do |keys, i|
-      keys[0] = keys[0] + i.try(:id).to_i.modulo(100)
-      keys[1] = [keys[1], i.try(:updated_at).try(:utc).to_i].max
-      keys
-    end.flatten.join("-")
-
+    item_keys = items.inject([]) do |keys, i|
+      keys << i.try(:id)
+      keys << i.try(:updated_at).try(:utc).to_i
+    end
+    key_components = ["c", item_class.model_name.cache_key]
+    key_components << OpenSSL::Digest::MD5.hexdigest(item_keys.join)
     ActiveSupport::Cache.expand_cache_key(key_components)
   end
 

@@ -92,7 +92,7 @@ describe HalActions do
     end
 
     it 'determines the resources id for caching' do
-      controller.send(:index_cache_path).must_equal 'c/foos/3-60'
+      controller.send(:index_cache_path).must_equal 'c/foos/1a8ca71da20c9dc2dfc2e02485821d9b'
     end
 
     it 'responds to show request' do
