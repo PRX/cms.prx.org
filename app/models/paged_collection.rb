@@ -34,7 +34,7 @@ class PagedCollection
       keys << i.try(:id)
       keys << i.try(:updated_at).try(:utc).to_i
     end
-    key_components = ["c", item_class.model_name.cache_key]
+    key_components = ['c', item_class.model_name.cache_key]
     key_components << OpenSSL::Digest::MD5.hexdigest(item_keys.join)
     ActiveSupport::Cache.expand_cache_key(key_components)
   end
@@ -75,5 +75,4 @@ class PagedCollection
   def count
     items.length
   end
-
 end
