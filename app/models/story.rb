@@ -120,7 +120,7 @@ class Story < BaseModel
   end
 
   def self.policy_class
-    AccountablePolicy
+    StoryPolicy
   end
 
   def episode_date

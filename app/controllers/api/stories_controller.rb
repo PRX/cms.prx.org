@@ -9,8 +9,11 @@ class Api::StoriesController < Api::BaseController
   announce_actions :create, :update, :delete, :publish, :unpublish
 
   def publish
-    publish_resource.publish!
-    show
+    publish_resource.tap do |res|
+      authorize res
+      res.publish!
+      respond_with root_resource(res), show_options
+    end
   end
 
   def publish_resource
@@ -18,8 +21,11 @@ class Api::StoriesController < Api::BaseController
   end
 
   def unpublish
-    resource.unpublish!
-    show
+    unpublish_resource.tap do |res|
+      authorize res
+      res.unpublish!
+      respond_with root_resource(res), show_options
+    end
   end
 
   def unpublish_resource
