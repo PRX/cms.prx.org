@@ -29,5 +29,4 @@ describe PublicAssetsController do
 
     assert_response :redirect
   end
-
 end

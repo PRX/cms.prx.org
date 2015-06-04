@@ -1,7 +1,9 @@
+# encoding: utf-8
+
 describe ApiVersioning do
 
   class ApiVersioningTestController < ActionController::Base
-    include ApiVersioning    
+    include ApiVersioning
   end
 
   let (:controller) { ApiVersioningTestController.new }
@@ -10,5 +12,4 @@ describe ApiVersioning do
     ApiVersioningTestController.api_versions(:v0)
     ApiVersioningTestController.understood_api_versions.must_equal ['v0']
   end
-
 end
