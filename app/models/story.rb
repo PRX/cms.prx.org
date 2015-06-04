@@ -131,6 +131,23 @@ class Story < BaseModel
     series && series.subscribable?
   end
 
+  # raising exceptions here to prevent sending publish messages when not actually published
+  def publish!
+    if published_at
+      raise "Story #{id} is already published."
+    else
+      update_attributes!(published_at: Time.now)
+    end
+  end
+
+  def unpublish!
+    unless published_at
+      raise "Story #{id} is not published."
+    else
+      update_attributes!(published_at: nil)
+    end
+  end
+
   def destroy
     if v4?
       really_destroy!

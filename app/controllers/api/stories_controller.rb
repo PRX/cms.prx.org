@@ -6,17 +6,16 @@ class Api::StoriesController < Api::BaseController
 
   filter_resources_by :series_id, :account_id
 
-  after_action :announce_story_update, only: [:create, :update], if: ->() { response.successful? }
-  after_action :announce_story_delete, only: [:destroy], if: ->() { response.successful? }
+  announce_actions :create, :update, :delete, :publish, :unpublish
 
-  def announce_story_update
-    representer = Api::Min::StoryRepresenter.new(resource)
-    announce(:story, :update, representer.to_json)
+  def publish
+    resource.publish!
+    show
   end
 
-  def announce_story_delete
-    representer = Api::Min::StoryRepresenter.new(resource)
-    announce(:story, :delete, representer.to_json)
+  def unpublish
+    resource.unpublish!
+    show
   end
 
   def random
