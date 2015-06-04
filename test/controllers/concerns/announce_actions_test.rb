@@ -24,8 +24,9 @@ describe Api::TestObjectsController do
   end
 
   it 'defaults to create, update, and destroy' do
+    default_actions = [:create, :destroy, :update]
     controller_class.announce_actions
-    controller_class.announced_actions.sort.must_equal [:create, :destroy, :update]
+    controller_class.announced_actions.sort.must_equal default_actions
   end
 
   describe 'test callbacks' do
@@ -40,7 +41,7 @@ describe Api::TestObjectsController do
 
       response.must_be :success?
       last_message['subject'].to_s.must_equal 'test_object'
-      last_message['action'].to_s.must_equal  'create'
+      last_message['action'].to_s.must_equal 'create'
     end
 
     it 'renames destroy action to delete' do
@@ -50,7 +51,7 @@ describe Api::TestObjectsController do
 
       response.must_be :success?
       last_message['subject'].to_s.must_equal 'test_object'
-      last_message['action'].to_s.must_equal  'delete'
+      last_message['action'].to_s.must_equal 'delete'
     end
   end
 end
