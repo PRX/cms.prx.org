@@ -136,7 +136,7 @@ class Story < BaseModel
   # raising exceptions here to prevent sending publish messages
   #  when not actually a change to be published
   def publish!
-    if published_at
+    if published?
       raise "Story #{id} is already published."
     else
       update_attributes!(published_at: Time.now)
@@ -144,7 +144,7 @@ class Story < BaseModel
   end
 
   def unpublish!
-    if !published_at
+    if !published?
       raise "Story #{id} is not published."
     else
       update_attributes!(published_at: nil)
