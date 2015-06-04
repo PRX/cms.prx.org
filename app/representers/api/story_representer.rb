@@ -23,6 +23,18 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   property :license, class: License, decorator: Api::LicenseRepresenter
 
+  link rel: :publish, writeable: false do
+    {
+      href: publish_api_story_path(represented)
+    } if !represented.published?
+  end
+
+  link rel: :unpublish, writeable: false do
+    {
+      href: unpublish_api_story_path(represented)
+    } if represented.published?
+  end
+
   link rel: :account, writeable: true do
     {
       href: api_account_path(represented.account),
