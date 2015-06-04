@@ -1,10 +1,5 @@
 class ProducerPolicy < ApplicationPolicy
-  attr_reader :user, :producer
-
-  def initialize(user, producer)
-    @user = user
-    @producer = producer
-  end
+  alias_method :producer, :record
 
   def create?
     update?

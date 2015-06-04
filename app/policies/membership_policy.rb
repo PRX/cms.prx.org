@@ -1,10 +1,5 @@
 class MembershipPolicy < ApplicationPolicy
-  attr_reader :user, :membership
-
-  def initialize(user, membership)
-    @user = user
-    @membership = membership
-  end
+  alias_method :membership, :record
 
   def create?
     update? || (user == membership.user && !membership.approved?)
