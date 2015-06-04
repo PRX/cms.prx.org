@@ -11,7 +11,7 @@ module AnnounceActions
     attr_accessor :action, :options
 
     def initialize(action, options = {})
-      @action  = action
+      @action = action
       @options = options
     end
 
@@ -32,15 +32,15 @@ module AnnounceActions
     end
 
     def announce_resource(action, controller)
-      prefix = "#{action}_" if controller.respond_to?("#{action}_resource", true)
-      controller.send("#{prefix}resource")
+      pre = "#{action}_" if controller.respond_to?("#{action}_resource", true)
+      controller.send("#{pre}resource")
     end
 
     def decorator_class(controller)
       return options[:decorator] if options[:decorator]
       resource_class = controller.controller_name.singularize.camelize
       "Api::Min::#{resource_class}Representer".safe_constantize ||
-      "Api::#{resource_class}Representer".safe_constantize
+        "Api::#{resource_class}Representer".safe_constantize
     end
   end
 end

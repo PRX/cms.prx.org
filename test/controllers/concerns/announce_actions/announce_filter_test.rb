@@ -11,7 +11,6 @@ describe AnnounceActions::AnnounceFilter do
   let(:filter) { AnnounceActions::AnnounceFilter.new('create', {}) }
 
   before do
-
     controller_class.class_eval do
       include AnnounceActions
       announce_actions
