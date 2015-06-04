@@ -5,6 +5,37 @@ describe Story do
   let(:story) { build_stubbed(:story_with_audio, audio_versions_count: 10) }
   let(:promos_only) { build_stubbed(:story_promos_only) }
 
+  describe 'publishing' do
+
+    let(:story) { create(:story) }
+
+    it 'publishes a story' do
+      story.published_at = nil
+      story.publish!
+      story.published_at.wont_be_nil
+    end
+
+    it 'wont publish when already published' do
+      lambda do
+        story.publish!
+        story.publish!
+      end.must_raise(RuntimeError)
+    end
+
+    it 'unpublishes a story' do
+      story.published_at = Time.now
+      story.unpublish!
+      story.published_at.must_be_nil
+    end
+
+    it 'wont unpublish an unpublished story' do
+      lambda do
+        story.unpublish!
+        story.unpublish!
+      end.must_raise(RuntimeError)
+    end
+  end
+
   describe 'basics' do
 
     it 'has a table defined' do
