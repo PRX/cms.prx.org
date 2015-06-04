@@ -58,6 +58,8 @@ class Story < BaseModel
 
   scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
 
+  scope :unpublished, -> { where('`published_at` IS NULL') }
+
   scope :purchased, -> {
     joins(:purchases).
     select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')

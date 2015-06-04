@@ -17,13 +17,15 @@ PRX::Application.routes.draw do
       end
 
       resources :stories, except: [:new, :edit] do
+        get 'random', on: :collection
+        put 'publish', on: :member
+        put 'unpublish', on: :member
         resources :promos, except: [:new, :edit]
         resources :audio_files, except: [:new, :edit]
         resources :audio_versions, except: [:new, :edit]
         resources :story_images, path: 'images', except: [:new, :edit]
         resources :musical_works, except: [:new, :edit]
         resources :producers, except: [:new, :edit]
-        get 'random', on: :collection
       end
 
       resources :series, except: [:new, :edit] do

@@ -9,13 +9,21 @@ class Api::StoriesController < Api::BaseController
   announce_actions :create, :update, :delete, :publish, :unpublish
 
   def publish
-    resource.publish!
+    publish_resource.publish!
     show
+  end
+
+  def publish_resource
+    @story ||= Story.unpublished.where(id: params[:id]).first
   end
 
   def unpublish
     resource.unpublish!
     show
+  end
+
+  def unpublish_resource
+    @story ||= Story.published.where(id: params[:id]).first
   end
 
   def random

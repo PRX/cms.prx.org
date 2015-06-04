@@ -54,6 +54,22 @@ describe Api::StoriesController do
       Story.find(story.id).title.must_equal('this')
     end
 
+    it 'can publish a story' do
+      story = create(:story, title: 'not this', account: account, published_at: nil)
+      @request.env['CONTENT_TYPE'] = 'application/json'
+      put :publish, api_version: 'v1', format: 'json', id: story.id
+      assert_response :success
+      Story.find(story.id).published_at.wont_be_nil
+    end
+
+    it 'can unpublish a story' do
+      story = create(:story, title: 'not this', account: account, published_at: Time.now)
+      @request.env['CONTENT_TYPE'] = 'application/json'
+      put :unpublish, api_version: 'v1', format: 'json', id: story.id
+      assert_response :success
+      Story.find(story.id).published_at.must_be_nil
+    end
+
     it 'can delete a story' do
       story = create(:story, account: account)
       delete :destroy, api_version: 'v1', format: 'json', id: story.id
