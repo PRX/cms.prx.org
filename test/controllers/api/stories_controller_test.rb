@@ -56,10 +56,9 @@ describe Api::StoriesController do
 
     it 'can publish a story' do
       story = create(:story,
-        title: 'not this',
-        account: account,
-        published_at: nil
-      )
+                     title: 'not this',
+                     account: account,
+                     published_at: nil)
       @request.env['CONTENT_TYPE'] = 'application/json'
       post :publish, api_version: 'v1', format: 'json', id: story.id
       assert_response :success
@@ -68,10 +67,9 @@ describe Api::StoriesController do
 
     it 'can unpublish a story' do
       story = create(:story,
-        title: 'not this',
-        account: account,
-        published_at: Time.now
-      )
+                     title: 'not this',
+                     account: account,
+                     published_at: Time.now)
       @request.env['CONTENT_TYPE'] = 'application/json'
       post :unpublish, api_version: 'v1', format: 'json', id: story.id
       assert_response :success
