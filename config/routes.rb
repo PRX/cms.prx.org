@@ -18,8 +18,8 @@ PRX::Application.routes.draw do
 
       resources :stories, except: [:new, :edit] do
         get 'random', on: :collection
-        put 'publish', on: :member
-        put 'unpublish', on: :member
+        post 'publish', on: :member
+        post 'unpublish', on: :member
         resources :promos, except: [:new, :edit]
         resources :audio_files, except: [:new, :edit]
         resources :audio_versions, except: [:new, :edit]
