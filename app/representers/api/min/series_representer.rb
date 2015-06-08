@@ -2,7 +2,7 @@
 
 class Api::Min::SeriesRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :title
   property :short_description
 

@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Api::AuthorizationRepresenter < Api::BaseRepresenter
-  property :id
+  property :id, writeable: false
   property :name
 
   link :default_account do

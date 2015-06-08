@@ -32,5 +32,4 @@ class Api::BaseRepresenter < Roar::Decorator
     klass = rep.try(:item_class) || rep.class.try(:base_class)
     (klass && (klass != rep.class)) ? rep.becomes(klass) : rep
   end
-
 end
