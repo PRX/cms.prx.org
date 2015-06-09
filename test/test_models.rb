@@ -3,6 +3,9 @@ TestObject = Struct.new(:title, :is_root_resource) do
 
   def persisted?; false; end
   def to_model; self; end
+  def to_param; "1"; end
+  def id; 1; end
+  def id=(_id); _id; end
 end
 
 
@@ -38,7 +41,7 @@ def define_routes
     namespace :api do
       resources :test_objects
 
-      resources :test_parent do
+      resources :test_parents do
         get 'test_objects', to: 'test_objects#index'
       end
 
