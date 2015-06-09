@@ -86,7 +86,5 @@ module Embeds
 
       collection(name, options)
     end
-
   end
-
 end

@@ -48,7 +48,5 @@ module Curies
       options[:as] = curify(options[:as] || name) if options[:embedded]
       super(name, options)
     end
-
   end
-
 end
