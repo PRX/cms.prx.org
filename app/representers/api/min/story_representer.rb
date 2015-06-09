@@ -14,7 +14,9 @@ class Api::Min::StoryRepresenter < Api::BaseRepresenter
   property :points, writeable: false
   property :app_version, writeable: false
 
-  # default zoom
+  alternate_link
+
+# default zoom
   link :account do
     {
       href: api_account_path(represented.account),

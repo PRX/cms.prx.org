@@ -23,6 +23,8 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   property :license, class: License, decorator: Api::LicenseRepresenter
 
+  alternate_link
+
   link rel: :account, writeable: true do
     {
       href: api_account_path(represented.account),

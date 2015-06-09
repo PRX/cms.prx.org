@@ -7,6 +7,8 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   property :short_description
   property :description
 
+  alternate_link
+
   link :stories do
     {
       href: "#{api_series_stories_path(represented)}{?page,per,zoom}",
