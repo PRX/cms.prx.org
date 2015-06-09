@@ -59,5 +59,4 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
   def represented_url
     @represented_url ||= represented.try(:url)
   end
-
 end
