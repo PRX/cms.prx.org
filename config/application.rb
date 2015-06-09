@@ -52,5 +52,8 @@ module PRX
     config.active_job.queue_adapter = :shoryuken
 
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.action_mailer.default_url_options = { host: ENV['PRX_HOST'], protocol: 'https' }
+    Rails.application.routes.default_url_options = { host: ENV['CMS_HOST'], protocol: 'https' }
   end
 end

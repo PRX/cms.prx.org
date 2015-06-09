@@ -45,9 +45,6 @@ PRX::Application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
 
-  config.action_mailer.default_url_options = { host: 'www.prx.org', protocol: 'https' }
-  Rails.application.routes.default_url_options = { host: 'api.prx.org', protocol: 'https' }
-
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
@@ -64,5 +61,4 @@ PRX::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-
 end

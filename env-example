@@ -10,3 +10,6 @@ NEW_RELIC_KEY=
 PUBLIC_ASSET_SECRET=
 RAILS_SECRET_KEY=
 TEST_DATABASE=cms_prx_org_test
+PRX_HOST=beta.prx.dev
+CMS_HOST=cms.prx.dev
+META_HOST=meta.prx.org
