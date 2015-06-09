@@ -6,22 +6,67 @@ require 'active_support/concern'
 module UriMethods
   extend ActiveSupport::Concern
 
-  def method_missing(method_name, *args, &block)
-    if method_name.to_s.ends_with?('_path_template')
-      original_method_name = method_name[0..-10]
-      template_named_path(original_method_name, *args)
+  module ClassMethods
+
+    def self_link
+      link(:self) do
+        {
+          href: self_url(represented),
+          profile: prx_model_uri(represented)
+        }
+      end
+    end
+
+    def profile_link
+      link(:profile) { prx_model_uri(represented) }
+    end
+
+    def alternate_link
+      link :alternate do
+        {
+          href: prx_web_url(prx_model_web_path(represented)),
+          type: 'text/html'
+        }
+      end
+    end
+
+    def prx_meta_host
+      (ENV['META_HOST'] || 'meta.prx.org')
     end
   end
 
-  def template_named_path(named_path, options)
-    replace_options = options.keys.inject({}){|s,k| s[k] = "_#{k.upcase}_REPLACE_"; s}
-    path = self.send(named_path, replace_options)
-    replace_options.keys.each{|k| path.gsub!(replace_options[k], (options[k] || ''))}
-    path
+  def prx_model_web_path(represented)
+    rep = becomes_represented_class(represented)
+    class_path = rep.class.name.underscore.pluralize
+    "#{class_path}/#{represented.id}"
+  end
+
+  def self_url(represented)
+    rep = becomes_represented_class(represented)
+    polymorphic_path([:api, rep])
+  end
+
+  def becomes_represented_class(rep)
+    return rep unless rep.respond_to?(:becomes)
+    klass = rep.try(:item_class) || rep.class.try(:base_class)
+    (klass && (klass != rep.class)) ? rep.becomes(klass) : rep
+  end
+
+  def prx_web_url(*path)
+    path = path.map(&:to_s).join('/')
+    "https://#{prx_web_host}/#{path}"
   end
 
   def prx_model_uri(*args)
-    "http://meta.prx.org/model/#{joined_names(args)}"
+    "http://#{prx_meta_host}/model/#{joined_names(args)}"
+  end
+
+  def prx_meta_host
+    (ENV['META_HOST'] || 'meta.prx.org')
+  end
+
+  def prx_web_host
+    (ENV['PRX_HOST'] || 'www.prx.org')
   end
 
   def joined_names(args)
@@ -48,5 +93,19 @@ module UriMethods
         klass.name.underscore.dasherize
       end
     end
+  end
+
+  def method_missing(method_name, *args, &block)
+    if method_name.to_s.ends_with?('_path_template')
+      original_method_name = method_name[0..-10]
+      template_named_path(original_method_name, *args)
+    end
+  end
+
+  def template_named_path(named_path, options)
+    replace_options = options.keys.inject({}){|s,k| s[k] = "_#{k.upcase}_REPLACE_"; s}
+    path = self.send(named_path, replace_options)
+    replace_options.keys.each{|k| path.gsub!(replace_options[k], (options[k] || ''))}
+    path
   end
 end
