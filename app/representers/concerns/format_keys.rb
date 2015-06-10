@@ -26,7 +26,5 @@ module FormatKeys
       options[:as] = options[:embedded] ? n.dasherize : n.camelize(:lower)
       super(name, options)
     end
-
   end
-
 end

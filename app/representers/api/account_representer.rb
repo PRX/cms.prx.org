@@ -2,7 +2,7 @@
 
 class Api::AccountRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :type
   property :name
   property :path

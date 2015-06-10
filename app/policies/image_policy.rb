@@ -1,10 +1,5 @@
-class ImagePolicy
-  attr_reader :user, :image
-
-  def initialize(user, image)
-    @user = user
-    @image = image
-  end
+class ImagePolicy < ApplicationPolicy
+  alias_method :image, :record
 
   def create?
     update?

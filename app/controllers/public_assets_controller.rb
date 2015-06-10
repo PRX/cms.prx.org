@@ -11,5 +11,4 @@ class PublicAssetsController < ApplicationController
       head 401
     end
   end
-
 end

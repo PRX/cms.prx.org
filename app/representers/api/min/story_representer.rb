@@ -2,12 +2,12 @@
 
 class Api::Min::StoryRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :title
   property :short_description
   property :episode_number
   property :episode_identifier
-  property :published_at
+  property :published_at, writeable: false
   property :produced_on
 
   property :duration, writeable: false

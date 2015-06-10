@@ -2,7 +2,7 @@
 
 class Api::AddressRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :street_1
   property :street_2
   property :street_3

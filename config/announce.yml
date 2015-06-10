@@ -1,0 +1,10 @@
+# Configuration file that defines the settings for pub/sub of events
+app_name: cms
+
+publish:
+  story:
+    - create
+    - update
+    - delete
+    - publish
+    - unpublish

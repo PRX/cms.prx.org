@@ -2,7 +2,7 @@
 
 class Api::ProducerRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :user_id
   property :name
 

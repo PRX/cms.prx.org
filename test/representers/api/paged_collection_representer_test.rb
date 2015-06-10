@@ -32,15 +32,6 @@ describe Api::PagedCollectionRepresenter do
     representer.href_url_helper({page: 1}).must_equal "/api/v1/stories?page=1"
   end
 
-  # TODO Find out why this is broken
-  it 'gets a route url helper method with parent' do
-    define_routes
-    representer.represented.options[:parent] = TestParent.new(1, true)
-    representer.represented.options[:item_class] = TestObject
-    representer.href_url_helper({page: 1}).must_equal "/api/test_parent/1/test_objects?page=1"
-    Rails.application.reload_routes!
-  end
-
   it 'uses a lambda for a url method' do
     representer.represented.options[:url] = ->(options){ options.keys.sort.join('/') }
     representer.href_url_helper({foo: 1, bar: 2, camp: 3}).must_equal "bar/camp/foo"
@@ -52,4 +43,16 @@ describe Api::PagedCollectionRepresenter do
     representer.href_url_helper({foo: 1, bar: 2, camp: 3}).must_equal "this is a test"
   end
 
+  describe 'test with routing' do
+
+    before { define_routes }
+    after { Rails.application.reload_routes! }
+
+    it 'gets a route url helper method with parent' do
+      representer.represented.options[:parent] = TestParent.new(1, true)
+      representer.represented.options[:item_class] = TestObject
+      page_one_path = '/api/test_parent/1/test_objects?page=1'
+      representer.href_url_helper(page: 1).must_equal page_one_path
+    end
+  end
 end

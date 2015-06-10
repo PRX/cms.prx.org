@@ -2,7 +2,7 @@
 
 class Api::MusicalWorkRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :position
   property :title
   property :artist

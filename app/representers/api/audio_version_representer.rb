@@ -2,7 +2,7 @@
 
 class Api::AudioVersionRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :label
   property :timing_and_cues
   property :explicit

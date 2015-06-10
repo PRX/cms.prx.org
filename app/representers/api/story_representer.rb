@@ -2,12 +2,12 @@
 
 class Api::StoryRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :title
   property :short_description
   property :episode_number
   property :episode_identifier
-  property :published_at
+  property :published_at, writeable: false
   property :produced_on
 
   property :duration, writeable: false
@@ -22,6 +22,18 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :tags
 
   property :license, class: License, decorator: Api::LicenseRepresenter
+
+  link rel: :publish, writeable: false do
+    {
+      href: publish_api_story_path(represented)
+    } if !represented.published?
+  end
+
+  link rel: :unpublish, writeable: false do
+    {
+      href: unpublish_api_story_path(represented)
+    } if represented.published?
+  end
 
   link rel: :account, writeable: true do
     {

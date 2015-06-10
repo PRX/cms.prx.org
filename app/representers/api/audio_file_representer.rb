@@ -2,7 +2,7 @@
 
 class Api::AudioFileRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :filename
   property :label
   property :size
