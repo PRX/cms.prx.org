@@ -6,6 +6,10 @@ class Api::ProducerRepresenter < Api::BaseRepresenter
   property :user_id
   property :name
 
+  def self_url(represented)
+    polymorphic_path([:api, represented.story, represented])
+  end
+
   link :user do
     {
       href: api_user_path(represented.user),

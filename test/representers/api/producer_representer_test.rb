@@ -6,7 +6,7 @@ require 'producer' if !defined?(AudioFile)
 
 describe Api::ProducerRepresenter do
 
-  let(:producer)    { FactoryGirl.create(:producer) }
+  let(:producer)    { FactoryGirl.create(:producer_with_user_and_story) }
   let(:representer) { Api::ProducerRepresenter.new(producer) }
   let(:json)        { JSON.parse(representer.to_json) }
 
@@ -17,5 +17,4 @@ describe Api::ProducerRepresenter do
   it 'use representer to create json' do
     json['id'].must_equal producer.id
   end
-
 end
