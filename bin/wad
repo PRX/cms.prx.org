@@ -5,7 +5,6 @@
 require 'time'
 require 'net/http'
 require 'net/https'
-require 'digest/md5'
 require 'fileutils'
 require 'openssl'
 require 'base64'
@@ -291,7 +290,7 @@ class Wad
   end
 
   def bundle_name
-    Digest::MD5.hexdigest(bundle_name_parts.join)
+    OpenSSL::Digest::MD5.hexdigest(bundle_name_parts.join)
   end
 
   def bzip_filename

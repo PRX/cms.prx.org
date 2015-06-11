@@ -6,6 +6,32 @@ class Api::StoriesController < Api::BaseController
 
   filter_resources_by :series_id, :account_id
 
+  announce_actions :create, :update, :delete, :publish, :unpublish
+
+  def publish
+    publish_resource.tap do |res|
+      authorize res
+      res.publish!
+      respond_with root_resource(res), show_options
+    end
+  end
+
+  def publish_resource
+    @story ||= Story.unpublished.where(id: params[:id]).first
+  end
+
+  def unpublish
+    unpublish_resource.tap do |res|
+      authorize res
+      res.unpublish!
+      respond_with root_resource(res), show_options
+    end
+  end
+
+  def unpublish_resource
+    @story ||= Story.published.where(id: params[:id]).first
+  end
+
   def random
     @story = Story.published.limit(1).order('RAND()').first
     show

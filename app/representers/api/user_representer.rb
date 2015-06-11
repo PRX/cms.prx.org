@@ -2,7 +2,7 @@
 
 class Api::UserRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :first_name
   property :last_name
   property :login

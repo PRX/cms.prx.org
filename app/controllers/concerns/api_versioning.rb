@@ -26,7 +26,5 @@ module ApiVersioning
       self.understood_api_versions = versions.map(&:to_s)
       before_filter :check_api_version
     end
-
   end
-
 end

@@ -58,6 +58,8 @@ class Story < BaseModel
 
   scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
 
+  scope :unpublished, -> { where('`published_at` IS NULL') }
+
   scope :purchased, -> {
     joins(:purchases).
     select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
@@ -118,7 +120,7 @@ class Story < BaseModel
   end
 
   def self.policy_class
-    AccountablePolicy
+    StoryPolicy
   end
 
   def episode_date
@@ -129,6 +131,24 @@ class Story < BaseModel
 
   def subscription_episode?
     series && series.subscribable?
+  end
+
+  # raising exceptions here to prevent sending publish messages
+  #  when not actually a change to be published
+  def publish!
+    if published?
+      raise "Story #{id} is already published."
+    else
+      update_attributes!(published_at: Time.now)
+    end
+  end
+
+  def unpublish!
+    if !published?
+      raise "Story #{id} is not published."
+    else
+      update_attributes!(published_at: nil)
+    end
   end
 
   def destroy

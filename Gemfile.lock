@@ -41,6 +41,7 @@ GEM
       tzinfo (~> 1.1)
     acts_as_list (0.7.0)
       activerecord (>= 3.0)
+    announce (0.2.2)
     ansi (1.5.0)
     arel (6.0.0)
     aws-sdk-core (2.0.41)
@@ -393,6 +394,7 @@ PLATFORMS
 DEPENDENCIES
   actionpack-action_caching
   acts_as_list
+  announce
   better_errors
   binding_of_caller
   capistrano (~> 3.2)

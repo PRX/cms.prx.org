@@ -44,6 +44,7 @@ gem 'oj_mimic_json'
 
 ## Messaging
 gem 'shoryuken'
+gem 'announce'
 
 ## Deployment
 # configuration

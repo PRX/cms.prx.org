@@ -1,10 +1,5 @@
 class AccountPolicy < ApplicationPolicy
-  attr_reader :user, :account
-
-  def initialize(user, account)
-    @user = user
-    @account = account
-  end
+  alias_method :account, :record
 
   def create?
     user.present?

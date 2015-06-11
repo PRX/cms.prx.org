@@ -8,6 +8,7 @@ class Api::BaseController < ApplicationController
 
   include ApiVersioning
   include HalActions
+  include AnnounceActions
   include Roar::Rails::ControllerAdditions
 
   # respond to hal or json, but always returns application/hal+json
@@ -17,7 +18,6 @@ class Api::BaseController < ApplicationController
   allow_params :index, [:page, :per, :zoom]
 
   cache_api_action :show
-
   cache_api_action :index
 
   caches_action :entrypoint, cache_path: ->(_c) { { _c: Api.version(api_version).cache_key } }

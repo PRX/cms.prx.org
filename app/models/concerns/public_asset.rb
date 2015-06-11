@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require 'active_support/concern'
-require 'digest/md5'
+require 'openssl'
 
 # expects underlying model to have filename, class, and id attributes
 module PublicAsset
@@ -26,7 +26,7 @@ module PublicAsset
 
     str = [t,e,u,c,i,v,n,x].join("|")
 
-    Digest::MD5.hexdigest(str)
+    OpenSSL::Digest::MD5.hexdigest(str)
   end
 
   # assumes a route like the following
@@ -91,5 +91,4 @@ module PublicAsset
   def token_secret
     ENV['PUBLIC_ASSET_SECRET']
   end
-
 end

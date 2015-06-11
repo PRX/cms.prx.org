@@ -24,6 +24,7 @@ require 'minitest/reporters'
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'minitest/pride'
+require 'announce/testing'
 
 # To add Capybara feature tests add `gem "minitest-rails-capybara"`
 # to the test group in the Gemfile and uncomment the following:
@@ -31,6 +32,7 @@ require 'minitest/pride'
 
 class ActiveSupport::TestCase
   include FactoryGirl::Syntax::Methods
+  include Announce::Testing
 
   def api_request_opts(opts={})
     { format: 'json', api_version: 'v1' }.merge(opts)
@@ -39,6 +41,7 @@ end
 
 class MiniTest::Spec
   include FactoryGirl::Syntax::Methods
+  include Announce::Testing
 
   def extract_filename(uri)
     URI.parse(uri).path.split('?')[0].split('/').last
@@ -47,3 +50,6 @@ end
 
 Minitest::Expectations.infect_an_assertion :assert_operator, :must_allow, :reverse
 Minitest::Expectations.infect_an_assertion :refute_operator, :wont_allow, :reverse
+
+include Announce::Testing
+reset_announce

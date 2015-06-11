@@ -2,7 +2,7 @@
 
 class Api::MembershipRepresenter < Api::BaseRepresenter
 
-  property :id
+  property :id, writeable: false
   property :role
   property :approved
   property :request
