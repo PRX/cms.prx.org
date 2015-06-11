@@ -5,20 +5,32 @@ require 'test_models'
 
 describe UriMethods do
 
-  let(:helper) { class TestUriMethods; include Rails.application.routes.url_helpers; include UriMethods; end.new }
-  let(:t_object) { TestObject.new("test", true) }
-  let(:representer) { Api::TestObjectRepresenter.new(t_object) }
+  let(:helper) do
+    class TestUriMethods
+      include Rails.application.routes.url_helpers
+      include UriMethods
+    end.new
+  end
 
+  let(:t_object) { TestObject.new("test", true) }
+
+  let(:representer) { Api::TestObjectRepresenter.new(t_object) }
 
   it 'gets the path for url to represented' do
     representer.prx_model_web_path(t_object).must_equal 'test_objects/1'
   end
 
   it 'helps an object become the represented base class' do
-    class FooParent; end
+    class FooParent
+    end
     class FooChild < FooParent
-      def self.base_class; FooParent; end
-      def becomes(klass); 'became'; end
+      def self.base_class
+        FooParent
+      end
+
+      def becomes(_klass)
+        'became'
+      end
     end
     representer.becomes_represented_class(FooChild.new).must_equal 'became'
   end
