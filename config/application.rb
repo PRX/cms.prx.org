@@ -53,7 +53,10 @@ module PRX
 
     config.active_record.raise_in_transactional_callbacks = true
 
-    config.action_mailer.default_url_options = { host: ENV['PRX_HOST'], protocol: 'https' }
-    Rails.application.routes.default_url_options = { host: ENV['CMS_HOST'], protocol: 'https' }
+    prx_url_options = { host: ENV['PRX_HOST'], protocol: 'https' }
+    config.action_mailer.default_url_options = prx_url_options
+
+    cms_url_options = { host: ENV['CMS_HOST'], protocol: 'https' }
+    Rails.application.routes.default_url_options = cms_url_options
   end
 end
