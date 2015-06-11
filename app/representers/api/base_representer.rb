@@ -12,7 +12,11 @@ class Api::BaseRepresenter < Roar::Decorator
   include LinkSerialize
 
   curies(:prx) do
-    [{ name: :prx, href: "http://#{prx_meta_host}/relation/{rel}", templated: true }]
+    [{
+      name: :prx,
+      href: "http://#{prx_meta_host}/relation/{rel}",
+      templated: true
+    }]
   end
 
   self_link
