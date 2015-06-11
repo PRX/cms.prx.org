@@ -7,18 +7,17 @@ module UriMethods
   extend ActiveSupport::Concern
 
   module ClassMethods
-
     def self_link
       link(:self) do
         {
           href: self_url(represented),
-          profile: prx_model_uri(represented)
+          profile: profile_url(represented)
         }
       end
     end
 
     def profile_link
-      link(:profile) { prx_model_uri(represented) }
+      link(:profile) { profile_url(represented) }
     end
 
     def alternate_link
@@ -44,6 +43,10 @@ module UriMethods
   def self_url(represented)
     rep = becomes_represented_class(represented)
     polymorphic_path([:api, rep])
+  end
+
+  def profile_url(represented)
+    prx_model_uri(represented)
   end
 
   def becomes_represented_class(rep)
@@ -99,13 +102,20 @@ module UriMethods
     if method_name.to_s.ends_with?('_path_template')
       original_method_name = method_name[0..-10]
       template_named_path(original_method_name, *args)
+    else
+      super(method_name, *args, &block)
     end
   end
 
   def template_named_path(named_path, options)
-    replace_options = options.keys.inject({}){|s,k| s[k] = "_#{k.upcase}_REPLACE_"; s}
-    path = self.send(named_path, replace_options)
-    replace_options.keys.each{|k| path.gsub!(replace_options[k], (options[k] || ''))}
+    replace_options = options.keys.inject({}) do |s, k|
+      s[k] = "_#{k.upcase}_REPLACE_"
+      s
+    end
+    path = send(named_path, replace_options)
+    replace_options.keys.each do |k|
+      path.gsub!(replace_options[k], (options[k] || ''))
+    end
     path
   end
 end
