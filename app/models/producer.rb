@@ -10,5 +10,4 @@ class Producer < BaseModel
   def full_name
     user.try(:name) || name
   end
-
 end
