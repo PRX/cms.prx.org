@@ -9,6 +9,8 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   property :short_name
   property :description
 
+  alternate_link
+
   link :address do
     api_account_address_path(represented.id) if represented.id
   end

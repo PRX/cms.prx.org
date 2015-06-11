@@ -6,6 +6,7 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
   property :title
   property :short_description
 
+  alternate_link
 
   link :stories do
     {

@@ -27,8 +27,6 @@ PRX::Application.configure do
   # Raise an error on page load if there are pending migrations
   config.active_record.migration_error = :page_load
 
-  config.action_mailer.default_url_options = { host: 'prx-backend.dev', protocol: 'http' }
-  Rails.application.routes.default_url_options = { host: 'prx-backend.dev', protocol: 'http' }
   PrxAuth::Rails.middleware = false
   config.middleware.insert_before 'ActionDispatch::ParamsParser', 'Rack::PrxAuth', cert_location: 'http://id.prx.dev/api/v1/certs', issuer: 'id.prx.dev'
 end

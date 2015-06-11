@@ -36,16 +36,18 @@ PRX::Application.routes.draw do
       resources :accounts do
         resource :address, except: [:new, :edit]
         resource :account_image, path: 'image', except: [:new, :edit]
-        resources :memberships, except: [:new, :edit]
+        resources :memberships, only: [:index]
         resources :series, except: [:new, :edit]
         resources :stories, only: [:index, :post]
       end
 
       resources :users do
         resource :user_image, path: 'image', except: [:new, :edit]
-        resources :memberships, except: [:new, :edit]
+        resources :memberships, only: [:index]
         resources :accounts, only: [:index]
       end
+
+      resources :memberships, except: [:new, :edit]
 
       resources :pick_lists do
         resources :picks

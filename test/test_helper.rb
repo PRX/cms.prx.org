@@ -1,4 +1,8 @@
-ENV["RAILS_ENV"] = "test"
+ENV['RAILS_ENV'] = 'test'
+
+ENV['PRX_HOST'] = 'www.prx.org'
+ENV['CMS_HOST'] = 'cms.prx.org'
+ENV['META_HOST'] = 'meta.prx.org'
 
 require 'simplecov' if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
 
