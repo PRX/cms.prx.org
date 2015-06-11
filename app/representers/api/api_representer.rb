@@ -4,7 +4,9 @@ class Api::ApiRepresenter < Api::BaseRepresenter
 
   property :version
 
-  link(:self) { api_root_path(represented.version) }
+  def self_url(represented)
+    api_root_path(represented.version)
+  end
 
   links :story do
     [
