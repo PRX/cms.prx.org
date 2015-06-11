@@ -6,12 +6,12 @@ require 'test_models'
 
 describe Api::PagedCollectionRepresenter do
 
-  let(:items)            { (0..25).collect{|t| TestObject.new("test #{t}", true) } }
-  let(:paged_items)      { Kaminari.paginate_array(items).page(1).per(10) }
-  let(:request)          { OpenStruct.new(params: {"page"=>"1", "action"=>"index", "api_version"=>"v1", "controller"=>"api/test_objects", "format"=>"json"}) }
+  let(:items) { (0..25).collect{|t| TestObject.new("test #{t}", true) } }
+  let(:paged_items) { Kaminari.paginate_array(items).page(1).per(10) }
+  let(:request) { OpenStruct.new(params: {"page"=>"1", "action"=>"index", "api_version"=>"v1", "controller"=>"api/test_objects", "format"=>"json"}) }
   let(:paged_collection) { PagedCollection.new(paged_items, request, is_root_resource: true) }
-  let(:representer)      { Api::PagedCollectionRepresenter.new(paged_collection) }
-  let(:json)             { JSON.parse(representer.to_json) }
+  let(:representer) { Api::PagedCollectionRepresenter.new(paged_collection) }
+  let(:json) { JSON.parse(representer.to_json) }
 
   it 'creates a paged collection representer' do
     representer.wont_be_nil
@@ -38,7 +38,7 @@ describe Api::PagedCollectionRepresenter do
     representer.href_url_helper({foo: 1, bar: 2, camp: 3}).must_equal "this is a test"
   end
 
-  describe "requires routes" do
+  describe 'requires routes' do
     before { define_routes }
 
     after { Rails.application.reload_routes! }
