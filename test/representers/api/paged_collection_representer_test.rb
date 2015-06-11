@@ -17,11 +17,6 @@ describe Api::PagedCollectionRepresenter do
     representer.wont_be_nil
   end
 
-  it 'paged collection contains tests _links' do
-    json['_embedded']['prx:items'].wont_be_nil
-    json['_embedded']['prx:items'].size.must_equal 10
-  end
-
   it 'has a represented_url' do
     representer.represented.options[:url] = "api_stories_path"
     representer.represented_url.must_equal "api_stories_path"
@@ -30,15 +25,6 @@ describe Api::PagedCollectionRepresenter do
   it 'gets a route url helper method' do
     representer.represented.options[:url] = "api_stories_path"
     representer.href_url_helper({page: 1}).must_equal "/api/v1/stories?page=1"
-  end
-
-  # TODO Find out why this is broken
-  it 'gets a route url helper method with parent' do
-    define_routes
-    representer.represented.options[:parent] = TestParent.new(1, true)
-    representer.represented.options[:item_class] = TestObject
-    representer.href_url_helper({page: 1}).must_equal "/api/test_parents/1/test_objects?page=1"
-    Rails.application.reload_routes!
   end
 
   it 'uses a lambda for a url method' do
@@ -50,5 +36,24 @@ describe Api::PagedCollectionRepresenter do
     representer.represented.options[:parent] = "this is a test"
     representer.represented.options[:url] = ->(options){ represented.parent }
     representer.href_url_helper({foo: 1, bar: 2, camp: 3}).must_equal "this is a test"
+  end
+
+  describe "requires routes" do
+    before { define_routes }
+
+    after { Rails.application.reload_routes! }
+
+    it 'paged collection contains tests _links' do
+      json['_embedded']['prx:items'].wont_be_nil
+      json['_embedded']['prx:items'].size.must_equal 10
+    end
+
+    it 'gets a route url helper method with parent' do
+      representer.represented.options[:parent] = TestParent.new(1, true)
+      representer.represented.options[:item_class] = TestObject
+
+      nested_page = '/api/test_parents/1/test_objects?page=1'
+      representer.href_url_helper(page: 1).must_equal nested_page
+    end
   end
 end

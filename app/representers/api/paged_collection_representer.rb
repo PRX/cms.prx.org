@@ -5,12 +5,6 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
   property :count
   property :total
 
-  link :self do
-    {
-      href:    href_url_helper(params),
-      profile: prx_model_uri(:collection, represented.item_class)
-    }
-  end
   embeds :items, decorator: lambda{|*| item_decorator }, class: lambda{|*| item_class }, zoom: :always
 
   link :prev do
@@ -31,6 +25,14 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
 
   def params
     represented.params
+  end
+
+  def self_url(represented)
+    href_url_helper(represented.params)
+  end
+
+  def profile_url(represented)
+    prx_model_uri(:collection, represented.item_class)
   end
 
   # refactor to use single property, :url, that can be a method name, a string, or a lambda
