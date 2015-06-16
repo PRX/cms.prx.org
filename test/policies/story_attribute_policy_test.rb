@@ -3,7 +3,7 @@ require 'test_helper'
 describe StoryAttributePolicy do
   describe '#update?' do
     let(:member_token) { StubToken.new(story.account_id, ['member']) }
-    let(:non_member_token) { StubToken.new(story.account_id + 1, ['no'])}
+    let(:n_m_token) { StubToken.new(story.account_id + 1, ['no']) }
     let(:story) { build_stubbed(:story) }
     let(:musical_work) { build_stubbed(:musical_work, story: story) }
 
@@ -16,7 +16,7 @@ describe StoryAttributePolicy do
     end
 
     it 'returns false if user is not a member of story account' do
-      StoryAttributePolicy.new(non_member_token, musical_work).wont_allow :update?
+      StoryAttributePolicy.new(n_m_token, musical_work).wont_allow :update?
     end
   end
 end

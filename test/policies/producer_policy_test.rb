@@ -3,7 +3,7 @@ require 'test_helper'
 describe ProducerPolicy do
   let(:producer_token) { StubToken.new(story.account_id + 1, ['member']) }
   let(:member_token) { StubToken.new(story.account_id, ['member']) }
-  let(:non_member_token) { StubToken.new(story.account_id + 1, ['no'])}
+  let(:non_member_token) { StubToken.new(story.account_id + 1, ['no']) }
   let(:producer) { build_stubbed(:producer_with_user_and_story, user: user, story: story) }
   let(:story) { build_stubbed(:story, account: account) }
   let(:account) { build_stubbed(:account) }
