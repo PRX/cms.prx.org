@@ -21,4 +21,11 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
       type: 'audio/mpeg'
     } if represented.id
   end
+
+  link :original do
+    {
+      href: original_api_audio_file_path(represented),
+      type: represented.content_type
+    } if represented.id
+  end
 end
