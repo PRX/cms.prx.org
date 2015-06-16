@@ -24,6 +24,16 @@ describe PagedCollection do
     paged_collection.total.must_equal 26
   end
 
+  it 'implements to_model' do
+    paged_collection = PagedCollection.new([])
+    paged_collection.to_model.must_equal paged_collection
+  end
+
+  it 'is never persisted' do
+    paged_collection = PagedCollection.new([])
+    paged_collection.wont_be :persisted?
+  end
+
   it 'has a stubbed request by default' do
     paged_collection = PagedCollection.new([])
     paged_collection.params.must_equal Hash.new
