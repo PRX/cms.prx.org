@@ -116,6 +116,6 @@ class AudioFile < BaseModel
   end
 
   def self.policy_class
-    AccountablePolicy
+    AudioFilePolicy
   end
 end
