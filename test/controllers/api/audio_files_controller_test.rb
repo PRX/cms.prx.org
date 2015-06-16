@@ -49,4 +49,20 @@ describe Api::AudioFilesController do
     get :index, api_request_opts(story_id: story.id)
     assert_response :success
   end
+
+  describe '#original' do
+
+    before { @controller.current_user = user }
+
+    it 'should fail to get original when not authorized' do
+      @controller.current_user = nil
+      get :original, api_request_opts(id: audio_file.id)
+      assert_response 401
+    end
+
+    it 'should redirect to download url' do
+      get :original, api_request_opts(id: audio_file.id)
+      assert_response :redirect
+    end
+  end
 end
