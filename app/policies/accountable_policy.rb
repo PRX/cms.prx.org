@@ -4,7 +4,7 @@ class AccountablePolicy < ApplicationPolicy
   end
 
   def update?
-    user && user.approved_accounts.include?(record.account)
+    token && token.authorized?(resource.account.id)
   end
 
   def destroy?

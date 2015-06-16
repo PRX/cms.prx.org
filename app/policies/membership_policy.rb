@@ -1,15 +1,13 @@
 class MembershipPolicy < ApplicationPolicy
-  alias_method :membership, :record
-
   def create?
-    update? || (user == membership.user && !membership.approved?)
+    update? || (token.user_id == resource.user.id && !resource.approved?)
   end
 
   def update?
-    user && user.role_for(membership.account) == 'admin'
+    token && token.authorized?(resource.account.id, :admin)
   end
 
   def destroy?
-    user == membership.user || user.role_for(membership.account) == 'admin'
+    token.user_id == resource.user.id || update?
   end
 end

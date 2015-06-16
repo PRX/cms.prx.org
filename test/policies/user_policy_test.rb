@@ -1,16 +1,17 @@
 require 'test_helper'
 
 describe UserPolicy do
-  let(:user1) { build_stubbed(:user) }
-  let(:user2) { build_stubbed(:user) }
+  let(:user_token) { StubToken.new(123, ['member']) }
+  let(:other_token) { StubToken.new(123, ['member']) }
+  let(:user) { build_stubbed(:user, id: user_token.user_id) }
 
   describe '#update?' do
     it 'lets users update themselves' do
-      UserPolicy.new(user1, user1).must_allow :update?
+      UserPolicy.new(user_token, user).must_allow :update?
     end
 
     it 'does not let users update each other' do
-      UserPolicy.new(user1, user2).wont_allow :update?
+      UserPolicy.new(other_token, user).wont_allow :update?
     end
   end
 end
