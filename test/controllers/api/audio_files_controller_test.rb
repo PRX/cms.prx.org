@@ -54,11 +54,15 @@ describe Api::AudioFilesController do
   end
 
   describe '#original' do
+    let(:token) { StubToken.new(account.id, ['member']) }
 
-    before { @controller.current_user = user }
+    before(:each) do
+      class << @controller; attr_accessor :prx_auth_token; end
+      @controller.prx_auth_token = token
+    end
 
     it 'should fail to get original when not authorized' do
-      @controller.current_user = nil
+      @controller.prx_auth_token = nil
       get :original, api_request_opts(id: audio_file.id)
       assert_response 401
     end
