@@ -54,7 +54,8 @@ describe Api::AudioFilesController do
   end
 
   describe '#original' do
-    let(:token) { StubToken.new(account.id, ['member']) }
+    let(:bad_token) { StubToken.new(account.id, ['member']) }
+    let(:token) { StubToken.new(account.id, ['member', 'read-private']) }
 
     before(:each) do
       class << @controller; attr_accessor :prx_auth_token; end
@@ -67,7 +68,14 @@ describe Api::AudioFilesController do
       assert_response 401
     end
 
+    it 'should fail to get original when token not authorized' do
+      @controller.prx_auth_token = bad_token
+      get :original, api_request_opts(id: audio_file.id)
+      assert_response 401
+    end
+
     it 'should redirect to download url' do
+      @controller.prx_auth_token = token
       get :original, api_request_opts(id: audio_file.id)
       assert_response :redirect
     end
