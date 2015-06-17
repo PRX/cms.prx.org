@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Api::BaseController < ApplicationController
+  include Pundit
 
   protect_from_forgery with: :null_session
 
@@ -32,9 +33,13 @@ class Api::BaseController < ApplicationController
     head :no_content
   end
 
+  def pundit_user
+    prx_auth_token
+  end
+
   def current_user
     @current_user ||= if prx_auth_token
-      User.find_by(id: prx_auth_token.user_id)
+      User.find(prx_auth_token.user_id)
     end
   end
 
