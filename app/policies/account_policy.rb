@@ -1,15 +1,13 @@
 class AccountPolicy < ApplicationPolicy
-  alias_method :account, :record
-
   def create?
-    user.present?
+    token.present?
   end
 
   def update?
-    user && user.approved_accounts.include?(account)
+    token && token.authorized?(resource.id)
   end
 
   def destroy?
-    user && user.role_for(account) == 'admin'
+    token && token.authorized?(resource.id, :admin)
   end
 end

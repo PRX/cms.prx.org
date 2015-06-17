@@ -53,3 +53,16 @@ Minitest::Expectations.infect_an_assertion :refute_operator, :wont_allow, :rever
 
 include Announce::Testing
 reset_announce
+
+StubToken = Struct.new(:resource, :scopes, :user_id)
+class StubToken
+  @@user_id = 0
+
+  def initialize(res, scopes)
+    super(res.to_s, scopes, @@user_id += 1)
+  end
+
+  def authorized?(r, s = nil)
+    resource == r.to_s && (s.nil? || scopes.include?(s.to_s))
+  end
+end

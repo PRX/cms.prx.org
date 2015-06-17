@@ -5,6 +5,7 @@ gem 'rails', '~> 4.2.1'
 
 # JWS
 gem 'prx_auth-rails', '~> 0.0.4'
+gem 'rack-prx_auth', '~> 0.0.7'
 
 ## Model
 # Use mysql as the database for Active Record

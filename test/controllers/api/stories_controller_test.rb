@@ -9,10 +9,13 @@ describe Api::StoriesController do
 
   describe 'editing' do
 
-    let(:user) { create(:user) }
-    let(:account) { user.approved_accounts.first }
+    let(:account) { create(:account) }
+    let(:token) { StubToken.new(account.id, ['member']) }
 
-    before { @controller.current_user = user }
+    before(:each) do
+      class << @controller; attr_accessor :prx_auth_token; end
+      @controller.prx_auth_token = token
+    end
 
     it 'can create a new story' do
       story_hash = { title: 'create story', set_account_uri: "/api/v1/accounts/#{account.id}" }

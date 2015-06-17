@@ -1,14 +1,17 @@
 require 'test_helper'
 
 describe Api::AudioFilesController do
-  let(:user) { create(:user) }
-  let(:story) { create(:story, account: user.approved_accounts.first) }
-  let(:audio_file) { create(:audio_file, story: story) }
+  let(:account) { create(:account) }
+  let(:token) { StubToken.new(account.id, ['member']) }
+  let(:story) { create(:story, account: account) }
+  let(:audio_file) { create(:audio_file, story: story, account: account) }
+
+  before(:each) do
+    class << @controller; attr_accessor :prx_auth_token; end
+    @controller.prx_auth_token = token
+  end
 
   describe '#create' do
-
-    before { @controller.current_user = user }
-
     it 'can create an audio file for an account' do
       af_hash = {
         size: 1024,

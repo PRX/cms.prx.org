@@ -224,7 +224,7 @@ GEM
     ipaddress (0.8.0)
     jmespath (1.0.2)
       multi_json (~> 1.0)
-    json (1.8.2)
+    json (1.8.3)
     json-jwt (0.8.1)
       activesupport
       bindata
@@ -246,7 +246,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.5)
     mini_portile (0.6.2)
-    minitest (5.6.1)
+    minitest (5.7.0)
     minitest-reporters (1.0.14)
       ansi
       builder
@@ -255,7 +255,7 @@ GEM
     minitest-spec-rails (5.2.0)
       minitest (~> 5.0)
       rails (~> 4.1)
-    multi_json (1.11.0)
+    multi_json (1.11.1)
     mysql2 (0.3.18)
     nenv (0.2.0)
     net-scp (1.2.1)
@@ -281,9 +281,9 @@ GEM
       activesupport (>= 3.0.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
-    rack (1.6.0)
+    rack (1.6.1)
     rack-cors (0.4.0)
-    rack-prx_auth (0.0.6)
+    rack-prx_auth (0.0.7)
       json (~> 1.8, >= 1.8.1)
       json-jwt (~> 0.7, >= 0.7.0)
       rack (~> 1.5, >= 1.5.2)
@@ -426,6 +426,7 @@ DEPENDENCIES
   pundit
   quiet_assets
   rack-cors
+  rack-prx_auth (~> 0.0.7)
   rails (~> 4.2.1)
   rake
   responders (~> 2.0)
