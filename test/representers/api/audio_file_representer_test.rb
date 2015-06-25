@@ -23,4 +23,7 @@ describe Api::AudioFileRepresenter do
     end
   end
 
+  it 'links to the original' do
+    json['_links']['original']['href'].must_match /#{audio_file.id}\/original/
+  end
 end

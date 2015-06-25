@@ -6,7 +6,10 @@ PRX::Application.routes.draw do
       root to: 'base#entrypoint'
       match '*any', via: [:options], to: 'base#options'
 
-      resources :audio_files
+      resources :audio_files do
+        get 'original', on: :member
+      end
+
       resources :account_images, only: [:show, :index]
       resources :series_images, only: [:show, :index]
       resources :story_images, only: [:show, :index]

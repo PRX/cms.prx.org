@@ -24,6 +24,7 @@ require 'minitest/reporters'
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'minitest/pride'
+require 'announce'
 require 'announce/testing'
 
 # To add Capybara feature tests add `gem "minitest-rails-capybara"`

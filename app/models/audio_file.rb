@@ -114,8 +114,4 @@ class AudioFile < BaseModel
   def final_location?
     [VALID, COMPLETE, TRANSFORMING, TRANSFORM_FAILED, TRANSFORMED].include? status
   end
-
-  def self.policy_class
-    AccountablePolicy
-  end
 end

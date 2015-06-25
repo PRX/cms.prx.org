@@ -6,6 +6,11 @@ class Api::AudioFilesController < Api::BaseController
 
   filter_resources_by :audio_version_id
 
+  def original
+    authorize show_resource
+    redirect_to show_resource.asset_url
+  end
+
   # if the audio version is not set, and story is, set default av
   def create_resource
     super.tap do |af|
