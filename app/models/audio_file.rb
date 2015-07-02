@@ -39,19 +39,31 @@ class AudioFile < BaseModel
   # `upload` can be any of the protocols of url used by fixer
   # http(s), ftp, s3, ia...
   def asset_url(options = {})
-    v = options[:version]
-    v = nil if (v.blank? || v.to_s == 'original')
-    final_location? ? file.try(:url, *v) : upload_url
+    final_location? ? final_url(options) : upload_url(options)
   end
 
-  def upload_url
+  def final_url(options)
+    f = file
+
+    if AudioFileUploader.version_formats.keys.include?(options[:version].to_s)
+      f = file.try(options[:version])
+    end
+
+    if options.key?(:expiration) && options[:expiration].to_i > 0
+      f.fog_authenticated_url_expiration = options[:expiration].to_i
+    end
+
+    f.url
+  end
+
+  def upload_url(options = {})
     uri = URI.parse(upload)
     if uri.scheme.starts_with?('http')
       upload
     elsif uri.scheme.starts_with?('ftp')
       nil
     elsif AudioFile.storage_providers[uri.scheme.to_s]
-      signed_url(upload)
+      signed_url(upload, options)
     end
   end
 
