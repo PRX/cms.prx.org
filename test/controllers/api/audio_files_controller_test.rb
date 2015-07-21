@@ -34,6 +34,19 @@ describe Api::AudioFilesController do
       post :create, af_hash.to_json, api_request_opts(story_id: story.id)
       assert_response :success
     end
+
+    it 'can create an audio file for an account with the route' do
+      af_hash = {
+        size: 1024,
+        duration: 212,
+        upload: 'http://thisisatest.com/guid1/test.mp3'
+      }
+      @request.env['CONTENT_TYPE'] = 'application/json'
+      post :create, af_hash.to_json, api_request_opts(account_id: story.account.id)
+      assert_response :success
+
+      AudioFile.find(JSON.parse(response.body)['id']).account_id.must_equal story.account.id
+    end
   end
 
   it 'should show' do

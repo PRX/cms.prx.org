@@ -4,7 +4,7 @@ class Api::AudioFilesController < Api::BaseController
 
   api_versions :v1
 
-  filter_resources_by :audio_version_id
+  filter_resources_by :audio_version_id, :account_id
 
   def original
     authorize show_resource
