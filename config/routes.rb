@@ -42,6 +42,7 @@ PRX::Application.routes.draw do
         resources :memberships, only: [:index]
         resources :series, except: [:new, :edit]
         resources :stories, only: [:index, :post]
+        resources :audio_files, only: [:create]
       end
 
       resources :users do
