@@ -8,7 +8,11 @@ class Api::AudioFilesController < Api::BaseController
 
   def original
     authorize show_resource
-    redirect_to show_resource.asset_url
+    redirect_to show_resource.asset_url(original_params)
+  end
+
+  def original_params
+    params.permit(:expiration)
   end
 
   # if the audio version is not set, and story is, set default av

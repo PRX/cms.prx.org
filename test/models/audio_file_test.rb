@@ -39,6 +39,12 @@ describe AudioFile do
     asset_url.must_match /X-Amz-Credential/
   end
 
+  it 'can set expiration on asset_url from an upload' do
+    audio_file_uploaded.upload = 's3://prx-development/another.mp3'
+    one_day_url = audio_file_uploaded.asset_url(expiration: 3600)
+    one_day_url.must_match /X-Amz-Expires=3600/
+  end
+
   it 'can get a provider for a url scheme' do
     AudioFile.storage_providers['s3'].must_equal 'AWS'
   end

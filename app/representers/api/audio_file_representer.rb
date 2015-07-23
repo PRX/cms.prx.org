@@ -24,7 +24,8 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
 
   link :original do
     {
-      href: original_api_audio_file_path(represented),
+      href: "#{original_api_audio_file_path(represented)}{?expiration}",
+      templated: true,
       type: represented.content_type
     } if represented.id
   end
