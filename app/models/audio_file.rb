@@ -111,7 +111,7 @@ class AudioFile < BaseModel
 
   def url_expires_at(options)
     ::Fog::Time.now + (options.delete(:expiration) ||
-    AudioFileUploader.fog_authenticated_url_expiration)
+    AudioFileUploader.fog_authenticated_url_expiration).to_i
   end
 
   def public_asset_filename
