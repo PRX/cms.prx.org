@@ -39,4 +39,10 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
     }
   end
   embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter, zoom: false
+
+  link :audio_files do
+    {
+      href: api_account_audio_files_path(represented)
+    }
+  end
 end
