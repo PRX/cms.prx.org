@@ -43,7 +43,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
 
   link :series do
     {
-      href: "#{api_account_series_path(represented)}{?page,per,zoom,filters}",
+      href: "#{api_account_series_index_path(represented)}{?page,per,zoom,filters}",
       templated: true,
       count: represented.series.count
     } if represented.id

@@ -42,7 +42,7 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
 
   link :series do
     {
-      href: "#{api_account_series_path(represented)}{?filters}",
+      href: "#{api_account_series_index_path(represented)}{?filters}",
       templated: true
     }
   end
