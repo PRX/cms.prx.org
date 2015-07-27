@@ -39,4 +39,12 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
     }
   end
   embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter, zoom: false
+
+  link :series do
+    {
+      href: "#{api_account_series_path(represented)}{?filters}",
+      templated: true
+    }
+  end
+  embed :series, paged: true, item_class: Series, item_decorator: Api::Min::SeriesRepresenter, zoom: false
 end
