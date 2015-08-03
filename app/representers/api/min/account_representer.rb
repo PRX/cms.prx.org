@@ -34,7 +34,7 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
 
   link :stories do
     {
-      href: "#{api_account_stories_path(represented)}{?filters}",
+      href: "#{api_account_stories_path(represented)}{?page,per,zoom,filters}",
       templated: true
     }
   end
@@ -42,7 +42,7 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
 
   link :series do
     {
-      href: "#{api_account_series_index_path(represented)}{?filters}",
+      href: "#{api_account_series_index_path(represented)}{?page,per,zoom,filters}",
       templated: true
     }
   end
