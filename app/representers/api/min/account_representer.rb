@@ -47,4 +47,10 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
     }
   end
   embed :series, paged: true, item_class: Series, item_decorator: Api::Min::SeriesRepresenter, zoom: false
+
+  link :audio_files do
+    {
+      href: api_account_audio_files_path(represented)
+    }
+  end
 end
