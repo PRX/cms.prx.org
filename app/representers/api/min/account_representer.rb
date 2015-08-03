@@ -34,11 +34,19 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
 
   link :stories do
     {
-      href: "#{api_account_stories_path(represented)}{?filters}",
+      href: "#{api_account_stories_path(represented)}{?page,per,zoom,filters}",
       templated: true
     }
   end
   embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter, zoom: false
+
+  link :series do
+    {
+      href: "#{api_account_series_index_path(represented)}{?page,per,zoom,filters}",
+      templated: true
+    }
+  end
+  embed :series, paged: true, item_class: Series, item_decorator: Api::Min::SeriesRepresenter, zoom: false
 
   link :audio_files do
     {
