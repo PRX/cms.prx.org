@@ -31,9 +31,14 @@ These instructions are written assuming Mac OS X install.
 ```
 # Homebrew - http://brew.sh/
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+brew update
 
 # Git - http://git-scm.com/
 brew install git
+
+# Mysql (and run the server somehow) - https://www.mysql.com/
+brew install mysql
+mysql.server start
 
 # Pow to serve the app - http://pow.cx/
 curl get.pow.cx | sh
@@ -41,8 +46,6 @@ curl get.pow.cx | sh
 
 ### Ruby & Related Projects
 ```
-brew update
-
 # rbenv and ruby-build - https://github.com/sstephenson/rbenv
 brew install rbenv ruby-build
 echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
@@ -50,10 +53,13 @@ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
 source ~/.bash_profile
 
 # ruby (.ruby-version default)
-rbenv install
+rbenv install 2.1.2
 
 # bundler gem - http://bundler.io/
-gem install bundler powder
+gem install bundler
+
+# powder gem - https://github.com/Rodreegez/powder
+gem install powder
 ```
 
 ### Rails Project
@@ -66,26 +72,44 @@ cd cms.prx.org
 # bundle to install gems dependencies
 bundle install
 
-# copy the config
-cp config/application.yml.example config/application.yml
-
 # copy the env-example, fill out the values
 cp env-example .env
+vi .env
+```
 
-# create test database
-mysqladmin create prx_test
+### Database bootstrapping
 
-# run tests
-bundle exec rake
+This project uses the [prx.org](https://github.com/PRX/prx.org) database.  So you'll need to get a backup of it to restore to your local development/test databases.  (See the instructions at the end of the prx.org README).
 
-# pow set-up
+```
+# create dev/test databases
+mysql -u root -e "CREATE DATABASE cms_prx_org_development;"
+mysql -u root -e "CREATE DATABASE cms_prx_org_test;"
+
+# optionally restrict to user (must also be in .env file)
+mysql -u root -e "CREATE USER 'cms_prx_user'@'localhost' IDENTIFIED BY 'somepassword'";
+mysql -u root -e "GRANT ALL PRIVILEGES ON cms_prx_org_development.* TO 'cms_prx_user'@'localhost';"
+mysql -u root -e "GRANT ALL PRIVILEGES ON cms_prx_org_test.* TO 'cms_prx_user'@'localhost';"
+
+# load schemas from backup
+gunzip < 20150101_mediajoint_production_structure.gz | mysql -u root cms_prx_org_development
+gunzip < 20150101_mediajoint_production_structure.gz | mysql -u root cms_prx_org_test
+
+# load data from backup (NOT needed for the test db)
+gunzip < 20150101_mediajoint_production_data.gz | mysql -u root cms_prx_org_development
+```
+
+### Testing
+
+After bootstrapping the prx.org schema into the test database, just run `bundle exec rake`.  Bingo!
+
+### Development server
+
+The dev server runs through powder - see a [full list of commands](https://github.com/Rodreegez/powder#working-with-pow) over there.
+
+```
 powder link
-
-# see the development status page
 open http://cms.prx.dev
-
-# see the api root json doc
-open http://cms.prx.dev/api
 ```
 
 License
