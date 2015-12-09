@@ -25,5 +25,6 @@ test:
   encoding: utf8
   database: <%= ENV['TEST_DATABASE'] %>
   pool: 5
-  username: <%= ENV['TRAVIS'] ? 'travis' : 'root' %>
+  username: <%= ENV['TRAVIS'] ? 'travis' : ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
   host: 127.0.0.1
