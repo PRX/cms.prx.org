@@ -45,7 +45,7 @@ module PRX
 
       allow do
         origins '*'
-        resource '/api/*', methods: [:get]
+        resource '/api/*', methods: [:get], headers: :any
       end
     end
 
