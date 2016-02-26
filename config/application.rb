@@ -39,7 +39,7 @@ module PRX
 
     config.middleware.insert_after Rails::Rack::Logger, Rack::Cors do
       allow do
-        origins /.*\.prx\.(?:org|dev)$/
+        origins /.*\.prx\.(?:org|dev|tech)$/
         resource '/api/*', methods: [:get, :put, :post, :options], headers: :any
       end
 
