@@ -33,7 +33,7 @@ PRX::Application.routes.draw do
 
       resources :series, except: [:new, :edit] do
         resources :series_images, path: 'images', except: [:new, :edit]
-        resources :stories, only: [:index, :post]
+        resources :stories, only: [:index, :create]
       end
 
       resources :accounts do
@@ -41,7 +41,7 @@ PRX::Application.routes.draw do
         resource :account_image, path: 'image', except: [:new, :edit]
         resources :memberships, only: [:index]
         resources :series, except: [:new, :edit]
-        resources :stories, only: [:index, :post]
+        resources :stories, only: [:index, :create]
         resources :audio_files, only: [:create]
       end
 
