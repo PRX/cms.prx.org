@@ -42,6 +42,8 @@ module HalActions::Actions
   def index_options
     valid_params_for_action(:index).tap do |options|
       options[:_keys] = options.keys
+      # TODO: this isn't great
+      options[:represent_with] = Api::PagedCollectionRepresenter
     end
   end
 
