@@ -20,6 +20,13 @@ describe User do
   end
 
   it 'has a list of accounts' do
-    user.accounts.must_equal [user.individual_account]
+    user.accounts.must_include user.individual_account
   end
+
+  it 'has a list of stories for approved accounts' do
+    start_count = user.individual_account.all_stories.count
+    create(:account, user: user, stories_count: 2)
+    user.approved_account_stories.count.must_equal start_count + 2
+  end
+
 end

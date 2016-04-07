@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'hal_actions'
+require 'test_helper'
 
 describe HalActions do
 
@@ -73,6 +73,13 @@ describe HalActions do
       lambda do
         controller.create
       end.must_raise HalActions::Errors::UnsupportedMediaType
+    end
+
+    it 'handles not found errors' do
+      raises_exception = -> { raise ActiveRecord::RecordNotFound.new }
+      controller.stub :resource, raises_exception do
+        assert_raises(HalActions::Errors::NotFound) { controller.show }
+      end
     end
   end
 
