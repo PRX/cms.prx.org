@@ -253,6 +253,8 @@ GEM
     mime-types (2.6.1)
     mini_portile (0.6.2)
     minitest (5.7.0)
+    minitest-around (0.3.2)
+      minitest (~> 5.0)
     minitest-reporters (1.0.19)
       ansi
       builder
@@ -420,6 +422,7 @@ DEPENDENCIES
   guard-minitest
   highline
   kaminari
+  minitest-around
   minitest-reporters
   minitest-spec-rails
   mysql2
@@ -445,3 +448,6 @@ DEPENDENCIES
   spring
   unf
   web-console (~> 2.0)
+
+BUNDLED WITH
+   1.10.6
