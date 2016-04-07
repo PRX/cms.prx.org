@@ -49,6 +49,8 @@ class Api::BaseController < ApplicationController
     @current_user ||= if prx_auth_token
       User.find(prx_auth_token.user_id)
     end
+  rescue ActiveRecord::RecordNotFound
+    nil
   end
 
   def current_user=(user)

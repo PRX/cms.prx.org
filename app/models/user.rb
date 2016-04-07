@@ -32,4 +32,10 @@ class User < BaseModel
   def approved_active_accounts
     approved_accounts.active
   end
+
+  def approved_account_stories
+    Story.
+      joins('INNER JOIN `memberships` ON `memberships`.`account_id` = `pieces`.`account_id`').
+      where(['pieces.account_id = ? OR (memberships.user_id = ? and memberships.approved is true)', individual_account.id, id])
+  end
 end

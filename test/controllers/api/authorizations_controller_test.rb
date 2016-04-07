@@ -1,26 +1,27 @@
 require 'test_helper'
 
 describe Api::AuthorizationsController do
+
   let (:user) { create(:user) }
-  let (:token) do
-    OpenStruct.new.tap do |t|
-      t.user_id = user.id
+  let (:token) { OpenStruct.new.tap { |t| t.user_id = user.id } }
+
+  it 'shows the user with a valid token' do
+    @controller.stub(:prx_auth_token, token) do
+      get(:show, api_version: 'v1')
+      assert_response :success
     end
   end
 
-  describe 'with valid authorization header' do
-    it 'shows' do
-      @controller.stub(:prx_auth_token, token) do
-        get(:show, api_version: 'v1', format: 'json')
-        response.status.must_equal 200
-      end
-    end
-
-    it 'lists' do
-      @controller.stub(:prx_auth_token, token) do
-        get(:index, api_version: 'v1', format: 'json')
-        response.status.must_equal 200
-      end
+  it 'returns unauthorized with invalid token' do
+    @controller.stub(:prx_auth_token, OpenStruct.new) do
+      get(:show, api_version: 'v1')
+      assert_response :unauthorized
     end
   end
+
+  it 'returns unauthorized with no token' do
+    get(:show, api_version: 'v1')
+    assert_response :unauthorized
+  end
+
 end

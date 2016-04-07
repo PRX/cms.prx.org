@@ -8,6 +8,8 @@ class Api::AuthorizationsController < Api::BaseController
 
   represent_with Api::AuthorizationRepresenter
 
+  private
+
   def resource
     current_user
   end
