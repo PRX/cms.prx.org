@@ -1,7 +1,6 @@
 require 'test_helper'
 
 describe Api::Auth::AccountRepresenter do
-
   let(:account) { create(:account, stories_count: 2) }
   let(:representer) { Api::Auth::AccountRepresenter.new(account) }
   let(:json) { JSON.parse(representer.to_json) }
@@ -32,5 +31,4 @@ describe Api::Auth::AccountRepresenter do
     account.all_stories.count.must_equal 2
     get_embed('prx:stories', 'total').must_equal 2
   end
-
 end

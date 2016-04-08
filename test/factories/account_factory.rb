@@ -14,7 +14,9 @@ FactoryGirl.define do
 
     after(:create) do |account, evaluator|
       create_list(:story, evaluator.stories_count, account: account)
-      create(:membership, account: account, user: evaluator.user) if evaluator.user
+      if evaluator.user
+        create(:membership, account: account, user: evaluator.user)
+      end
     end
 
     factory :group_account, class: 'GroupAccount' do

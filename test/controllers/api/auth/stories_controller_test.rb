@@ -1,18 +1,17 @@
 require 'test_helper'
 
 describe Api::Auth::StoriesController do
-
   let (:user) { create(:user) }
   let (:token) { StubToken.new(account.id, ['member'], user.id) }
   let (:account) { user.individual_account }
   let (:unpublished_story) { account.all_stories.first }
   let (:random_story) { create(:story, published_at: nil) }
+
   before do
     unpublished_story.update!(published_at: nil)
   end
 
   describe 'with a valid token' do
-
     around do |test|
       @controller.stub(:prx_auth_token, token) { test.call }
     end
@@ -31,7 +30,8 @@ describe Api::Auth::StoriesController do
 
     it 'creates a story' do
       @request.env['CONTENT_TYPE'] = 'application/json'
-      post :create, {title: 'foobar'}.to_json, api_version: 'v1', account_id: account.id
+      json = { title: 'foobar' }.to_json
+      post :create, json, api_version: 'v1', account_id: account.id
       assert_response :success
       story = Story.find(JSON.parse(response.body)['id'])
       story.title.must_equal 'foobar'
@@ -41,7 +41,8 @@ describe Api::Auth::StoriesController do
 
     it 'updates an unpublished story' do
       @request.env['CONTENT_TYPE'] = 'application/json'
-      put :update, {title: 'foobar'}.to_json, api_version: 'v1', id: unpublished_story.id
+      json = { title: 'foobar' }.to_json
+      put :update, json, api_version: 'v1', id: unpublished_story.id
       assert_response :success
       Story.find(unpublished_story.id).title.must_equal('foobar')
     end
@@ -60,7 +61,8 @@ describe Api::Auth::StoriesController do
 
     it 'does not update unowned stories' do
       @request.env['CONTENT_TYPE'] = 'application/json'
-      put :update, {title: 'foobar'}.to_json, api_version: 'v1', id: random_story.id
+      json = { title: 'foobar' }.to_json
+      put :update, json, api_version: 'v1', id: random_story.id
       assert_response :no_content # TODO: see hal_actions.rb
     end
 
@@ -68,11 +70,9 @@ describe Api::Auth::StoriesController do
       delete :destroy, api_version: 'v1', id: random_story.id
       assert_response :no_content # TODO: see hal_actions.rb
     end
-
   end
 
   describe 'with no token' do
-
     it 'will not show you anything' do
       get(:show, api_version: 'v1', id: unpublished_story.id)
       assert_response :unauthorized
@@ -82,7 +82,5 @@ describe Api::Auth::StoriesController do
       get(:index, api_version: 'v1', account_id: account.id)
       assert_response :unauthorized
     end
-
   end
-
 end

@@ -3,7 +3,9 @@ require 'test_helper'
 describe Account do
 
   let(:account) { create(:account) }
-  let(:unpublished_story) { create(:story, account: account, published_at: nil) }
+  let(:unpublished_story) do
+    create(:story, account: account, published_at: nil)
+  end
 
   it 'has a table defined' do
     Account.table_name.must_equal 'accounts'

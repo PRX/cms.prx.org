@@ -28,5 +28,4 @@ describe User do
     create(:account, user: user, stories_count: 2)
     user.approved_account_stories.count.must_equal start_count + 2
   end
-
 end

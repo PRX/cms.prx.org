@@ -24,6 +24,5 @@ FactoryGirl.define do
         create_list(:group_account, evaluator.group_accounts, user: user)
       end
     end
-
   end
 end

@@ -1,7 +1,6 @@
 require 'test_helper'
 
 describe Api::Auth::AccountsController do
-
   let (:user) { create(:user_with_accounts, group_accounts: 2) }
   let (:token) { OpenStruct.new.tap { |t| t.user_id = user.id } }
   let (:individual_account) { user.individual_account }
@@ -11,7 +10,6 @@ describe Api::Auth::AccountsController do
   before { unapproved_account.memberships.first.update!(approved: false) }
 
   describe 'with a valid token' do
-
     around do |test|
       @controller.stub(:prx_auth_token, token) { test.call }
     end
@@ -48,11 +46,9 @@ describe Api::Auth::AccountsController do
       ids.wont_include unapproved_account.id
       ids.wont_include random_account.id
     end
-
   end
 
   describe 'with no token' do
-
     it 'will not show you anything' do
       get(:show, api_version: 'v1', id: individual_account.id)
       assert_response :unauthorized
@@ -62,7 +58,5 @@ describe Api::Auth::AccountsController do
       get(:index, api_version: 'v1')
       assert_response :unauthorized
     end
-
   end
-
 end
