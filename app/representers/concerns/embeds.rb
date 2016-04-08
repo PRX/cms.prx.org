@@ -66,11 +66,10 @@ module Embeds
           item_decorator: options.delete(:item_decorator)
         }
         getter_per = options.delete(:per) || Kaminari.config.default_per_page
-        getter_name = options.delete(:get) || name
         options[:getter] ||= ->(*) do
           # set # per page based on default, option value integer, or special :all
-          per = send(getter_name).count if getter_per == :all
-          PagedCollection.new(send(getter_name).page(1).per(per), nil, opts.merge(parent: self))
+          per = getter_per == :all ? send(name).count : getter_per
+          PagedCollection.new(send(name).page(1).per(per), nil, opts.merge(parent: self))
         end
         options[:decorator] = Api::PagedCollectionRepresenter
       end

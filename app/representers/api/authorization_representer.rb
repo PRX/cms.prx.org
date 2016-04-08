@@ -19,9 +19,9 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
       count: represented.accounts.count
     }
   end
-  embed :accounts, get: :approved_active_accounts, paged: true, per: :all,
-                   item_class: Account, item_decorator: Api::Auth::AccountMinRepresenter,
-                   url: lambda { |_r| api_authorization_accounts_path }
+  embed :approved_active_accounts, as: :accounts, paged: true, per: :all, item_class: Account,
+                                   item_decorator: Api::Auth::AccountMinRepresenter,
+                                   url: ->(_r) { api_authorization_accounts_path }
 
   def self_url(_r)
     api_authorization_path
