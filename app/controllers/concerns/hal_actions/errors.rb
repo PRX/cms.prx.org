@@ -13,6 +13,16 @@ module HalActions::Errors
     end
   end
 
+  class NotFound < StandardError
+    def message
+      'Resource not found'
+    end
+
+    def status
+      404
+    end
+  end
+
   module Representer
     include Roar::Representer::JSON::HAL
 

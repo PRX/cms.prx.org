@@ -78,6 +78,7 @@ group :development do
 end
 
 group :test do
+  gem 'minitest-around'
   gem 'minitest-spec-rails'
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'

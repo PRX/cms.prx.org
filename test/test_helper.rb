@@ -57,10 +57,14 @@ reset_announce
 
 StubToken = Struct.new(:resource, :scopes, :user_id)
 class StubToken
-  @@user_id = 0
+  @@fake_user_id = 0
 
-  def initialize(res, scopes)
-    super(res.to_s, scopes, @@user_id += 1)
+  def initialize(res, scopes, explicit_user_id = nil)
+    if explicit_user_id
+      super(res.to_s, scopes, explicit_user_id)
+    else
+      super(res.to_s, scopes, @@fake_user_id += 1)
+    end
   end
 
   def authorized?(r, s = nil)

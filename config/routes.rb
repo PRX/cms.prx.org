@@ -59,7 +59,10 @@ PRX::Application.routes.draw do
       resources :picks
 
       resource :authorization, only: [:show] do
-        resources :accounts, only: [:index], controller: 'authorizations'
+        resources :accounts, only: [:index, :show], module: :auth do
+          resources :stories, only: [:index, :create]
+        end
+        resources :stories, except: [:new, :edit, :index, :create], module: :auth
       end
     end
   end

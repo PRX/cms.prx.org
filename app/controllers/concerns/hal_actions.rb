@@ -13,6 +13,10 @@ module HalActions
     rescue_from Errors::UnsupportedMediaType do |e|
       respond_with e, status: e.status, represent_with: Errors::Representer
     end
+    rescue_from Errors::NotFound do |e|
+      # TODO: rails returns a 204 and ignores status on PUT/DELETE
+      respond_with e, status: e.status, represent_with: Errors::Representer
+    end
   end
 
   module ClassMethods
