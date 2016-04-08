@@ -10,7 +10,7 @@ class Api::Auth::AccountMinRepresenter < Api::Min::AccountRepresenter
     }
   end
   embed :stories, get: :all_stories, paged: true, item_class: Story,
-    item_decorator: Api::Auth::StoryMinRepresenter, zoom: false
+                  item_decorator: Api::Auth::StoryMinRepresenter, zoom: false
 
   def self_url(r)
     api_authorization_account_path(r)

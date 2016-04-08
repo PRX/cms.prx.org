@@ -69,8 +69,8 @@ module Embeds
         getter_name = options.delete(:get) || name
         options[:getter] ||= ->(*) do
           # set # per page based on default, option value integer, or special :all
-          per = self.send(getter_name).count if getter_per == :all
-          PagedCollection.new(self.send(getter_name).page(1).per(per), nil, opts.merge({parent: self}))
+          per = send(getter_name).count if getter_per == :all
+          PagedCollection.new(send(getter_name).page(1).per(per), nil, opts.merge(parent: self))
         end
         options[:decorator] = Api::PagedCollectionRepresenter
       end
