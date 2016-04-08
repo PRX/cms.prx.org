@@ -1,6 +1,7 @@
 require 'test_helper'
 
 describe Api::AuthorizationsController do
+
   let (:user) { create(:user) }
   let (:token) { OpenStruct.new.tap { |t| t.user_id = user.id } }
 
@@ -22,4 +23,5 @@ describe Api::AuthorizationsController do
     get(:show, api_version: 'v1')
     assert_response :unauthorized
   end
+
 end

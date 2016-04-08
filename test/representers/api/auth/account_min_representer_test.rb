@@ -1,6 +1,7 @@
 require 'test_helper'
 
 describe Api::Auth::AccountMinRepresenter do
+
   let(:account) { create(:account) }
   let(:representer) { Api::Auth::AccountMinRepresenter.new(account) }
   let(:json) { JSON.parse(representer.to_json) }
@@ -14,7 +15,7 @@ describe Api::Auth::AccountMinRepresenter do
   end
 
   it 'links to authorized stories' do
-    href = get_link_href('prx:stories')
-    href.must_match /authorization\/accounts\/\d+\/stories/
+    get_link_href('prx:stories').must_match /authorization\/accounts\/\d+\/stories/
   end
+
 end

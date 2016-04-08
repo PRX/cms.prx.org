@@ -1,6 +1,7 @@
 require 'test_helper'
 
 describe Api::AuthorizationRepresenter do
+
   let(:user) { create(:user) }
   let(:account) { user.default_account }
   let(:representer) { Api::AuthorizationRepresenter.new(user) }
@@ -15,8 +16,7 @@ describe Api::AuthorizationRepresenter do
   end
 
   it 'links to the default account' do
-    href = get_link('prx:default-account')
-    href.must_match /authorization\/accounts\/#{account.id}/
+    get_link('prx:default-account').must_match /authorization\/accounts\/#{account.id}/
   end
 
   it 'links to all accounts' do
@@ -33,7 +33,6 @@ describe Api::AuthorizationRepresenter do
     get_embed('prx:accounts', 'count').must_equal 1
     items = get_embed('prx:accounts', '_embedded')['prx:items']
     items.count.must_equal 1
-    href = items[0]['_links']['self']['href']
-    href.must_match /authorization\/accounts\/#{account.id}/
+    items[0]['_links']['self']['href'].must_match /authorization\/accounts\/#{account.id}/
   end
 end

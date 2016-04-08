@@ -1,20 +1,20 @@
-# encoding: utf-8
-
 require 'test_helper'
 
 describe ApiAuthenticated do
 
   class ApiAuthenticatedTestController < ActionController::Base
     include ApiAuthenticated
+
     def current_user
       nil
     end
+
     def user_not_authorized
       raise 'user_not_authorized'
     end
   end
 
-  let (:controller) { ApiAuthenticatedTestController.new }
+  let(:controller) { ApiAuthenticatedTestController.new }
 
   it 'does not cache index/show actions' do
     controller.cache_show?.must_equal false
@@ -30,7 +30,7 @@ describe ApiAuthenticated do
 
   it 'calls user_not_authorized if there is no user' do
     err = assert_raises { controller.authenticate_user! }
-    assert_match /user_not_authorized/, err.message
+    err.message.must_match /user_not_authorized/
   end
 
 end
