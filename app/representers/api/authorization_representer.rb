@@ -23,6 +23,13 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
                                    item_decorator: Api::Auth::AccountMinRepresenter,
                                    url: ->(_r) { api_authorization_accounts_path }
 
+  link :story do
+    {
+      href: "#{api_authorization_story_path_template(id: '{id}')}{?zoom}",
+      templated: true,
+    }
+  end
+
   def self_url(_r)
     api_authorization_path
   end
