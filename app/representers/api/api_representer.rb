@@ -12,7 +12,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     [
       {
         title:     "Get a single story",
-        profile:   prx_model_uri(:story),
+        profile:   profile_url(:story),
         href:      api_story_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
         templated: true
       }
@@ -23,7 +23,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     [
       {
         title:     "Get a paged collection of stories",
-        profile:   prx_model_uri(:collection, :story),
+        profile:   profile_url(:collection, :story),
         href:      api_stories_path_template(api_version: represented.version) + '{?page,per,zoom,filters}',
         templated: true
       }
@@ -34,13 +34,13 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     [
       {
         title:     "Get a single series",
-        profile:   prx_model_uri(:series),
+        profile:   profile_url(:series),
         href:      api_series_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
         templated: true
       },
       {
         title:     "Get a paged collection of series",
-        profile:   prx_model_uri(:collection, :series),
+        profile:   profile_url(:collection, :series),
         href:      api_series_index_path_template(api_version: represented.version) + '{?page,per,zoom}',
         templated: true
       }
@@ -51,7 +51,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     [
       {
         title:     "Get a single account",
-        profile:   prx_model_uri(:account),
+        profile:   profile_url(:account),
         href:      api_account_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
         templated: true
       }
@@ -62,7 +62,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     [
       {
         title:     "Get a paged collection of accounts",
-        profile:   prx_model_uri(:collection, :account),
+        profile:   profile_url(:collection, :account),
         href:      api_accounts_path_template(api_version: represented.version) + '{?page,per,zoom}',
         templated: true
       }
@@ -73,7 +73,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     [
       {
         title:     "Get a paged collection of the most recent picks",
-        profile:   prx_model_uri(:collection, :pick),
+        profile:   profile_url(:collection, :pick),
         href:      api_picks_path_template(api_version: represented.version) + '{?page,per,zoom}',
         templated: true
       }
@@ -83,7 +83,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
   link :authorization do
     {
       title: 'Get information about the active authorization for this request',
-      profile: prx_model_uri(:user),
+      profile: profile_url(:user),
       href: api_authorization_path(api_version: represented.version),
       templated: false
     }
