@@ -23,6 +23,7 @@ gem 'unf'
 
 ## Controller
 gem 'responders', '~> 2.0'
+gem 'hal_api-rails', '~> 0.2.2'
 
 # auth
 gem 'rack-cors', require: 'rack/cors'
@@ -38,8 +39,8 @@ gem 'actionpack-action_caching'
 
 ## View
 # json handling
-gem 'roar', '~> 0.12'
-gem 'roar-rails', '~> 0.1'
+gem 'roar'
+gem 'roar-rails'
 gem 'oj'
 gem 'oj_mimic_json'
 
