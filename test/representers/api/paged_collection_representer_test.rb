@@ -10,11 +10,11 @@ describe Api::PagedCollectionRepresenter do
   let(:paged) { Kaminari.paginate_array(items).page(1).per(10) }
   let(:request) do
     OpenStruct.new(params: {
-      "page"=>"1",
-      "action"=>"index",
-      "api_version"=>"v1",
-      "controller"=>"api/test_objects",
-      "format"=>"json"
+      'page' => '1',
+      'action' => 'index',
+      'api_version' => 'v1',
+      'controller' => 'api/test_objects',
+      'format' => 'json'
     })
   end
 
