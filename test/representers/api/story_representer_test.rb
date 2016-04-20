@@ -90,6 +90,20 @@ describe Api::StoryRepresenter do
         json['tags'].must_equal tags
       end
     end
+
+    it 'includes the created date' do
+      date = DateTime.parse('1999-12-31 23:59:59')
+      story.stub(:created_at, date) do
+        DateTime.parse(json['createdAt']).must_equal(date)
+      end
+    end
+
+    it 'includes the updated date' do
+      date = DateTime.parse('1970-01-01 00:01:00')
+      story.stub(:updated_at, date) do
+        DateTime.parse(json['updatedAt']).must_equal(date)
+      end
+    end
   end
 
   describe 'series info' do
