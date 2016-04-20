@@ -19,7 +19,7 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
     {
       href:    polymorphic_path([:api, represented.image]),
       title:   represented.image.filename,
-      profile: prx_model_uri(represented.image)
+      profile: model_uri(represented.image)
     } if represented.image
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter

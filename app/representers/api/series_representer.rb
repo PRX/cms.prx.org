@@ -27,7 +27,7 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
     {
       href: api_account_path(represented.account),
       title: represented.account.name,
-      profile: prx_model_uri(represented.account)
+      profile: model_uri(represented.account)
     }
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter

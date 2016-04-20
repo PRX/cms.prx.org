@@ -1,19 +1,13 @@
 # encoding: utf-8
+require 'hal_api/rails'
 
 class Api::BaseController < ApplicationController
+  include HalApi::Controller
   include Pundit
+  include ApiVersioning
+  include AnnounceActions
 
   protect_from_forgery with: :null_session
-
-  before_action :set_accepts
-
-  include ApiVersioning
-  include HalActions
-  include AnnounceActions
-  include Roar::Rails::ControllerAdditions
-
-  # respond to hal or json, but always returns application/hal+json
-  respond_to :hal, :json
 
   allow_params :show, :zoom
   allow_params :index, [:page, :per, :zoom]
@@ -58,10 +52,6 @@ class Api::BaseController < ApplicationController
   end
 
   private
-
-  def set_accepts
-    request.format = :json if request.format == Mime::HTML
-  end
 
   def user_not_authorized
     message = { error: 'You are not authorized to perform this action' }

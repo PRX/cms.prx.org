@@ -6,6 +6,8 @@ ENV['META_HOST'] = 'meta.prx.org'
 
 require 'simplecov' if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
 
+ENV['action_dispatch.logger'] = Rails.logger
+
 if ENV['TRAVIS']
   require 'codeclimate-test-reporter'
   require 'coveralls'
