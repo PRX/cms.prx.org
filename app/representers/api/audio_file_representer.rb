@@ -3,8 +3,11 @@
 class Api::AudioFileRepresenter < Api::BaseRepresenter
 
   property :id, writeable: false
+  property :position
+
   property :filename
   property :label
+  property :status, writeable: false
   property :size
   property :duration
 
