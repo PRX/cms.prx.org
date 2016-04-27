@@ -5,6 +5,7 @@ describe Api::AudioFilesController do
   let(:token) { StubToken.new(account.id, ['member']) }
   let(:story) { create(:story, account: account) }
   let(:audio_file) { create(:audio_file, story: story, account: account) }
+  let(:audio_version) { audio_file.audio_version }
 
   before(:each) do
     class << @controller; attr_accessor :prx_auth_token; end
@@ -32,6 +33,17 @@ describe Api::AudioFilesController do
       }
       @request.env['CONTENT_TYPE'] = 'application/json'
       post :create, af_hash.to_json, api_request_opts(story_id: story.id)
+      assert_response :success
+    end
+
+    it 'can create an audio file for an audio version' do
+      af_hash = {
+        upload: "http://thisisatest.com/guid1/test.mp3",
+        size: 1024,
+        duration: 30
+      }
+      @request.env['CONTENT_TYPE'] = 'application/json'
+      post :create, af_hash.to_json, api_request_opts(audio_version_id: audio_version.id)
       assert_response :success
     end
 

@@ -22,6 +22,9 @@ class Api::AudioFilesController < Api::BaseController
         af.audio_version_id ||= story.default_audio_version.id
         af.account_id ||= story.account_id
       end
+      if af.audio_version_id && !af.account_id
+        af.account_id ||= af.audio_version.story.account_id
+      end
     end
   end
 
