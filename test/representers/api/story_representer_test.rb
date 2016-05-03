@@ -61,6 +61,10 @@ describe Api::StoryRepresenter do
       end
     end
 
+    it 'has a story profile' do
+      json['_links']['profile']['href'].must_equal 'http://meta.prx.org/model/story'
+    end
+
     it 'has a profile for the default image' do
       image = create(:story_image)
       representer.stub(:model_uri, 'string') do

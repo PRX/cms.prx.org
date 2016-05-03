@@ -23,4 +23,7 @@ describe Api::ImageRepresenter do
     end
   end
 
+  it 'has an image profile' do
+    json['_links']['profile']['href'].must_equal 'http://meta.prx.org/model/image/story'
+  end
 end
