@@ -52,10 +52,6 @@ class Story < BaseModel
   # indicates the piece is not publically available, only to the network
   event_attribute :network_only_at
 
-  after_create do
-    audio_versions.create(label: 'Main Audio')
-  end
-
   scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
 
   scope :unpublished, -> { where('`published_at` IS NULL') }
