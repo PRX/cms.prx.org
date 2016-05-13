@@ -2,6 +2,6 @@
 
 class SeriesImage < Image
 
-  belongs_to :series
+  belongs_to :series, touch: true
 
 end

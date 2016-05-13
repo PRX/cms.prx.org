@@ -10,8 +10,8 @@ class Series < BaseModel
 
   acts_as_paranoid
 
-  belongs_to :account, -> { with_deleted }
-  belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
+  belongs_to :account, -> { with_deleted }, touch: true
+  belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id', touch: true
 
   has_many :stories, -> { where('published_at is not null and network_only_at is null').order('episode_number DESC, position DESC, published_at DESC') }
 

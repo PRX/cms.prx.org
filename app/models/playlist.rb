@@ -4,7 +4,7 @@ class Playlist < BaseModel
 
   acts_as_paranoid
 
-  belongs_to :account
+  belongs_to :account, touch: true
 
   has_many :playlist_sections, foreign_key: 'playlist_id'
   has_many :picks, through: :playlist_sections
