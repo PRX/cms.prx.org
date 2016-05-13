@@ -37,7 +37,7 @@ describe Tagging do
     taggable = create(:story)
     taggable.update_attribute(:updated_at, 3.minutes.ago)
     stamp = taggable.updated_at
-    tagging1 = create(:tagging, taggable: taggable)
+    create(:tagging, taggable: taggable)
     taggable.reload
     stamp.must_be :<, taggable.updated_at
   end
