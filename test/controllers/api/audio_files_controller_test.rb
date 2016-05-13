@@ -4,6 +4,7 @@ describe Api::AudioFilesController do
   let(:account) { create(:account) }
   let(:token) { StubToken.new(account.id, ['member']) }
   let(:story) { create(:story, account: account) }
+  let(:story_with_version) { create(:story_with_audio, account: account) }
   let(:audio_file) { create(:audio_file, story: story, account: account) }
   let(:audio_version) { audio_file.audio_version }
 
@@ -32,7 +33,7 @@ describe Api::AudioFilesController do
         duration: 30
       }
       @request.env['CONTENT_TYPE'] = 'application/json'
-      post :create, af_hash.to_json, api_request_opts(story_id: story.id)
+      post :create, af_hash.to_json, api_request_opts(story_id: story_with_version.id)
       assert_response :success
     end
 
