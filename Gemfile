@@ -22,8 +22,9 @@ gem 'fog'
 gem 'unf'
 
 ## Controller
-gem 'responders', '~> 2.0'
-gem 'hal_api-rails', '~> 0.2.3'
+gem "responders"
+gem "roar-rails"
+gem 'hal_api-rails', '~> 0.2.4'
 
 # auth
 gem 'rack-cors', require: 'rack/cors'
@@ -40,7 +41,6 @@ gem 'actionpack-action_caching'
 ## View
 # json handling
 gem 'roar'
-gem 'roar-rails'
 gem 'oj'
 gem 'oj_mimic_json'
 

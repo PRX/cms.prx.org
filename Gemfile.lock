@@ -222,7 +222,7 @@ GEM
     guard-minitest (2.4.4)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
-    hal_api-rails (0.2.3)
+    hal_api-rails (0.2.4)
       actionpack (>= 3.0.0)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -429,7 +429,7 @@ DEPENDENCIES
   guard (~> 2.10.0)
   guard-bundler
   guard-minitest
-  hal_api-rails (~> 0.2.3)
+  hal_api-rails (~> 0.2.4)
   highline
   kaminari
   minitest-around
@@ -448,7 +448,7 @@ DEPENDENCIES
   rack-prx_auth (~> 0.0.8)
   rails (~> 4.2.1)
   rake
-  responders (~> 2.0)
+  responders
   roar
   roar-rails
   sdoc
