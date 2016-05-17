@@ -5,7 +5,7 @@ class License < BaseModel
   WEBSITE_USAGE = ['as a free MP3 download and stream', 'as a stream only', 'only with permission']
   ALLOW_EDIT = ['only with permission', 'without further permission', 'never']
 
-  belongs_to :story, -> { with_deleted }, class_name: 'Story', foreign_key: 'piece_id'
+  belongs_to :story, -> { with_deleted }, class_name: 'Story', foreign_key: 'piece_id', touch: true
 
   acts_as_paranoid
 

@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Website < BaseModel
-  belongs_to :browsable, polymorphic: true
+  belongs_to :browsable, polymorphic: true, touch: true
 
   SEARCH  = /^(?!http)./
   REPLACE = 'http://\\0'

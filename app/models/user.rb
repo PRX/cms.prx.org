@@ -3,6 +3,7 @@
 class User < BaseModel
   acts_as_paranoid
 
+  # DON'T touch the account, as you'll create an infinite loop
   belongs_to :default_account, -> { with_deleted }, class_name: 'Account', foreign_key: 'account_id'
 
   has_one :address, as: :addressable

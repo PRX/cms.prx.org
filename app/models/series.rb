@@ -14,7 +14,6 @@ class Series < BaseModel
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
 
   has_many :stories, -> { where('published_at is not null and network_only_at is null').order('episode_number DESC, position DESC, published_at DESC') }
-
   has_many :schedules
 
   has_one :image, -> { where(parent_id: nil) }, class_name: 'SeriesImage'

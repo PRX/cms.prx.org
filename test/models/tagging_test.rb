@@ -32,4 +32,13 @@ describe Tagging do
 
     tagging2.must_be :valid?
   end
+
+  it 'updates the taggable\'s timestamp' do
+    taggable = create(:story)
+    taggable.update_attribute(:updated_at, 3.minutes.ago)
+    stamp = taggable.updated_at
+    create(:tagging, taggable: taggable)
+    taggable.reload
+    stamp.must_be :<, taggable.updated_at
+  end
 end

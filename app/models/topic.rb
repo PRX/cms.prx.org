@@ -5,7 +5,7 @@ class Topic < BaseModel
                   'Instructional','International','Labor','Latino','Literature','Media','Music','Native','News','Politics',
                   'Public Affairs','Religious','Science','Senior','Sports','Technology','Travel','War','Women','Youth']
 
-  belongs_to :story, class_name: 'Story', foreign_key: 'piece_id'
+  belongs_to :story, class_name: 'Story', foreign_key: 'piece_id', touch: true
   validates_inclusion_of :name, in: TOPIC_NAMES
   validates_uniqueness_of :name, scope: :story
 
