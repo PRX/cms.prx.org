@@ -1,5 +1,5 @@
 # encoding: utf-8
 
 class Schedule < BaseModel
-  belongs_to :series, touch: true
+  belongs_to :series
 end
