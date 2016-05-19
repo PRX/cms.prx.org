@@ -1,0 +1,58 @@
+#!/bin/sh
+
+PROCESS=
+CMD_ARGS=
+
+CmsUsage () {
+  echo "usage: application [ help | web | migrate | test | -- ]"
+}
+
+CmsParseOpts () {
+  PROCESS=$1
+  shift
+  CMD_ARGS=$*
+}
+
+CmsTunnelMysql () {
+  if [[ -n "$SSH_MYSQL_KEY" && -n "$SSH_MYSQL_DEST" ]] ; then
+    TMPFILE=$(mktemp)
+    echo "$SSH_MYSQL_KEY" | xargs printf > $TMPFILE
+    autossh -M 0 -f -N -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
+      -o ExitOnForwardFailure=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
+      -i $TMPFILE -L 3306:localhost:3306 $SSH_MYSQL_DEST
+    if [ $? -eq 0 ] ; then
+      echo "Tunneling mysql from $SSH_MYSQL_DEST"
+    else
+      echo "Mysql tunneling failed"
+      exit 1
+    fi
+  fi
+}
+
+CmsRun () {
+  CMD=
+  if [ "$PROCESS" = "help" ] ; then
+    CmsUsage
+    exit
+  elif [ "$PROCESS" = "web" ] ; then
+    CmsTunnelMysql
+    CMD="bundle exec puma -C config/puma.rb"
+  elif [ "$PROCESS" = "test" ] ; then
+    CMD="bundle exec rake db:create test:run RAILS_ENV=test"
+  elif [ "$PROCESS" = "guard" ] ; then
+    CMD="bundle exec guard"
+  elif [ "$PROCESS" = "setup" ] ; then
+    CMD="bundle exec rake -vt db:setup"
+  elif [ "$PROCESS" = "--" ] ; then
+    CMD=
+  else
+    echo "ERROR: $PROCESS is not a valid command."
+    CmsUsage
+    exit
+  fi
+
+  $CMD $CMD_ARGS
+}
+
+CmsParseOpts $*
+CmsRun

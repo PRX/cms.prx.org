@@ -8,23 +8,27 @@
 #
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
-<%= ENV['RAILS_ENV'] || 'development' %>:
+default: &default
   adapter: mysql2
   encoding: utf8
-  database: <%= ENV['DATABASE'] %>
-  pool: 5
-  username: <%= ENV['DATABASE_USERNAME'] %>
-  password: <%= ENV['DATABASE_PASSWORD'] %>
-  host: <%= ENV['DATABASE_HOST'] %>
+  pool: <%= ENV['DATABASE_POOL_SIZE'] %>
+  username: <%= ENV['DB_ENV_MYSQL_USER'] %>
+  password: <%= ENV['DB_ENV_MYSQL_PASSWORD'] %>
+  host: <%= ENV['DB_PORT_3306_TCP_ADDR'] %>
+  port: <%= ENV['DB_PORT_3306_TCP_PORT'] %>
+  database: <%= ENV['DB_ENV_MYSQL_DATABASE'] %>
+  reconnect: true
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
+development:
+  <<: *default
+  database: cms_development
+
 test:
-  adapter: mysql2
-  encoding: utf8
-  database: <%= ENV['TEST_DATABASE'] %>
-  pool: 5
-  username: <%= ENV['TRAVIS'] ? 'travis' : ENV['DATABASE_USERNAME'] %>
-  password: <%= ENV['DATABASE_PASSWORD'] %>
-  host: 127.0.0.1
+  <<: *default
+  database: cms_test
+
+staging:
+  <<: *default
+
+production:
+  <<: *default
