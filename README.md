@@ -25,60 +25,52 @@ Integrations & Dependencies
 
 Installation
 ------------
-These instructions are written assuming Mac OS X install.
+CMS now works in Docker.  You should use Docker.
 
 ### Basics
 ```
 # Homebrew - http://brew.sh/
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
-brew update
 
 # Git - http://git-scm.com/
 brew install git
 
-# Mysql (and run the server somehow) - https://www.mysql.com/
-brew install mysql
-mysql.server start
-
-# Pow to serve the app - http://pow.cx/
-curl get.pow.cx | sh
-```
-
-### Ruby & Related Projects
-```
-# rbenv and ruby-build - https://github.com/sstephenson/rbenv
-brew install rbenv ruby-build
-echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
-echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
-source ~/.bash_profile
-
-# ruby (.ruby-version default)
-rbenv install 2.1.2
-
-# bundler gem - http://bundler.io/
-gem install bundler
-
-# powder gem - https://github.com/Rodreegez/powder
-gem install powder
-```
-
-### Rails Project
-Consider forking the repo if you plan to make changes, otherwise you can clone it:
-```
-# ssh repo syntax (or https `git clone https://github.com/PRX/cms.prx.org.git cms.prx.org`)
-git clone git@github.com:PRX/cms.prx.org.git cms.prx.org
+# Get the code
+git clone git@github.com:PRX/cms.prx.org.git
 cd cms.prx.org
+```
 
-# bundle to install gems dependencies
-bundle install
+### Environment
+You'll need to `cp env-example .env` and include your credentials.
 
-# copy the env-example, fill out the values
-cp env-example .env
-vi .env
+### Docker Development
+Currently on OSX, [Dinghy](https://github.com/codekitchen/dinghy) is probably
+the best way to set up your dev environment.  Using VirtualBox is recommended.
+Also be sure to install `docker-compose` along with the toolbox.
+
+```
+# Build the `web` container, it will also be used for `worker`
+docker-compose build
+
+# Start the postgres `db`
+docker-compose start db
+
+# ... and run migrations against it
+docker-compose up db # the database has to be running
+docker-compose run app setup
+docker-compose stop
+
+# Test
+docker-compose run app test
+
+# Guard
+docker-compose run app guard
+
+# Run the web, worker, and db
+docker-compose up
 ```
 
 ### Database bootstrapping
-
 This project uses the [prx.org](https://github.com/PRX/prx.org) database.  So you'll need to get a backup of it to restore to your local development/test databases.  (See the instructions at the end of the prx.org README).
 
 ```
@@ -99,23 +91,9 @@ gunzip < 20150101_mediajoint_production_structure.gz | mysql -u root cms_prx_org
 gunzip < 20150101_mediajoint_production_data.gz | mysql -u root cms_prx_org_development
 ```
 
-### Testing
-
-After bootstrapping the prx.org schema into the test database, just run `bundle exec rake`.  Bingo!
-
-### Development server
-
-The dev server runs through powder - see a [full list of commands](https://github.com/Rodreegez/powder#working-with-pow) over there.
-
-```
-powder link
-open http://cms.prx.dev
-```
-
 License
 -------
 [AGPL License](https://www.gnu.org/licenses/agpl-3.0.html)
-
 
 Contributing
 ------------
