@@ -16,12 +16,18 @@ CmsParseOpts () {
 CmsTunnelMysql () {
   if [[ -n "$SSH_MYSQL_KEY" && -n "$SSH_MYSQL_DEST" ]] ; then
     TMPFILE=$(mktemp)
-    echo "$SSH_MYSQL_KEY" | xargs printf > $TMPFILE
+    echo -e "$SSH_MYSQL_KEY" > $TMPFILE
     autossh -M 0 -f -N -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
       -o ExitOnForwardFailure=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
       -i $TMPFILE -L 3306:localhost:3306 $SSH_MYSQL_DEST
     if [ $? -eq 0 ] ; then
-      echo "Tunneling mysql from $SSH_MYSQL_DEST"
+      sleep 2
+      if nc -z 127.0.0.1 3306 ; then
+        echo "Tunneling mysql from $SSH_MYSQL_DEST"
+      else
+        echo "Unable to establish mysql tunnel!"
+        exit 1
+      fi
     else
       echo "Mysql tunneling failed"
       exit 1

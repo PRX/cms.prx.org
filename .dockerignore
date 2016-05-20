@@ -3,6 +3,7 @@
 #
 tmp/*
 log/*
+*.log
 build/
 coverage/
 .git
