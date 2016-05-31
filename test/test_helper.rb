@@ -6,7 +6,7 @@ ENV['META_HOST'] = 'meta.prx.org'
 
 require 'simplecov' if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
 
-if ENV['TRAVIS']
+if ENV['CI']
   require 'codeclimate-test-reporter'
   require 'coveralls'
   SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
