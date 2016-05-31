@@ -3,7 +3,7 @@ PRX.org CMS API
 [![License](https://img.shields.io/badge/license-AGPL-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 [![Build Status](https://snap-ci.com/PRX/cms.prx.org/branch/master/build_image)](https://snap-ci.com/PRX/cms.prx.org/branch/master)
 [![Code Climate](https://codeclimate.com/github/PRX/cms.prx.org/badges/gpa.svg)](https://codeclimate.com/github/PRX/cms.prx.org)
-[![Coverage Status](https://coveralls.io/repos/PRX/cms.prx.org/badge.svg?branch=master)](https://coveralls.io/r/PRX/cms.prx.org?branch=master)
+[![Coverage Status](https://codecov.io/gh/PRX/cms.prx.org/branch/master/graph/badge.svg)](https://codecov.io/gh/PRX/cms.prx.org)
 [![Dependency Status](https://gemnasium.com/PRX/cms.prx.org.svg)](https://gemnasium.com/PRX/cms.prx.org)
 
 Description

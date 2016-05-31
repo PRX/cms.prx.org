@@ -4,8 +4,6 @@ ENV['PRX_HOST'] = 'www.prx.org'
 ENV['CMS_HOST'] = 'cms.prx.org'
 ENV['META_HOST'] = 'meta.prx.org'
 
-
-
 if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
   require 'simplecov'
   require 'codecov'
