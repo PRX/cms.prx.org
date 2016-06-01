@@ -1,0 +1,41 @@
+#!/bin/sh
+
+PROCESS=
+CMD_ARGS=
+
+CmsUsage () {
+  echo "usage: application [ help | web | migrate | test | -- ]"
+}
+
+CmsParseOpts () {
+  PROCESS=$1
+  shift
+  CMD_ARGS=$*
+}
+
+CmsRun () {
+  CMD=
+  if [ "$PROCESS" = "help" ] ; then
+    CmsUsage
+    exit
+  elif [ "$PROCESS" = "web" ] ; then
+    CMD="bundle exec puma -C config/puma.rb"
+  elif [ "$PROCESS" = "test" ] ; then
+    CMD="bundle exec rake db:create test:run RAILS_ENV=test"
+  elif [ "$PROCESS" = "guard" ] ; then
+    CMD="bundle exec guard"
+  elif [ "$PROCESS" = "setup" ] ; then
+    CMD="bundle exec rake -vt db:setup"
+  elif [ "$PROCESS" = "--" ] ; then
+    CMD=
+  else
+    echo "ERROR: $PROCESS is not a valid command."
+    CmsUsage
+    exit
+  fi
+
+  $CMD $CMD_ARGS
+}
+
+CmsParseOpts $*
+CmsRun

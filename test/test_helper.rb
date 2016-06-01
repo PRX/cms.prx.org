@@ -4,16 +4,14 @@ ENV['PRX_HOST'] = 'www.prx.org'
 ENV['CMS_HOST'] = 'cms.prx.org'
 ENV['META_HOST'] = 'meta.prx.org'
 
-require 'simplecov' if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
-
-if ENV['TRAVIS']
+if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
+  require 'simplecov'
+  require 'codecov'
   require 'codeclimate-test-reporter'
-  require 'coveralls'
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-    SimpleCov.formatter,
-    Coveralls::SimpleCov::Formatter,
-    CodeClimate::TestReporter::Formatter
-  ]
+  formatters = [SimpleCov.formatter]
+  formatters << SimpleCov::Formatter::Codecov if ENV['CODECOV_TOKEN']
+  formatters << CodeClimate::TestReporter::Formatter if ENV['CODECLIMATE_REPO_TOKEN']
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.send(:[], *formatters)
 end
 
 require File.expand_path("../../config/environment", __FILE__)

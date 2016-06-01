@@ -63,9 +63,7 @@ gem 'slackistrano', require: false
 gem 'newrelic_rpm'
 gem 'capistrano-newrelic'
 
-# These will not be installed on travis - keep all
-# developer-specific gems here so our travis builds
-# stay snappy!
+# dev-only
 group :development do
   gem 'web-console', '~> 2.0'
   gem 'quiet_assets'
@@ -83,9 +81,9 @@ group :test do
   gem 'minitest-spec-rails'
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'
-  gem "codeclimate-test-reporter", require: false
+  gem 'codeclimate-test-reporter', require: false
   gem 'simplecov', require: false
-  gem 'coveralls', require: false
+  gem 'codecov', require: false
 end
 
 group :development, :test do
@@ -94,4 +92,9 @@ end
 
 group :doc do
   gem 'sdoc', require: false
+end
+
+group :production, :staging do
+  gem 'rails_12factor'
+  gem 'puma'
 end

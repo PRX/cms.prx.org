@@ -1,0 +1,21 @@
+cms:
+  build: .
+  volumes:
+    - .:/app
+  env_file:
+    - .env
+  links:
+    - db
+  ports:
+    - "3000:3000"
+  command: web
+  environment:
+    VIRTUAL_HOST: cms.prx.docker
+    DB_PORT_3306_TCP_ADDR: db
+db:
+  image: mysql
+  env_file:
+    - .env
+  ports:
+    - "3306:3306"
+  command: mysqld --log_error_verbosity=1
