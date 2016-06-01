@@ -2,9 +2,8 @@ FROM alpine:3.3
 
 MAINTAINER PRX <sysadmin@prx.org>
 
-RUN echo "http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-    apk update && apk --update add ca-certificates ruby ruby-irb ruby-json ruby-rake \
-    ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev autossh \
+RUN apk --update add ca-certificates ruby ruby-irb ruby-json ruby-rake \
+    ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev \
     linux-headers libc-dev zlib libxml2 libxslt libffi
 
 ENV TINI_VERSION v0.9.0

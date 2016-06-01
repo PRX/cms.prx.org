@@ -56,8 +56,7 @@ docker-compose build
 docker-compose start db
 
 # ... and run migrations against it
-docker-compose up db # the database has to be running
-docker-compose run app setup
+docker-compose run cms setup
 docker-compose stop
 
 # Test
