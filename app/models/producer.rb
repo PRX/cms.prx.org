@@ -2,8 +2,8 @@
 
 class Producer < BaseModel
 
-  belongs_to :story, -> { with_deleted }, foreign_key: 'piece_id'
-  belongs_to :user, -> { with_deleted }
+  belongs_to :story, -> { with_deleted }, foreign_key: 'piece_id', touch: true
+  belongs_to :user, -> { with_deleted }, touch: true
 
   acts_as_paranoid
 

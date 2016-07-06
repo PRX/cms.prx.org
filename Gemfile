@@ -23,6 +23,7 @@ gem 'unf'
 
 ## Controller
 gem 'responders', '~> 2.0'
+gem 'hal_api-rails', '~> 0.2.3'
 
 # auth
 gem 'rack-cors', require: 'rack/cors'
@@ -38,8 +39,8 @@ gem 'actionpack-action_caching'
 
 ## View
 # json handling
-gem 'roar', '~> 0.12'
-gem 'roar-rails', '~> 0.1'
+gem 'roar'
+gem 'roar-rails'
 gem 'oj'
 gem 'oj_mimic_json'
 
@@ -62,9 +63,7 @@ gem 'slackistrano', require: false
 gem 'newrelic_rpm'
 gem 'capistrano-newrelic'
 
-# These will not be installed on travis - keep all
-# developer-specific gems here so our travis builds
-# stay snappy!
+# dev-only
 group :development do
   gem 'web-console', '~> 2.0'
   gem 'quiet_assets'
@@ -78,12 +77,13 @@ group :development do
 end
 
 group :test do
+  gem 'minitest-around'
   gem 'minitest-spec-rails'
   gem 'minitest-reporters', require: false
   gem 'factory_girl_rails'
-  gem "codeclimate-test-reporter", require: false
+  gem 'codeclimate-test-reporter', require: false
   gem 'simplecov', require: false
-  gem 'coveralls', require: false
+  gem 'codecov', require: false
 end
 
 group :development, :test do
@@ -92,4 +92,9 @@ end
 
 group :doc do
   gem 'sdoc', require: false
+end
+
+group :production, :staging do
+  gem 'rails_12factor'
+  gem 'puma'
 end

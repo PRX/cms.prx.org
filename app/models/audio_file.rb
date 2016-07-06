@@ -15,7 +15,7 @@ class AudioFile < BaseModel
 
   belongs_to :account
 
-  belongs_to :audio_version
+  belongs_to :audio_version, touch: true
   has_one :story, through: :audio_version
 
   acts_as_list scope: :audio_version

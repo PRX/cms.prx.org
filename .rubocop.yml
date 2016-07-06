@@ -77,6 +77,15 @@ DoubleNegation:
 EachWithObject:
   Enabled: false
 
+EmptyLinesAroundBlockBody:
+  Enabled: false
+
+EmptyLinesAroundClassBody:
+  Enabled: false
+
+EmptyLinesAroundModuleBody:
+  Enabled: false
+
 EmptyLiteral:
   Enabled: false
 
@@ -120,7 +129,7 @@ LineEndConcatenation:
   Enabled: false
 
 LineLength:
-  Max: 80
+  Max: 100
 
 MethodLength:
   Enabled: false
@@ -195,7 +204,10 @@ StringLiterals:
 VariableInterpolation:
   Enabled: false
 
-TrailingComma:
+TrailingCommaInLiteral:
+  Enabled: false
+
+TrailingCommaInArguments:
   Enabled: false
 
 TrivialAccessors:

@@ -7,12 +7,14 @@ FactoryGirl.define do
 
     transient do
       stories_count 2
+      user false
     end
 
     status 'open'
 
     after(:create) do |account, evaluator|
-      FactoryGirl.create_list(:story, evaluator.stories_count, account: account)
+      create_list(:story, evaluator.stories_count, account: account)
+      create(:membership, account: account, user: evaluator.user) if evaluator.user
     end
 
     factory :group_account, class: 'GroupAccount' do

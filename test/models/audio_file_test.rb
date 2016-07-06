@@ -65,4 +65,22 @@ describe AudioFile do
       audio_file_uploaded.url_expires_at(expiration: 3600).must_equal (n + 3600)
     end
   end
+
+  it 'updates story and version timestamps' do
+    story = create(:story)
+    version = create(:audio_version, story: story)
+    audio_file.update_attribute(:audio_version_id, version.id)
+
+    stamp = 2.minutes.ago
+    story.update_attribute(:updated_at, stamp)
+    version.update_attribute(:updated_at, stamp)
+
+    audio_file.filename = 'something'
+    audio_file.save!
+    story.reload
+    version.reload
+
+    story.updated_at.must_be :>, stamp
+    version.updated_at.must_be :>, stamp
+  end
 end

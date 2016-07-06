@@ -2,6 +2,6 @@
 
 class UserImage < Image
 
-  belongs_to :user
+  belongs_to :user, touch: true
 
 end

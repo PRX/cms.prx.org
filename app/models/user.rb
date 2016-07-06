@@ -3,6 +3,7 @@
 class User < BaseModel
   acts_as_paranoid
 
+  # DON'T touch the account, as you'll create an infinite loop
   belongs_to :default_account, -> { with_deleted }, class_name: 'Account', foreign_key: 'account_id'
 
   has_one :address, as: :addressable
@@ -27,5 +28,16 @@ class User < BaseModel
     Account.
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
       where(['accounts.id = ? OR (memberships.user_id = ? and memberships.approved is true)', individual_account.id, id])
+  end
+
+  def approved_active_accounts
+    approved_accounts.active
+  end
+
+  def approved_account_stories
+    Story.
+      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `pieces`.`account_id`').
+      where(['pieces.account_id = ? OR (memberships.user_id = ? and memberships.approved is true)',
+             individual_account.id, id])
   end
 end

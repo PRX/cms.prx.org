@@ -32,7 +32,7 @@ class Api::PagedCollectionRepresenter < Api::BaseRepresenter
   end
 
   def profile_url(represented)
-    prx_model_uri(:collection, represented.item_class)
+    model_uri(:collection, represented.item_class)
   end
 
   # refactor to use single property, :url, that can be a method name, a string, or a lambda

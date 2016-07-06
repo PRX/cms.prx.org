@@ -12,7 +12,7 @@ class Api::StoriesController < Api::BaseController
     publish_resource.tap do |res|
       authorize res
       res.publish!
-      respond_with root_resource(res), show_options
+      respond_with root_resource(res), create_options
     end
   end
 
@@ -24,7 +24,7 @@ class Api::StoriesController < Api::BaseController
     unpublish_resource.tap do |res|
       authorize res
       res.unpublish!
-      respond_with root_resource(res), show_options
+      respond_with root_resource(res), create_options
     end
   end
 

@@ -5,7 +5,7 @@ class Pick < BaseModel
   self.table_name = 'playlistings'
 
   belongs_to :story, foreign_key: 'playlistable_id'
-  belongs_to :playlist_section
+  belongs_to :playlist_section, touch: true
 
   has_one :playlist, through: :playlist_section
   has_one :account, through: :playlist_section

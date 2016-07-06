@@ -7,6 +7,8 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :short_description
   property :episode_number
   property :episode_identifier
+  property :created_at, writeable: false
+  property :updated_at, writeable: false
   property :published_at, writeable: false
   property :produced_on
 
@@ -41,7 +43,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
     {
       href: api_account_path(represented.account),
       title: represented.account.name,
-      profile: prx_model_uri(represented.account)
+      profile: model_uri(represented.account)
     } if represented.account
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
@@ -57,7 +59,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   link :image do
     {
       href: polymorphic_path([:api, represented.default_image]),
-      profile: prx_model_uri(represented.default_image)
+      profile: model_uri(represented.default_image)
     } if represented.default_image
   end
   embed :default_image, as: :image, decorator: Api::ImageRepresenter
