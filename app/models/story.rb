@@ -16,7 +16,7 @@ class Story < BaseModel
 
   belongs_to :account, -> { with_deleted }
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
-  belongs_to :series
+  belongs_to :series, touch: true
 
   has_many :images, -> { where(parent_id: nil).order(:position) }, class_name: 'StoryImage', foreign_key: :piece_id
   has_many :audio_versions, -> { where(promos: false).includes(:audio_files) }, foreign_key: :piece_id
@@ -55,6 +55,8 @@ class Story < BaseModel
   scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
 
   scope :unpublished, -> { where('`published_at` IS NULL') }
+
+  scope :unseries, -> { where('`series_id` IS NULL') }
 
   scope :purchased, -> {
     joins(:purchases).
