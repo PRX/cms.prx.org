@@ -1,3 +1,17 @@
+GIT
+  remote: https://github.com/PRX/hal_api-rails.git
+  revision: 9840c239c90a590943139c287aa14647367a27a4
+  tag: v0.2.6
+  specs:
+    hal_api-rails (0.2.6)
+      actionpack (>= 3.0.0)
+      activemodel (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      multi_json
+      rack-test (~> 0.6.2)
+      responders (~> 2.0)
+      roar-rails (~> 1.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -218,14 +232,6 @@ GEM
     guard-minitest (2.4.4)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
-    hal_api-rails (0.2.5)
-      actionpack (>= 3.0.0)
-      activemodel (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      multi_json
-      rack-test (~> 0.6.2)
-      responders (~> 2.0)
-      roar-rails (~> 1.0.1)
     highline (1.7.3)
     hitimes (1.2.2)
     i18n (0.7.0)
@@ -422,7 +428,7 @@ DEPENDENCIES
   guard (~> 2.10.0)
   guard-bundler
   guard-minitest
-  hal_api-rails (~> 0.2.5)
+  hal_api-rails!
   highline
   kaminari
   minitest-around
@@ -455,4 +461,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.10.6
+   1.12.5
