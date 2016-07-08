@@ -22,6 +22,10 @@ class Api::ImageRepresenter < Api::BaseRepresenter
   property :caption
   property :credit
 
+  # provide either an accessible url or the file itself for upload
+  property :upload, readable: false
+  property :file, readable: false
+
   link :enclosure do
     {
       href: represented.public_url(version: 'medium'),

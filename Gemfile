@@ -20,6 +20,7 @@ gem 'event_attribute'
 gem 'carrierwave'
 gem 'fog'
 gem 'unf'
+gem 'mini_magick'
 
 ## Controller
 gem 'responders', '~> 2.0'

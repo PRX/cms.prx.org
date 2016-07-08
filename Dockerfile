@@ -19,6 +19,7 @@ ADD Gemfile.lock ./
 
 RUN apk --update add --virtual build-dependencies build-base ruby-dev openssl-dev \
     zlib-dev libxml2-dev libxslt-dev libffi-dev git && \
+    apk add imagemagick && \
     gem install -N bundler && \
     cd $APP_HOME ; \
     bundle config --global build.nokogiri  "--use-system-libraries" && \
