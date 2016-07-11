@@ -18,7 +18,7 @@ ADD Gemfile ./
 ADD Gemfile.lock ./
 
 RUN apk --update add --virtual build-dependencies build-base ruby-dev openssl-dev \
-    zlib-dev libxml2-dev libxslt-dev libffi-dev git && \
+    zlib-dev libxml2-dev libxslt-dev libffi-dev && \
     apk add imagemagick less && \
     gem install -N bundler && \
     cd $APP_HOME ; \
