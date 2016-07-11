@@ -56,8 +56,6 @@ module Fixerable
         else
           local_file.url(fixerable_url_expires_at(uploader, options))
         end
-      else
-        nil
       end
     end
 
@@ -68,11 +66,11 @@ module Fixerable
   end
 
   def fixtemp
-    self.send(self.class.fixtemp)
+    send(class.fixtemp)
   end
 
   def fixfinal
-    self.send(self.class.fixfinal)
+    send(class.fixfinal)
   end
 
   # override public asset url

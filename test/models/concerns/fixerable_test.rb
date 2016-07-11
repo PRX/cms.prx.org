@@ -20,11 +20,11 @@ describe Fixerable do
   end
 
   let(:uploader) { FixerableTestUploader.new }
-  let(:model) {
+  let(:model) do
     m = FixerableTestModel.new
     m.the_final_field = uploader
     m
-  }
+  end
 
   it 'can get a provider for a url scheme' do
     FixerableTestModel.fixerable_storage['s3'].must_equal 'AWS'
