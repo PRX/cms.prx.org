@@ -88,7 +88,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'pry-rails'
+  gem 'pry-byebug'
 end
 
 group :doc do
