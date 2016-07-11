@@ -66,11 +66,11 @@ module Fixerable
   end
 
   def fixtemp
-    send(class.fixtemp)
+    send(self.class.fixtemp)
   end
 
   def fixfinal
-    send(class.fixfinal)
+    send(self.class.fixfinal)
   end
 
   # override public asset url
