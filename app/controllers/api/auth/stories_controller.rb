@@ -12,13 +12,13 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   represent_with Api::Auth::StoryRepresenter
 
+  def resources_base
+    @stories ||= current_user.approved_account_stories
+  end
+
   # ALL stories - not just published and visible
   def scoped(relation)
     relation
-  end
-
-  def resources_base
-    @stories ||= current_user.approved_account_stories
   end
 
 end
