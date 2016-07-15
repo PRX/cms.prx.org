@@ -8,6 +8,8 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   filter_resources_by :account_id, :series_id
 
+  filter_params :noseries
+
   announce_actions :create, :update, :delete, :publish, :unpublish
 
   represent_with Api::Auth::StoryRepresenter
@@ -22,7 +24,7 @@ class Api::Auth::StoriesController < Api::StoriesController
   end
 
   def filtered(resources)
-    if filters.include?('noseries')
+    if filters.noseries?
       resources.unseries
     else
       super
@@ -40,10 +42,6 @@ class Api::Auth::StoriesController < Api::StoriesController
       story.account_id ||= current_user.account_id
       story.account_id ||= current_user.approved_accounts.first.try(:id)
     end
-  end
-
-  def filters
-    @filters ||= (params[:filters] || '').split(',')
   end
 
 end
