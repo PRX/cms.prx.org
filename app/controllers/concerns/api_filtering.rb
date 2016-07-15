@@ -28,9 +28,9 @@ module ApiFiltering
     attr_accessor :allowed_filter_names
 
     def filter_params(*args)
-      allowed_filter_names = args.map(&:to_s).uniq
+      self.allowed_filter_names = args.map(&:to_s).uniq
       if superclass.respond_to?(:allowed_filter_names)
-        allowed_filter_names |= (superclass.allowed_filter_names || [])
+        self.allowed_filter_names |= (superclass.allowed_filter_names || [])
       end
     end
   end
