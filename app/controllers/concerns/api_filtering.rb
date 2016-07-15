@@ -13,7 +13,7 @@ module ApiFiltering
       @filters = filters.with_indifferent_access
     end
 
-    def method_missing(m, *args, &block)
+    def method_missing(m, *args, &_block)
       if @filters.key?(m) && args.empty?
         @filters[m]
       elsif m.to_s[-1] == '?' && args.empty? && @filters.key?(m.to_s.chop)
@@ -28,12 +28,10 @@ module ApiFiltering
     attr_accessor :allowed_filter_names
 
     def filter_params(*args)
-      self.allowed_filter_names = if self.superclass.respond_to?(:allowed_filter_names)
-        self.superclass.allowed_filter_names || []
-      else
-        []
+      allowed_filter_names = args.map(&:to_s).uniq
+      if superclass.respond_to?(:allowed_filter_names)
+        allowed_filter_names |= (superclass.allowed_filter_names || [])
       end
-      self.allowed_filter_names = self.allowed_filter_names | args.map(&:to_s).uniq
     end
   end
 
@@ -53,28 +51,25 @@ module ApiFiltering
 
     # parse query param
     (params[:filters] || '').split(',').each do |str|
-      parts = str.split('=')
+      name, value = str.split('=', 2)
+      next unless filters_map.key?(name)
 
       # convert/guess type of known params
-      if !filters_map.key?(parts[0])
-        next
-      elsif parts.count > 1
-        if [false, 'false'].include? parts[1]
-          filters_map[parts[0]] = false
-        elsif [true, 'true'].include? parts[1]
-          filters_map[parts[0]] = true
-        elsif parts[1] =~ /\A[-+]?\d+\z/
-          filters_map[parts[0]] = parts[1].to_i
+      filters_map[name] =
+        if value.nil?
+          true
+        elsif value.blank?
+          ''
+        elsif [false, 'false'].include? value
+          false
+        elsif [true, 'true'].include? value
+          true
+        elsif value =~ /\A[-+]?\d+\z/
+          value.to_i
         else
-          filters_map[parts[0]] = parts[1]
+          value
         end
-      elsif str[-1] == '='
-        filters_map[parts[0]] = ''
-      else
-        filters_map[parts[0]] = true
-      end
     end
-
     FilterParams.new(filters_map)
   end
 

@@ -10,7 +10,7 @@ describe ApiFiltering do
     attr_accessor :filter_string
 
     def params
-      {filters: filter_string}
+      { filters: filter_string }
     end
   end
 
