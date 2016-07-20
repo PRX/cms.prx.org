@@ -23,6 +23,29 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
                                    item_decorator: Api::Auth::AccountMinRepresenter,
                                    url: ->(_r) { api_authorization_accounts_path }
 
+  links :series do
+    [
+      {
+        href: "#{api_authorization_series_path_template(id: '{id}')}{?zoom}",
+        templated: true,
+        count: represented.approved_account_series.count
+      },
+      {
+        href: "#{api_authorization_series_index_path}{?page,per,zoom,filters}",
+        templated: true,
+        count: represented.approved_account_series.count
+      }
+    ]
+  end
+
+  link :stories do
+    {
+      href: "#{api_authorization_stories_path}{?page,per,zoom,filters}",
+      templated: true,
+      count: represented.approved_account_stories.count
+    }
+  end
+
   link :story do
     {
       href: "#{api_authorization_story_path_template(id: '{id}')}{?zoom}",

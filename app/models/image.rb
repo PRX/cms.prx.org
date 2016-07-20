@@ -7,6 +7,7 @@ class Image < BaseModel
   include PublicAsset
 
   mount_uploader :file, ImageUploader, mount_on: :filename
+  alias_attribute :upload, :remote_file_url
 
   # not all the tables have these columns, story images do
   def caption

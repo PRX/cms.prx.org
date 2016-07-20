@@ -6,6 +6,8 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   property :title
   property :short_description
   property :description
+  property :created_at, writeable: false
+  property :updated_at, writeable: false
 
   alternate_link
 

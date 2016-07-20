@@ -1,10 +1,9 @@
 # encoding: utf-8
+# require 'carrierwave/processing/mini_magick'
 
 class ImageUploader < CarrierWave::Uploader::Base
 
-  # Include RMagick or MiniMagick support:
-  # include CarrierWave::RMagick
-  # include CarrierWave::MiniMagick
+  include CarrierWave::MiniMagick
 
   # Choose what kind of storage to use for this uploader:
   storage :fog
@@ -12,21 +11,21 @@ class ImageUploader < CarrierWave::Uploader::Base
   # :thumbnails => { :square => '75x75', :small=>'120x120', :medium=>'240x240' }
   def self.version_formats
     {
-      'square' => {'scale' => [75, 75]},
-      'small'  => {'scale' => [120, 120]},
-      'medium' => {'scale' => [240, 240]}
+      'square' => [75, 75],
+      'small'  => [120, 120],
+      'medium' => [240, 240]
     }
   end
 
   version_formats.keys.each do |label|
     version label do
-      process scale: version_formats[label]['scale']
+      process resize_to_fit: version_formats[label]
     end
   end
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
-  def store_dir    
+  def store_dir
     "public/#{model.class.table_name}/#{model.id}"
   end
 

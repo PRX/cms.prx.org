@@ -60,10 +60,11 @@ docker-compose run cms setup
 docker-compose stop
 
 # Test
-docker-compose run app test
+docker-compose run cms test
 
 # Guard
-docker-compose run app guard
+docker-compose run cms testsetup
+docker-compose run cms guard
 
 # Run the web, worker, and db
 docker-compose up
