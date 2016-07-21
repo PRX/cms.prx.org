@@ -4,7 +4,7 @@ class Api::StoriesController < Api::BaseController
 
   api_versions :v1
 
-  filter_resources_by :series_id, :account_id
+  filter_resources_by :series_id, :account_id, :network_id
 
   announce_actions :create, :update, :delete, :publish, :unpublish
 
