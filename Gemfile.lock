@@ -56,6 +56,7 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
+    byebug (9.0.5)
     capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
@@ -218,7 +219,7 @@ GEM
     guard-minitest (2.4.4)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
-    hal_api-rails (0.2.3)
+    hal_api-rails (0.2.7)
       actionpack (>= 3.0.0)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -254,6 +255,7 @@ GEM
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
     mime-types (2.99.1)
+    mini_magick (4.5.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     minitest-around (0.3.2)
@@ -285,8 +287,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    pry-rails (0.3.4)
-      pry (>= 0.9.10)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     puma (3.4.0)
     pundit (1.0.1)
       activesupport (>= 3.0.0)
@@ -422,9 +425,10 @@ DEPENDENCIES
   guard (~> 2.10.0)
   guard-bundler
   guard-minitest
-  hal_api-rails (~> 0.2.3)
+  hal_api-rails (= 0.2.7)
   highline
   kaminari
+  mini_magick
   minitest-around
   minitest-reporters
   minitest-spec-rails
@@ -434,7 +438,7 @@ DEPENDENCIES
   oj_mimic_json
   paranoia (~> 2.0)
   prx_auth-rails (~> 0.0.4)
-  pry-rails
+  pry-byebug
   puma
   pundit
   quiet_assets
@@ -453,3 +457,6 @@ DEPENDENCIES
   spring
   unf
   web-console (~> 2.0)
+
+BUNDLED WITH
+   1.12.5

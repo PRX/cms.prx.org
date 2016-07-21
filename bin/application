@@ -20,6 +20,8 @@ CmsRun () {
     exit
   elif [ "$PROCESS" = "web" ] ; then
     CMD="bundle exec puma -C config/puma.rb"
+  elif [ "$PROCESS" = "testsetup" ] ; then
+    CMD="bundle exec rake db:create RAILS_ENV=test"
   elif [ "$PROCESS" = "test" ] ; then
     CMD="bundle exec rake db:create test:run RAILS_ENV=test"
   elif [ "$PROCESS" = "guard" ] ; then

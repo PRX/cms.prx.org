@@ -68,7 +68,11 @@ PRX::Application.routes.draw do
           resources :stories, only: [:index, :create]
         end
 
-        resources :stories, except: [:new, :edit, :index, :create], module: :auth
+        resources :series, except: [:new, :edit, :create], module: :auth do
+          resources :stories, only: [:index, :create]
+        end
+
+        resources :stories, except: [:new, :edit, :create], module: :auth
 
         resources :networks, only: [:index, :show], module: :auth do
           resources :stories, only: [:index]

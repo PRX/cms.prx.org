@@ -6,6 +6,8 @@ class Api::StoriesController < Api::BaseController
 
   filter_resources_by :series_id, :account_id, :network_id
 
+  filter_params :highlighted, :purchased
+
   announce_actions :create, :update, :delete, :publish, :unpublish
 
   def publish
@@ -70,19 +72,15 @@ class Api::StoriesController < Api::BaseController
   end
 
   def sorted(res)
-    if filters.include?('purchased')
+    if filters.purchased?
       res.purchased.order('purchase_count DESC')
     else
       res.order('published_at desc')
     end
   end
 
-  def filters
-    @filters ||= (params[:filters] || '').split(',')
-  end
-
   def highlighted?
-    account && filters.include?('highlighted')
+    account && filters.highlighted?
   end
 
   def account

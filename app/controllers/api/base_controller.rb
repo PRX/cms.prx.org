@@ -5,6 +5,7 @@ class Api::BaseController < ApplicationController
   include HalApi::Controller
   include Pundit
   include ApiVersioning
+  include ApiFiltering
   include AnnounceActions
 
   protect_from_forgery with: :null_session

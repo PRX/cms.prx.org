@@ -20,10 +20,11 @@ gem 'event_attribute'
 gem 'carrierwave'
 gem 'fog'
 gem 'unf'
+gem 'mini_magick'
 
 ## Controller
 gem 'responders', '~> 2.0'
-gem 'hal_api-rails', '~> 0.2.3'
+gem 'hal_api-rails', '0.2.7'
 
 # auth
 gem 'rack-cors', require: 'rack/cors'
@@ -87,14 +88,15 @@ group :test do
 end
 
 group :development, :test do
-  gem 'pry-rails'
+  gem 'pry-byebug'
 end
 
 group :doc do
   gem 'sdoc', require: false
 end
 
-group :production, :staging do
+# TODO: will eventually want these in production too
+group :staging do
   gem 'rails_12factor'
   gem 'puma'
 end
