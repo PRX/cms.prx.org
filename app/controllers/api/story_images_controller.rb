@@ -6,7 +6,7 @@ class Api::StoryImagesController < Api::BaseController
 
   filter_resources_by :story_id
 
-  announce_actions decorator: Api::ImageRepresenter, subject: :image
+  announce_actions decorator: Api::Msg::ImageRepresenter, subject: :image
 
   represent_with Api::ImageRepresenter
 end

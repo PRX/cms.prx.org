@@ -21,6 +21,7 @@ class Api::ImageRepresenter < Api::BaseRepresenter
   property :size
   property :caption
   property :credit
+  property :status, writeable: false
 
   # provide an accessible url to the image media file for upload
   property :upload, readable: false

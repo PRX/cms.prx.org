@@ -33,4 +33,14 @@ describe StoryImage do
     story_image.public_asset_filename.must_equal 'fromupload.jpg'
   end
 
+  it 'returns the upload filename until status is complete' do
+    story_image_uploaded.update!(caption: 'print')
+    story_image.filename.must_equal 'test.png'
+    story_image_uploaded.filename.must_equal 'test.jpg'
+    story_image_uploaded.update!(filename: 'real.jpg')
+    story_image_uploaded.filename.must_equal 'test.jpg'
+    story_image_uploaded.update!(status: 'complete')
+    story_image_uploaded.filename.must_equal 'real.jpg'
+  end
+
 end
