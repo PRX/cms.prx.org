@@ -70,7 +70,6 @@ group :development do
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'growl'
   gem 'guard', '~> 2.10.0'
   gem 'guard-minitest'
   gem 'guard-bundler'

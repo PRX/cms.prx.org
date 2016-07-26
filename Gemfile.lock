@@ -203,7 +203,6 @@ GEM
     formatador (0.2.5)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
-    growl (1.0.3)
     guard (2.10.5)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -421,7 +420,6 @@ DEPENDENCIES
   event_attribute
   factory_girl_rails
   fog
-  growl
   guard (~> 2.10.0)
   guard-bundler
   guard-minitest
