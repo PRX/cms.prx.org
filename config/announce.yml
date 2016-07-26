@@ -8,3 +8,7 @@ publish:
     - delete
     - publish
     - unpublish
+  image:
+    - create
+    - update
+    - delete
