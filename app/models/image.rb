@@ -7,9 +7,9 @@ class Image < BaseModel
   include PublicAsset
   include Fixerable
 
-  UPLOADED = 'uploaded'
-  INVALID  = 'invalid'
-  COMPLETE = 'complete'
+  UPLOADED = 'uploaded'.freeze
+  INVALID  = 'invalid'.freeze
+  COMPLETE = 'complete'.freeze
 
   alias_attribute :upload, :upload_path
 
