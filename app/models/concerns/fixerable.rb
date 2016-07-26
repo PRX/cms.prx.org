@@ -80,8 +80,11 @@ module Fixerable
 
   # override public asset filename
   def public_asset_filename
-    f = fixfinal.path || URI.parse(fixtemp || '').path
-    File.basename(f) if f
+    if fixerable_final?
+      File.basename(fixfinal.path)
+    else
+      File.basename(URI.parse(fixtemp || '').path)
+    end
   end
 
   # has upload been copied to final destination?
