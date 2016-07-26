@@ -12,11 +12,11 @@ module Fixerable
     end
 
     def fixtemp
-      @fixerable_temp_field
+      @fixerable_temp_field || superclass.try(:fixtemp)
     end
 
     def fixfinal
-      @fixerable_final_field
+      @fixerable_final_field || superclass.try(:fixfinal)
     end
 
     def fixerable_storage

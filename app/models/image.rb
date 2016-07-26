@@ -5,9 +5,22 @@ class Image < BaseModel
   self.abstract_class = true
 
   include PublicAsset
+  include Fixerable
+
+  UPLOADED = 'uploaded'
+  INVALID  = 'invalid'
+  COMPLETE = 'complete'
+
+  alias_attribute :upload, :upload_path
 
   mount_uploader :file, ImageUploader, mount_on: :filename
-  alias_attribute :upload, :remote_file_url
+  fixerable_upload :upload, :file
+
+  before_validation do
+    if upload
+      self.status ||= UPLOADED
+    end
+  end
 
   # not all the tables have these columns, story images do
   def caption
@@ -20,5 +33,10 @@ class Image < BaseModel
 
   def self.policy_class
     ImagePolicy
+  end
+
+  # for backwards compatibility, null statuses are considered final
+  def fixerable_final?
+    status.nil? || status == COMPLETE
   end
 end

@@ -17,18 +17,24 @@ class Api::ImageRepresenter < Api::BaseRepresenter
   end
 
   property :id, writeable: false
-  property :filename, writeable: false
+  property :filename
   property :size
   property :caption
   property :credit
 
-  # provide either an accessible url or the file itself for upload
+  # provide an accessible url to the image media file for upload
   property :upload, readable: false
-  property :file, readable: false
 
   link :enclosure do
     {
       href: represented.public_url(version: 'medium'),
+      type: represented.content_type || 'image'
+    } if represented.id
+  end
+
+  link :original do
+    {
+      href: represented.public_url(version: 'original'),
       type: represented.content_type || 'image'
     } if represented.id
   end
