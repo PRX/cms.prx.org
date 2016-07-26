@@ -219,7 +219,7 @@ GEM
     guard-minitest (2.4.4)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
-    hal_api-rails (0.2.7)
+    hal_api-rails (0.2.8)
       actionpack (>= 3.0.0)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -425,7 +425,7 @@ DEPENDENCIES
   guard (~> 2.10.0)
   guard-bundler
   guard-minitest
-  hal_api-rails (= 0.2.7)
+  hal_api-rails (= 0.2.8)
   highline
   kaminari
   mini_magick
