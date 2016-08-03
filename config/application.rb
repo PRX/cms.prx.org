@@ -29,6 +29,7 @@ module PRX
     config.i18n.default_locale = :en
 
     config.autoload_paths += %W( #{config.root}/app/representers/concerns )
+    config.autoload_paths += %W( #{config.root}/app/workers )
 
     # Disable the asset pipeline.
     config.assets.enabled = false

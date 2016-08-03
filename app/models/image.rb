@@ -8,7 +8,9 @@ class Image < BaseModel
   include Fixerable
 
   UPLOADED = 'uploaded'.freeze
+  NOTFOUND = 'not found'.freeze
   INVALID  = 'invalid'.freeze
+  FAILED   = 'failed'.freeze
   COMPLETE = 'complete'.freeze
 
   alias_attribute :upload, :upload_path
