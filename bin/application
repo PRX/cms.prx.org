@@ -27,7 +27,7 @@ ApplicationRun () {
     CMD="bundle exec puma -C config/puma.rb"
   elif [ "$PROCESS" = "worker" ] ; then
     ApplicationUpdate
-    CMD="bundle exec shoryuken --verbose --rails --config config/shoryuken.yml"
+    CMD="bundle exec shoryuken --rails --config config/shoryuken.yml"
   elif [ "$PROCESS" = "testsetup" ] ; then
     CMD="bundle exec rake db:create RAILS_ENV=test"
   elif [ "$PROCESS" = "test" ] ; then
