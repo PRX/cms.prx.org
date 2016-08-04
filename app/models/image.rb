@@ -16,6 +16,7 @@ class Image < BaseModel
   alias_attribute :upload, :upload_path
 
   mount_uploader :file, ImageUploader, mount_on: :filename
+  skip_callback :commit, :after, :remove_file! # don't remove s3 file
   fixerable_upload :upload, :file
 
   before_validation do

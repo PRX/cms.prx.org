@@ -26,6 +26,7 @@ class AudioFile < BaseModel
   alias_attribute :duration, :length
 
   mount_uploader :file, AudioFileUploader, mount_on: :filename
+  skip_callback :commit, :after, :remove_file! # don't remove s3 file
   fixerable_upload :upload, :file
 
   before_validation do
