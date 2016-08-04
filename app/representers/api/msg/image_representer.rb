@@ -12,6 +12,12 @@ class Api::Msg::ImageRepresenter < Api::BaseRepresenter
   property :credit
   property :status, writeable: false
 
+  # parent id (useful to identify soft-deleted images in s3)
+  property :piece_id, writeable: false, if: -> (*) { is_a?(StoryImage) }
+  property :series_id, writeable: false, if: -> (*) { is_a?(SeriesImage) }
+  property :account_id, writeable: false, if: -> (*) { is_a?(AccountImage) }
+  property :user_id, writeable: false, if: -> (*) { is_a?(UserImage) }
+
   # the newly uploaded file
   property :upload_path
 

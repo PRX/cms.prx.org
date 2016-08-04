@@ -26,6 +26,22 @@ describe Api::Msg::ImageRepresenter do
       json['destinationPath'].must_equal "public/piece_images/#{image.id}"
     end
 
+    it 'knows the id of the parent story' do
+      json['pieceId'].must_equal image.piece_id
+      json['userId'].must_be_nil
+    end
+
+  end
+
+  describe 'with a user image' do
+
+    let(:image) { FactoryGirl.create(:user_image) }
+
+    it 'knows the id of the parent user' do
+      json['userId'].must_equal image.user_id
+      json['pieceId'].must_be_nil
+    end
+
   end
 
   describe 'with an in-progress upload' do
