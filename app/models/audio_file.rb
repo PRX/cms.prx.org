@@ -6,13 +6,20 @@ class AudioFile < BaseModel
   include Fixerable
 
   UPLOADED         = 'uploaded'
+  NOTFOUND         = 'not found'
   VALIDATING       = 'validating'
   VALID            = 'valid'
   INVALID          = 'invalid'
+  FAILED           = 'failed'
   COMPLETE         = 'complete'
   TRANSFORMING     = 'creating mp3s'
   TRANSFORM_FAILED = 'creating mp3s failed'
   TRANSFORMED      = 'mp3s created'
+
+  SINGLE_CHANNEL = 'Single Channel'
+  DUAL_CHANNEL   = 'Dual Channel'
+  STEREO         = 'Stereo'
+  JOINT_STEREO   = 'JStereo'
 
   belongs_to :account
 

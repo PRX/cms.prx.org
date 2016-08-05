@@ -9,3 +9,4 @@ concurrency:         25 # The number of allocated threads to process messages. D
 delay:               15 # The delay in seconds to pause a queue when it's empty. Default 0
 queues:
   - [<%= env %>_cms_image_callback, 2]
+  - [<%= env %>_cms_audio_callback, 2]

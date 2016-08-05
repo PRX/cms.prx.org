@@ -12,3 +12,7 @@ publish:
     - create
     - update
     - delete
+  audio:
+    - create
+    - update
+    - delete
