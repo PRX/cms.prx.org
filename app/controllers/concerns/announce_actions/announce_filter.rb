@@ -42,7 +42,6 @@ module AnnounceActions
     def decorator_class(controller)
       return options[:decorator] if options[:decorator]
       resource_class = controller.controller_name.singularize.camelize
-      "Api::Msg::#{resource_class}Representer".safe_constantize ||
       "Api::Min::#{resource_class}Representer".safe_constantize ||
         "Api::#{resource_class}Representer".safe_constantize
     end
