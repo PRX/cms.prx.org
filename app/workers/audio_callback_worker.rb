@@ -24,13 +24,11 @@ class AudioCallbackWorker
     # TODO: not quite sure how to get this from ffprobe
     # job['channels'] = ffmpeg.channels
     # job['layout'] = ffmpeg.channel_layout
-    if job['channels'] == 2
-      audio.channel_mode = AudioFile::STEREO
-    elsif job['channels'] == 1
-      audio.channel_mode = AudioFile::SINGLE_CHANNEL
-    else
-      audio.channel_mode = nil
-    end
+    audio.channel_mode = if job['channels'] == 2
+                           AudioFile::STEREO
+                         elsif job['channels'] == 1
+                           AudioFile::SINGLE_CHANNEL
+                         end
 
     if !job['downloaded']
       audio.status = AudioFile::NOTFOUND
