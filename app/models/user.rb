@@ -20,6 +20,11 @@ class User < BaseModel
       where(['accounts.id = ? OR memberships.user_id = ?', individual_account.id, id])
   end
 
+  def networks
+    Network.joins('LEFT OUTER JOIN `network_memberships` on `network_memberships`.`network_id` = `networks`.`id`').
+    where(['`networks`.`account_id` in (?) OR `network_memberships`.`account_id` in (?)', accounts.ids, accounts.ids])
+  end
+
   def name
     "#{first_name} #{last_name}"
   end
