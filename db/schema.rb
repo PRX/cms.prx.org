@@ -497,4 +497,11 @@ ActiveRecord::Schema.define(version: 5) do
     t.string   "notification_strategy", :default => "", :null => false
     t.string   "path"
   end
+
+  create_table "network_memberships", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "network_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 end
