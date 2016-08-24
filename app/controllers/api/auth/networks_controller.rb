@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Api::Auth::NetworksController < Api::AccountsController
+class Api::Auth::NetworksController < Api::NetworksController
 
   include ApiAuthenticated
 
