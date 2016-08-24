@@ -6,7 +6,7 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   api_versions :v1
 
-  filter_resources_by :account_id, :series_id
+  filter_resources_by :account_id, :series_id, :network_id
 
   filter_params :noseries
 
