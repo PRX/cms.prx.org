@@ -22,7 +22,7 @@ class Series < BaseModel
   event_attribute :subscriber_only_at
 
   def story_count
-    @story_count ||= self.stories.published.network_visible.series_visible.count
+    @story_count ||= stories.published.network_visible.series_visible.count
   end
 
   def self.policy_class
