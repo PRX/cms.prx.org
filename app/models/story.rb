@@ -53,7 +53,7 @@ class Story < BaseModel
   # indicates the piece is not publically available, only to the network
   event_attribute :network_only_at
 
-  scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
+  scope :published, -> { where('`published_at` IS NOT NULL') }
 
   scope :unpublished, -> { where('`published_at` IS NULL') }
 
@@ -64,7 +64,9 @@ class Story < BaseModel
     select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
   }
 
-  scope :visible,   -> {
+  scope :network_visible, -> { where('`network_only_at` IS NULL') }
+
+  scope :series_visible, -> {
     joins('LEFT OUTER JOIN `series` ON `pieces`.`series_id` = `series`.`id`').
     where(['`series`.`subscription_approval_status` != ? OR `series`.`subscriber_only_at` IS NULL',
            Series::SUBSCRIPTION_PRX_APPROVED])

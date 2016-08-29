@@ -183,6 +183,21 @@ describe Story do
     end
   end
 
+  describe 'scopes' do
+    it 'wont include network_only stories' do
+      story = create(:story, network_only_at: Time.now)
+      Story.where(id: story.id).must_include story
+      Story.where(id: story.id).network_visible.wont_include story
+    end
+
+    it 'wont include subscriber_only stories' do
+      series = create(:series, subscription_approval_status: Series::SUBSCRIPTION_PRX_APPROVED, subscriber_only_at: Time.now)
+      story = create(:story, network_only_at: Time.now, series_id: series.id)
+      Story.where(id: story.id).must_include story
+      Story.where(id: story.id).series_visible.wont_include story
+    end
+  end
+
   describe 'default scope' do
     it 'includes non-deleted v3 stories' do
       story = create(:story, deleted_at: nil, app_version: 'v3')
