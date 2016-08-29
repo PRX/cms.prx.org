@@ -120,6 +120,14 @@ class Story < BaseModel
     self.user_tags = ts.uniq.sort.map { |t| UserTag.new(name: t) }
   end
 
+  def transcript
+    default_audio_version.try(:transcript)
+  end
+
+  def transcript=(tr)
+    default_audio_version.try(:transcript=, tr)
+  end
+
   def self.policy_class
     StoryPolicy
   end

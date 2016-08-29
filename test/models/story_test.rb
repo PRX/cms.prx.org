@@ -98,6 +98,10 @@ describe Story do
         story.duration.must_equal 0
       end
     end
+
+    it 'has a transcript from the default audio version' do
+      story.transcript.must_equal story.default_audio_version.transcript
+    end
   end
 
   describe '#default_image' do

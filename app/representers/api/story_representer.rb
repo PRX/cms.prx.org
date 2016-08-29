@@ -22,6 +22,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :timing_and_cues
   property :content_advisory
   property :tags
+  property :transcript
 
   property :license, class: License, decorator: Api::LicenseRepresenter
 
