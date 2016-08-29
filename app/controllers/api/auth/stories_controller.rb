@@ -14,6 +14,12 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   represent_with Api::Auth::StoryRepresenter
 
+  before_filter :check_user_network, only: [:index], if: -> { params[:network_id] }
+
+  def check_user_network
+    user_not_authorized unless current_user.networks.exists?(params[:network_id])
+  end
+
   def sorted(res)
     res.order('updated_at desc')
   end
@@ -32,7 +38,12 @@ class Api::Auth::StoriesController < Api::StoriesController
   end
 
   def resources_base
-    @stories ||= current_user.approved_account_stories
+    # If there is a network_id specified, use that network
+    @stories ||= if params[:network_id]
+      super.published
+    else
+      current_user.approved_account_stories
+    end
   end
 
   def create_resource
