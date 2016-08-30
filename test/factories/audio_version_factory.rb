@@ -4,6 +4,7 @@ FactoryGirl.define do
     label 'Audio Version'
     timing_and_cues 'Timing and cues'
     content_advisory 'Content Advisory'
+    transcript 'Transcript of all the text in this audio'
     promos false
 
     transient do

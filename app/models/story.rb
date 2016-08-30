@@ -17,6 +17,7 @@ class Story < BaseModel
   belongs_to :account, -> { with_deleted }
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
   belongs_to :series, touch: true
+  belongs_to :network
 
   has_many :images, -> { where(parent_id: nil).order(:position) }, class_name: 'StoryImage', foreign_key: :piece_id
   has_many :audio_versions, -> { where(promos: false).includes(:audio_files) }, foreign_key: :piece_id
@@ -52,7 +53,7 @@ class Story < BaseModel
   # indicates the piece is not publically available, only to the network
   event_attribute :network_only_at
 
-  scope :published, -> { where('`published_at` IS NOT NULL AND `network_only_at` IS NULL') }
+  scope :published, -> { where('`published_at` IS NOT NULL') }
 
   scope :unpublished, -> { where('`published_at` IS NULL') }
 
@@ -63,7 +64,9 @@ class Story < BaseModel
     select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
   }
 
-  scope :visible,   -> {
+  scope :network_visible, -> { where('`network_only_at` IS NULL') }
+
+  scope :series_visible, -> {
     joins('LEFT OUTER JOIN `series` ON `pieces`.`series_id` = `series`.`id`').
     where(['`series`.`subscription_approval_status` != ? OR `series`.`subscriber_only_at` IS NULL',
            Series::SUBSCRIPTION_PRX_APPROVED])
@@ -115,6 +118,14 @@ class Story < BaseModel
 
   def tags=(ts)
     self.user_tags = ts.uniq.sort.map { |t| UserTag.new(name: t) }
+  end
+
+  def transcript
+    default_audio_version.try(:transcript)
+  end
+
+  def transcript=(tr)
+    default_audio_version.try(:transcript=, tr)
   end
 
   def self.policy_class

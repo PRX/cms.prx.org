@@ -88,4 +88,26 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       templated: false
     }
   end
+
+  links :network do
+    [
+      {
+        title:     "Get a single network",
+        profile:   profile_url(:network),
+        href:      api_network_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
+        templated: true
+      }
+    ]
+  end
+
+  links :networks do
+    [
+      {
+        title:     "Get a paged collection of networks",
+        profile:   profile_url(:collection, :network),
+        href:      api_networks_path_template(api_version: represented.version) + '{?page,per,zoom}',
+        templated: true
+      }
+    ]
+  end
 end

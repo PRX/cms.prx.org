@@ -6,6 +6,7 @@ class Api::AudioVersionRepresenter < Api::BaseRepresenter
   property :label
   property :timing_and_cues
   property :explicit
+  property :transcript
 
   set_link_property(rel: :story, writeable: true)
 

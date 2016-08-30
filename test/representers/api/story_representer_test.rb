@@ -81,6 +81,13 @@ describe Api::StoryRepresenter do
       end
     end
 
+    it 'includes a transcript' do
+      sigil = 'sigil'
+      story.stub(:transcript, sigil) do
+        json['transcript'].must_equal sigil
+      end
+    end
+
     it 'includes timing and cues' do
       sigil = 'sigil'
       story.stub(:timing_and_cues, sigil) do

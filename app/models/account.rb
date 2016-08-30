@@ -16,6 +16,9 @@ class Account < BaseModel
   has_many :websites, as: :browsable
   has_many :playlists
 
+  has_many :network_memberships
+  has_many :networks, through: :network_memberships
+
   scope :pending, -> { where status: :pending }
   scope :active, -> { where status: :open }
   scope :member, -> { where type: ['StationAccount', 'GroupAccount'] }

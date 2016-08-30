@@ -1,7 +1,8 @@
 require 'test_helper'
 
 describe User do
-  let(:user) { build(:user) }
+  let (:user) { create(:user) }
+  let (:network) { create(:network, account: user.individual_account) }
 
   it 'has a table defined' do
     User.table_name.must_equal 'users'
@@ -21,6 +22,10 @@ describe User do
 
   it 'has a list of accounts' do
     user.accounts.must_include user.individual_account
+  end
+
+  it 'has a list of networks' do
+    user.networks.must_include network
   end
 
   it 'has a list of stories for approved accounts' do

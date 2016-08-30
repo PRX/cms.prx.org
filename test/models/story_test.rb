@@ -98,6 +98,10 @@ describe Story do
         story.duration.must_equal 0
       end
     end
+
+    it 'has a transcript from the default audio version' do
+      story.transcript.must_equal story.default_audio_version.transcript
+    end
   end
 
   describe '#default_image' do
@@ -180,6 +184,21 @@ describe Story do
 
         story.episode_date.must_equal series.get_datetime_for_episode_number(3)
       end
+    end
+  end
+
+  describe 'scopes' do
+    it 'wont include network_only stories' do
+      story = create(:story, network_only_at: Time.now)
+      Story.where(id: story.id).must_include story
+      Story.where(id: story.id).network_visible.wont_include story
+    end
+
+    it 'wont include subscriber_only stories' do
+      series = create(:series, subscription_approval_status: Series::SUBSCRIPTION_PRX_APPROVED, subscriber_only_at: Time.now)
+      story = create(:story, network_only_at: Time.now, series_id: series.id)
+      Story.where(id: story.id).must_include story
+      Story.where(id: story.id).series_visible.wont_include story
     end
   end
 

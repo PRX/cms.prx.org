@@ -9,7 +9,7 @@ describe Series do
   end
 
   it 'has a story count' do
-    series.story_count.must_equal series.stories.published.count
+    series.story_count.must_equal series.stories.published.network_visible.series_visible.count
   end
 
   describe '#subscribable?' do

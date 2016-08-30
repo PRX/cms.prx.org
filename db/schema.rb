@@ -39,24 +39,33 @@ ActiveRecord::Schema.define(version: 5) do
     t.datetime "network_only_at"
     t.integer  "image_id"
     t.datetime "featured_at"
-    t.boolean  "allow_comments",       :default => true
+    t.boolean  "allow_comments",          :default => true
     t.float    "average_rating"
     t.integer  "npr_story_id"
     t.datetime "is_exportable_at"
     t.integer  "custom_points"
     t.datetime "is_shareable_at"
     t.datetime "has_custom_points_at"
+    t.boolean  "publish_on_valid"
     t.datetime "publish_notified_at"
     t.datetime "publish_on_valid_at"
-    t.boolean  "publish_on_valid"
     t.datetime "promos_only_at"
     t.string   "episode_identifier"
-    t.string   "app_version", :default => 'v3', :null => false
+    t.string   "app_version",             :default => "v3", :null => false
+    t.string   "marketplace_subtitle"
+    t.text     "marketplace_information"
+    t.integer  "network_id"
   end
 
   add_index "pieces", ["account_id"], :name => "pieces_account_id_fk"
+  add_index "pieces", ["created_at", "published_at"], :name => "created_published_index"
   add_index "pieces", ["creator_id"], :name => "pieces_creator_id_fk"
+  add_index "pieces", ["deleted_at", "published_at", "network_only_at"], :name => "public_pieces_index"
+  add_index "pieces", ["deleted_at"], :name => "deleted_at_idx"
+  add_index "pieces", ["episode_number", "series_id"], :name => "index_pieces_on_episode_number_and_series_id"
+  add_index "pieces", ["network_id", "network_only_at", "deleted_at"], :name => "index_pieces_on_network_id_and_network_only_at_and_deleted_at"
   add_index "pieces", ["published_at"], :name => "by_published_at"
+  add_index "pieces", ["series_id", "deleted_at"], :name => "series_episodes"
   add_index "pieces", ["series_id"], :name => "pieces_series_id_fk"
 
   create_table "audio_files", :force => true do |t|
@@ -476,4 +485,23 @@ ActiveRecord::Schema.define(version: 5) do
   end
 
   add_index "schedules", ["series_id"], :name => "index_schedules_on_series_id"
+
+  create_table "networks", :force => true do |t|
+    t.integer  "account_id"
+    t.string   "name"
+    t.string   "description"
+    t.string   "pricing_strategy"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "publishing_strategy",   :default => "", :null => false
+    t.string   "notification_strategy", :default => "", :null => false
+    t.string   "path"
+  end
+
+  create_table "network_memberships", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "network_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 end

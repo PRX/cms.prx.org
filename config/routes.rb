@@ -43,6 +43,7 @@ PRX::Application.routes.draw do
         resources :series, except: [:new, :edit]
         resources :stories, only: [:index, :create]
         resources :audio_files, only: [:create]
+        resources :networks, only: [:index]
       end
 
       resources :users do
@@ -58,14 +59,24 @@ PRX::Application.routes.draw do
       end
       resources :picks
 
+      resources :networks do
+        resources :stories, only: [:index]
+      end
+
       resource :authorization, only: [:show] do
         resources :accounts, only: [:index, :show], module: :auth do
           resources :stories, only: [:index, :create]
         end
+
         resources :series, except: [:new, :edit, :create], module: :auth do
           resources :stories, only: [:index, :create]
         end
+
         resources :stories, except: [:new, :edit, :create], module: :auth
+
+        resources :networks, only: [:index, :show], module: :auth do
+          resources :stories, only: [:index]
+        end
       end
     end
   end
