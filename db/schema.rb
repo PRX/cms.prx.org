@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 5) do
+ActiveRecord::Schema.define(version: 6) do
 
   create_table "pieces", :force => true do |t|
     t.integer  "position"
@@ -194,6 +194,8 @@ ActiveRecord::Schema.define(version: 5) do
     t.integer "account_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "upload_path"
+    t.string "status"
   end
 
   add_index "account_images", ["account_id"], :name => "account_images_account_id_fk"
@@ -213,6 +215,8 @@ ActiveRecord::Schema.define(version: 5) do
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "upload_path"
+    t.string "status"
   end
 
   add_index "piece_images", ["piece_id"], :name => "piece_images_piece_id_fk"
@@ -271,6 +275,8 @@ ActiveRecord::Schema.define(version: 5) do
     t.string   "credit"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "upload_path"
+    t.string "status"
   end
 
   add_index "series_images", ["series_id"], :name => "series_images_series_id_fk"
@@ -329,6 +335,8 @@ ActiveRecord::Schema.define(version: 5) do
     t.integer "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "upload_path"
+    t.string "status"
   end
 
   add_index "user_images", ["user_id"], :name => "user_images_user_id_fk"

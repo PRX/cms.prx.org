@@ -16,8 +16,11 @@ module AnnounceActions
     end
 
     def after(controller)
-      subject = controller.controller_name.singularize
+      subject = (options[:subject] || controller.controller_name).to_s.singularize
       announce(subject, resource_action, decorated_resource(controller))
+    rescue Aws::SNS::Errors::NotFound => e
+      Rails.logger.error("Non-existent SNS topic: #{Rails.env.downcase}_announce_#{subject}_#{action}")
+      raise e
     end
 
     def resource_action

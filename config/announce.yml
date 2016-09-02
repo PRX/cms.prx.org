@@ -8,3 +8,11 @@ publish:
     - delete
     - publish
     - unpublish
+  image:
+    - create
+    - update
+    - delete
+  audio:
+    - create
+    - update
+    - delete

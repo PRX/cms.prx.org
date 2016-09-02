@@ -1,8 +1,6 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
-notification :growl
-
 guard :minitest, spring: true, env: {GUARD: 'true'}, all_env: :GUARD_COVERAGE, all_after_pass: false do
   watch(%r{^test/(.*)\/?test_(.*)\.rb})
   watch(%r{^lib/(.*/)?([^/]+)\.rb})                      { |m| "test/#{m[1]}test_#{m[2]}.rb" }

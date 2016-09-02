@@ -6,6 +6,8 @@ class Api::AudioFilesController < Api::BaseController
 
   filter_resources_by :audio_version_id, :account_id
 
+  announce_actions decorator: Api::Msg::AudioFileRepresenter, subject: :audio
+
   def original
     authorize show_resource
     redirect_to show_resource.asset_url(original_params)

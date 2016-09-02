@@ -12,8 +12,17 @@ cms:
   environment:
     VIRTUAL_HOST: cms.prx.docker
     DB_PORT_3306_TCP_ADDR: db
-  tty: true
-  stdin_open: true
+  # tty: true
+  # stdin_open: true
+worker:
+  image: cmsprxorg_cms
+  volumes:
+    - .:/app
+  env_file:
+    - .env
+  links:
+    - db
+  command: worker
 db:
   image: mysql
   env_file:

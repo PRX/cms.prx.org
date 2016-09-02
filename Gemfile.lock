@@ -203,7 +203,6 @@ GEM
     formatador (0.2.5)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
-    growl (1.0.3)
     guard (2.10.5)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -219,7 +218,7 @@ GEM
     guard-minitest (2.4.4)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
-    hal_api-rails (0.2.7)
+    hal_api-rails (0.2.8)
       actionpack (>= 3.0.0)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -255,7 +254,6 @@ GEM
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
     mime-types (2.99.1)
-    mini_magick (4.5.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     minitest-around (0.3.2)
@@ -421,14 +419,12 @@ DEPENDENCIES
   event_attribute
   factory_girl_rails
   fog
-  growl
   guard (~> 2.10.0)
   guard-bundler
   guard-minitest
-  hal_api-rails (= 0.2.7)
+  hal_api-rails (= 0.2.8)
   highline
   kaminari
-  mini_magick
   minitest-around
   minitest-reporters
   minitest-spec-rails

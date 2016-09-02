@@ -5,14 +5,21 @@ class AudioFile < BaseModel
   include PublicAsset
   include Fixerable
 
-  UPLOADED         = 'uploaded'
-  VALIDATING       = 'validating'
-  VALID            = 'valid'
-  INVALID          = 'invalid'
-  COMPLETE         = 'complete'
-  TRANSFORMING     = 'creating mp3s'
-  TRANSFORM_FAILED = 'creating mp3s failed'
-  TRANSFORMED      = 'mp3s created'
+  UPLOADED         = 'uploaded'.freeze
+  NOTFOUND         = 'not found'.freeze
+  VALIDATING       = 'validating'.freeze
+  VALID            = 'valid'.freeze
+  INVALID          = 'invalid'.freeze
+  FAILED           = 'failed'.freeze
+  COMPLETE         = 'complete'.freeze
+  TRANSFORMING     = 'creating mp3s'.freeze
+  TRANSFORM_FAILED = 'creating mp3s failed'.freeze
+  TRANSFORMED      = 'mp3s created'.freeze
+
+  SINGLE_CHANNEL = 'Single Channel'.freeze
+  DUAL_CHANNEL   = 'Dual Channel'.freeze
+  STEREO         = 'Stereo'.freeze
+  JOINT_STEREO   = 'JStereo'.freeze
 
   belongs_to :account
 
@@ -26,6 +33,7 @@ class AudioFile < BaseModel
   alias_attribute :duration, :length
 
   mount_uploader :file, AudioFileUploader, mount_on: :filename
+  skip_callback :commit, :after, :remove_file! # don't remove s3 file
   fixerable_upload :upload, :file
 
   before_validation do

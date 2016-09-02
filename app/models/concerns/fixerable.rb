@@ -9,14 +9,27 @@ module Fixerable
     def fixerable_upload(temp_field, final_field)
       @fixerable_temp_field = temp_field
       @fixerable_final_field = final_field
+
+      # alias filename field until upload has completed
+      mask_field = final_field
+      if try(:uploader_options) && uploader_options[final_field] && uploader_options[final_field][:mount_on]
+        mask_field = uploader_options[final_field][:mount_on]
+      end
+      define_method mask_field do
+        if fixerable_final?
+          read_attribute(mask_field)
+        else
+          public_asset_filename
+        end
+      end
     end
 
     def fixtemp
-      @fixerable_temp_field
+      @fixerable_temp_field || superclass.try(:fixtemp)
     end
 
     def fixfinal
-      @fixerable_final_field
+      @fixerable_final_field || superclass.try(:fixfinal)
     end
 
     def fixerable_storage
@@ -80,8 +93,11 @@ module Fixerable
 
   # override public asset filename
   def public_asset_filename
-    f = fixfinal.path || URI.parse(fixtemp || '').path
-    File.basename(f) if f
+    if fixerable_final?
+      File.basename(fixfinal.path)
+    else
+      File.basename(URI.parse(fixtemp || '').path)
+    end
   end
 
   # has upload been copied to final destination?
@@ -99,6 +115,10 @@ module Fixerable
       f.fog_authenticated_url_expiration = options[:expiration].to_i
     end
     f.url
+  end
+
+  def fixerable_final_path
+    fixfinal.store_dir
   end
 
   # temporary location

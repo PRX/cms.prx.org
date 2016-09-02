@@ -27,6 +27,9 @@ PRX::Application.configure do
   # Raise an error on page load if there are pending migrations
   config.active_record.migration_error = :page_load
 
+  # Better logging for docker-compose
+  config.logger = Logger.new(STDOUT)
+
   PrxAuth::Rails.middleware = false
   config.middleware.insert_before 'ActionDispatch::ParamsParser', 'Rack::PrxAuth', cert_location: 'http://id.prx.dev/api/v1/certs', issuer: 'id.prx.dev'
 end

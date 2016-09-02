@@ -40,7 +40,7 @@ module AnnounceActions
     end
 
     def new_announce_filter(action, options)
-      filter_options = options.slice(:action, :decorator)
+      filter_options = options.slice(:action, :decorator, :subject)
       filter_options[:action] ||= 'delete' if action.to_s == 'destroy'
       AnnounceActions::AnnounceFilter.new(action, filter_options)
     end

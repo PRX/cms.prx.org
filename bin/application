@@ -3,23 +3,31 @@
 PROCESS=
 CMD_ARGS=
 
-CmsUsage () {
-  echo "usage: application [ help | web | migrate | test | -- ]"
+ApplicationUsage () {
+  echo "usage: application [ help | web | worker | testsetup | test | guard | setup | sqs | -- ]"
 }
 
-CmsParseOpts () {
+ApplicationParseOpts () {
   PROCESS=$1
   shift
   CMD_ARGS=$*
 }
 
-CmsRun () {
+ApplicationUpdate () {
+  bundle exec rake -vt sqs:create announce:configure_broker db:create
+}
+
+ApplicationRun () {
   CMD=
   if [ "$PROCESS" = "help" ] ; then
-    CmsUsage
+    ApplicationUsage
     exit
   elif [ "$PROCESS" = "web" ] ; then
+    ApplicationUpdate
     CMD="bundle exec puma -C config/puma.rb"
+  elif [ "$PROCESS" = "worker" ] ; then
+    ApplicationUpdate
+    CMD="bundle exec shoryuken --rails --config config/shoryuken.yml"
   elif [ "$PROCESS" = "testsetup" ] ; then
     CMD="bundle exec rake db:create RAILS_ENV=test"
   elif [ "$PROCESS" = "test" ] ; then
@@ -28,16 +36,18 @@ CmsRun () {
     CMD="bundle exec guard"
   elif [ "$PROCESS" = "setup" ] ; then
     CMD="bundle exec rake -vt db:setup"
+  elif [ "$PROCESS" = "sqs" ] ; then
+    CMD="bundle exec rake -vt sqs:create announce:configure_broker"
   elif [ "$PROCESS" = "--" ] ; then
     CMD=
   else
     echo "ERROR: $PROCESS is not a valid command."
-    CmsUsage
+    ApplicationUsage
     exit
   fi
 
   $CMD $CMD_ARGS
 }
 
-CmsParseOpts $*
-CmsRun
+ApplicationParseOpts $*
+ApplicationRun
