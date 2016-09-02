@@ -254,7 +254,6 @@ GEM
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
     mime-types (2.99.1)
-    mini_magick (4.5.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     minitest-around (0.3.2)
@@ -426,7 +425,6 @@ DEPENDENCIES
   hal_api-rails (= 0.2.8)
   highline
   kaminari
-  mini_magick
   minitest-around
   minitest-reporters
   minitest-spec-rails
