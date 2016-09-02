@@ -6,7 +6,7 @@
 class Api::Msg::ImageRepresenter < Api::BaseRepresenter
 
   property :id, writeable: false
-  property :filename
+  property :filename, writeable: false
   property :size
   property :caption
   property :credit

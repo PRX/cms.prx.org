@@ -17,7 +17,7 @@ class Api::ImageRepresenter < Api::BaseRepresenter
   end
 
   property :id, writeable: false
-  property :filename
+  property :filename, writeable: false
   property :size
   property :caption
   property :credit

@@ -6,7 +6,7 @@
 class Api::Msg::AudioFileRepresenter < Api::BaseRepresenter
 
   property :id, writeable: false
-  property :filename
+  property :filename, writeable: false
   property :size
   property :status, writeable: false
 
