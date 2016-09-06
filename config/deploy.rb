@@ -52,7 +52,6 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          cmd = release_path.join('bin/application')
           log = release_path.join('log/production.worker.log')
           pid = release_path.join('tmp/pids/production.worker.pid')
           opts = "-al #{log} -c /bin/sh --pidFile #{pid} --workingDir #{release_path}"
