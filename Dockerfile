@@ -3,8 +3,8 @@ FROM alpine:3.3
 MAINTAINER PRX <sysadmin@prx.org>
 
 RUN apk --update add ca-certificates ruby ruby-irb ruby-json ruby-rake \
-    ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev \
-    linux-headers libc-dev zlib libxml2 libxslt libffi
+    ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev mysql-client \
+    linux-headers libc-dev zlib libxml2 libxslt libffi less
 
 ENV TINI_VERSION v0.9.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static /tini
@@ -19,7 +19,6 @@ ADD Gemfile.lock ./
 
 RUN apk --update add --virtual build-dependencies build-base ruby-dev openssl-dev \
     zlib-dev libxml2-dev libxslt-dev libffi-dev && \
-    apk add less && \
     gem install -N bundler && \
     cd $APP_HOME ; \
     bundle config --global build.nokogiri  "--use-system-libraries" && \
