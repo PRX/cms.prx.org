@@ -366,7 +366,7 @@ GEM
       capistrano (>= 3.0.1)
       json
     slop (3.6.0)
-    spring (1.3.6)
+    spring (1.7.2)
     sprockets (3.6.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
