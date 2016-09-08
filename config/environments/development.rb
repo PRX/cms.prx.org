@@ -27,6 +27,9 @@ PRX::Application.configure do
   # Raise an error on page load if there are pending migrations
   config.active_record.migration_error = :page_load
 
+  # Just allow all docker-compose requests
+  config.web_console.whitelisted_ips = '0.0.0.0/0'
+
   # Better logging for docker-compose
   config.logger = Logger.new(STDOUT)
 
