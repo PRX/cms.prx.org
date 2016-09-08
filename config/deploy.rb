@@ -47,7 +47,25 @@ namespace :deploy do
     end
   end
 
+  desc 'Start/restart worker'
+  task :worker do
+    on roles(:app), in: :sequence, wait: 5 do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          log = release_path.join('log/production.worker.log')
+          pid = release_path.join('tmp/pids/production.worker.pid')
+          opts = "-al #{log} -c /bin/sh --pidFile #{pid} --workingDir #{release_path}"
+
+          # stop any running worker
+          execute :forever, :stop, "$(cat #{pid})" if test("[ -f #{pid} ]")
+          execute :forever, :start, opts, 'bin/application worker'
+        end
+      end
+    end
+  end
+
   after :publishing, :restart
+  after :restart, :worker
 
   desc "Flushes cache"
   task :flush_cache do
