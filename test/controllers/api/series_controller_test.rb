@@ -7,14 +7,14 @@ describe Api::SeriesController do
   let(:v3_series) { create(:series_v3, account: account) }
 
   it 'should show' do
-    get(:show, { api_version: 'v1', format: 'json', id: series.id } )
+    get(:show, api_version: 'v1', format: 'json', id: series.id)
     assert_response :success
   end
 
   it 'should list' do
     series.must_be :v4?
     v3_series.wont_be :v4?
-    get(:index, { api_version: 'v1', format: 'json' } )
+    get(:index, api_version: 'v1', format: 'json')
     assert_response :success
     assert_not_nil assigns[:series]
     assigns[:series].must_include series
@@ -24,7 +24,7 @@ describe Api::SeriesController do
   it 'should filter v4 stories' do
     series.must_be :v4?
     v3_series.wont_be :v4?
-    get(:index, { api_version: 'v1', format: 'json', filters: 'v4' } )
+    get(:index, api_version: 'v1', format: 'json', filters: 'v4')
     assert_response :success
     assert_not_nil assigns[:series]
     assigns[:series].must_include series
@@ -61,7 +61,5 @@ describe Api::SeriesController do
     end
 
   end
-
-
 
 end

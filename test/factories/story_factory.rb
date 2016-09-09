@@ -52,7 +52,7 @@ FactoryGirl.define do
     end
 
     factory :story_v3 do
-      after(:create, :stub) do |story, evaluator|
+      after(:create, :stub) do |story, _evaluator|
         story.update_attributes(app_version: 'v3', deleted_at: nil)
       end
     end
