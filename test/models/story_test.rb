@@ -36,6 +36,21 @@ describe Story do
     end
   end
 
+  describe 'deleting' do
+    let(:story) { create(:story) }
+    let(:story_v3) { create(:story_v3) }
+
+    it 'actually deletes v4 stories' do
+      story.destroy!
+      Story.unscoped.where(id: story.id).count.must_equal 0
+    end
+
+    it 'soft deletes v3 stories' do
+      story_v3.destroy!
+      Story.unscoped.where(id: story_v3.id).count.must_equal 1
+    end
+  end
+
   describe 'basics' do
 
     it 'has a table defined' do
@@ -200,17 +215,28 @@ describe Story do
       Story.where(id: story.id).must_include story
       Story.where(id: story.id).series_visible.wont_include story
     end
+
+    it 'wont include non-v4 stories' do
+      story = create(:story)
+      story.app_version.must_equal 'v4'
+      Story.where(id: story.id).v4.must_include story
+      story.update_attributes(app_version: 'v3', deleted_at: nil)
+      Story.where(id: story.id).v4.wont_include story
+      story.update_attributes(app_version: 'foobar', deleted_at: nil)
+      Story.where(id: story.id).v4.wont_include story
+    end
   end
 
   describe 'default scope' do
     it 'includes non-deleted v3 stories' do
-      story = create(:story, deleted_at: nil, app_version: 'v3')
+      story = create(:story_v3)
       Story.where(id: story.id).must_include story
     end
 
     it 'does not include deleted v3 stories' do
-      story = create(:story, deleted_at: Time.now)
-      story.update_attribute :app_version, 'v3'
+      story = create(:story_v3)
+      story.destroy!
+      story.deleted_at.wont_be_nil
       Story.where(id: story).wont_include story
     end
 

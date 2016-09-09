@@ -50,5 +50,12 @@ FactoryGirl.define do
         create(:promos, story: story)
       end
     end
+
+    factory :story_v3 do
+      after(:create, :stub) do |story, evaluator|
+        story.update_attributes(app_version: 'v3', deleted_at: nil)
+      end
+    end
+
   end
 end

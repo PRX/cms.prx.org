@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Story < BaseModel
-  APPLICATION_VERSION = 'v4'
+
   self.table_name = 'pieces'
 
   acts_as_paranoid
@@ -9,7 +9,7 @@ class Story < BaseModel
   def self.paranoia_scope
     where(
       arel_table[paranoia_column].eq(paranoia_sentinel_value).or(
-        arel_table['app_version'].eq(APPLICATION_VERSION)
+        arel_table['app_version'].eq(PRX::APP_VERSION)
       )
     )
   end
@@ -58,6 +58,8 @@ class Story < BaseModel
   scope :unpublished, -> { where('`published_at` IS NULL') }
 
   scope :unseries, -> { where('`series_id` IS NULL') }
+
+  scope :v4, -> { where(app_version: PRX::APP_VERSION) }
 
   scope :purchased, -> {
     joins(:purchases).
@@ -168,6 +170,10 @@ class Story < BaseModel
     end
   end
 
+  def v4?
+    app_version == PRX::APP_VERSION
+  end
+
   private
 
   def longest_single_file_version
@@ -180,11 +186,7 @@ class Story < BaseModel
 
   def set_app_version
     return unless new_record?
-    self.app_version = APPLICATION_VERSION
+    self.app_version = PRX::APP_VERSION
     self.deleted_at = Time.now
-  end
-
-  def v4?
-    app_version == APPLICATION_VERSION
   end
 end
