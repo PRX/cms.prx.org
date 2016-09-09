@@ -43,9 +43,10 @@ module ApiFiltering
 
   def parse_filters_param
     filters_map = {}
+    filters = self.class.allowed_filter_names || self.class.superclass.allowed_filter_names
 
     # set nils
-    self.class.allowed_filter_names.each do |name|
+    filters.each do |name|
       filters_map[name] = nil
     end
 
