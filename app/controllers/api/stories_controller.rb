@@ -6,7 +6,7 @@ class Api::StoriesController < Api::BaseController
 
   filter_resources_by :series_id, :account_id, :network_id
 
-  filter_params :highlighted, :purchased
+  filter_params :highlighted, :purchased, :v4
 
   announce_actions :create, :update, :delete, :publish, :unpublish
 
@@ -50,6 +50,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def filtered(resources)
+    resources = resources.v4 if filters.v4?
     if highlighted?
       resources
     else

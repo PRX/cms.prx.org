@@ -9,6 +9,7 @@ describe Api::Auth::StoriesController do
   let (:random_story) { create(:story, published_at: nil) }
   let (:network) { create(:network, account: user.individual_account) }
   let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now) }
+  let (:v3_story) { create(:story_v3, account: account) }
 
   before do
     unpublished_story.update!(published_at: nil)
@@ -31,6 +32,16 @@ describe Api::Auth::StoriesController do
       get(:index, api_version: 'v1', network_id: network.id)
       assert_response :success
       JSON.parse(response.body)['count'].must_equal network.all_stories.count
+    end
+
+    it 'filters v4 stories' do
+      unpublished_story.must_be :v4?
+      v3_story.wont_be :v4?
+      get(:index, api_version: 'v1', format: 'json', filters: 'v4')
+      assert_response :success
+      assert_not_nil assigns[:stories]
+      assigns[:stories].must_include unpublished_story
+      assigns[:stories].wont_include v3_story
     end
 
     it 'error for network user access' do
