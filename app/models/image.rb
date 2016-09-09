@@ -25,15 +25,6 @@ class Image < BaseModel
     end
   end
 
-  # not all the tables have these columns, story images do
-  def caption
-    self.try(:read_attribute, :caption)
-  end
-
-  def credit
-    self.try(:read_attribute, :credit)
-  end
-
   def self.policy_class
     ImagePolicy
   end
