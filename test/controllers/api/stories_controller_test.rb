@@ -92,10 +92,16 @@ describe Api::StoriesController do
     assert_response :success
   end
 
-  it 'should list' do
+  it 'should list published stories of any app version' do
     story.must_be :published
+    story2 = create(:story, published_at: nil)
+    story3 = create(:story_v3)
+
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
+    assigns[:stories].must_include story
+    assigns[:stories].wont_include story2
+    assigns[:stories].must_include story3
   end
 
   it 'should list stories for an account' do
@@ -136,6 +142,16 @@ describe Api::StoriesController do
     assert_response :success
     assert_not_nil assigns[:stories]
     assigns[:stories].must_equal [story, story3]
+  end
+
+  it 'should list only v4 stories' do
+    story.must_be :v4?
+    story2 = create(:story_v3)
+    get(:index, api_version: 'v1', format: 'json', filters: 'v4')
+    assert_response :success
+    assert_not_nil assigns[:stories]
+    assigns[:stories].must_include story
+    assigns[:stories].wont_include story2
   end
 
   it 'should error on bad version' do

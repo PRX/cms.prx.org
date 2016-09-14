@@ -196,6 +196,8 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "updated_at"
     t.string "upload_path"
     t.string "status"
+    t.string   "caption"
+    t.string   "credit"
   end
 
   add_index "account_images", ["account_id"], :name => "account_images_account_id_fk"
@@ -257,6 +259,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.integer  "promos_days_early"
     t.datetime "subauto_bill_me_at"
     t.datetime "subscriber_only_at"
+    t.string   "app_version",             :default => "v3", :null => false
   end
 
   add_index "series", ["account_id"], :name => "index_series_on_account_id"
@@ -337,6 +340,8 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "updated_at"
     t.string "upload_path"
     t.string "status"
+    t.string   "caption"
+    t.string   "credit"
   end
 
   add_index "user_images", ["user_id"], :name => "user_images_user_id_fk"

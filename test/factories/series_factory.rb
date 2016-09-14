@@ -14,5 +14,11 @@ FactoryGirl.define do
     after(:create) do |series, evaluator|
       FactoryGirl.create_list(:story, evaluator.stories_count, series: series)
     end
+
+    factory :series_v3 do
+      after(:create, :stub) do |series, _evaluator|
+        series.update_attributes(app_version: 'v3')
+      end
+    end
   end
 end

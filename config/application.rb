@@ -11,6 +11,8 @@ require "rails/test_unit/railtie"
 Bundler.require(:default, Rails.env)
 
 module PRX
+  APP_VERSION = 'v4'.freeze
+
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
