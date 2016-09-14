@@ -2,8 +2,9 @@ FROM ruby:2.1-alpine
 
 MAINTAINER PRX <sysadmin@prx.org>
 
-RUN apk --update add ca-certificates tzdata linux-headers libxml2 libxslt \
-    mysql-dev mysql-client less
+RUN apk --update add ca-certificates ruby ruby-irb ruby-json ruby-rake \
+    ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev mysql-client \
+    linux-headers libc-dev zlib libxml2 libxslt libffi less
 
 ENV TINI_VERSION v0.9.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static /tini

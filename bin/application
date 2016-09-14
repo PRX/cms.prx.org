@@ -4,7 +4,7 @@ PROCESS=
 CMD_ARGS=
 
 ApplicationUsage () {
-  echo "usage: application [ help | web | worker | testsetup | test | guard | setup | sqs | -- ]"
+  echo "usage: application [ help | web | worker | testsetup | test | guard | setup | sqs | bootstrap | -- ]"
 }
 
 ApplicationParseOpts () {
@@ -38,6 +38,8 @@ ApplicationRun () {
     CMD="bundle exec rake -vt db:setup"
   elif [ "$PROCESS" = "sqs" ] ; then
     CMD="bundle exec rake -vt sqs:create announce:configure_broker"
+  elif [ "$PROCESS" = "bootstrap" ] ; then
+    CMD="bundle exec rake -vt db:bootstrap"
   elif [ "$PROCESS" = "--" ] ; then
     CMD=
   else

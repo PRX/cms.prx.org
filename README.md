@@ -71,24 +71,24 @@ docker-compose up
 ```
 
 ### Database bootstrapping
-This project uses the [prx.org](https://github.com/PRX/prx.org) database.  So you'll need to get a backup of it to restore to your local development/test databases.  (See the instructions at the end of the prx.org README).
+
+This project uses the [prx.org](https://github.com/PRX/prx.org) database.
+So you'll need to get a backup of it to restore to your local development/test databases.
+
+Assuming you have SSH keys for `deploy@cms.prx.org`, you can automatically do this!
 
 ```
-# create dev/test databases
-mysql -u root -e "CREATE DATABASE cms_prx_org_development;"
-mysql -u root -e "CREATE DATABASE cms_prx_org_test;"
+# Create a new mysqldump (usually you can skip this step)
+bundle exec rake db:proddump
 
-# optionally restrict to user (must also be in .env file)
-mysql -u root -e "CREATE USER 'cms_prx_user'@'localhost' IDENTIFIED BY 'somepassword'";
-mysql -u root -e "GRANT ALL PRIVILEGES ON cms_prx_org_development.* TO 'cms_prx_user'@'localhost';"
-mysql -u root -e "GRANT ALL PRIVILEGES ON cms_prx_org_test.* TO 'cms_prx_user'@'localhost';"
+# Copy the sql.gz files to your local tmp/dbbootstrap directory
+bundle exec rake db:prodcopy
 
-# load schemas from backup
-gunzip < 20150101_mediajoint_production_structure.gz | mysql -u root cms_prx_org_development
-gunzip < 20150101_mediajoint_production_structure.gz | mysql -u root cms_prx_org_test
+# Now you can restore your local database! (Uses db in your .env file)
+bundle exec rake db:bootstrap
 
-# load data from backup (NOT needed for the test db)
-gunzip < 20150101_mediajoint_production_data.gz | mysql -u root cms_prx_org_development
+# Or to restore your docker-compose database...
+docker-compose run cms bootstrap
 ```
 
 License
