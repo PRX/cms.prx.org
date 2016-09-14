@@ -8,16 +8,26 @@ class User < BaseModel
 
   has_one :address, as: :addressable
   has_one :image, -> { where(parent_id: nil) }, class_name: 'UserImage'
-  has_one :individual_account, foreign_key: 'opener_id'
 
   has_many :memberships
   has_many :member_accounts, through: :memberships, source: :account
   has_many :producers
 
+  def individual_account
+    accounts.where('type = \'IndividualAccount\'').first
+  end
+
+  def individual_account=(account)
+    if prior_account = individual_account
+      memberships.where(account_id: prior_account.id).destroy
+    end
+    memberships.build(account_id: account, approved: true, role: 'admin').save
+  end
+
   def accounts
     Account.
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
-      where(['accounts.id = ? OR memberships.user_id = ?', individual_account.id, id])
+      where(['memberships.user_id = ?', id])
   end
 
   def networks
@@ -32,7 +42,7 @@ class User < BaseModel
   def approved_accounts
     Account.
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
-      where(['accounts.id = ? OR (memberships.user_id = ? and memberships.approved is true)', individual_account.id, id])
+      where(['memberships.user_id = ? and memberships.approved is true', id])
   end
 
   def approved_active_accounts
@@ -42,15 +52,12 @@ class User < BaseModel
   def approved_account_stories
     Story.
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `pieces`.`account_id`').
-      where(['pieces.account_id = ? OR (memberships.user_id = ? and memberships.approved is true)',
-             individual_account.id, id])
+      where(['memberships.user_id = ? and memberships.approved is true', id])
   end
 
   def approved_account_series
     Series.
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `series`.`account_id`').
-      where(['series.account_id = ? OR (memberships.user_id = ? and memberships.approved is true)',
-             individual_account.id, id])
+      where(['memberships.user_id = ? and memberships.approved is true', id])
   end
-
 end

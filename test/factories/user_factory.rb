@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :user, aliases: [:opener, :creator] do
 
-    individual_account
     address
 
     first_name 'Rick'
@@ -12,7 +11,9 @@ FactoryGirl.define do
     end
 
     after(:create) do |user|
-      create(:membership, user: user, account: user.individual_account)
+      account = create(:individual_account)
+      create(:membership, user: user, account: account)
+      user.update_attribute(:account_id, account.id)
     end
 
     factory :user_with_accounts do
