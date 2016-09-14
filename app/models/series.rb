@@ -19,7 +19,11 @@ class Series < BaseModel
 
   has_one :image, -> { where(parent_id: nil) }, class_name: 'SeriesImage'
 
+  before_validation :set_app_version, on: :create
+
   event_attribute :subscriber_only_at
+
+  scope :v4, -> { where('`app_version` = ?', PRX::APP_VERSION) }
 
   def story_count
     @story_count ||= stories.published.network_visible.series_visible.count
@@ -103,5 +107,24 @@ class Series < BaseModel
     schedule_index = schedule_index - episodes_per_week if schedule_index >= episodes_per_week
 
     schedule_index
+  end
+
+  def destroy
+    if v4?
+      really_destroy!
+    else
+      super
+    end
+  end
+
+  def v4?
+    app_version == PRX::APP_VERSION
+  end
+
+  private
+
+  def set_app_version
+    return unless new_record?
+    self.app_version = PRX::APP_VERSION
   end
 end

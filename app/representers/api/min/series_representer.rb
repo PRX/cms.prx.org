@@ -5,6 +5,7 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
   property :id, writeable: false
   property :title
   property :short_description
+  property :app_version, writeable: false
 
   alternate_link
 

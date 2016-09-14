@@ -3,6 +3,7 @@ require 'test_helper'
 describe Series do
   let(:episode_start_at) { Time.parse('2013-06-01T00:00:00-05:00') }
   let(:series) { create(:series, episode_start_at: episode_start_at) }
+  let(:v3_series) { create(:series_v3, episode_start_at: episode_start_at) }
 
   it 'has stories' do
     series.stories.count.must_be :>, 0
@@ -10,6 +11,16 @@ describe Series do
 
   it 'has a story count' do
     series.story_count.must_equal series.stories.published.network_visible.series_visible.count
+  end
+
+  it 'actually deletes v4 series' do
+    series.destroy!
+    Series.where(id: series.id).with_deleted.count.must_equal 0
+  end
+
+  it 'soft deletes v3 series' do
+    v3_series.destroy!
+    Series.where(id: v3_series.id).with_deleted.count.must_equal 1
   end
 
   describe '#subscribable?' do
@@ -60,4 +71,14 @@ describe Series do
     end
 
   end
+
+  describe 'scopes' do
+    it 'wont include non-v4 series' do
+      series.app_version.must_equal 'v4'
+      v3_series.app_version.must_equal 'v3'
+      Series.where(id: [series.id, v3_series.id]).v4.must_include series
+      Series.where(id: [series.id, v3_series.id]).v4.wont_include v3_series
+    end
+  end
+
 end
