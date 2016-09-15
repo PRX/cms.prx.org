@@ -46,7 +46,7 @@ PRX::Application.routes.draw do
         resources :networks, only: [:index]
       end
 
-      resources :users, except: [:new, :edit, :destroy] do
+      resources :users, except: [:new, :edit, :create, :destroy] do
         resource :user_image, path: 'image', except: [:new, :edit]
         resources :memberships, only: [:index]
         resources :accounts, only: [:index]
