@@ -30,7 +30,8 @@ class User < BaseModel
   def create_individual_account
     return if individual_account
     User.transaction do
-      self.individual_account = IndividualAccount.create!(opener_id: id, path: login, status: 'open')
+      ia = IndividualAccount.create!(opener_id: id, path: login, status: 'open')
+      self.individual_account = ia
       update_attributes!(account_id: individual_account.id)
     end
   end
