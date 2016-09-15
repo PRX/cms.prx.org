@@ -6,7 +6,7 @@ FactoryGirl.define do
     first_name 'Rick'
     last_name 'Astley'
 
-    after(:create) do |user, evaluator|
+    after(:create) do |user, _evaluator|
       user.individual_account = create(:individual_account)
       user.reload
     end
