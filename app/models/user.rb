@@ -8,16 +8,32 @@ class User < BaseModel
 
   has_one :address, as: :addressable
   has_one :image, -> { where(parent_id: nil) }, class_name: 'UserImage'
-  has_one :individual_account, foreign_key: 'opener_id'
 
   has_many :memberships
-  has_many :member_accounts, through: :memberships, source: :account
+  has_many :accounts, through: :memberships, source: :account
   has_many :producers
 
-  def accounts
-    Account.
-      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
-      where(['accounts.id = ? OR memberships.user_id = ?', individual_account.id, id])
+  after_commit :create_individual_account, on: [:create]
+
+  def individual_account
+    accounts.where('type = \'IndividualAccount\'').first
+  end
+
+  def individual_account=(account)
+    prior_account = individual_account
+    memberships.create!(account_id: account.id, approved: true, role: 'admin')
+    if prior_account
+      memberships.where(account_id: prior_account.id).each { |m| memberships.destroy(m) }
+    end
+  end
+
+  def create_individual_account
+    return if individual_account
+    User.transaction do
+      ia = IndividualAccount.create!(opener_id: id, path: login, status: 'open')
+      self.individual_account = ia
+      update_attributes!(account_id: individual_account.id)
+    end
   end
 
   def networks
@@ -32,7 +48,7 @@ class User < BaseModel
   def approved_accounts
     Account.
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
-      where(['accounts.id = ? OR (memberships.user_id = ? and memberships.approved is true)', individual_account.id, id])
+      where(['memberships.user_id = ? and memberships.approved is true', id])
   end
 
   def approved_active_accounts
@@ -42,15 +58,12 @@ class User < BaseModel
   def approved_account_stories
     Story.
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `pieces`.`account_id`').
-      where(['pieces.account_id = ? OR (memberships.user_id = ? and memberships.approved is true)',
-             individual_account.id, id])
+      where(['memberships.user_id = ? and memberships.approved is true', id])
   end
 
   def approved_account_series
     Series.
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `series`.`account_id`').
-      where(['series.account_id = ? OR (memberships.user_id = ? and memberships.approved is true)',
-             individual_account.id, id])
+      where(['memberships.user_id = ? and memberships.approved is true', id])
   end
-
 end

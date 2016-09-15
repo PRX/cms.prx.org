@@ -15,7 +15,7 @@ PRX::Application.routes.draw do
       resources :story_images, only: [:show, :index]
       resources :user_images, only: [:show, :index]
 
-      resources :audio_versions do
+      resources :audio_versions, except: [:new, :edit] do
         resources :audio_files, except: [:new, :edit]
       end
 
@@ -36,7 +36,7 @@ PRX::Application.routes.draw do
         resources :stories, only: [:index, :create]
       end
 
-      resources :accounts do
+      resources :accounts, except: [:new, :edit, :destroy] do
         resource :address, except: [:new, :edit]
         resource :account_image, path: 'image', except: [:new, :edit]
         resources :memberships, only: [:index]
@@ -46,7 +46,7 @@ PRX::Application.routes.draw do
         resources :networks, only: [:index]
       end
 
-      resources :users do
+      resources :users, except: [:new, :edit, :create, :destroy] do
         resource :user_image, path: 'image', except: [:new, :edit]
         resources :memberships, only: [:index]
         resources :accounts, only: [:index]
@@ -54,12 +54,12 @@ PRX::Application.routes.draw do
 
       resources :memberships, except: [:new, :edit]
 
-      resources :pick_lists do
-        resources :picks
+      resources :pick_lists, except: [:new, :edit] do
+        resources :picks, except: [:new, :edit]
       end
-      resources :picks
+      resources :picks, except: [:new, :edit]
 
-      resources :networks do
+      resources :networks, except: [:new, :edit] do
         resources :stories, only: [:index]
       end
 

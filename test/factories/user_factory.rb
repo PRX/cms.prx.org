@@ -1,18 +1,14 @@
 FactoryGirl.define do
   factory :user, aliases: [:opener, :creator] do
 
-    individual_account
     address
 
     first_name 'Rick'
     last_name 'Astley'
 
-    after(:build) do |user|
-      user.default_account = user.individual_account
-    end
-
-    after(:create) do |user|
-      create(:membership, user: user, account: user.individual_account)
+    after(:create) do |user, _evaluator|
+      user.individual_account = create(:individual_account)
+      user.reload
     end
 
     factory :user_with_accounts do
