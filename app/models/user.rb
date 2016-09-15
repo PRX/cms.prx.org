@@ -10,24 +10,29 @@ class User < BaseModel
   has_one :image, -> { where(parent_id: nil) }, class_name: 'UserImage'
 
   has_many :memberships
-  has_many :member_accounts, through: :memberships, source: :account
+  has_many :accounts, through: :memberships, source: :account
   has_many :producers
+
+  after_commit :create_individual_account, on: [:create]
 
   def individual_account
     accounts.where('type = \'IndividualAccount\'').first
   end
 
   def individual_account=(account)
-    if prior_account = individual_account
-      memberships.where(account_id: prior_account.id).destroy
+    prior_account = individual_account
+    memberships.create!(account_id: account.id, approved: true, role: 'admin')
+    if prior_account
+      memberships.where(account_id: prior_account.id).each { |m| memberships.destroy(m) }
     end
-    memberships.build(account_id: account, approved: true, role: 'admin').save
   end
 
-  def accounts
-    Account.
-      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
-      where(['memberships.user_id = ?', id])
+  def create_individual_account
+    return if individual_account
+    User.transaction do
+      self.individual_account = IndividualAccount.create!(opener_id: id, path: login, status: 'open')
+      update_attributes!(account_id: individual_account.id)
+    end
   end
 
   def networks

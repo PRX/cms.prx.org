@@ -16,8 +16,19 @@ describe User do
     user.default_account.wont_be_nil
   end
 
+  it 'creates an individual account on user create' do
+    new_user = User.create(first_name: 'New', last_name: 'User')
+    new_user.individual_account.wont_be_nil
+  end
+
   it 'has an individual account' do
     user.individual_account.wont_be_nil
+  end
+
+  it 'can set the individual account' do
+    current_account = user.individual_account
+    user.individual_account = create(:individual_account)
+    user.individual_account.wont_equal current_account
   end
 
   it 'has a list of accounts' do
