@@ -34,6 +34,11 @@ PRX::Application.routes.draw do
       resources :series, except: [:new, :edit] do
         resources :series_images, path: 'images', except: [:new, :edit]
         resources :stories, only: [:index, :create]
+        resources :audio_version_templates
+      end
+
+      resources :audio_version_templates do
+        resources :audio_file_templates
       end
 
       resources :accounts, except: [:new, :edit, :destroy] do
