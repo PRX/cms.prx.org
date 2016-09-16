@@ -5,13 +5,13 @@ describe Api::AudioFileTemplatesController do
   let(:template) { create(:audio_file_template, audio_version_template: version_template) }
 
   it 'should show' do
-    get(:show, { api_version: 'v1', format: 'json', audio_version_template_id: version_template.id, id: template.id } )
+    get(:show, api_request_opts(audio_version_template_id: version_template.id, id: template.id))
     assert_response :success
   end
 
   it 'should list by audio version template' do
     template.id.wont_be_nil
-    get(:index, { api_version: 'v1', format: 'json', audio_version_template_id: version_template.id } )
+    get(:index, api_request_opts(audio_version_template_id: version_template.id))
     assert_response :success
   end
 end
