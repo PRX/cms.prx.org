@@ -6,19 +6,19 @@ describe Api::AudioVersionTemplatesController do
   let(:template) { create(:audio_version_template, series: series) }
 
   it 'should show' do
-    get(:show, { api_version: 'v1', format: 'json', id: template.id } )
+    get(:show, api_request_opts(id: template.id))
     assert_response :success
   end
 
   it 'should list' do
     template.id.wont_be_nil
-    get(:index, { api_version: 'v1', format: 'json' } )
+    get(:index, api_request_opts(series_id: series.id))
     assert_response :success
   end
 
   it 'should list by series' do
     template.id.wont_be_nil
-    get(:index, { api_version: 'v1', format: 'json', series_id: series.id } )
+    get(:index, api_request_opts(series_id: series.id))
     assert_response :success
   end
 end
