@@ -4,7 +4,7 @@ require 'test_helper'
 
 describe Api::StoryRepresenter do
 
-  let(:story) { create(:story_with_audio, audio_versions_count: 1) }
+  let(:story) { create(:story, audio_versions_count: 1) }
   let(:representer) { Api::StoryRepresenter.new(story) }
   let(:json) { JSON.parse(representer.to_json) }
 
@@ -29,8 +29,7 @@ describe Api::StoryRepresenter do
   describe 'serialize' do
 
     it 'can serialize an unsaved story' do
-      story_with_audio = create(:story_with_audio)
-      json = Api::StoryRepresenter.new(story_with_audio).to_json
+      json = Api::StoryRepresenter.new(story).to_json
       json.wont_be_nil
     end
 

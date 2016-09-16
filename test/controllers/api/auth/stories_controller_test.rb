@@ -6,7 +6,7 @@ describe Api::Auth::StoriesController do
   let (:token) { StubToken.new(account.id, ['member'], user.id) }
   let (:account) { user.individual_account }
   let (:unpublished_story) { account.all_stories.first }
-  let (:random_story) { create(:story, published_at: nil) }
+  let (:random_story) { create(:story, unpublished: true) }
   let (:network) { create(:network, account: user.individual_account) }
   let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now) }
   let (:v3_story) { create(:story_v3, account: account) }
@@ -73,7 +73,7 @@ describe Api::Auth::StoriesController do
     end
 
     it 'deletes an unpublished story' do
-      story = create(:story, account: account, published_at: nil)
+      story = create(:story, account: account, unpublished: true)
       delete :destroy, api_version: 'v1', id: story.id
       response.status.must_equal 204
       Story.where(id: story.id).must_be :empty?

@@ -61,7 +61,7 @@ describe Api::StoriesController do
       story = create(:story,
                      title: 'not this',
                      account: account,
-                     published_at: nil)
+                     unpublished: true)
       @request.env['CONTENT_TYPE'] = 'application/json'
       post :publish, api_version: 'v1', format: 'json', id: story.id
       assert_response :success
@@ -71,8 +71,7 @@ describe Api::StoriesController do
     it 'can unpublish a story' do
       story = create(:story,
                      title: 'not this',
-                     account: account,
-                     published_at: Time.now)
+                     account: account)
       @request.env['CONTENT_TYPE'] = 'application/json'
       post :unpublish, api_version: 'v1', format: 'json', id: story.id
       assert_response :success
@@ -94,7 +93,7 @@ describe Api::StoriesController do
 
   it 'should list published stories of any app version' do
     story.must_be :published
-    story2 = create(:story, published_at: nil)
+    story2 = create(:story, unpublished: true)
     story3 = create(:story_v3)
 
     get(:index, { api_version: 'v1', format: 'json' } )

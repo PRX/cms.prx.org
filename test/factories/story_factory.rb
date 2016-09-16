@@ -10,10 +10,27 @@ FactoryGirl.define do
     point_level 1
     short_description 'Short description'
     description 'Long description'
-    published_at 1.week.ago
     produced_on 2.weeks.ago
     related_website 'http://prx.org'
     broadcast_history 'Broadcast history'
+
+    transient do
+      audio_versions_count 1
+      images_count 1
+      unpublished false
+    end
+
+    after(:create) do |story, evaluator|
+      create_list(:audio_version, evaluator.audio_versions_count, story: story)
+      create_list(:story_image, evaluator.images_count, story: story)
+      story.update_attribute(:published_at, 1.week.ago) unless evaluator.unpublished
+    end
+
+    after(:stub) do |story, evaluator|
+      create_list(:audio_version, evaluator.audio_versions_count, story: story)
+      create_list(:story_image, evaluator.images_count, story: story)
+      story.published_at = 1.week.ago unless evaluator.unpublished
+    end
 
     factory :story_with_license do
       license
@@ -26,19 +43,6 @@ FactoryGirl.define do
 
       after(:create, :stub) do |story, evaluator|
         create_list(:purchase, evaluator.purchases_count, purchased: story)
-      end
-    end
-
-    factory :story_with_audio do
-
-      transient do
-        audio_versions_count 1
-        images_count 1
-      end
-
-      after(:create, :stub) do |story, evaluator|
-        create_list(:audio_version, evaluator.audio_versions_count, story: story)
-        create_list(:story_image, evaluator.images_count, story: story)
       end
     end
 

@@ -4,7 +4,7 @@ describe Account do
 
   let(:account) { create(:account) }
   let(:unpublished_story) do
-    create(:story, account: account, published_at: nil)
+    create(:story, account: account, unpublished: true)
   end
 
   it 'has a table defined' do
