@@ -12,7 +12,7 @@ describe Api::AudioVersionTemplatesController do
 
   it 'should list' do
     template.id.wont_be_nil
-    get(:index, api_request_opts(series_id: series.id))
+    get(:index, api_request_opts)
     assert_response :success
   end
 
