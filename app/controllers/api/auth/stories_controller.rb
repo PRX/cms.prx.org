@@ -30,11 +30,8 @@ class Api::Auth::StoriesController < Api::StoriesController
   end
 
   def filtered(resources)
-    if filters.noseries?
-      resources.unseries
-    else
-      super
-    end
+    resources = resources.unseries if filters.noseries?
+    super
   end
 
   def resources_base
