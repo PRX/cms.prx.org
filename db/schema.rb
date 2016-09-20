@@ -100,6 +100,16 @@ ActiveRecord::Schema.define(version: 6) do
   add_index "audio_files", ["position"], :name => "position_idx"
   add_index "audio_files", ["status"], :name => "status_idx"
 
+  create_table "audio_file_templates", :force => true do |t|
+    t.integer  "audio_version_template_id"
+    t.integer  "position"
+    t.string   "label"
+    t.integer  "length_minimum"
+    t.integer  "length_maximum"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "audio_versions", :force => true do |t|
     t.integer  "piece_id"
     t.string   "label"
@@ -119,6 +129,15 @@ ActiveRecord::Schema.define(version: 6) do
   end
 
   add_index "audio_versions", ["piece_id"], :name => "audio_versions_piece_id_fk"
+
+  create_table "audio_version_templates", :force => true do |t|
+    t.integer "series_id"
+    t.string  "label"
+    t.boolean "promos"
+    t.integer "length_minimum"
+    t.integer "segment_count"
+    t.integer "length_maximum"
+  end
 
   create_table "accounts", :force => true do |t|
     t.string   "type"

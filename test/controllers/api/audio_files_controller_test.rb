@@ -4,7 +4,7 @@ describe Api::AudioFilesController do
   let(:account) { create(:account) }
   let(:token) { StubToken.new(account.id, ['member']) }
   let(:story) { create(:story, account: account) }
-  let(:story_with_version) { create(:story_with_audio, account: account) }
+  let(:story_with_version) { create(:story, account: account) }
   let(:audio_file) { create(:audio_file, story: story, account: account) }
   let(:audio_version) { audio_file.audio_version }
 

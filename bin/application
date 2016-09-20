@@ -29,9 +29,9 @@ ApplicationRun () {
     ApplicationUpdate
     CMD="bundle exec shoryuken --rails --config config/shoryuken.yml"
   elif [ "$PROCESS" = "testsetup" ] ; then
-    CMD="bundle exec rake db:create RAILS_ENV=test"
+    CMD="bundle exec rake db:create db:setup RAILS_ENV=test"
   elif [ "$PROCESS" = "test" ] ; then
-    CMD="bundle exec rake db:create test:run RAILS_ENV=test"
+    CMD="bundle exec rake test:run RAILS_ENV=test"
   elif [ "$PROCESS" = "guard" ] ; then
     CMD="bundle exec guard"
   elif [ "$PROCESS" = "setup" ] ; then

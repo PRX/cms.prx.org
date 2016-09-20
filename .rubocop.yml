@@ -62,7 +62,7 @@ CyclomaticComplexity:
 Delegate:
   Enabled: false
 
-DeprecatedHashMethods:
+Style/PreferredHashMethods:
   Enabled: false
 
 Documentation:
@@ -270,4 +270,7 @@ UnderscorePrefixedVariableName:
   Enabled: false
 
 Void:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
   Enabled: false

@@ -2,54 +2,8 @@ require 'test_helper'
 
 describe Story do
 
-  let(:story) { build_stubbed(:story_with_audio, audio_versions_count: 10) }
+  let(:story) { build_stubbed(:story, audio_versions_count: 10) }
   let(:promos_only) { build_stubbed(:story_promos_only) }
-
-  describe 'publishing' do
-
-    let(:story) { create(:story) }
-
-    it 'publishes a story' do
-      story.published_at = nil
-      story.publish!
-      story.published_at.wont_be_nil
-    end
-
-    it 'wont publish when already published' do
-      lambda do
-        story.publish!
-        story.publish!
-      end.must_raise(RuntimeError)
-    end
-
-    it 'unpublishes a story' do
-      story.published_at = Time.now
-      story.unpublish!
-      story.published_at.must_be_nil
-    end
-
-    it 'wont unpublish an unpublished story' do
-      lambda do
-        story.unpublish!
-        story.unpublish!
-      end.must_raise(RuntimeError)
-    end
-  end
-
-  describe 'deleting' do
-    let(:story) { create(:story) }
-    let(:story_v3) { create(:story_v3) }
-
-    it 'actually deletes v4 stories' do
-      story.destroy!
-      Story.unscoped.where(id: story.id).count.must_equal 0
-    end
-
-    it 'soft deletes v3 stories' do
-      story_v3.destroy!
-      Story.unscoped.where(id: story_v3.id).count.must_equal 1
-    end
-  end
 
   describe 'basics' do
 
@@ -199,6 +153,52 @@ describe Story do
 
         story.episode_date.must_equal series.get_datetime_for_episode_number(3)
       end
+    end
+  end
+
+  describe 'publishing' do
+
+    let(:story) { create(:story) }
+
+    it 'publishes a story' do
+      story.published_at = nil
+      story.publish!
+      story.published_at.wont_be_nil
+    end
+
+    it 'wont publish when already published' do
+      lambda do
+        story.publish!
+        story.publish!
+      end.must_raise(RuntimeError)
+    end
+
+    it 'unpublishes a story' do
+      story.published_at = Time.now
+      story.unpublish!
+      story.published_at.must_be_nil
+    end
+
+    it 'wont unpublish an unpublished story' do
+      lambda do
+        story.unpublish!
+        story.unpublish!
+      end.must_raise(RuntimeError)
+    end
+  end
+
+  describe 'deleting' do
+    let(:story) { create(:story) }
+    let(:story_v3) { create(:story_v3) }
+
+    it 'actually deletes v4 stories' do
+      story.destroy!
+      Story.unscoped.where(id: story.id).count.must_equal 0
+    end
+
+    it 'soft deletes v3 stories' do
+      story_v3.destroy!
+      Story.unscoped.where(id: story_v3.id).count.must_equal 1
     end
   end
 

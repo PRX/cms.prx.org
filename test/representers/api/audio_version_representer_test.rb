@@ -5,7 +5,7 @@ require 'audio_version' if !defined?(AudioVersion)
 
 describe Api::AudioVersionRepresenter do
 
-  let(:audio_version) { FactoryGirl.create(:audio_version) }
+  let(:audio_version) { FactoryGirl.create(:audio_version_with_template) }
   let(:representer)   { Api::AudioVersionRepresenter.new(audio_version) }
   let(:json)          { JSON.parse(representer.to_json) }
 
@@ -32,5 +32,9 @@ describe Api::AudioVersionRepresenter do
       audio_version.explicit = nil
       json['explicit'].must_equal nil
     end
+  end
+
+  it 'returns a link to the template' do
+    json['_links']['prx:audio-version-template']['href'].wont_be_nil
   end
 end

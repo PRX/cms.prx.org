@@ -71,8 +71,7 @@ describe Api::StoriesController do
     it 'can unpublish a story' do
       story = create(:story,
                      title: 'not this',
-                     account: account,
-                     published_at: Time.now)
+                     account: account)
       @request.env['CONTENT_TYPE'] = 'application/json'
       post :unpublish, api_version: 'v1', format: 'json', id: story.id
       assert_response :success

@@ -8,7 +8,7 @@ FactoryGirl.define do
     promos false
 
     transient do
-      audio_files_count 0
+      audio_files_count 1
     end
 
     after(:create) do |audio_version, evaluator|
@@ -19,6 +19,10 @@ FactoryGirl.define do
 
     factory :promos do
       promos true
+    end
+
+    factory :audio_version_with_template do
+      audio_version_template
     end
   end
 end
