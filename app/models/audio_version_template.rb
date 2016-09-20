@@ -2,6 +2,7 @@
 
 class AudioVersionTemplate < BaseModel
   belongs_to :series
+
   has_many :audio_file_templates, -> { order :position }, dependent: :destroy
 
   after_save :sync_audio_file_templates
@@ -27,5 +28,9 @@ class AudioVersionTemplate < BaseModel
     elsif diff < 0
       self.audio_file_templates = audio_file_templates[0, segment_count]
     end
+  end
+
+  def self.policy_class
+    SeriesAttributePolicy
   end
 end

@@ -2,6 +2,7 @@
 
 class AudioFileTemplate < BaseModel
   belongs_to :audio_version_template
+
   acts_as_list scope: :audio_version_template
 
   before_validation :set_defaults, on: :create
