@@ -5,10 +5,7 @@ class AudioVersion < BaseModel
              class_name: 'Story',
              foreign_key: 'piece_id', touch: true
 
-  belongs_to :template, -> { with_deleted },
-             class_name: 'AudioVersionTemplate',
-             foreign_key: 'audio_version_template_id'
-
+  belongs_to :audio_version_template, -> { with_deleted }
   has_many :audio_files, -> { order :position }, dependent: :destroy
 
   acts_as_paranoid

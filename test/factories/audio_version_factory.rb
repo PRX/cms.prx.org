@@ -20,5 +20,9 @@ FactoryGirl.define do
     factory :promos do
       promos true
     end
+
+    factory :audio_version_with_template do
+      audio_version_template
+    end
   end
 end
