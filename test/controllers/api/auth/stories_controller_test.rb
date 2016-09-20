@@ -44,6 +44,19 @@ describe Api::Auth::StoriesController do
       assigns[:stories].wont_include v3_story
     end
 
+    it 'applies multiple filters' do
+      create(:series, stories: [unpublished_story])
+      unpublished_story.series.wont_be_nil
+      v3_story.wont_be :v4?
+      v3_story.series.must_be_nil
+
+      get(:index, api_version: 'v1', filters: 'v4,noseries')
+      assert_response :success
+      assert_not_nil assigns[:stories]
+      assigns[:stories].wont_include unpublished_story
+      assigns[:stories].wont_include v3_story
+    end
+
     it 'error for network user access' do
       other_network = create(:network)
       get(:index, api_version: 'v1', network_id: other_network.id)
