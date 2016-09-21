@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Pick < BaseModel
-
   self.table_name = 'playlistings'
 
   belongs_to :story, foreign_key: 'playlistable_id'

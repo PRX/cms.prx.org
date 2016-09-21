@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class AudioFile < BaseModel
-
   include PublicAsset
   include Fixerable
 
@@ -22,8 +21,8 @@ class AudioFile < BaseModel
   JOINT_STEREO   = 'JStereo'.freeze
 
   belongs_to :account
-
   belongs_to :audio_version, touch: true
+
   has_one :story, through: :audio_version
 
   acts_as_list scope: :audio_version

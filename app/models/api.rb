@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api
-
   extend ActiveModel::Naming
 
   def to_model
@@ -40,5 +39,4 @@ class Api
   def initialize(version)
     @version = version
   end
-
 end
