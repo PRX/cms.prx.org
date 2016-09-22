@@ -79,6 +79,18 @@ describe Series do
       Series.where(id: [series.id, v3_series.id]).v4.must_include series
       Series.where(id: [series.id, v3_series.id]).v4.wont_include v3_series
     end
+
+    it 'searches text for title and description' do
+      series = create(:series,
+                      title: 'Some Weirdo',
+                      description: 'Unique thing',
+                      short_description: 'Lacking sense')
+
+      Series.match_text('weirdo').must_include series
+      Series.match_text('unique').must_include series
+      Series.match_text('lack').must_include series
+      Series.match_text('random').wont_include series
+    end
   end
 
 end
