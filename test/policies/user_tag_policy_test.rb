@@ -6,7 +6,7 @@ describe UserTagPolicy do
   let(:token) { StubToken.new(account.id, ['member']) }
 
   it 'allows anyone to create a tag' do
-    UserTagPolicy.new(token, UserTag.new(name: "test-tag")).must_allow :create?
+    UserTagPolicy.new(token, UserTag.new(name: 'test-tag')).must_allow :create?
   end
 
   it 'prevents anyone from updating a tag' do

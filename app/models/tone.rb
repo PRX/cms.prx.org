@@ -8,7 +8,7 @@ class Tone < BaseModel
                 'NPR NewsMagazine-y', 'Offbeat', 'Opinionated', 'Personal', 'Polished', 'Political',
                 'Provocative', 'Quirky', 'Raw', 'Real', 'Rough', 'Sad', 'Sentimental', 'Simple',
                 'Sound-Rich', 'Surprising', 'Suspenseful', 'Sweet', 'This American Life-esque',
-                'Thorough', 'Thoughtful', 'Unconventional', 'Unusual', 'Upbeat']
+                'Thorough', 'Thoughtful', 'Unconventional', 'Unusual', 'Upbeat'].freeze
 
   belongs_to :story, class_name: 'Story', foreign_key: 'piece_id', touch: true
 
