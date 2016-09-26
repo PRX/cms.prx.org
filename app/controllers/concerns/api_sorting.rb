@@ -1,0 +1,50 @@
+# encoding: utf-8
+
+require 'active_support/concern'
+
+module ApiSorting
+  extend ActiveSupport::Concern
+
+  included do
+    class_eval do
+      class_attribute :allowed_sort_names
+      class_attribute :default_sort
+    end
+  end
+
+  module ClassMethods
+    def sort_params(*args)
+      self.allowed_sort_names = args.map(&:to_s).uniq
+    end
+  end
+
+  def sorts
+    @sorts ||= parse_sorts_param
+  end
+
+  def sorted(arel)
+    if sorts.blank?
+      super
+    else
+      arel.order(*sorts)
+    end
+  end
+
+  private
+
+  def parse_sorts_param
+    sorts_array = []
+    allowed_sorts = self.class.allowed_sort_names || self.class.superclass.allowed_sort_names
+
+    # parse sort param for name of the column and direction
+    # default is descending, because I say so, and we have a bias towards the new
+    (params[:sorts] || '').split(',').each do |str|
+      name, direction = str.split(':', 2).map { |s| s.to_s.downcase.strip }
+      direction = 'desc' if direction.blank?
+      next unless allowed_sorts.include?(name)
+      next unless ['asc', 'desc'].include?(direction)
+      sorts_array << { name => direction }
+    end
+    sorts_array
+  end
+end
