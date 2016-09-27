@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::Auth::NetworksController < Api::NetworksController
-
   include ApiAuthenticated
 
   api_versions :v1
@@ -17,5 +16,4 @@ class Api::Auth::NetworksController < Api::NetworksController
   def resources_base
     @networks ||= current_user.networks
   end
-
 end
