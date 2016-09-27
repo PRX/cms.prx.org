@@ -4,7 +4,6 @@
 # Representer for Announce messaging
 #
 class Api::Msg::ImageRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :filename, writeable: false
   property :size
@@ -23,5 +22,4 @@ class Api::Msg::ImageRepresenter < Api::BaseRepresenter
 
   # destination for the uploaded file
   property :fixerable_final_path, as: :destination_path
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::ProducerRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :user_id
   property :name

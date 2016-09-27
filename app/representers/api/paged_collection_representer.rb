@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::PagedCollectionRepresenter < Api::BaseRepresenter
-
   property :count
   property :total
 

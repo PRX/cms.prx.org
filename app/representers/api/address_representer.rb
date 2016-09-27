@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::AddressRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :street_1
   property :street_2

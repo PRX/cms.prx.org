@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::Min::StoryRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :title
   property :short_description

@@ -4,7 +4,6 @@
 # Representer for Announce messaging
 #
 class Api::Msg::AudioFileRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :filename, writeable: false
   property :size
@@ -15,5 +14,4 @@ class Api::Msg::AudioFileRepresenter < Api::BaseRepresenter
 
   # destination for the uploaded file
   property :fixerable_final_path, as: :destination_path
-
 end

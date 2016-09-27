@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::PickRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :comment
   property :editors_title

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::ImageRepresenter < Api::BaseRepresenter
-
   def self_url(represented)
     if represented.is_a?(StoryImage)
       api_story_story_image_path(represented.story, represented)
