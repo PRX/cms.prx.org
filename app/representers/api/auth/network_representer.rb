@@ -10,10 +10,10 @@ class Api::Auth::NetworkRepresenter < Api::NetworkRepresenter
     } if represented.id
   end
   embed :stories,
-    paged: true,
-    item_class: Story,
-    item_decorator: Api::Auth::StoryMinRepresenter,
-    url: ->(_r) { api_authorization_network_stories_path(represented.parent) }
+        paged: true,
+        item_class: Story,
+        item_decorator: Api::Auth::StoryMinRepresenter,
+        url: ->(_r) { api_authorization_network_stories_path(represented.parent) }
 
   def self_url(r)
     api_authorization_network_path(r)

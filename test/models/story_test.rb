@@ -210,7 +210,9 @@ describe Story do
     end
 
     it 'wont include subscriber_only stories' do
-      series = create(:series, subscription_approval_status: Series::SUBSCRIPTION_PRX_APPROVED, subscriber_only_at: Time.now)
+      series = create(:series,
+                      subscription_approval_status: Series::SUBSCRIPTION_PRX_APPROVED,
+                      subscriber_only_at: Time.now)
       story = create(:story, series_id: series.id)
       Story.where(id: story.id).must_include story
       Story.where(id: story.id).series_visible.wont_include story
@@ -241,7 +243,9 @@ describe Story do
     it 'returns public only stories' do
       story = create(:story)
       story_n = create(:story, network_only_at: Time.now)
-      series = create(:series, subscription_approval_status: Series::SUBSCRIPTION_PRX_APPROVED, subscriber_only_at: Time.now)
+      series = create(:series,
+                      subscription_approval_status: Series::SUBSCRIPTION_PRX_APPROVED,
+                      subscriber_only_at: Time.now)
       story_s = create(:story, series_id: series.id)
       story_u = create(:story, published_at: nil)
 

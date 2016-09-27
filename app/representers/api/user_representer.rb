@@ -14,10 +14,10 @@ class Api::UserRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :accounts,
-    paged: true,
-    item_class: Account,
-    item_decorator: Api::Min::AccountRepresenter,
-    zoom: false
+        paged: true,
+        item_class: Account,
+        item_decorator: Api::Min::AccountRepresenter,
+        zoom: false
 
   link :image do
     {

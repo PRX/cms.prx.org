@@ -39,10 +39,10 @@ class Api::AccountRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :public_stories,
-    as: :stories,
-    paged: true,
-    item_class: Story,
-    item_decorator: Api::Min::StoryRepresenter
+        as: :stories,
+        paged: true,
+        item_class: Story,
+        item_decorator: Api::Min::StoryRepresenter
 
   link :series do
     {

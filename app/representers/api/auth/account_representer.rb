@@ -10,10 +10,10 @@ class Api::Auth::AccountRepresenter < Api::AccountRepresenter
     } if represented.id
   end
   embed :stories,
-    paged: true,
-    item_class: Story,
-    item_decorator: Api::Auth::StoryMinRepresenter,
-    url: ->(_r) { api_authorization_account_stories_path(represented.parent) }
+        paged: true,
+        item_class: Story,
+        item_decorator: Api::Auth::StoryMinRepresenter,
+        url: ->(_r) { api_authorization_account_stories_path(represented.parent) }
 
   def self_url(r)
     api_authorization_account_path(r)

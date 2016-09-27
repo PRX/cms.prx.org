@@ -3,7 +3,7 @@
 require 'test_helper'
 
 describe Api::BaseRepresenter do
-  let(:t_object) { TestObject.new("test", true) }
+  let(:t_object) { TestObject.new('test', true) }
   let(:representer) { Api::BaseRepresenter.new(t_object) }
   let(:json) { JSON.parse(representer.to_json) }
 
@@ -13,6 +13,6 @@ describe Api::BaseRepresenter do
 
   it '#index_url_params' do
     representer.index_url_params.wont_be_nil
-    representer.index_url_params.must_equal "{?page,per,zoom,filters,sorts}"
+    representer.index_url_params.must_equal '{?page,per,zoom,filters,sorts}'
   end
 end

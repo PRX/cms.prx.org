@@ -39,11 +39,11 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
     }
   end
   embed :public_stories,
-    as: :stories,
-    paged: true,
-    item_class: Story,
-    item_decorator: Api::Min::StoryRepresenter,
-    zoom: false
+        as: :stories,
+        paged: true,
+        item_class: Story,
+        item_decorator: Api::Min::StoryRepresenter,
+        zoom: false
 
   link :series do
     {

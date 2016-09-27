@@ -75,7 +75,7 @@ class Story < BaseModel
           "`pieces`.`description` like '%#{text}%'")
   }
 
-  def self.public_stories(arel=nil)
+  def self.public_stories(arel = nil)
     (arel || self).published.network_visible.series_visible
   end
 

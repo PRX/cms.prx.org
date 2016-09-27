@@ -10,7 +10,8 @@ describe Series do
   end
 
   it 'has a story count' do
-    series.public_stories.count.must_equal series.stories.published.network_visible.series_visible.count
+    public_stories_count = series.stories.published.network_visible.series_visible.count
+    series.public_stories.count.must_equal public_stories_count
   end
 
   it 'actually deletes v4 series' do
