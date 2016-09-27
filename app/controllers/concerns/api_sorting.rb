@@ -13,8 +13,12 @@ module ApiSorting
   end
 
   module ClassMethods
-    def sort_params(*args)
-      self.allowed_sort_names = args.map(&:to_s).uniq
+    def sort_params(args)
+      self.allowed_sort_names = args[:allowed].map(&:to_s).uniq
+      self.default_sort = args[:default]
+      if default_sort && !default_sort.is_a?(Array)
+        self.default_sort = Array[default_sort]
+      end
     end
   end
 
@@ -23,10 +27,11 @@ module ApiSorting
   end
 
   def sorted(arel)
-    if sorts.blank?
+    apply_sorts = !sorts.blank? ? sorts : default_sort
+    if apply_sorts.blank?
       super
     else
-      arel.order(*sorts)
+      arel.order(*apply_sorts)
     end
   end
 

@@ -5,7 +5,7 @@ describe ApiSorting do
   class ApiSortingTestController < ActionController::Base
     include ApiSorting
 
-    sort_params :one, :two, :three, :four, :five
+    sort_params default: { one: :desc }, allowed: [:one, :two, :three, :four, :five]
 
     attr_accessor :sort_string
 
@@ -19,6 +19,10 @@ describe ApiSorting do
   before {
     controller.sort_string = 'one,two:asc,three:desc,four:,five:up,six'
   }
+
+  it 'sets a default array of sorts' do
+    controller.class.default_sort.must_equal [ { one: :desc } ]
+  end
 
   it 'parses query params' do
     controller.sorts.count.must_equal 4
@@ -63,6 +67,14 @@ describe ApiSorting do
 
   it 'sorted adds orders to resources arel' do
     sorts = [{ 'one' => 'desc' }, { 'two' => 'asc' }, { 'three' => 'desc' }, { 'four' => 'desc' }]
+    table = Arel::Table.new(:api_test_sorting)
+    result = controller.sorted(table)
+    result.orders.must_equal sorts
+  end
+
+  it 'sorted adds default orders to resources arel' do
+    controller.sort_string = nil
+    sorts = [{ one: :desc }]
     table = Arel::Table.new(:api_test_sorting)
     result = controller.sorted(table)
     result.orders.must_equal sorts
