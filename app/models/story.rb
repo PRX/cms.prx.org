@@ -69,6 +69,12 @@ class Story < BaseModel
     select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
   }
 
+  scope :match_text, ->(text) {
+    where("`pieces`.`title` like '%#{text}%' OR " +
+          "`pieces`.`short_description` like '%#{text}%' OR " +
+          "`pieces`.`description` like '%#{text}%'")
+  }
+
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)
   end
