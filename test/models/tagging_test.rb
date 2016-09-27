@@ -15,6 +15,10 @@ describe Tagging do
     tagging.must_respond_to(:taggable)
   end
 
+  it 'has an owner' do
+    tagging.owner.wont_be_nil
+  end
+
   it 'validates uniqueness of tag to taggable' do
     taggable = create(:story)
     tagging1 = create(:tagging, taggable: taggable)
