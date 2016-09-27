@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::NetworkRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :path
   property :name
@@ -23,10 +22,14 @@ class Api::NetworkRepresenter < Api::BaseRepresenter
 
   link :stories do
     {
-      href: "#{api_network_stories_path(represented)}{?page,per,zoom,filters}",
+      href: "#{api_network_stories_path(represented)}#{index_url_params}",
       templated: true,
-      count: represented.stories.count
+      count: represented.public_stories.count
     } if represented.id
   end
-  embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
+  embed :public_stories,
+    as: :stories,
+    paged: true,
+    item_class: Story,
+    item_decorator: Api::Min::StoryRepresenter
 end
