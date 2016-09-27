@@ -12,6 +12,7 @@ describe Api::SeriesController do
   end
 
   it 'should list' do
+    series.must_be :v4?
     get(:index, api_version: 'v1', format: 'json')
     assert_response :success
     assert_not_nil assigns[:series]
