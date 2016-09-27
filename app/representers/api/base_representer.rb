@@ -17,4 +17,8 @@ class Api::BaseRepresenter < HalApi::Representer
   def self.profile_host
     ENV['META_HOST'] || 'meta.prx.org'
   end
+
+  def index_url_params
+    "{?page,per,zoom,filters,sorts}"
+  end
 end
