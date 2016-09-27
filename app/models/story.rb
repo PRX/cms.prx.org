@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Story < BaseModel
-
   self.table_name = 'pieces'
 
   acts_as_paranoid
@@ -54,24 +53,20 @@ class Story < BaseModel
   event_attribute :network_only_at
 
   scope :published, -> { where('`published_at` IS NOT NULL') }
-
   scope :unpublished, -> { where('`published_at` IS NULL') }
-
   scope :unseries, -> { where('`series_id` IS NULL') }
-
   scope :v4, -> { where(app_version: PRX::APP_VERSION) }
-
-  scope :purchased, -> {
-    joins(:purchases).
-    select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
-  }
-
   scope :network_visible, -> { where('`network_only_at` IS NULL') }
 
   scope :series_visible, -> {
     joins('LEFT OUTER JOIN `series` ON `pieces`.`series_id` = `series`.`id`').
     where(['`series`.`subscription_approval_status` != ? OR `series`.`subscriber_only_at` IS NULL',
            Series::SUBSCRIPTION_PRX_APPROVED])
+  }
+
+  scope :purchased, -> {
+    joins(:purchases).
+    select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
   }
 
   scope :match_text, ->(text) {

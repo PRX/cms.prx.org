@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Image < BaseModel
-
   self.abstract_class = true
 
   include PublicAsset
@@ -9,8 +8,8 @@ class Image < BaseModel
 
   UPLOADED = 'uploaded'.freeze
   NOTFOUND = 'not found'.freeze
-  INVALID  = 'invalid'.freeze
-  FAILED   = 'failed'.freeze
+  INVALID = 'invalid'.freeze
+  FAILED = 'failed'.freeze
   COMPLETE = 'complete'.freeze
 
   alias_attribute :upload, :upload_path
@@ -25,12 +24,12 @@ class Image < BaseModel
     end
   end
 
-  def self.policy_class
-    ImagePolicy
-  end
-
   # for backwards compatibility, null statuses are considered final
   def fixerable_final?
     status.nil? || status == COMPLETE
+  end
+
+  def self.policy_class
+    ImagePolicy
   end
 end

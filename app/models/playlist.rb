@@ -14,4 +14,8 @@ class Playlist < BaseModel
 
   default_scope { where(type: nil) }  # no portfolios
   scope :named, ->(name = nil) { where(name ? { path: name } : 'path IS NOT NULL') }
+
+  def self.policy_class
+    AccountablePolicy
+  end
 end

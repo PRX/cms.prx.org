@@ -35,10 +35,6 @@ class Series < BaseModel
     @story_count ||= stories.published.network_visible.series_visible.count
   end
 
-  def self.policy_class
-    AccountablePolicy
-  end
-
   def subscribable?
     subscription_approval_status == SUBSCRIPTION_PRX_APPROVED
   end
@@ -125,6 +121,10 @@ class Series < BaseModel
 
   def v4?
     app_version == PRX::APP_VERSION
+  end
+
+  def self.policy_class
+    AccountablePolicy
   end
 
   private
