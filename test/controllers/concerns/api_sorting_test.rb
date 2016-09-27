@@ -16,12 +16,12 @@ describe ApiSorting do
 
   let(:controller) { ApiSortingTestController.new }
 
-  before {
+  before do
     controller.sort_string = 'one,two:asc,three:desc,four:,five:up,six'
-  }
+  end
 
   it 'sets a default array of sorts' do
-    controller.class.default_sort.must_equal [ { one: :desc } ]
+    controller.class.default_sort.must_equal [{ one: :desc }]
   end
 
   it 'parses query params' do

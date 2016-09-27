@@ -129,7 +129,7 @@ describe Api::StoriesController do
   end
 
   it 'should list purchased stories' do
-    purchases = create_list(:purchase, 3, purchased: story)
+    create_list(:purchase, 3, purchased: story)
     story2 = create(:story, account: story.account)
     story3 = create(:story_with_purchases, account: story.account)
 

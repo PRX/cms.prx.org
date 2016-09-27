@@ -32,9 +32,13 @@ describe Api::SeriesController do
   end
 
   describe 'sorting' do
-    let (:series_a) { create(:series, title: "aaaa") }
-    let (:series_b) { create(:series, title: "bbbb") }
-    before { series_a; series_b }
+    let (:series_a) { create(:series, title: 'aaaa') }
+    let (:series_b) { create(:series, title: 'bbbb') }
+
+    before do
+      series_a
+      series_b
+    end
 
     it 'should sort series by title asc' do
       get(:index, api_version: 'v1', format: 'json', sorts: 'title:asc')
