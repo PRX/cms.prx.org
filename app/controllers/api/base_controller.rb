@@ -6,12 +6,15 @@ class Api::BaseController < ApplicationController
   include Pundit
   include ApiVersioning
   include ApiFiltering
+  include ApiSorting
   include AnnounceActions
 
   protect_from_forgery with: :null_session
 
-  allow_params :show, :zoom
-  allow_params :index, [:page, :per, :zoom]
+  allow_params :show, [:api_version, :format, :zoom]
+  allow_params :index, [:api_version, :format, :page, :per, :zoom, :filters, :sorts]
+
+  sort_params default: { updated_at: :desc }, allowed: [:id, :created_at, :updated_at]
 
   cache_api_action :show, if: :cache_show?
   cache_api_action :index, if: :cache_index?
