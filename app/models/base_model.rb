@@ -15,7 +15,7 @@ class BaseModel < ActiveRecord::Base
     save!
   end
 
-  def public_stories(arel=nil)
+  def public_stories(arel = nil)
     Story.public_stories(arel || stories)
   end
 end
