@@ -5,7 +5,7 @@ class Api::StoriesController < Api::BaseController
 
   filter_resources_by :series_id, :account_id, :network_id
 
-  filter_params :highlighted, :purchased, :v4
+  filter_params :highlighted, :purchased, :v4, :text
 
   sort_params default: { published_at: :desc, updated_at: :desc },
               allowed: [:id, :created_at, :updated_at, :published_at, :title,
@@ -54,6 +54,7 @@ class Api::StoriesController < Api::BaseController
 
   def filtered(resources)
     resources = resources.v4 if filters.v4?
+    resources = resources.match_text(filters.text) if filters.text?
     if highlighted?
       resources
     else

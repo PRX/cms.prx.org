@@ -225,6 +225,18 @@ describe Story do
       story.update_attributes(app_version: 'foobar', deleted_at: nil)
       Story.where(id: story.id).v4.wont_include story
     end
+
+    it 'searches text for title and description' do
+      story = create(:story,
+                     title: 'Some Weirdo',
+                     description: 'Unique thing',
+                     short_description: 'Lacking sense')
+
+      Story.match_text('weirdo').must_include story
+      Story.match_text('unique').must_include story
+      Story.match_text('lack').must_include story
+      Story.match_text('random').wont_include story
+    end
   end
 
   describe 'default scope' do
@@ -250,5 +262,4 @@ describe Story do
       Story.where(id: story.id).must_include story
     end
   end
-
 end

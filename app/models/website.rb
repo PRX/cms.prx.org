@@ -13,4 +13,12 @@ class Website < BaseModel
   def as_link
     { href: url }
   end
+
+  def owner
+    browsable
+  end
+
+  def self.policy_class
+    OwnedPolicy
+  end
 end

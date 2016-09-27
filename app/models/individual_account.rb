@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class IndividualAccount < Account
-
   def name
     opener.try(:name)
   end
@@ -25,5 +24,4 @@ class IndividualAccount < Account
   def description
     opener.try(:bio)
   end
-
 end

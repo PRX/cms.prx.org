@@ -3,7 +3,6 @@
 # collect together values that work for the PRX economy
 # with the logic to come up with interesting info such as calculating the values for bonuses or something.
 class Economy
-
   # default rate for points per minute - this can be changed
   POINTS_PER_MINUTE            = 5 unless defined?(POINTS_PER_MINUTE)
 
@@ -124,5 +123,4 @@ class Economy
     # end
 
   end
-
 end

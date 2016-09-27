@@ -12,23 +12,32 @@ describe Api::SeriesController do
   end
 
   it 'should list' do
-    series.must_be :v4?
-    v3_series.wont_be :v4?
     get(:index, api_version: 'v1', format: 'json')
     assert_response :success
     assert_not_nil assigns[:series]
     assigns[:series].must_include series
-    assigns[:series].must_include v3_series
   end
 
-  it 'should filter v4 stories' do
-    series.must_be :v4?
-    v3_series.wont_be :v4?
-    get(:index, api_version: 'v1', format: 'json', filters: 'v4')
-    assert_response :success
-    assert_not_nil assigns[:series]
-    assigns[:series].must_include series
-    assigns[:series].wont_include v3_series
+  describe 'filtering' do
+    it 'should filter v4 stories' do
+      series.must_be :v4?
+      v3_series.wont_be :v4?
+      get(:index, api_version: 'v1', format: 'json', filters: 'v4')
+      assert_response :success
+      assert_not_nil assigns[:series]
+      assigns[:series].must_include series
+      assigns[:series].wont_include v3_series
+    end
+
+    it 'should list matching series for text' do
+      series = create(:series, title: 'You are all Weirdos')
+      series2 = create(:series, title: 'We are all Freakazoids')
+      get(:index, api_version: 'v1', format: 'json', filters: 'text=weirdos')
+      assert_response :success
+      assert_not_nil assigns[:series]
+      assigns[:series].must_include series
+      assigns[:series].wont_include series2
+    end
   end
 
   describe 'sorting' do

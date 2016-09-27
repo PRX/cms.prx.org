@@ -25,12 +25,14 @@ class Series < BaseModel
 
   scope :v4, -> { where('`app_version` = ?', PRX::APP_VERSION) }
 
+  scope :match_text, ->(text) {
+    where("`series`.`title` like '%#{text}%' OR " +
+          "`series`.`short_description` like '%#{text}%' OR " +
+          "`series`.`description` like '%#{text}%'")
+  }
+
   def story_count
     @story_count ||= stories.published.network_visible.series_visible.count
-  end
-
-  def self.policy_class
-    AccountablePolicy
   end
 
   def subscribable?
@@ -119,6 +121,10 @@ class Series < BaseModel
 
   def v4?
     app_version == PRX::APP_VERSION
+  end
+
+  def self.policy_class
+    AccountablePolicy
   end
 
   private
