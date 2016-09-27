@@ -31,8 +31,20 @@ describe Api::SeriesController do
     assigns[:series].wont_include v3_series
   end
 
-  describe 'with a valid token' do
+  describe 'sorting' do
+    let (:series_a) { create(:series, title: "aaaa") }
+    let (:series_b) { create(:series, title: "bbbb") }
+    before { series_a; series_b }
 
+    it 'should sort series by title asc' do
+      get(:index, api_version: 'v1', format: 'json', sorts: 'title:asc')
+      assert_response :success
+      assert_not_nil assigns[:series]
+      assigns[:series].first.must_equal series_a
+    end
+  end
+
+  describe 'with a valid token' do
     around do |test|
       token = StubToken.new(account.id, ['member'], user.id)
       @request.env['CONTENT_TYPE'] = 'application/json'
@@ -49,6 +61,7 @@ describe Api::SeriesController do
     end
 
     it 'updates a series' do
+      Series.find(series.id).title.wont_equal('foobar')
       put :update, { title: 'foobar' }.to_json, api_version: 'v1', id: series.id
       assert_response :success
       Series.find(series.id).title.must_equal('foobar')
@@ -59,7 +72,5 @@ describe Api::SeriesController do
       response.status.must_equal 204
       Series.where(id: series.id).must_be :empty?
     end
-
   end
-
 end
