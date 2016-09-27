@@ -1,14 +1,13 @@
 # encoding: utf-8
 
 class Api::Auth::StoriesController < Api::StoriesController
-
   include ApiAuthenticated
 
   api_versions :v1
 
   filter_resources_by :account_id, :series_id, :network_id
 
-  filter_params :noseries
+  filter_params :highlighted, :purchased, :v4, :noseries
 
   announce_actions :create, :update, :delete, :publish, :unpublish
 
@@ -20,10 +19,6 @@ class Api::Auth::StoriesController < Api::StoriesController
     user_not_authorized unless current_user.networks.exists?(params[:network_id])
   end
 
-  def sorted(res)
-    res.order('updated_at desc')
-  end
-
   # ALL stories - not just published and visible
   def scoped(relation)
     relation
@@ -31,7 +26,7 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   def filtered(resources)
     resources = resources.unseries if filters.noseries?
-    super
+    super(resources)
   end
 
   def resources_base
@@ -51,5 +46,4 @@ class Api::Auth::StoriesController < Api::StoriesController
       story.account_id ||= current_user.approved_accounts.first.try(:id)
     end
   end
-
 end

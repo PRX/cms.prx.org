@@ -129,7 +129,7 @@ describe Api::StoriesController do
   end
 
   it 'should list purchased stories' do
-    create_list(:purchase, 3, purchased: story)
+    purchases = create_list(:purchase, 3, purchased: story)
     story2 = create(:story, account: story.account)
     story3 = create(:story_with_purchases, account: story.account)
 
@@ -140,7 +140,9 @@ describe Api::StoriesController do
 
     assert_response :success
     assert_not_nil assigns[:stories]
-    assigns[:stories].must_equal [story, story3]
+    assigns[:stories].must_include story
+    assigns[:stories].must_include story3
+    assigns[:stories].wont_include story2
   end
 
   it 'should list only v4 stories' do
