@@ -9,8 +9,7 @@ class Account < BaseModel
   has_one :image, -> { where(parent_id: nil) }, class_name: 'AccountImage'
   has_one :portfolio
 
-  has_many :stories, -> { where('published_at is not null and network_only_at is null').order(published_at: :desc) }
-  has_many :all_stories, foreign_key: 'account_id', class_name: 'Story'
+  has_many :stories, -> { order(published_at: :desc) }
   has_many :series
   has_many :memberships
   has_many :websites, as: :browsable

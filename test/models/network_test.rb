@@ -13,6 +13,5 @@ describe Network do
 
   it 'returns a list of stories' do
     network.stories.count.must_equal 2
-    network.all_stories.count.must_equal 2
   end
 end

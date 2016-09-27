@@ -13,8 +13,7 @@ class Series < BaseModel
   belongs_to :account, -> { with_deleted }
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
 
-  has_many :stories, -> { where('published_at is not null and network_only_at is null').order('episode_number DESC, position DESC, published_at DESC') }
-  has_many :all_stories, foreign_key: 'series_id', class_name: 'Story'
+  has_many :stories, -> { order('episode_number DESC, position DESC, published_at DESC') }
   has_many :schedules
 
   has_one :image, -> { where(parent_id: nil) }, class_name: 'SeriesImage'
@@ -30,10 +29,6 @@ class Series < BaseModel
           "`series`.`short_description` like '%#{text}%' OR " +
           "`series`.`description` like '%#{text}%'")
   }
-
-  def story_count
-    @story_count ||= stories.published.network_visible.series_visible.count
-  end
 
   def subscribable?
     subscription_approval_status == SUBSCRIPTION_PRX_APPROVED
