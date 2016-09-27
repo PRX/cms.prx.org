@@ -7,7 +7,7 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   filter_resources_by :account_id, :series_id, :network_id
 
-  filter_params :highlighted, :purchased, :v4, :noseries
+  filter_params :highlighted, :purchased, :v4, :text, :noseries
 
   announce_actions :create, :update, :delete, :publish, :unpublish
 
