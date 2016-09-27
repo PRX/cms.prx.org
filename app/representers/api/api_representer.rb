@@ -24,7 +24,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of stories",
         profile:   profile_url(:collection, :story),
-        href:      api_stories_path_template(api_version: represented.version) + '{?page,per,zoom,filters}',
+        href:      api_stories_path_template(api_version: represented.version) + index_url_params,
         templated: true
       }
     ]
@@ -41,7 +41,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of series",
         profile:   profile_url(:collection, :series),
-        href:      api_series_index_path_template(api_version: represented.version) + '{?page,per,zoom}',
+        href:      api_series_index_path_template(api_version: represented.version) + index_url_params,
         templated: true
       }
     ]
@@ -63,7 +63,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of accounts",
         profile:   profile_url(:collection, :account),
-        href:      api_accounts_path_template(api_version: represented.version) + '{?page,per,zoom}',
+        href:      api_accounts_path_template(api_version: represented.version) + index_url_params,
         templated: true
       }
     ]
@@ -74,7 +74,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of the most recent picks",
         profile:   profile_url(:collection, :pick),
-        href:      api_picks_path_template(api_version: represented.version) + '{?page,per,zoom}',
+        href:      api_picks_path_template(api_version: represented.version) + index_url_params,
         templated: true
       }
     ]
@@ -105,7 +105,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title:     "Get a paged collection of networks",
         profile:   profile_url(:collection, :network),
-        href:      api_networks_path_template(api_version: represented.version) + '{?page,per,zoom}',
+        href:      api_networks_path_template(api_version: represented.version) + index_url_params,
         templated: true
       }
     ]

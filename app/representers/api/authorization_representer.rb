@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::AuthorizationRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :name
 
@@ -14,7 +13,7 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
 
   link :accounts do
     {
-      href: "#{api_authorization_accounts_path}{?page,per,zoom}",
+      href: "#{api_authorization_accounts_path}#{index_url_params}",
       templated: true,
       count: represented.accounts.count
     }
@@ -31,7 +30,7 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
         count: represented.approved_account_series.count
       },
       {
-        href: "#{api_authorization_series_index_path}{?page,per,zoom,filters}",
+        href: "#{api_authorization_series_index_path}#{index_url_params}",
         templated: true,
         count: represented.approved_account_series.count
       }
@@ -40,7 +39,7 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
 
   link :stories do
     {
-      href: "#{api_authorization_stories_path}{?page,per,zoom,filters}",
+      href: "#{api_authorization_stories_path}#{index_url_params}",
       templated: true,
       count: represented.approved_account_stories.count
     }
@@ -63,5 +62,4 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
   def self_url(_r)
     api_authorization_path
   end
-
 end

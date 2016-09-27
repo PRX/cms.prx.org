@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::StoryRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :title
   property :short_description
@@ -99,7 +98,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   link :musical_works do
     {
-      href: "#{api_story_musical_works_path(represented)}{?page,per,zoom}",
+      href: "#{api_story_musical_works_path(represented)}#{index_url_params}",
       templated: true,
       count: represented.musical_works.count
     } if represented.id
