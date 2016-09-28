@@ -73,7 +73,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def scoped(relation)
-    Story.public_stories(relation)
+    relation.public_stories
   end
 
   def sorted(res)
