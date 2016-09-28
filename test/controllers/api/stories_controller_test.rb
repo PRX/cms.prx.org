@@ -140,7 +140,9 @@ describe Api::StoriesController do
 
     assert_response :success
     assert_not_nil assigns[:stories]
-    assigns[:stories].must_equal [story, story3]
+    assigns[:stories].must_include story
+    assigns[:stories].must_include story3
+    assigns[:stories].wont_include story2
   end
 
   it 'should list only v4 stories' do

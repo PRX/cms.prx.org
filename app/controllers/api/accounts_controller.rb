@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::AccountsController < Api::BaseController
-
   api_versions :v1
 
   represent_with Api::AccountRepresenter
@@ -14,10 +13,6 @@ class Api::AccountsController < Api::BaseController
 
   def resources_base
     user.try(:accounts) || Account
-  end
-
-  def sorted(arel)
-    arel.order(created_at: :desc)
   end
 
   def user

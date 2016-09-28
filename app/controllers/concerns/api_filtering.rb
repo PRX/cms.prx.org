@@ -5,6 +5,12 @@ require 'active_support/concern'
 module ApiFiltering
   extend ActiveSupport::Concern
 
+  included do
+    class_eval do
+      class_attribute :allowed_filter_names
+    end
+  end
+
   class UnknownFilterError < NoMethodError
   end
 
@@ -25,13 +31,8 @@ module ApiFiltering
   end
 
   module ClassMethods
-    attr_accessor :allowed_filter_names
-
     def filter_params(*args)
-      self.allowed_filter_names = args.map(&:to_s).uniq
-      if superclass.respond_to?(:allowed_filter_names)
-        self.allowed_filter_names |= (superclass.allowed_filter_names || [])
-      end
+      self.allowed_filter_names = args.map(&:to_s).uniq || []
     end
   end
 
@@ -43,7 +44,7 @@ module ApiFiltering
 
   def parse_filters_param
     filters_map = {}
-    filters = self.class.allowed_filter_names || self.class.superclass.allowed_filter_names
+    filters = self.class.allowed_filter_names
 
     # set nils
     filters.each do |name|
@@ -73,5 +74,4 @@ module ApiFiltering
     end
     FilterParams.new(filters_map)
   end
-
 end

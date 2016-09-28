@@ -1,12 +1,15 @@
 # encoding: utf-8
 
 class Api::StoriesController < Api::BaseController
-
   api_versions :v1
 
   filter_resources_by :series_id, :account_id, :network_id
 
   filter_params :highlighted, :purchased, :v4, :text
+
+  sort_params default: { published_at: :desc, updated_at: :desc },
+              allowed: [:id, :created_at, :updated_at, :published_at, :title,
+                        :episode_number, :position]
 
   announce_actions :create, :update, :delete, :publish, :unpublish
 
@@ -74,11 +77,8 @@ class Api::StoriesController < Api::BaseController
   end
 
   def sorted(res)
-    if filters.purchased?
-      res.purchased.order('purchase_count DESC')
-    else
-      res.order('published_at desc')
-    end
+    res = res.purchased.order('purchase_count DESC') if filters.purchased?
+    super(res)
   end
 
   def highlighted?
