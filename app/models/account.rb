@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Account < BaseModel
+  include Storied
+
   acts_as_paranoid
 
   belongs_to :opener, -> { with_deleted }, class_name: 'User', foreign_key: 'opener_id'

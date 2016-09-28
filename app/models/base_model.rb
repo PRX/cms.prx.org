@@ -14,8 +14,4 @@ class BaseModel < ActiveRecord::Base
     raw_write_attribute(:filename, name)
     save!
   end
-
-  def public_stories(arel = nil)
-    Story.public_stories(arel || stories)
-  end
 end

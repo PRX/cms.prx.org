@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class PlaylistSection < BaseModel
+  include Storied
+
   self.table_name = 'playlist_sections'
 
   belongs_to :playlist, touch: true

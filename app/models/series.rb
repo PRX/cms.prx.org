@@ -8,6 +8,8 @@ class Series < BaseModel
     SUBSCRIPTION_PRX_APPROVED  = 'PRX Approved'
   ]
 
+  include Storied
+
   acts_as_paranoid
 
   belongs_to :account, -> { with_deleted }
