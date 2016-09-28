@@ -2,7 +2,8 @@ require 'test_helper'
 
 describe Fixerable do
 
-  class FixerableTestModel < ActionController::Base
+  class FixerableTestModel
+    include ActiveModel::Model
     include Fixerable
     fixerable_upload :the_temp_field, :the_final_field
     attr_accessor :the_temp_field
