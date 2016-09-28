@@ -25,7 +25,7 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
   links :series do
     [
       {
-        href: "#{api_authorization_series_path_template(id: '{id}')}{?zoom}",
+        href: "#{api_authorization_series_path_template(id: '{id}')}#{show_url_params}",
         templated: true,
         count: represented.approved_account_series.count
       },
@@ -47,14 +47,14 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
 
   link :story do
     {
-      href: "#{api_authorization_story_path_template(id: '{id}')}{?zoom}",
+      href: "#{api_authorization_story_path_template(id: '{id}')}#{show_url_params}",
       templated: true,
     }
   end
 
   link :network do
     {
-      href: "#{api_authorization_network_path_template(id: '{id}')}{?zoom}",
+      href: "#{api_authorization_network_path_template(id: '{id}')}#{show_url_params}",
       templated: true,
     }
   end

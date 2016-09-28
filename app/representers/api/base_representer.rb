@@ -21,4 +21,8 @@ class Api::BaseRepresenter < HalApi::Representer
   def index_url_params
     '{?page,per,zoom,filters,sorts}'
   end
+
+  def show_url_params
+    '{?zoom}'
+  end
 end

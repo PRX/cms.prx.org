@@ -13,7 +13,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title: 'Get a single story',
         profile: profile_url(:story),
-        href: api_story_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
+        href: api_story_path_template(api_version: represented.version, id: '{id}') + show_url_params,
         templated: true
       }
     ]
@@ -35,7 +35,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title: 'Get a single series',
         profile: profile_url(:series),
-        href: api_series_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
+        href: api_series_path_template(api_version: represented.version, id: '{id}') + show_url_params,
         templated: true
       },
       {
@@ -52,7 +52,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title: 'Get a single account',
         profile: profile_url(:account),
-        href: api_account_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
+        href: api_account_path_template(api_version: represented.version, id: '{id}') + show_url_params,
         templated: true
       }
     ]
@@ -94,7 +94,7 @@ class Api::ApiRepresenter < Api::BaseRepresenter
       {
         title: 'Get a single network',
         profile: profile_url(:network),
-        href: api_network_path_template(api_version: represented.version, id: '{id}') + '{?zoom}',
+        href: api_network_path_template(api_version: represented.version, id: '{id}') + show_url_params,
         templated: true
       }
     ]
