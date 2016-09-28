@@ -37,9 +37,12 @@ module ApiSorting
 
   private
 
+  # support ?sorts=attribute,attribute:direction params
+  # e.g. ?sorts=published_at,updated_at:desc
+  # desc is default if a direction is not specified
   def parse_sorts_param
     sorts_array = []
-    allowed_sorts = self.class.allowed_sort_names || self.class.superclass.allowed_sort_names
+    allowed_sorts = self.class.allowed_sort_names
 
     # parse sort param for name of the column and direction
     # default is descending, because I say so, and we have a bias towards the new
