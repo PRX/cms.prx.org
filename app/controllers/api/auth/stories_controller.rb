@@ -9,6 +9,10 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   filter_params :highlighted, :purchased, :v4, :text, :noseries
 
+  sort_params default: { updated_at: :desc },
+              allowed: [:id, :created_at, :updated_at, :published_at, :title,
+                        :episode_number, :position]
+
   announce_actions :create, :update, :delete, :publish, :unpublish
 
   represent_with Api::Auth::StoryRepresenter
