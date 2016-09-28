@@ -7,7 +7,7 @@ describe Api::Auth::AccountRepresenter do
   let(:json) { JSON.parse(representer.to_json) }
 
   before do
-    account.all_stories.last.update(published_at: nil)
+    account.stories.last.update(published_at: nil)
   end
 
   def get_link(rel, key = 'href')
@@ -28,9 +28,8 @@ describe Api::Auth::AccountRepresenter do
   end
 
   it 'embeds all authorized stories' do
-    account.stories.count.must_equal 1
-    account.all_stories.count.must_equal 2
+    account.public_stories.count.must_equal 1
+    account.stories.count.must_equal 2
     get_embed('prx:stories', 'total').must_equal 2
   end
-
 end

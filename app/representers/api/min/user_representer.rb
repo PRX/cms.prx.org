@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::Min::UserRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :first_name
   property :last_name

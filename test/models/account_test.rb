@@ -15,12 +15,12 @@ describe Account do
     account.stories.count.must_be :>, 0
   end
 
-  it 'does not include unpublished stories by default' do
-    account.stories.where(id: unpublished_story.id).count.must_equal 0
+  it 'does not include unpublished stories in public_stories' do
+    account.public_stories.where(id: unpublished_story.id).count.must_equal 0
   end
 
   it 'has unpublished (or any) stories' do
-    account.all_stories.where(id: unpublished_story.id).count.must_equal 1
+    account.stories.where(id: unpublished_story.id).count.must_equal 1
   end
 
   it 'has name as short name' do

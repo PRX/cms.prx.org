@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::Min::AccountRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :type
   property :name
@@ -34,15 +33,21 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
 
   link :stories do
     {
-      href: "#{api_account_stories_path(represented)}{?page,per,zoom,filters}",
-      templated: true
+      href: "#{api_account_stories_path(represented)}#{index_url_params}",
+      templated: true,
+      count: represented.public_stories.count
     }
   end
-  embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter, zoom: false
+  embed :public_stories,
+        as: :stories,
+        paged: true,
+        item_class: Story,
+        item_decorator: Api::Min::StoryRepresenter,
+        zoom: false
 
   link :series do
     {
-      href: "#{api_account_series_index_path(represented)}{?page,per,zoom,filters}",
+      href: "#{api_account_series_index_path(represented)}#{index_url_params}",
       templated: true
     }
   end

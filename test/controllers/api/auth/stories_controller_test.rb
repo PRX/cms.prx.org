@@ -4,7 +4,7 @@ describe Api::Auth::StoriesController do
   let (:user) { create(:user) }
   let (:token) { StubToken.new(account.id, ['member'], user.id) }
   let (:account) { user.individual_account }
-  let (:unpublished_story) { account.all_stories.first }
+  let (:unpublished_story) { account.stories.first }
   let (:random_story) { create(:story, published_at: nil) }
   let (:network) { create(:network, account: user.individual_account) }
   let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now) }
@@ -22,14 +22,14 @@ describe Api::Auth::StoriesController do
     it 'indexes stories under their account' do
       get(:index, api_version: 'v1', account_id: account.id)
       assert_response :success
-      JSON.parse(response.body)['count'].must_equal account.all_stories.count
-      account.all_stories.count.must_be :>, account.stories.count
+      JSON.parse(response.body)['count'].must_equal account.stories.count
+      account.stories.count.must_be :>, account.public_stories.count
     end
 
     it 'indexes stories in a network' do
       get(:index, api_version: 'v1', network_id: network.id)
       assert_response :success
-      JSON.parse(response.body)['count'].must_equal network.all_stories.count
+      JSON.parse(response.body)['count'].must_equal network.stories.count
     end
 
     it 'filters v4 stories' do

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::MembershipRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :role
   property :approved

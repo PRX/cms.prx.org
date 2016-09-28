@@ -1,12 +1,10 @@
 require 'test_helper'
 
 describe Api::Msg::ImageRepresenter do
-
   let(:representer) { Api::Msg::ImageRepresenter.new(image) }
   let(:json)        { JSON.parse(representer.to_json) }
 
   describe 'with a completed upload' do
-
     let(:image) { FactoryGirl.create(:story_image) }
 
     it 'includes basic data' do
@@ -30,22 +28,18 @@ describe Api::Msg::ImageRepresenter do
       json['pieceId'].must_equal image.piece_id
       json['userId'].must_be_nil
     end
-
   end
 
   describe 'with a user image' do
-
     let(:image) { FactoryGirl.create(:user_image) }
 
     it 'knows the id of the parent user' do
       json['userId'].must_equal image.user_id
       json['pieceId'].must_be_nil
     end
-
   end
 
   describe 'with an in-progress upload' do
-
     let(:image) { FactoryGirl.create(:story_image_uploaded) }
 
     it 'includes basic data' do
@@ -64,7 +58,5 @@ describe Api::Msg::ImageRepresenter do
     it 'has a destination path' do
       json['destinationPath'].must_equal "public/piece_images/#{image.id}"
     end
-
   end
-
 end

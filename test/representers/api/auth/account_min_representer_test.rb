@@ -16,6 +16,6 @@ describe Api::Auth::AccountMinRepresenter do
 
   it 'links to authorized stories' do
     get_link_href('prx:stories').must_match /authorization\/accounts\/\d+\/stories/
+    get_link_href('prx:stories').must_match /\{\?page,per,zoom,filters,sorts\}/
   end
-
 end

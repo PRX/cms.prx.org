@@ -75,6 +75,8 @@ class Story < BaseModel
           "`pieces`.`description` like '%#{text}%'")
   }
 
+  scope :public_stories, -> { published.network_visible.series_visible }
+
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)
   end

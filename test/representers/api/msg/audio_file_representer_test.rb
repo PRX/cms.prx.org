@@ -1,12 +1,10 @@
 require 'test_helper'
 
 describe Api::Msg::AudioFileRepresenter do
-
   let(:representer) { Api::Msg::AudioFileRepresenter.new(audio) }
   let(:json)        { JSON.parse(representer.to_json) }
 
   describe 'with a completed upload' do
-
     let(:audio) { FactoryGirl.create(:audio_file) }
 
     it 'includes basic data' do
@@ -23,11 +21,9 @@ describe Api::Msg::AudioFileRepresenter do
     it 'has a destination path' do
       json['destinationPath'].must_equal "public/audio_files/#{audio.id}"
     end
-
   end
 
   describe 'with an in-progress upload' do
-
     let(:audio) { FactoryGirl.create(:audio_file_uploaded) }
 
     it 'includes basic data' do
@@ -46,7 +42,5 @@ describe Api::Msg::AudioFileRepresenter do
     it 'has a destination path' do
       json['destinationPath'].must_equal "public/audio_files/#{audio.id}"
     end
-
   end
-
 end

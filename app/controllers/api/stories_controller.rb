@@ -38,7 +38,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def random
-    @story = Story.published.network_visible.series_visible.limit(1).order('RAND()').first
+    @story = Story.public_stories.limit(1).order('RAND()').first
     show
   end
 
@@ -73,7 +73,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def scoped(relation)
-    relation.published.network_visible.series_visible
+    relation.public_stories
   end
 
   def sorted(res)

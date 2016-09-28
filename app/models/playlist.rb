@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Playlist < BaseModel
+  include Storied
 
   acts_as_paranoid
 

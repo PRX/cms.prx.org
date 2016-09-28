@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::AudioFileRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :position
 

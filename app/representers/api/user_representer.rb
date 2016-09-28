@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::UserRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :first_name
   property :last_name
@@ -9,12 +8,16 @@ class Api::UserRepresenter < Api::BaseRepresenter
 
   link :accounts do
     {
-      href: "#{api_user_accounts_path(represented)}{?page,per,zoom}",
+      href: "#{api_user_accounts_path(represented)}#{index_url_params}",
       templated: true,
       count: represented.accounts.count
     } if represented.id
   end
-  embed :accounts, paged: true, item_class: Account, item_decorator: Api::Min::AccountRepresenter, zoom: false
+  embed :accounts,
+        paged: true,
+        item_class: Account,
+        item_decorator: Api::Min::AccountRepresenter,
+        zoom: false
 
   link :image do
     {

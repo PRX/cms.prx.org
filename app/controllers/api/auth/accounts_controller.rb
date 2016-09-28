@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::Auth::AccountsController < Api::AccountsController
-
   include ApiAuthenticated
 
   api_versions :v1
@@ -17,5 +16,4 @@ class Api::Auth::AccountsController < Api::AccountsController
   def resources_base
     @accounts ||= current_user.approved_accounts
   end
-
 end

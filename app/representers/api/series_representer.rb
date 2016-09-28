@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::SeriesRepresenter < Api::BaseRepresenter
-
   property :id, writeable: false
   property :title
   property :short_description
@@ -14,12 +13,16 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
 
   link :stories do
     {
-      href: "#{api_series_stories_path(represented)}{?page,per,zoom}",
+      href: "#{api_series_stories_path(represented)}#{index_url_params}",
       templated: true,
-      count: represented.story_count
+      count: represented.public_stories.count
     } if represented.id
   end
-  embed :stories, paged: true, item_class: Story, item_decorator: Api::Min::StoryRepresenter
+  embed :public_stories,
+        as: :stories,
+        paged: true,
+        item_class: Story,
+        item_decorator: Api::Min::StoryRepresenter
 
   link :image do
     api_series_image_path(represented.image) if represented.image
@@ -34,5 +37,4 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
     }
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
-
 end

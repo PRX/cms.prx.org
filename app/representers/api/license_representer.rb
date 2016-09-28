@@ -3,7 +3,6 @@ require 'roar/json/hal'
 require 'hal_api/representer/caches'
 
 class Api::LicenseRepresenter < Roar::Decorator
-
   include Roar::JSON::HAL
   include HalApi::Representer::Caches
 
