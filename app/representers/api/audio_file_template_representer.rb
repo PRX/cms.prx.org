@@ -8,7 +8,9 @@ class Api::AudioFileTemplateRepresenter < Api::BaseRepresenter
   property :length_maximum
 
   def self_url(represented)
-    polymorphic_path([:api, represented.audio_version_template, represented])
+    api_audio_version_template_audio_file_template_path(
+      represented.audio_version_template,
+      represented)
   end
 
   set_link_property(rel: :audio_version_template, writeable: true)
