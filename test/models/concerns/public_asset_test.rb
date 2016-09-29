@@ -5,6 +5,12 @@ class BasePublicAsset
   include PublicAsset
 end
 
+class MockFile
+  def url(version='original')
+    version
+  end
+end
+
 class TestPublicAsset
   include PublicAsset
 
@@ -13,12 +19,9 @@ class TestPublicAsset
   def id; 1; end
   def public_asset_filename; name; end
   def token_secret; 'secret'; end
-  def asset_url(options={})
-    v = options[:version]
-    v = nil if (v.blank? || v.to_s == 'original')
-    "test_public_asset/#{[v, public_asset_filename].join('/')}"
+  def file
+    MockFile.new
   end
-
 end
 
 describe PublicAsset do
@@ -33,7 +36,11 @@ describe PublicAsset do
   it 'generates a public url' do
     public_asset.public_url.must_equal "/pub/5033d06991dc5b69e38275253bfb3b24/0/web/test_public_asset/1/original/test.mp3"
   end
-  
+
+  it 'generates an asset url' do
+    public_asset.asset_url.must_equal "original"
+  end
+
   it 'sets default options' do
     defaults = public_asset.set_asset_option_defaults
     defaults[:use].must_equal 'web'
@@ -45,19 +52,11 @@ describe PublicAsset do
     defaults[:expires].must_equal 0
   end
 
-  it 'has a token secret' do    
+  it 'has a token secret' do
     bare_public_asset.token_secret.wont_be_nil
   end
 
-  # it 'needs to have asset_url implemented' do
-  #   proc{ bare_public_asset.asset_url}.must_raise NotImplementedError
-  # end
-
-  # it 'needs to have public_asset_filename implemented' do
-  #   proc{ bare_public_asset.public_asset_filename }.must_raise NotImplementedError
-  # end
-
-  it 'tests if valid' do    
+  it 'tests if valid' do
     public_asset.public_url_valid?({}).must_equal false
 
     options = public_asset.set_asset_option_defaults
@@ -65,8 +64,7 @@ describe PublicAsset do
     public_asset.public_url_valid?(options).must_equal true
   end
 
-  it 'tests if expired' do    
+  it 'tests if expired' do
     public_asset.url_expired?({expires: 1.week.ago.to_i}).must_equal true
   end
-
 end
