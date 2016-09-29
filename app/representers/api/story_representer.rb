@@ -58,8 +58,8 @@ class Api::StoryRepresenter < Api::BaseRepresenter
 
   link :image do
     {
-      href: polymorphic_path([:api, represented.default_image]),
-      profile: model_uri(represented.default_image)
+      href: api_story_story_image_path(represented, represented.default_image),
+      title: represented.default_image.try(:filename)
     } if represented.default_image
   end
   embed :default_image, as: :image, decorator: Api::ImageRepresenter
