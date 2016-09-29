@@ -62,13 +62,7 @@ module Fixerable
         # avoid a get by using local references
         local_directory = connection.directories.new(key: bucket)
         local_file = local_directory.files.new(key: path)
-        if credentials[:provider] == 'AWS'
-          local_file.url(fixerable_url_expires_at(uploader, options), options)
-        elsif ['Rackspace', 'OpenStack'].include?(credentials[:provider])
-          connection.get_object_https_url(bucket, path, fixerable_url_expires_at(uploader, options))
-        else
-          local_file.url(fixerable_url_expires_at(uploader, options))
-        end
+        local_file.url(fixerable_url_expires_at(uploader, options), options)
       end
     end
 
