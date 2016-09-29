@@ -9,14 +9,17 @@ describe StoryAttributePolicy do
 
     it 'returns true if user is a member of story account' do
       StoryAttributePolicy.new(member_token, musical_work).must_allow :update?
+      StoryAttributePolicy.new(member_token, musical_work).must_allow :create?
     end
 
     it 'returns false if user is not present' do
       StoryAttributePolicy.new(nil, musical_work).wont_allow :update?
+      StoryAttributePolicy.new(nil, musical_work).wont_allow :create?
     end
 
     it 'returns false if user is not a member of story account' do
       StoryAttributePolicy.new(n_m_token, musical_work).wont_allow :update?
+      StoryAttributePolicy.new(n_m_token, musical_work).wont_allow :create?
     end
   end
 end

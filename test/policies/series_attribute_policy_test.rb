@@ -9,14 +9,17 @@ describe SeriesAttributePolicy do
 
     it 'returns true if user is a member of series account' do
       SeriesAttributePolicy.new(member_token, template).must_allow :update?
+      SeriesAttributePolicy.new(member_token, template).must_allow :create?
     end
 
     it 'returns false if user is not present' do
       SeriesAttributePolicy.new(nil, template).wont_allow :update?
+      SeriesAttributePolicy.new(nil, template).wont_allow :create?
     end
 
     it 'returns false if user is not a member of series account' do
       SeriesAttributePolicy.new(n_m_token, template).wont_allow :update?
+      SeriesAttributePolicy.new(n_m_token, template).wont_allow :create?
     end
   end
 end
