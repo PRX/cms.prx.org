@@ -6,7 +6,7 @@ class BasePublicAsset
 end
 
 class MockFile
-  def url(version='original')
+  def url(version = 'original')
     version
   end
 end
@@ -19,6 +19,7 @@ class TestPublicAsset
   def id; 1; end
   def public_asset_filename; name; end
   def token_secret; 'secret'; end
+
   def file
     MockFile.new
   end
@@ -38,7 +39,7 @@ describe PublicAsset do
   end
 
   it 'generates an asset url' do
-    public_asset.asset_url.must_equal "original"
+    public_asset.asset_url.must_equal 'original'
   end
 
   it 'sets default options' do
