@@ -13,6 +13,14 @@ describe Website do
     website.url.must_equal 'http://prx.org'
   end
 
+  it 'has an owner' do
+    website.owner.must_equal website.browsable
+  end
+
+  it 'uses an owned policy' do
+    Website.policy_class.must_equal OwnedPolicy
+  end
+
   describe '#as_link' do
     it 'sets :href to #url' do
       website.url = "http://example.com"

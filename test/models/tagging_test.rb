@@ -19,6 +19,10 @@ describe Tagging do
     tagging.owner.wont_be_nil
   end
 
+  it 'uses an owned policy' do
+    Tagging.policy_class.must_equal OwnedPolicy
+  end
+
   it 'validates uniqueness of tag to taggable' do
     taggable = create(:story)
     tagging1 = create(:tagging, taggable: taggable)
