@@ -11,6 +11,6 @@ class Api::MusicalWorkRepresenter < Api::BaseRepresenter
   property :duration
 
   def self_url(musical_work)
-    polymorphic_path([:api, musical_work.story, musical_work])
+    api_story_musical_work_path(musical_work.story, musical_work)
   end
 end

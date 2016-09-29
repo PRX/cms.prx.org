@@ -17,7 +17,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
 
   link :image do
     {
-      href:  api_account_account_image_path(represented),
+      href: api_account_account_image_path(represented),
       title: represented.image.try(:filename)
     } if represented.id
   end
@@ -25,7 +25,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
 
   link rel: :opener, writeable: true do
     {
-      href:  api_user_path(represented.opener),
+      href: api_user_path(represented.opener),
       title: represented.opener.login
     } if represented.opener && represented.opener.id
   end

@@ -16,10 +16,9 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
 
   link :image do
     {
-      href:    polymorphic_path([:api, represented.image]),
-      title:   represented.image.filename,
-      profile: model_uri(represented.image)
-    } if represented.image
+      href: api_account_account_image_path(represented),
+      title: represented.image.try(:filename)
+    } if represented.id
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter
 

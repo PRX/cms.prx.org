@@ -4,6 +4,12 @@
 # Representer for Announce messaging
 #
 class Api::Msg::ImageRepresenter < Api::BaseRepresenter
+  include NestedImage
+
+  def self_url(represented)
+    nested_image_path(represented) || super
+  end
+
   property :id, writeable: false
   property :filename, writeable: false
   property :size
