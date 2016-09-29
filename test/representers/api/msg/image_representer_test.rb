@@ -5,7 +5,7 @@ describe Api::Msg::ImageRepresenter do
   let(:json)        { JSON.parse(representer.to_json) }
 
   describe 'with a completed upload' do
-    let(:image) { FactoryGirl.create(:story_image) }
+    let(:image) { create(:story_image) }
 
     it 'includes basic data' do
       json['id'].must_equal image.id
@@ -31,7 +31,7 @@ describe Api::Msg::ImageRepresenter do
   end
 
   describe 'with a user image' do
-    let(:image) { FactoryGirl.create(:user_image) }
+    let(:image) { create(:user_image) }
 
     it 'knows the id of the parent user' do
       json['userId'].must_equal image.user_id
@@ -40,7 +40,7 @@ describe Api::Msg::ImageRepresenter do
   end
 
   describe 'with an in-progress upload' do
-    let(:image) { FactoryGirl.create(:story_image_uploaded) }
+    let(:image) { create(:story_image_uploaded) }
 
     it 'includes basic data' do
       json['id'].must_equal image.id
