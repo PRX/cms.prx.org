@@ -6,6 +6,8 @@ class Api::UserImagesController < Api::BaseController
 
   filter_resources_by :user_id
 
+  announce_actions decorator: Api::Msg::ImageRepresenter, subject: :image
+
   represent_with Api::ImageRepresenter
 
   def resource
