@@ -10,7 +10,8 @@ class Api::AudioFileTemplateRepresenter < Api::BaseRepresenter
   def self_url(represented)
     api_audio_version_template_audio_file_template_path(
       represented.audio_version_template,
-      represented)
+      represented
+    )
   end
 
   set_link_property(rel: :audio_version_template, writeable: true)
