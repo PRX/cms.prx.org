@@ -1,12 +1,10 @@
 require 'test_helper'
 
 describe Story do
-
   let(:story) { build_stubbed(:story, audio_versions_count: 10) }
   let(:promos_only) { build_stubbed(:story_promos_only) }
 
   describe 'basics' do
-
     it 'has a table defined' do
       Story.table_name.must_equal 'pieces'
     end
@@ -29,7 +27,6 @@ describe Story do
   end
 
   describe 'using default audio version' do
-
     it 'finds default audio' do
       story.audio_versions.count.must_equal 10
       story.default_audio_version.audio_files.count.must_be :>=, 1
@@ -74,7 +71,6 @@ describe Story do
   end
 
   describe '#default_image' do
-
     it 'returns the first image when one is present' do
       story.stub(:images, [:image, :second_image]) do
         story.default_image.must_equal :image
@@ -86,15 +82,6 @@ describe Story do
         story.default_image.must_equal nil
       end
     end
-
-    it 'falls back to series image when present' do
-      series = build_stubbed(:series, image: build_stubbed(:series_image))
-      story.images = []
-      story.stub(:series, series) do
-        story.default_image.must_equal series.image
-      end
-    end
-
   end
 
   describe '#tags' do
@@ -157,7 +144,6 @@ describe Story do
   end
 
   describe 'publishing' do
-
     let(:story) { create(:story) }
 
     it 'publishes a story' do
