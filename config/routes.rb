@@ -10,11 +10,6 @@ PRX::Application.routes.draw do
         get 'original', on: :member
       end
 
-      resources :account_images, only: [:show, :index]
-      resources :series_images, only: [:show, :index]
-      resources :story_images, only: [:show, :index]
-      resources :user_images, only: [:show, :index]
-
       resources :audio_versions, except: [:new, :edit] do
         resources :audio_files, except: [:new, :edit]
       end
@@ -32,7 +27,7 @@ PRX::Application.routes.draw do
       end
 
       resources :series, except: [:new, :edit] do
-        resources :series_images, path: 'images', except: [:new, :edit]
+        resource :series_image, path: 'image', except: [:new, :edit]
         resources :stories, only: [:index, :create]
         resources :audio_version_templates, except: [:new, :edit]
       end
