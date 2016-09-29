@@ -13,21 +13,20 @@ describe Api::StoryImagesController do
   end
 
   it 'should show' do
-    get(:show, api_request_opts(id: story_image.id))
+    get(:show, api_request_opts(story_id: story.id, id: story_image.id))
     assert_response :success
   end
 
   it 'should list' do
     story_image.id.wont_be_nil
-    get(:index, api_request_opts)
+    get(:index, api_request_opts(story_id: story.id))
     assert_response :success
   end
 
   it 'should update' do
     image_hash = { credit: 'blah credit' }
-    put :update, image_hash.to_json, api_request_opts(story_id: story.id, id: story_image.id)
+    put(:update, image_hash.to_json, api_request_opts(story_id: story.id, id: story_image.id))
     assert_response :success
     StoryImage.find(story_image.id).credit.must_equal('blah credit')
   end
-
 end
