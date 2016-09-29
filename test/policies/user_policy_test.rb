@@ -5,7 +5,7 @@ describe UserPolicy do
   let(:other_token) { StubToken.new(123, ['member']) }
   let(:user) { build_stubbed(:user, id: user_token.user_id) }
 
-  describe '#update? and #create?' do
+  describe '#update?' do
     it 'lets users update themselves' do
       UserPolicy.new(user_token, user).must_allow :update?
     end
