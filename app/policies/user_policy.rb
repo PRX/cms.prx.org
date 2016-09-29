@@ -1,6 +1,6 @@
 class UserPolicy < ApplicationPolicy
   def create?
-    true
+    false
   end
 
   def update?

@@ -14,4 +14,11 @@ describe UserPolicy do
       UserPolicy.new(other_token, user).wont_allow :update?
     end
   end
+
+  describe '#create?' do
+    it 'never allows create' do
+      UserPolicy.new(user_token, user).wont_allow :create?
+      UserPolicy.new(other_token, user).wont_allow :create?
+    end
+  end
 end

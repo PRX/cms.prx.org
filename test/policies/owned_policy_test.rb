@@ -10,18 +10,21 @@ describe OwnedPolicy do
   let(:token) { StubToken.new(account.id, ['member']) }
   let(:bad_token) { StubToken.new(account.id + 1, ['member']) }
 
-  describe '#update?' do
+  describe '#update? or #create?' do
     it 'returns true if authorized on owning account' do
       OwnedPolicy.new(token, owned).must_allow :update?
+      OwnedPolicy.new(token, owned).must_allow :create?
     end
 
     it 'returns false if authorized on non-owning account' do
       OwnedPolicy.new(bad_token, owned).wont_allow :update?
+      OwnedPolicy.new(bad_token, owned).wont_allow :create?
     end
 
     it 'returns false if there is no owner' do
       owned.owner = nil
       OwnedPolicy.new(token, owned).wont_allow :update?
+      OwnedPolicy.new(token, owned).wont_allow :create?
     end
   end
 end

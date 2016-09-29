@@ -36,18 +36,13 @@ class ImageCallbackWorker
   end
 
   def find_image(type, id)
-    case type
-    when 'account_images'
-      AccountImage.find(id)
-    when 'piece_images'
-      StoryImage.find(id)
-    when 'series_images'
-      SeriesImage.find(id)
-    when 'user_images'
-      UserImage.find(id)
-    else
+    type = 'story_images' if type == 'piece_images'
+    type_class = nil
+    begin
+      type_class = type.camelize.singularize.constantize
+    rescue NameError
       raise UnknownImageTypeError.new
     end
+    type_class.find(id)
   end
-
 end
