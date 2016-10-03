@@ -45,7 +45,7 @@ module ChildResource
 
   def parent_resource
     parent_class = parent_resource_name.classify.safe_constantize
-    parent_key = class.child_resource_options[:parent_key] || "#{parent_resource_name}_id"
+    parent_key = self.class.child_resource_options[:parent_key] || "#{parent_resource_name}_id"
     @parent_resource ||= parent_class.find(params[parent_key]) if params[parent_key]
   end
 
@@ -54,15 +54,15 @@ module ChildResource
   end
 
   def parent_resource_name
-    class.child_resource_options[:parent]
+    self.class.child_resource_options[:parent]
   end
 
   def child_resource_name
-    class.child_resource_options[:child]
+    self.class.child_resource_options[:child]
   end
 
   def decorator_class
-    if class.child_resource_options[:decorator]
+    if self.class.child_resource_options[:decorator]
       return self.class.child_resource_options[:decorator]
     else
       resource_class = controller.controller_name.singularize.camelize
@@ -78,6 +78,6 @@ module ChildResource
   end
 
   def is_child_resource?
-    !class.child_resource_options.blank?
+    !self.class.child_resource_options.blank?
   end
 end
