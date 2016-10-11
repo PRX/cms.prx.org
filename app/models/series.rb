@@ -18,7 +18,7 @@ class Series < BaseModel
   has_many :stories, -> { order('episode_number DESC, position DESC, published_at DESC') }
   has_many :schedules
 
-  has_one :image, -> { where(parent_id: nil) }, class_name: 'SeriesImage'
+  has_one :image, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
 
   before_validation :set_app_version, on: :create
 

@@ -8,7 +8,7 @@ class Account < BaseModel
   belongs_to :opener, -> { with_deleted }, class_name: 'User', foreign_key: 'opener_id'
 
   has_one :address, as: :addressable
-  has_one :image, -> { where(parent_id: nil) }, class_name: 'AccountImage'
+  has_one :image, -> { where(parent_id: nil) }, class_name: 'AccountImage', dependent: :destroy
   has_one :portfolio
 
   has_many :stories, -> { order(published_at: :desc) }
