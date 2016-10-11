@@ -7,6 +7,7 @@ class Api::BaseController < ApplicationController
   include ApiVersioning
   include ApiFiltering
   include ApiSorting
+  include ChildResource
   include AnnounceActions
 
   protect_from_forgery with: :null_session
