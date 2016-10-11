@@ -21,6 +21,10 @@ FactoryGirl.define do
       name 'group'
     end
 
+    factory :station_account, class: 'StationAccount' do
+      name 'station'
+    end
+
     factory :individual_account, class: 'IndividualAccount', aliases: [:default_account] do
       name 'individual'
     end
@@ -29,6 +33,5 @@ FactoryGirl.define do
       name 'individual with opener'
       opener
     end
-
   end
 end
