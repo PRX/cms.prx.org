@@ -1,16 +1,130 @@
 require 'test_helper'
 
-describe ChildResource do
+class Son
+  extend ActiveModel::Naming
+  attr_accessor :mom, :id
 
-  class SonController < ActionController::Base
-    include ChildResource
-
-    child_resource parent: 'mom', child: 'son'
+  def destroyed?
+    true
   end
 
-  let(:controller) { SonController.new }
+  def persisted?
+    false
+  end
+
+  def to_model
+    self
+  end
+
+  def to_param
+    id
+  end
+
+  def self.where(*args)
+    @@singleton ||= self.new.tap { |s| s.mom = Mom.new }
+  end
+
+  def build
+    self
+  end
+
+  def initialize
+    self.id = 1
+  end
+end
+
+class Mom
+  extend ActiveModel::Naming
+  attr_accessor :son, :id
+
+  def persisted?
+    false
+  end
+
+  def to_model
+    self
+  end
+
+  def to_param
+    id
+  end
+
+  def self.find(*args)
+    @@singleton ||= self.new.tap { |m| m.son = Son.new }
+  end
+
+  def initialize
+    self.id = 1
+  end
+end
+
+class Api::SonsController < ActionController::Base
+  include HalApi::Controller
+  include ChildResource
+
+  child_resource parent: 'mom', child: 'son'
+
+  def authorize(_r)
+    true
+  end
+end
+
+class Api::SonRepresenter < Api::BaseRepresenter
+  property :id
+
+  def self_url(represented)
+    api_mom_son_path(represented.mom)
+  end
+end
+
+def define_child_routes
+  Rails.application.routes.draw do
+    namespace :api do
+      resources :moms do
+        resource :son
+      end
+    end
+  end
+end
+
+describe Api::SonsController do
+  before do
+    define_child_routes
+    @request.env['CONTENT_TYPE'] = 'application/json'
+  end
+
+  after { Rails.application.reload_routes! }
 
   it 'is a child resource' do
-    controller.must_be :is_child_resource?
+    @controller.must_be :child_resource?
+  end
+
+  it 'creates a child resource' do
+    post :create, mom_id: 1
+    response.must_be :success?
+  end
+
+  it 'knows the child resource name' do
+    @controller.child_resource_name.must_equal 'son'
+  end
+
+  it 'knows the parent resource name' do
+    @controller.parent_resource_name.must_equal 'mom'
+  end
+
+  it 'gets the parent' do
+    mom = Mom.find(1)
+    mom.wont_be_nil
+    @controller.params = { mom_id: 1 }
+    @controller.parent_resource.must_equal mom
+  end
+
+  it 'retrieves the child resource' do
+    mom = Mom.find(1)
+    mom.wont_be_nil
+    son = mom.son
+    son.wont_be_nil
+    @controller.params = { mom_id: 1 }
+    @controller.child_resource.must_equal son
   end
 end
