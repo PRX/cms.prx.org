@@ -11,7 +11,7 @@ if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
   formatters = [SimpleCov.formatter]
   formatters << SimpleCov::Formatter::Codecov if ENV['CODECOV_TOKEN']
   formatters << CodeClimate::TestReporter::Formatter if ENV['CODECLIMATE_REPO_TOKEN']
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.send(:[], *formatters)
+  SimpleCov.formatters = formatters
 end
 
 require File.expand_path("../../config/environment", __FILE__)
