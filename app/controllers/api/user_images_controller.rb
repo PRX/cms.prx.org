@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Api::UserImagesController < Api::BaseController
+  include Announce::Publisher
 
   api_versions :v1
 
@@ -10,11 +11,9 @@ class Api::UserImagesController < Api::BaseController
 
   represent_with Api::ImageRepresenter
 
-  def resource
-    @user_image ||= user.try(:image) || super
-  end
+  child_resource parent: 'user', child: 'image'
 
-  def user
-    @user ||= User.find(params[:user_id]) if params[:user_id]
+  def after_original_destroyed(original)
+    announce('image', 'destroy', Api::Msg::ImageRepresenter.new(original).to_json)
   end
 end

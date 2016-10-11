@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Api::SeriesImagesController < Api::BaseController
+  include Announce::Publisher
+
   api_versions :v1
 
   filter_resources_by :series_id
@@ -9,11 +11,9 @@ class Api::SeriesImagesController < Api::BaseController
 
   represent_with Api::ImageRepresenter
 
-  def resource
-    @series_image ||= series.try(:image) || super
-  end
+  child_resource parent: 'series', child: 'image'
 
-  def series
-    @series ||= Series.find(params[:series_id]) if params[:series_id]
+  def after_original_destroyed(original)
+    announce('image', 'destroy', Api::Msg::ImageRepresenter.new(original).to_json)
   end
 end
