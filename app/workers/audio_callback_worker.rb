@@ -14,7 +14,7 @@ class AudioCallbackWorker
     audio.frequency = (job['frequency'] || 0) / 1000.0
 
     # decode content type and mpeg layer from basic "format" string
-    mime_types = MIME::Types.type_for(job['format']).map(&:to_s)
+    mime_types = MIME::Types.type_for(job['format'] || '').map(&:to_s)
     prefer_type = mime_types.find { |t| t.starts_with?('audio') }
     audio.content_type = prefer_type || mime_types.first || job['format']
 
