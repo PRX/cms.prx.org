@@ -43,7 +43,7 @@ describe Api::SeriesImagesController do
     last_message['action'].to_s.must_equal 'create'
     new_image = JSON.parse @response.body
 
-    original.id.wont_equal new_image["id"]
-    series.image(true).id.must_equal new_image["id"]
+    original.id.wont_equal new_image['id']
+    series.image(true).id.must_equal new_image['id']
   end
 end

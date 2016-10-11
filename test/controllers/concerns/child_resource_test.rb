@@ -20,8 +20,8 @@ class Son
     id
   end
 
-  def self.where(*args)
-    @@singleton ||= self.new.tap { |s| s.mom = Mom.new }
+  def self.where(*_args)
+    @@singleton ||= new.tap { |s| s.mom = Mom.new }
   end
 
   def build
@@ -49,8 +49,8 @@ class Mom
     id
   end
 
-  def self.find(*args)
-    @@singleton ||= self.new.tap { |m| m.son = Son.new }
+  def self.find(*_args)
+    @@singleton ||= new.tap { |m| m.son = Son.new }
   end
 
   def initialize
