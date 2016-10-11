@@ -28,4 +28,10 @@ describe Api::AccountRepresenter do
       json['_links']['prx:external'].must_include 'href' => 'http://example.com'
     end
   end
+
+  it 'includes a create-image link when there is no image' do
+    account.image = nil
+    json = JSON.parse(Api::AccountRepresenter.new(account).to_json)
+    json['_links']['prx:create-image']['href'].must_match /accounts\/#{account.id}\/image/
+  end
 end
