@@ -7,7 +7,7 @@ class User < BaseModel
   belongs_to :default_account, -> { with_deleted }, class_name: 'Account', foreign_key: 'account_id'
 
   has_one :address, as: :addressable
-  has_one :image, -> { where(parent_id: nil) }, class_name: 'UserImage'
+  has_one :image, -> { where(parent_id: nil) }, class_name: 'UserImage', dependent: :destroy
 
   has_many :memberships
   has_many :accounts, through: :memberships, source: :account

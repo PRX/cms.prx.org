@@ -27,10 +27,17 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   link :image do
     {
       href: api_series_series_image_path(represented),
-      title: represented.image.try(:filename)
-    } if represented.id
+      title: represented.image.filename
+    } if represented.id && represented.image
   end
   embed :image, class: SeriesImage, decorator: Api::ImageRepresenter
+
+  link 'create-image' do
+    {
+      href: api_series_series_image_path(represented),
+      title: 'Create an image'
+    } if represented.id && !represented.image
+  end
 
   link :account do
     {

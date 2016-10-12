@@ -23,7 +23,7 @@ gem 'unf'
 
 ## Controller
 gem 'responders', '~> 2.0'
-gem 'hal_api-rails', '0.2.8'
+gem 'hal_api-rails', ' ~> 0.2.9'
 
 # auth
 gem 'rack-cors', require: 'rack/cors'

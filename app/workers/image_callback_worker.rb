@@ -13,7 +13,7 @@ class ImageCallbackWorker
     image.height = job['height']
     image.aspect_ratio = image.width / image.height.to_f if image.width && image.height
 
-    mime_type = MIME::Types.type_for(job['format']).first.try(:content_type)
+    mime_type = MIME::Types.type_for(job['format'] || '').first.try(:content_type)
     image.content_type = mime_type || job['format']
 
     if !job['downloaded']
