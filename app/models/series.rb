@@ -17,6 +17,7 @@ class Series < BaseModel
 
   has_many :stories, -> { order('episode_number DESC, position DESC, published_at DESC') }
   has_many :schedules
+  has_many :audio_version_templates
 
   has_one :image, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
 
