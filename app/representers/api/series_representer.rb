@@ -47,4 +47,14 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
     }
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
+
+  link :audio_version_templates do
+    {
+      href: api_series_audio_version_templates_path(represented)
+    }
+  end
+  embed :audio_version_templates,
+        class: AudioVersionTemplate,
+        decorator: Api::AudioVersionTemplateRepresenter,
+        zoom: false
 end

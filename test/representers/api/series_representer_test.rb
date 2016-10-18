@@ -18,4 +18,8 @@ describe Api::SeriesRepresenter do
     json['id'].must_equal series.id
   end
 
+  it 'includes templates' do
+    puts json['_links']
+    json['_links']['prx:audio-version-templates'].wont_be_nil
+  end
 end
