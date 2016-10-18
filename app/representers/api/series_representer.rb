@@ -50,7 +50,8 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
 
   link :audio_version_templates do
     {
-      href: api_series_audio_version_templates_path(represented)
+      href: api_series_audio_version_templates_path(represented),
+      count: represented.audio_version_templates.count
     }
   end
   embed :audio_version_templates,
