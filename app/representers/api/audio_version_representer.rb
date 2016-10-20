@@ -17,7 +17,7 @@ class Api::AudioVersionRepresenter < Api::BaseRepresenter
   end
   embeds :audio_files, as: :audio, class: AudioFile, decorator: Api::AudioFileRepresenter
 
-  link :audio_version_template do
+  link rel: :audio_version_template, writeable: true do
     {
       href: api_audio_version_template_path(represented.audio_version_template)
     } if represented.audio_version_template_id
