@@ -4,7 +4,6 @@ class Api::AudioVersionTemplateRepresenter < Api::BaseRepresenter
   property :id, writeable: false
   property :label
   property :promos
-  property :segment_count
   property :length_minimum
   property :length_maximum
 
