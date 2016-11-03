@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class AudioFileTemplate < BaseModel
-  belongs_to :audio_version_template
+  belongs_to :audio_version_template, touch: true
 
   acts_as_list scope: :audio_version_template
 
