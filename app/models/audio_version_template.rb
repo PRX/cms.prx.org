@@ -5,6 +5,12 @@ class AudioVersionTemplate < BaseModel
 
   has_many :audio_file_templates, -> { order :position }, dependent: :destroy
 
+  has_many :audio_versions
+
+  after_save :touch_audio_versions
+
+  after_touch :touch_audio_versions
+
   validates :label, presence: true
 
   validates :length_minimum,
@@ -18,4 +24,9 @@ class AudioVersionTemplate < BaseModel
   def self.policy_class
     SeriesAttributePolicy
   end
+
+  def touch_audio_versions
+    audio_versions.update_all(updated_at: Time.now)
+  end
+
 end
