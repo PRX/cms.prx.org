@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class AudioVersionTemplate < BaseModel
-  belongs_to :series
+  belongs_to :series, touch: true
 
   has_many :audio_file_templates, -> { order :position }, dependent: :destroy
 
