@@ -137,6 +137,8 @@ ActiveRecord::Schema.define(version: 6) do
     t.integer "length_minimum"
     t.integer "segment_count"
     t.integer "length_maximum"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "accounts", :force => true do |t|
