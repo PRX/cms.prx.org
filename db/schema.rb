@@ -538,4 +538,29 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "distributions", :force => true do |t|
+    t.string   "type"
+    t.string   "distributable_type"
+    t.integer  "distributable_id"
+    t.string   "url"
+    t.string   "guid"
+    t.text     "properties"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "distributions", ["distributable_type", "distributable_id"], :name => "index_distributions_on_distributable_type_and_distributable_id"
+
+  create_table "story_distributions", :force => true do |t|
+    t.integer  "distribution_id"
+    t.integer  "story_id"
+    t.string   "url"
+    t.string   "guid"
+    t.text     "properties"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "story_distributions", ["distribution_id", "story_id"], :name => "index_story_distributions_on_distribution_id_and_story_id"
 end
