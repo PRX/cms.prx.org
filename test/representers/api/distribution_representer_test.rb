@@ -14,8 +14,6 @@ describe Api::DistributionRepresenter do
   end
 
   it 'use representer to create json' do
-    puts distribution.inspect
-    puts json
     json['id'].must_equal distribution.id
     json['properties']['explicit'].must_equal 'clean'
   end

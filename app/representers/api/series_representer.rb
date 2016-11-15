@@ -65,7 +65,7 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
       count: represented.distributions.count
     } if represented.id
   end
-  embed :distributions,
+  embeds :distributions,
         class: Distribution,
         decorator: Api::DistributionRepresenter
 end

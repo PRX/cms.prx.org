@@ -5,7 +5,7 @@ class Api::DistributionsController < Api::BaseController
 
   filter_resources_by :series_id
 
-  represent_with Api::Auth::DistributionRepresenter
+  represent_with Api::DistributionRepresenter
 
   def filtered(arel)
     polymorphic_filtered('distributable', arel)

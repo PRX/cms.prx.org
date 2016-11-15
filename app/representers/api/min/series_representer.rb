@@ -37,4 +37,11 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
     }
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter, zoom: false
+
+  link :distributions do
+    {
+      href: api_series_distributions_path(represented),
+      count: represented.distributions.count
+    } if represented.id
+  end
 end
