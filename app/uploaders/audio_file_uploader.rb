@@ -43,4 +43,16 @@ class AudioFileUploader < CarrierWave::Uploader::Base
   def version_ext(version)
     AudioFileUploader.version_formats[version.to_s]['format']
   end
+
+  def authenticated_head_url(options = {})
+    if fog_credentials[:provider] == "AWS"
+      storage.connection.head_object_url(
+        fog_directory,
+        path,
+        (::Fog::Time.now + fog_authenticated_url_expiration),
+        options
+      )
+    end
+  end
+
 end

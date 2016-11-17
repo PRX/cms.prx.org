@@ -108,7 +108,11 @@ module Fixerable
     if options.key?(:expiration) && options[:expiration].to_i > 0
       f.fog_authenticated_url_expiration = options[:expiration].to_i
     end
-    f.url
+    if options.delete(:head)
+      f.authenticated_head_url
+    else
+      f.url
+    end
   end
 
   def fixerable_final_path
