@@ -45,7 +45,7 @@ class AudioFileUploader < CarrierWave::Uploader::Base
   end
 
   def authenticated_head_url(options = {})
-    if fog_credentials[:provider] == "AWS"
+    if fog_credentials[:provider] === 'AWS'
       storage.connection.head_object_url(
         fog_directory,
         path,

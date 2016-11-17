@@ -29,4 +29,10 @@ describe PublicAssetsController do
 
     assert_response :redirect
   end
+
+  it 'has no content for options requests' do
+    process :options, 'OPTIONS', any: '1'
+    response.status.must_equal 204
+  end
+
 end

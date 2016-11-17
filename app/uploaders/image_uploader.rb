@@ -68,4 +68,15 @@ class ImageUploader < CarrierWave::Uploader::Base
     "#{base}_#{version}#{ext}"
   end
 
+  def authenticated_head_url(options = {})
+    if fog_credentials[:provider] === 'AWS'
+      storage.connection.head_object_url(
+        fog_directory,
+        path,
+        (::Fog::Time.now + fog_authenticated_url_expiration),
+        options
+      )
+    end
+  end
+
 end

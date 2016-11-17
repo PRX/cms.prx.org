@@ -18,6 +18,9 @@ describe Fixerable do
     def self.version_formats
       {}
     end
+    def authenticated_head_url
+      'some-head-url'
+    end
   end
 
   let(:uploader) { FixerableTestUploader.new }
@@ -40,6 +43,22 @@ describe Fixerable do
     url.must_match /another.mp3/
     url.must_match /X-Amz-Expires/
     url.must_match /X-Amz-Credential/
+  end
+
+  it 'signs HEAD requests for final aws uploads' do
+    model.stub(:fixerable_final?, true) do
+      model.asset_url(head: true).must_equal 'some-head-url'
+    end
+  end
+
+  it 'signs HEAD requests for temp aws uploads' do
+    fake_store = Fog::Storage::AWS.new(aws_access_key_id: 'foo', aws_secret_access_key: 'bar')
+    Fog::Storage::AWS.stub(:new, fake_store) do
+      fake_store.stub(:head_object_url, 'some-head-url') do
+        model.the_temp_field = 's3://prx-development/another.mp3'
+        model.asset_url(head: true).must_equal 'some-head-url'
+      end
+    end
   end
 
   it 'returns nil for plain urls' do

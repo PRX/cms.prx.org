@@ -29,6 +29,12 @@ describe AudioFileUploader do
     extract_filename(uploader.url(:preview)).must_equal 'test_preview.mp3'
   end
 
+  it 'signs head requests' do
+    signed_get = uploader.url
+    signed_get.must_equal(uploader.url)
+    signed_get.wont_equal(uploader.authenticated_head_url)
+  end
+
   it 'has a whitelist' do
     uploader.extension_white_list.must_include 'mp2'
   end
