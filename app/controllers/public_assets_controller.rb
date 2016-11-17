@@ -27,11 +27,7 @@ class PublicAssetsController < ApplicationController
 
   def find_valid_asset
     asset = params[:class].camelize.constantize.find(params[:id])
-    if asset.public_url_valid?(params)
-      asset
-    else
-      nil
-    end
+    asset if asset.public_url_valid?(params)
   end
 
 end
