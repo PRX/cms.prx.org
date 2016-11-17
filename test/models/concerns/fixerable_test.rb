@@ -15,9 +15,11 @@ describe Fixerable do
 
   class FixerableTestUploader < CarrierWave::Uploader::Base
     storage :fog
+
     def self.version_formats
       {}
     end
+
     def authenticated_head_url
       'some-head-url'
     end
