@@ -30,8 +30,21 @@ describe PublicAssetsController do
     assert_response :redirect
   end
 
+  it 'should get redirected to asset for valid HEAD request' do
+    options = audio_file.set_asset_option_defaults
+    options[:token] = audio_file.public_url_token(options)
+
+    get(:show_head, options)
+
+    assert_response :redirect
+  end
+
   it 'has no content for options requests' do
-    process :options, 'OPTIONS', any: '1'
+    options = audio_file.set_asset_option_defaults
+    options[:token] = audio_file.public_url_token(options)
+
+    process :show_options, 'OPTIONS', options
+
     response.status.must_equal 204
   end
 
