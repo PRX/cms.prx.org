@@ -50,6 +50,11 @@ module PRX
         origins '*'
         resource '/api/*', methods: [:get]
       end
+
+      allow do
+        origins '*'
+        resource '/pub/*', methods: [:get, :head, :options], headers: :any
+      end
     end
 
     config.active_job.queue_adapter = :shoryuken
