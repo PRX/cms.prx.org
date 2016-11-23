@@ -1,11 +1,8 @@
 # encoding: utf-8
 
 class Api::AuthorizationsController < Api::BaseController
-
   include ApiAuthenticated
-
   api_versions :v1
-
   represent_with Api::AuthorizationRepresenter
 
   private
@@ -13,5 +10,4 @@ class Api::AuthorizationsController < Api::BaseController
   def resource
     current_user
   end
-
 end
