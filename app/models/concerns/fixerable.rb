@@ -57,12 +57,17 @@ module Fixerable
 
       credentials = uploader.fog_credentials
       connection = Fog::Storage.new(credentials)
+      expiration = fixerable_url_expires_at(uploader, options)
 
-      if provider == credentials[:provider]
-        # avoid a get by using local references
-        local_directory = connection.directories.new(key: bucket)
-        local_file = local_directory.files.new(key: path)
-        local_file.url(fixerable_url_expires_at(uploader, options), options)
+      if provider === credentials[:provider]
+        if provider === 'AWS' && options.delete(:head)
+          connection.head_object_url(bucket, path, expiration, options)
+        else
+          # avoid a get by using local references
+          local_directory = connection.directories.new(key: bucket)
+          local_file = local_directory.files.new(key: path)
+          local_file.url(expiration, options)
+        end
       end
     end
 
@@ -108,7 +113,11 @@ module Fixerable
     if options.key?(:expiration) && options[:expiration].to_i > 0
       f.fog_authenticated_url_expiration = options[:expiration].to_i
     end
-    f.url
+    if options.delete(:head) && f.respond_to?(:authenticated_head_url)
+      f.authenticated_head_url
+    else
+      f.url
+    end
   end
 
   def fixerable_final_path
