@@ -21,6 +21,10 @@ gem 'carrierwave'
 gem 'fog'
 gem 'unf'
 
+# hal api access
+gem 'oauth2'
+gem 'hyperresource'
+
 ## Controller
 gem 'responders', '~> 2.0'
 gem 'hal_api-rails', ' ~> 0.2.9'
