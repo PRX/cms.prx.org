@@ -10,4 +10,12 @@ class Distribution < BaseModel
   def owner
     distributable
   end
+
+  def account
+    if owner.is_a?(Account)
+      owner
+    else
+      owner.try(:account)
+    end
+  end
 end
