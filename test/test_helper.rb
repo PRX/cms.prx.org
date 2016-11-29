@@ -24,6 +24,12 @@ require 'minitest/spec'
 require 'minitest/pride'
 require 'announce'
 require 'announce/testing'
+require 'webmock/minitest'
+
+def use_webmock?
+  ENV['USE_WEBMOCK'].nil? || (ENV['USE_WEBMOCK'] == 'true')
+end
+WebMock.allow_net_connect! unless use_webmock?
 
 # To add Capybara feature tests add `gem "minitest-rails-capybara"`
 # to the test group in the Gemfile and uncomment the following:
@@ -68,4 +74,12 @@ class StubToken
   def authorized?(r, s = nil)
     resource == r.to_s && (s.nil? || scopes.include?(s.to_s))
   end
+end
+
+def json_file(name)
+  test_file("/fixtures/#{name}.json")
+end
+
+def test_file(path)
+  File.read( File.dirname(__FILE__) + path)
 end
