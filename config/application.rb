@@ -62,7 +62,8 @@ module PRX
       protocol = ENV['ID_HOST'].include?('.docker') ? 'http' : 'https'
       PrxAuth::Rails.middleware = false
       config.middleware.insert_before 'ActionDispatch::ParamsParser', 'Rack::PrxAuth',
-        cert_location: "#{protocol}://#{ENV['ID_HOST']}/api/v1/certs", issuer: ENV['ID_HOST']
+                                      cert_location: "#{protocol}://#{ENV['ID_HOST']}/api/v1/certs",
+                                      issuer: ENV['ID_HOST']
     end
 
     config.active_job.queue_adapter = :shoryuken
