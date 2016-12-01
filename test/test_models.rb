@@ -1,6 +1,10 @@
 TestObject = Struct.new(:title, :is_root_resource) do
   extend ActiveModel::Naming
 
+  def self.base_class
+    TestObject
+  end
+
   def persisted?
     false
   end
@@ -24,6 +28,10 @@ end
 
 TestParent = Struct.new(:id, :is_root_resource) do
   extend ActiveModel::Naming
+
+  def self.base_class
+    self
+  end
 
   def persisted?
     false

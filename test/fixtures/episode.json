@@ -1,0 +1,20 @@
+{
+  "guid": "aguid",
+  "title": "Episode 1",
+  "_links": {
+    "curies": [
+      {
+        "name": "prx",
+        "href": "http://meta.prx.org/relation/{rel}",
+        "templated": true
+      }
+    ],
+    "self": {
+      "href": "/api/v1/episodes/aguid",
+      "profile": "http://meta.prx.org/model/episode"
+    },
+    "profile": {
+      "href": "http://meta.prx.org/model/episode"
+    }
+  }
+}

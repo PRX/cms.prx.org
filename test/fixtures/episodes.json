@@ -1,0 +1,23 @@
+{
+  "count": 0,
+  "total": 0,
+  "_embedded": {
+    "prx:items": []
+  },
+  "_links": {
+    "self": {
+      "href": "/api/v1/podcasts/23/episodes",
+      "profile": "http://meta.prx.org/model/collection/episode"
+    },
+    "profile": {
+      "href": "http://meta.prx.org/model/collection/episode"
+    },
+    "curies": [
+      {
+        "name": "prx",
+        "href": "http://meta.prx.org/relation/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}

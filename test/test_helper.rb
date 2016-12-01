@@ -3,6 +3,7 @@ ENV['RAILS_ENV'] = 'test'
 ENV['PRX_HOST'] = 'www.prx.org'
 ENV['CMS_HOST'] = 'cms.prx.org'
 ENV['META_HOST'] = 'meta.prx.org'
+ENV['FEEDER_ROOT'] = 'http://feeder.prx.tech/api/v1'
 
 if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
   require 'simplecov'
