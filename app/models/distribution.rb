@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 require 'hash_serializer'
 
 class Distribution < BaseModel
