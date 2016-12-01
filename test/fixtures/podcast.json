@@ -1,5 +1,14 @@
 {
+  "id": 23,
+  "title": "99% Invisible",
   "_links": {
+    "curies": [
+      {
+        "name": "prx",
+        "href": "http://meta.prx.org/relation/{rel}",
+        "templated": true
+      }
+    ],
     "self": {
       "href": "/api/v1/podcasts/23",
       "profile": "http://meta.prx.org/model/podcast"
@@ -7,12 +16,9 @@
     "profile": {
       "href": "http://meta.prx.org/model/podcast"
     },
-    "curies": [
-      {
-        "name": "prx",
-        "href": "http://meta.prx.org/relation/{rel}",
-        "templated": true
-      }
-    ]
+    "prx:episodes": {
+      "href": "/api/v1/podcasts/23/episodes",
+      "count": 0
+    }
   }
 }
