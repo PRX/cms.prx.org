@@ -93,6 +93,7 @@ end
 
 group :development, :test do
   gem 'pry-byebug'
+  gem 'minitest', '~> 5.9.1'
 end
 
 group :doc do
