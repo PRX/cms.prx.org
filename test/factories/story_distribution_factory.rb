@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :story_distribution do
     distribution
+    story
     url "http://feeder.prx.tech/episodes/aguid"
   end
 
