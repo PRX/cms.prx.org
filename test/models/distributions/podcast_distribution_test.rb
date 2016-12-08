@@ -24,6 +24,7 @@ describe Distributions::PodcastDistribution do
       distribution.url = nil
       distribution.account.wont_be_nil
       distribution.save!
+      distribution.distribute
       distribution.url.must_equal(podcast_url)
     end
   end

@@ -33,6 +33,7 @@ describe StoryDistributions::PodcastEpisodeDistribution do
       distribution.stub(:get_account_token, 'token') do
         distribution.url = nil
         distribution.save!
+        distribution.distribute
         distribution.url.must_equal(episode_url)
       end
     end
