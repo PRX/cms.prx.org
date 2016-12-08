@@ -24,6 +24,7 @@ PRX::Application.routes.draw do
         resources :story_images, path: 'images', except: [:new, :edit]
         resources :musical_works, except: [:new, :edit]
         resources :producers, except: [:new, :edit]
+        resources :story_distributions, except: [:new, :edit]
       end
 
       resources :series, except: [:new, :edit] do
