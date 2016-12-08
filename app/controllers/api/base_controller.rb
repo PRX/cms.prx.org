@@ -57,6 +57,16 @@ class Api::BaseController < ApplicationController
     @current_user = user
   end
 
+  def decorator_for_model(model)
+    decorator_class(model.class.model_name.name) ||
+    decorator_class(model.class.base_class.model_name.name)
+  end
+
+  def decorator_class(name)
+    class_name = "Api::#{name}Representer"
+    class_name.safe_constantize
+  end
+
   private
 
   def user_not_authorized
