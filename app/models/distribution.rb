@@ -6,6 +6,10 @@ class Distribution < BaseModel
   has_many :story_distributions
   serialize :properties, HashSerializer
 
+  def distribute
+    # no op for the super class
+  end
+
   def owner
     distributable
   end
@@ -16,5 +20,25 @@ class Distribution < BaseModel
     else
       owner.try(:account)
     end
+  end
+
+  def kind
+    (self.type || "Distribution").safe_constantize.model_name.element.sub(/_distribution$/, '')
+  end
+
+  def kind=(k)
+    child_class = "Distributions::#{k.titleize}Distribution".safe_constantize if k
+    if child_class
+      self.type = child_class.name
+    end
+  end
+
+  def self.class_for_kind(k)
+    child_class = "Distributions::#{k.titleize}Distribution".safe_constantize if k
+    child_class || Distribution
+  end
+
+  def self.policy_class
+    AccountablePolicy
   end
 end
