@@ -5,6 +5,8 @@ class Api::AuthorizationsController < Api::BaseController
 
   api_versions :v1
 
+  represent_with Api::AuthorizationRepresenter
+
   private
 
   def resource
