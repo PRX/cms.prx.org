@@ -1,12 +1,12 @@
 # encoding: utf-8
 
 require 'test_helper'
-require 'distribution' if !defined?(Distribution)
+require 'api/distributions/podcast_distribution_representer'
 
-describe Api::PodcastDistributionRepresenter do
+describe Api::Distributions::PodcastDistributionRepresenter do
 
   let(:distribution) { build(:podcast_distribution) }
-  let(:representer)   { Api::DistributionRepresenter.new(distribution) }
+  let(:representer)   { Api::Distributions::PodcastDistributionRepresenter.new(distribution) }
   let(:json)          { JSON.parse(representer.to_json) }
 
   before do
