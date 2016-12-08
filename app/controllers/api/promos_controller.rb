@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::PromosController < Api::BaseController
-
   api_versions :v1
 
   def resources_base

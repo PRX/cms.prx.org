@@ -44,7 +44,7 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
       href: api_account_path(represented.account),
       title: represented.account.name,
       profile: model_uri(represented.account)
-    }
+    } if represented.id && represented.account
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
 
@@ -52,10 +52,20 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
     {
       href: api_series_audio_version_templates_path(represented),
       count: represented.audio_version_templates.count
-    }
+    } if represented.id
   end
   embed :audio_version_templates,
         class: AudioVersionTemplate,
         decorator: Api::AudioVersionTemplateRepresenter,
         zoom: false
+
+  link :distributions do
+    {
+      href: api_series_distributions_path(represented),
+      count: represented.distributions.count
+    } if represented.id
+  end
+  embeds :distributions,
+        class: Distribution,
+        decorator: Api::DistributionRepresenter
 end

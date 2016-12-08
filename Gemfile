@@ -21,6 +21,10 @@ gem 'carrierwave'
 gem 'fog'
 gem 'unf'
 
+# hal api access
+gem 'oauth2'
+gem 'hyperresource'
+
 ## Controller
 gem 'responders', '~> 2.0'
 gem 'hal_api-rails', ' ~> 0.2.9'
@@ -84,10 +88,12 @@ group :test do
   gem 'codeclimate-test-reporter', require: false
   gem 'simplecov', require: false
   gem 'codecov', require: false
+  gem 'webmock'
 end
 
 group :development, :test do
   gem 'pry-byebug'
+  gem 'minitest', '~> 5.9.1'
 end
 
 group :doc do

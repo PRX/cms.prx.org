@@ -1,12 +1,11 @@
 # encoding: utf-8
 
 class Api::AudioFilesController < Api::BaseController
-
   api_versions :v1
 
   filter_resources_by :audio_version_id, :account_id
 
-  announce_actions decorator: Api::Msg::AudioFileRepresenter, subject: :audio
+  announce_actions subject: :audio
 
   def original
     authorize show_resource

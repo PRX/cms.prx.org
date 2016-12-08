@@ -8,6 +8,7 @@ class Api::BaseController < ApplicationController
   include ApiFiltering
   include ApiSorting
   include ChildResource
+  include PolymorphicResource
   include AnnounceActions
 
   protect_from_forgery with: :null_session

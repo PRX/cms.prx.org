@@ -12,7 +12,7 @@ describe AccountablePolicy do
     end
 
     it 'returns false if user is not a member of the account' do
-        AccountablePolicy.new(non_member_token, story).wont_allow :update?
+      AccountablePolicy.new(non_member_token, story).wont_allow :update?
     end
 
     it 'returns true if is a member of the account' do
