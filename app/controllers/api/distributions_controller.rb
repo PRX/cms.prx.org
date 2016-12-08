@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+require 'api/distribution_representer'
+require 'api/distributions/podcast_distribution_representer'
+
 class Api::DistributionsController < Api::BaseController
   api_versions :v1
 
