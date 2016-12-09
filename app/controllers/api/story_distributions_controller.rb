@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+require 'api/story_distribution_representer'
+require 'api/story_distributions/episode_distribution_representer'
+
 class Api::StoryDistributionsController < Api::BaseController
   api_versions :v1
 

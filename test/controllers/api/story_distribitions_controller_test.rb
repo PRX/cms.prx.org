@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Api::StoryDistributionsController do
 
-  let(:story_distribution) { create(:podcast_episode_distribution) }
+  let(:story_distribution) { create(:episode_distribution) }
   let(:distribution) { story_distribution.distribution }
   let(:story) { story_distribution.story }
   let(:token) { StubToken.new(account.id, ['member']) }
