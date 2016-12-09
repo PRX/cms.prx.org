@@ -454,8 +454,9 @@ ActiveRecord::Schema.define(version: 6) do
   add_index "series_images", ["series_id"], name: "series_images_series_id_fk", using: :btree
 
   create_table "story_distributions", force: :cascade do |t|
+    t.string   "type",            limit: 255
     t.integer  "distribution_id", limit: 4
-    t.integer  "story_id",        limit: 4
+    t.integer  "piece_id",        limit: 4
     t.string   "url",             limit: 255
     t.string   "guid",            limit: 255
     t.text     "properties",      limit: 65535
@@ -463,7 +464,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "updated_at"
   end
 
-  add_index "story_distributions", ["distribution_id", "story_id"], name: "index_story_distributions_on_distribution_id_and_story_id", using: :btree
+  add_index "story_distributions", ["distribution_id", "piece_id"], name: "index_story_distributions_on_distribution_id_and_piece_id", using: :btree
 
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id",        limit: 4
