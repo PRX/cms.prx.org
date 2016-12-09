@@ -5,7 +5,7 @@ FactoryGirl.define do
     url "http://feeder.prx.tech/episodes/aguid"
   end
 
-  factory :podcast_episode_distribution, class: 'StoryDistributions::PodcastEpisodeDistribution' do
+  factory :episode_distribution, class: 'StoryDistributions::EpisodeDistribution' do
     distribution factory: :podcast_distribution
     story
     url "http://feeder.prx.tech/episodes/aguid"
