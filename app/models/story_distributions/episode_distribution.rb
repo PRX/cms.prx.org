@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'prx_access'
 
-class StoryDistributions::PodcastEpisodeDistribution < StoryDistribution
+class StoryDistributions::EpisodeDistribution < StoryDistribution
   include PRXAccess
   include Rails.application.routes.url_helpers
 

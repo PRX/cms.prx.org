@@ -1,9 +1,9 @@
 require 'test_helper'
 
-describe StoryDistributions::PodcastEpisodeDistribution do
+describe StoryDistributions::EpisodeDistribution do
 
   let(:podcast_distribution) { create(:podcast_distribution) }
-  let(:distribution) { build(:podcast_episode_distribution, distribution: podcast_distribution) }
+  let(:distribution) { build(:episode_distribution, distribution: podcast_distribution) }
   let(:episode_url) { URI.join(distribution.feeder_root, "/api/v1/episodes/aguid").to_s }
 
   before do
