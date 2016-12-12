@@ -1,0 +1,73 @@
+{
+  "id": 23,
+  "createdAt": "2016-02-25T20:49:12.582Z",
+  "updatedAt": "2016-09-21T16:53:32.861Z",
+  "path": "99pi",
+  "publishedUrl": "http://f.prxu.org/99pi/feed-rss.xml",
+  "link": "http://99percentinvisible.org",
+  "title": "99% Invisible",
+  "subtitle": "A tiny radio show about design, architecture & the 99% invisible activity that shapes our world.",
+  "description": "Design is everywhere in our lives, perhaps most importantly in the places where we’ve just stopped noticing. 99% Invisible is a weekly exploration of the process and power of design and architecture. From award winning producer Roman Mars. Learn more at <a href=\"http://99percentinvisible.org\">99percentinvisible.org</a>.<br/> A proud member of Radiotopia, from PRX. Learn more at <a href=\"http://radiotopia.fm/\">radiotopia.fm</a>.",
+  "summary": "Design is everywhere in our lives, perhaps most importantly in the places where we've just stopped noticing. 99% Invisible is a weekly exploration of the process and power of design and architecture. From award winning producer Roman Mars. Learn more at <a href=\"http://99percentinvisible.org\">99percentinvisible.org</a>.<br/><br />\nA proud member of Radiotopia, from PRX. Learn more at <a href=\"http://radiotopia.fm/\">radiotopia.fm</a>.",
+  "explicit": "clean",
+  "complete": false,
+  "copyright": "Copyright © 2015 Roman Mars. All rights reserved.",
+  "language": "en-US",
+  "owner": {
+    "name": "Roman Mars",
+    "email": "roman@prx.org"
+  },
+  "author": {
+    "name": "Roman Mars"
+  },
+  "managingEditor": {
+    "name": "Roman Mars",
+    "email": "roman@prx.org"
+  },
+  "keywords": [],
+  "categories": [],
+  "itunesCategories": [
+    {
+      "name": "Arts",
+      "subcategories": [
+        "Design"
+      ]
+    }
+  ],
+  "itunesImage": {
+    "url": "http://cdn-99percentinvisible.prx.org/wp-content/uploads/powerpress/99-1400.png",
+    "format": "png",
+    "height": 1400,
+    "width": 1400,
+    "size": 40166
+  },
+  "feedImage": {
+    "url": "http://cdn-99percentinvisible.prx.org/wp-content/uploads/powerpress/99-300x300.png",
+    "format": "png",
+    "height": 300,
+    "width": 300,
+    "size": 5926
+  },
+  "enclosureTemplate": "http://www.podtrac.com/pts/redirect.mp3/media.blubrry.com/99percentinvisible/dovetail.prxu.org/{slug}/{guid}/{original_filename}",
+  "displayFullEpisodesCount": 10,
+  "_links": {
+    "self": {
+      "href": "/api/v1/podcasts/23",
+      "profile": "http://meta.prx.org/model/podcast"
+    },
+    "profile": {
+      "href": "http://meta.prx.org/model/podcast"
+    },
+    "curies": [
+      {
+        "name": "prx",
+        "href": "http://meta.prx.org/relation/{rel}",
+        "templated": true
+      }
+    ],
+    "prx:episodes": {
+      "href": "/api/v1/podcasts/23/episodes",
+      "count": 254
+    }
+  }
+}

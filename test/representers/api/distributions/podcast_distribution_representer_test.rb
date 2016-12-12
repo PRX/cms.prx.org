@@ -1,13 +1,10 @@
-# encoding: utf-8
-
 require 'test_helper'
-require 'distribution' if !defined?(Distribution)
 
-describe Api::PodcastDistributionRepresenter do
+describe Api::Distributions::PodcastDistributionRepresenter do
 
-  let(:distribution) { build(:podcast_distribution) }
-  let(:representer)   { Api::DistributionRepresenter.new(distribution) }
-  let(:json)          { JSON.parse(representer.to_json) }
+  let(:distribution) { create(:podcast_distribution) }
+  let(:representer)  { Api::Distributions::PodcastDistributionRepresenter.new(distribution) }
+  let(:json)         { JSON.parse(representer.to_json) }
 
   before do
     stub_request(:get, "http://feeder.docker/api/v1").
@@ -17,10 +14,6 @@ describe Api::PodcastDistributionRepresenter do
     stub_request(:post, "http://feeder.docker/api/v1/podcasts").
       with(:headers => {'Authorization'=>'Bearer token', 'Content-Type'=>'application/json'}).
       to_return(:status => 200, :body => json_file('podcast'), :headers => {})
-
-    distribution.stub(:get_account_token, "token") do
-      distribution.save!
-    end
   end
 
   it 'create representer' do

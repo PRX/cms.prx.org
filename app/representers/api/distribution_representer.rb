@@ -2,9 +2,9 @@
 
 class Api::DistributionRepresenter < Api::BaseRepresenter
   property :id, writeable: false
-  property :type
   property :guid
   property :url
+  property :kind
   hash :properties
 
   def self_url(represented)
