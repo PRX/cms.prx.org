@@ -83,7 +83,7 @@ module PRXAccess
   private
 
   def root_uri(host, path = '')
-    if host.match(/\.org/) # TODO: should .tech's be here too?
+    if host =~ /\.org/ # TODO: should .tech's be here too?
       URI::HTTPS.build(host: host, path: path).to_s
     else
       URI::HTTP.build(host: host, path: path).to_s
