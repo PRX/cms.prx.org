@@ -6,7 +6,7 @@ class Distribution < BaseModel
   has_many :story_distributions
   serialize :properties, HashSerializer
 
-  def distribute
+  def distribute!
     # no op for the super class
   end
 
@@ -23,7 +23,7 @@ class Distribution < BaseModel
   end
 
   def kind
-    (self.type || "Distribution").safe_constantize.model_name.element.sub(/_distribution$/, '')
+    (type || 'Distribution').safe_constantize.model_name.element.sub(/_distribution$/, '')
   end
 
   def kind=(k)
