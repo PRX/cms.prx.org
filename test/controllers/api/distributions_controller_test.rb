@@ -23,8 +23,8 @@ describe Api::DistributionsController do
         kind: 'podcast'
       }
       @request.env['CONTENT_TYPE'] = 'application/json'
-      def @controller.distribute(res)
-        res.update_column(:url, 'http://feeder.prx.org/api/v1/podcast/12345')
+      def @controller.after_create_resource(res)
+        res.update_attributes!(url: 'http://feeder.prx.org/api/v1/podcast/12345')
       end
       post :create, pd_hash.to_json, api_request_opts(series_id: series.id)
       assert_response :success
