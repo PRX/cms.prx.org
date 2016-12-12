@@ -12,7 +12,7 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
 
   def add_episode_to_feeder
     return unless url.blank?
-    podcast = self.distribution.get_podcast
+    podcast = distribution.get_podcast
     episode = podcast.episodes.post(episode_attributes)
     episode_url = URI.join(feeder_root, episode.links['self'].href).to_s
     update_attributes!(url: episode_url) if episode_url
