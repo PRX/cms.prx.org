@@ -5,7 +5,7 @@ class Distributions::PodcastDistribution < Distribution
   include PRXAccess
   include Rails.application.routes.url_helpers
 
-  def distribute
+  def distribute!
     super
     add_podcast_to_feeder
   end
@@ -15,7 +15,7 @@ class Distributions::PodcastDistribution < Distribution
     client = api(root: feeder_root, account: account.id)
     podcast = client.podcasts.first.post(podcast_attributes)
     podcast_url = URI.join(feeder_root, podcast.links['self'].href).to_s
-    self.update_column(:url, podcast_url) if podcast_url
+    update_attributes!(url: podcast_url) if podcast_url
   end
 
   def get_podcast
