@@ -7,7 +7,7 @@ module AbstractResource
 
   def show
     res = show_resource
-    resource = res = res.becomes(res.type.safe_constantize) if res.type
+    res = res.becomes(res.type.safe_constantize) if res.type
     respond_with root_resource(res), abstract_options(:show, res)
   end
 

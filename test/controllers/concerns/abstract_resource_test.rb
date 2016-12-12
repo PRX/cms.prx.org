@@ -99,7 +99,7 @@ describe Api::MammalsController do
   after { Rails.application.reload_routes! }
 
   it 'creates and returns the resource based on type' do
-    post :create, { type: 'Dog' }.to_json, { format: 'json' }
+    post :create, { type: 'Dog' }.to_json, format: 'json'
     response.must_be :success?
     dog = JSON.parse(response.body)
     dog['type'].must_equal 'Dog'
