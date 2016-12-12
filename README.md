@@ -52,7 +52,7 @@ Also be sure to install `docker-compose` along with the toolbox.
 # Build the `web` container, it will also be used for `worker`
 docker-compose build
 
-# Start the postgres `db`
+# Start the mysql `db`
 docker-compose start db
 
 # ... and run migrations against it
