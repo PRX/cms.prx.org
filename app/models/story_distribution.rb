@@ -6,12 +6,12 @@ class StoryDistribution < BaseModel
   belongs_to :story, -> { with_deleted }, class_name: 'Story', foreign_key: 'piece_id', touch: true
   serialize :properties, HashSerializer
 
-  def distribute
+  def distribute!
     # no op for the super class
   end
 
   def kind
-    (self.type || "StoryDistribution").safe_constantize.model_name.element.sub(/_distribution$/, '')
+    (type || 'StoryDistribution').safe_constantize.model_name.element.sub(/_distribution$/, '')
   end
 
   def kind=(k)
