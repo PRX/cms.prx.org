@@ -23,5 +23,4 @@ describe Api::AuthorizationsController do
     get(:show, api_version: 'v1')
     assert_response :unauthorized
   end
-
 end
