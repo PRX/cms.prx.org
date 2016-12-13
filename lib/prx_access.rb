@@ -69,14 +69,25 @@ module PRXAccess
   end
 
   def id_root
-    ENV['ID_ROOT']
+    root_uri ENV['ID_HOST']
   end
 
   def cms_root
-    ENV['CMS_ROOT']
+    root_uri ENV['CMS_HOST'], '/api/v1'
   end
 
   def feeder_root
-    ENV['FEEDER_ROOT']
+    root_uri ENV['FEEDER_HOST'], '/api/v1'
   end
+
+  private
+
+  def root_uri(host, path = '')
+    if host =~ /\.org/ # TODO: should .tech's be here too?
+      URI::HTTPS.build(host: host, path: path).to_s
+    else
+      URI::HTTP.build(host: host, path: path).to_s
+    end
+  end
+
 end
