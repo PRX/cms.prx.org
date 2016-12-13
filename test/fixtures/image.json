@@ -1,0 +1,31 @@
+{
+  "_links": {
+    "curies": [
+      {
+        "href": "http://meta.prx.org/relation/{rel}",
+        "name": "prx",
+        "templated": true
+      }
+    ],
+    "enclosure": {
+      "href": "/pub/8fcc44b850393d4bc7e8b62215e9a685/0/web/series_image/17051/medium/99-1400_medium.png",
+      "type": "image/png"
+    },
+    "original": {
+      "href": "/pub/c6c004ee9eafd6c2df51dd55d15ee139/0/web/series_image/17051/original/99-1400.png",
+      "type": "image/png"
+    },
+    "profile": {
+      "href": "http://meta.prx.org/model/image/series"
+    },
+    "self": {
+      "href": "/api/v1/series/12345/image",
+      "profile": "http://meta.prx.org/model/image/series"
+    }
+  },
+  "caption": "",
+  "credit": "",
+  "filename": "99-1400.png",
+  "id": 17051,
+  "size": 28049
+}

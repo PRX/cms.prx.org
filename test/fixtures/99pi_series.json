@@ -1,0 +1,155 @@
+{
+  "_embedded": {
+    "prx:account": {
+      "_embedded": {
+        "prx:address": {
+          "_links": {
+            "profile": {
+              "href": "http://meta.prx.org/model/address"
+            },
+            "self": {
+              "href": "/api/v1/accounts/8/address",
+              "profile": "http://meta.prx.org/model/address"
+            }
+          },
+          "city": "Cambridge",
+          "country": "United States",
+          "id": 66208,
+          "postalCode": "02238",
+          "state": "Massachusetts",
+          "street1": "50 Church Street"
+        },
+        "prx:image": {
+          "_links": {
+            "enclosure": {
+              "href": "/pub/96add7ada377e5893fc13bb3c30607df/0/web/user_image/10478/medium/logo_square.gif",
+              "type": "image/gif"
+            },
+            "original": {
+              "href": "/pub/c037a802f5aa98a976efaa5ce35f3830/0/web/user_image/10478/original/logo_square.gif",
+              "type": "image/gif"
+            },
+            "profile": {
+              "href": "http://meta.prx.org/model/image/user"
+            },
+            "self": {
+              "href": "/api/v1/users/8/image",
+              "profile": "http://meta.prx.org/model/image/user"
+            }
+          },
+          "filename": "logo_square.gif",
+          "id": 10478,
+          "size": 9171
+        }
+      },
+      "_links": {
+        "alternate": {
+          "href": "https://beta.prx.org/accounts/8",
+          "type": "text/html"
+        },
+        "profile": {
+          "href": "http://meta.prx.org/model/account/individual/min"
+        },
+        "prx:address": {
+          "href": "/api/v1/accounts/8/address"
+        },
+        "prx:audio-files": {
+          "href": "/api/v1/accounts/8/audio_files"
+        },
+        "prx:image": {
+          "href": "/api/v1/accounts/8/image",
+          "title": "logo_square.gif"
+        },
+        "prx:opener": {
+          "href": "/api/v1/users/8",
+          "title": "admin"
+        },
+        "prx:series": {
+          "href": "/api/v1/accounts/8/series{?page,per,zoom,filters,sorts}",
+          "templated": true
+        },
+        "prx:stories": {
+          "count": 1,
+          "href": "/api/v1/accounts/8/stories{?page,per,zoom,filters,sorts}",
+          "templated": true
+        },
+        "self": {
+          "href": "/api/v1/accounts/8",
+          "profile": "http://meta.prx.org/model/account/individual/min"
+        }
+      },
+      "id": 8,
+      "name": "PRX Administrator",
+      "path": "admin",
+      "shortName": "PRX",
+      "type": "IndividualAccount"
+    },
+    "prx:stories": {
+      "_embedded": {
+        "prx:items": [
+        ]
+      },
+      "_links": {
+        "profile": {
+          "href": "http://meta.prx.org/model/collection/story"
+        },
+        "self": {
+          "href": "/api/v1/series/12345/stories",
+          "profile": "http://meta.prx.org/model/collection/story"
+        }
+      },
+      "count": 0,
+      "total": 0
+    }
+  },
+  "_links": {
+    "alternate": {
+      "href": "https://beta.prx.org/series/12345",
+      "type": "text/html"
+    },
+    "curies": [
+      {
+        "href": "http://meta.prx.org/relation/{rel}",
+        "name": "prx",
+        "templated": true
+      }
+    ],
+    "profile": {
+      "href": "http://meta.prx.org/model/series"
+    },
+    "prx:account": {
+      "href": "/api/v1/accounts/8",
+      "profile": "http://meta.prx.org/model/account/individual",
+      "title": "PRX Administrator"
+    },
+    "prx:audio-version-templates": {
+      "count": 0,
+      "href": "/api/v1/series/12345/audio_version_templates"
+    },
+    "prx:create-image": {
+      "href": "/api/v1/series/12345/image",
+      "title": "Create an image"
+    },
+    "prx:distributions": {
+      "count": 0,
+      "href": "/api/v1/series/12345/distributions{?page,per,zoom,filters,sorts}",
+      "templated": true
+    },
+    "prx:stories": {
+      "count": 0,
+      "href": "/api/v1/series/12345/stories{?page,per,zoom,filters,sorts}",
+      "templated": true
+    },
+    "self": {
+      "href": "/api/v1/series/12345",
+      "profile": "http://meta.prx.org/model/series"
+    }
+  },
+  "id": 12345,
+  "appVersion": "v3",
+  "title": "99% Invisible",
+  "shortDescription": "A tiny radio show about design, architecture & the 99% invisible activity that shapes our world.",
+  "description": "Design is everywhere in our lives, perhaps most importantly in the places where we’ve just stopped noticing. 99% Invisible is a weekly exploration of the process and power of design and architecture. From award winning producer Roman Mars. Learn more at <a href=\"http://99percentinvisible.org\">99percentinvisible.org</a>.<br/> A proud member of Radiotopia, from PRX. Learn more at <a href=\"http://radiotopia.fm/\">radiotopia.fm</a>.",
+  "createdAt": "2009-05-20T16:18:19.000Z",
+  "updatedAt": "2009-05-20T16:18:19.000Z"
+}
