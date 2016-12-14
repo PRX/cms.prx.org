@@ -15,7 +15,8 @@ class Api::AudioVersionTemplateRepresenter < Api::BaseRepresenter
       count: represented.audio_file_templates.count
     } if represented.id
   end
-  embeds :audio_file_templates,
-         class: AudioFileTemplate,
-         decorator: Api::AudioFileTemplateRepresenter
+  embed :audio_file_templates,
+        paged: true,
+        item_class: AudioFileTemplate,
+        item_decorator: Api::AudioFileTemplateRepresenter
 end
