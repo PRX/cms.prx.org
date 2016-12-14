@@ -3,24 +3,24 @@ require 'test_helper'
 describe Distributions::PodcastDistribution do
 
   let(:distribution) { build(:podcast_distribution) }
-  let(:podcast_url) { URI.join(distribution.feeder_root, "/api/v1/podcasts/23").to_s }
+  let(:podcast_url) { URI.join(distribution.feeder_root, '/api/v1/podcasts/23').to_s }
 
   before do
-    stub_request(:get, "https://feeder.prx.org/api/v1").
-      with(:headers => {'Authorization'=>'Bearer token', 'Content-Type'=>'application/json'}).
-      to_return(:status => 200, :body => json_file('feeder_root'))
+    stub_request(:get, 'https://feeder.prx.org/api/v1').
+      with(headers: { 'Authorization' => 'Bearer token', 'Content-Type' => 'application/json' }).
+      to_return(status: 200, body: json_file('feeder_root'))
 
-    stub_request(:post, "https://feeder.prx.org/api/v1/podcasts").
-      with(:headers => {'Authorization'=>'Bearer token', 'Content-Type'=>'application/json'}).
-      to_return(:status => 200, :body => json_file('podcast'), :headers => {})
+    stub_request(:post, 'https://feeder.prx.org/api/v1/podcasts').
+      with(headers: { 'Authorization' => 'Bearer token', 'Content-Type' => 'application/json' }).
+      to_return(status: 200, body: json_file('podcast'), headers: {} )
 
-    stub_request(:get, "https://feeder.prx.org/api/v1/podcasts/23").
-      with(:headers => {'Authorization'=>'Bearer token', 'Content-Type'=>'application/json'}).
-      to_return(:status => 200, :body => json_file('podcast'), :headers => {})
+    stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/23').
+      with(headers: { 'Authorization' => 'Bearer token', 'Content-Type' => 'application/json' }).
+      to_return(status: 200, body: json_file('podcast'), headers: {} )
   end
 
   it 'creates the podcast on feeder' do
-    distribution.stub(:get_account_token, "token") do
+    distribution.stub(:get_account_token, 'token') do
       distribution.url = nil
       distribution.account.wont_be_nil
       distribution.save!
@@ -30,7 +30,7 @@ describe Distributions::PodcastDistribution do
   end
 
   it 'retrieves the podcast from feeder' do
-    distribution.stub(:get_account_token, "token") do
+    distribution.stub(:get_account_token, 'token') do
       distribution.url = podcast_url
       podcast = distribution.get_podcast
       podcast.wont_be_nil
