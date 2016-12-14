@@ -86,6 +86,10 @@ module PRXAccess
     end
   end
 
+  def respond_to_missing?(method, include_private = false)
+    method.to_s.ends_with?('_root') || super
+  end
+
   def root_uri(host, path = '')
     if host =~ /\.org/ # TODO: should .tech's be here too?
       URI::HTTPS.build(host: host, path: path).to_s
