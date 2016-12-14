@@ -12,6 +12,11 @@ describe Distribution do
     distribution.owner.wont_be_nil
   end
 
+  it 'has an account' do
+    distribution.account.wont_be_nil
+    distribution.account.must_equal distribution.owner.account
+  end
+
   it 'has properties' do
     distribution.properties.wont_be_nil
     distribution.properties["explicit"].must_equal "clean"
