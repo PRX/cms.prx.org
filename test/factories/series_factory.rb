@@ -10,11 +10,13 @@ FactoryGirl.define do
     transient do
       stories_count 2
       templates_count 1
+      dist_count 1
     end
 
     after(:create) do |series, evaluator|
       FactoryGirl.create_list(:story, evaluator.stories_count, series: series)
       FactoryGirl.create_list(:audio_version_template, evaluator.templates_count, series: series)
+      FactoryGirl.create_list(:podcast_distribution, evaluator.dist_count, distributable: series)
     end
 
     factory :series_v3 do

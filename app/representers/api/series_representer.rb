@@ -55,8 +55,9 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :audio_version_templates,
-        class: AudioVersionTemplate,
-        decorator: Api::AudioVersionTemplateRepresenter,
+        paged: true,
+        item_class: AudioVersionTemplate,
+        item_decorator: Api::AudioVersionTemplateRepresenter,
         zoom: false
 
   link :distributions do
@@ -65,7 +66,8 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
       count: represented.distributions.count
     } if represented.id
   end
-  embeds :distributions,
-        class: Distribution,
-        decorator: Api::DistributionRepresenter
+  embed :distributions,
+        paged: true,
+        item_class: Distribution,
+        item_decorator: Api::DistributionRepresenter
 end
