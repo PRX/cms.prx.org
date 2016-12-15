@@ -46,4 +46,12 @@ describe Api::SeriesImagesController do
     original.id.wont_equal new_image['id']
     series.image(true).id.must_equal new_image['id']
   end
+
+  it 'deletes the image, touches the series' do
+    series_update = series.updated_at
+    delete :destroy, api_request_opts(series_id: series.id, id: series_image.id)
+    assert_response :success
+    -> { SeriesImage.find(series_image.id) }.must_raise(ActiveRecord::RecordNotFound)
+    series_update.wont_equal series.reload.updated_at
+  end
 end
