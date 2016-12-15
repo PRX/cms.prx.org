@@ -41,6 +41,6 @@ describe PRXAccess do
       with(body: '{"underScore":1}').
       to_return(status: 200, body: '{"foo":"bar"}', headers: {})
 
-    prx_access.api.post({ 'under_score' => 1 })
+    prx_access.api.post('under_score' => 1 )
   end
 end
