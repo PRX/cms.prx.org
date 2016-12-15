@@ -37,7 +37,7 @@ describe PRXAccess do
   end
 
   it 'serializes using the outgoing_body_filter' do
-    stub_request(:post, "https://cms.prx.org/api/v1").
+    stub_request(:post, 'https://cms.prx.org/api/v1').
       with(body: '{"underScore":1}').
       to_return(status: 200, body: '{"foo":"bar"}', headers: {})
 
