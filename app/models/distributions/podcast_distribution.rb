@@ -23,9 +23,22 @@ class Distributions::PodcastDistribution < Distribution
   end
 
   def podcast_attributes
-    {
+    attrs = {
       prx_uri: polymorphic_url(['api', owner], only_path: true),
-      prx_account_uri: api_account_path(account)
+      prx_account_uri: api_account_path(account),
+      published_at: Time.now
     }
+
+    if owner.is_a?(Series)
+      attrs[:title] = owner.title
+      attrs[:subtitle] = owner.short_description
+      attrs[:description] = owner.description
+      attrs[:summary] = owner.description
+      if owner.image
+        attrs[:itunes_image] = { url: owner.image.public_url(version: 'original') }
+      end
+    end
+
+    attrs
   end
 end

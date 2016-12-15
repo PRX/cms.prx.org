@@ -40,8 +40,9 @@ describe Distributions::PodcastDistribution do
 
   it 'returns attributes for creating the podcast' do
     attrs = distribution.podcast_attributes
-    attrs.keys.count.must_equal 2
+    attrs.keys.count.must_equal 7
     attrs[:prx_uri].must_equal "/api/v1/series/#{distribution.owner.id}"
     attrs[:prx_account_uri].must_equal "/api/v1/accounts/#{distribution.account.id}"
+    attrs[:published_at].wont_be_nil
   end
 end
