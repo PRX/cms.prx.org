@@ -39,7 +39,7 @@ module PRXAccess
         attrs = (self.resource.default_attributes || {}).merge(attrs)
 
         # adding this line to call outgoing_body_filter
-        attrs = self.resource.outgoing_body_filter(attrs)
+        attrs = resource.outgoing_body_filter(attrs)
 
         response = faraday_connection.post do |req|
           req.body = self.resource.adapter.serialize(attrs)
@@ -52,7 +52,7 @@ module PRXAccess
         attrs = (self.resource.default_attributes || {}).merge(attrs)
 
         # adding this line to call outgoing_body_filter
-        attrs = self.resource.outgoing_body_filter(attrs)
+        attrs = resource.outgoing_body_filter(attrs)
 
         response = faraday_connection.put do |req|
           req.body = self.resource.adapter.serialize(attrs)
@@ -65,7 +65,7 @@ module PRXAccess
         attrs = (self.resource.default_attributes || {}).merge(attrs)
 
         # adding this line to call outgoing_body_filter
-        attrs = self.resource.outgoing_body_filter(attrs)
+        attrs = resource.outgoing_body_filter(attrs)
 
         response = faraday_connection.patch do |req|
           req.body = self.resource.adapter.serialize(attrs)
