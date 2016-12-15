@@ -64,6 +64,10 @@ class Api::Min::TestObjectRepresenter < Api::BaseRepresenter
   end
 end
 
+class Api::TestParentRepresenter < Api::BaseRepresenter
+  property :id
+end
+
 class Api::TestObjectsController < ActionController::Base
   def index; head :no_content; end
 
@@ -77,6 +81,10 @@ class Api::TestObjectsController < ActionController::Base
 
   def resource
     @resource ||= TestObject.new('title', true)
+  end
+
+  def parent
+    @parent ||= TestParent.new(1, true)
   end
 end
 
