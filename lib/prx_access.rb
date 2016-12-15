@@ -33,6 +33,45 @@ module PRXAccess
           end
         end
       end
+
+      def post_response(attrs=nil)
+        attrs ||= self.resource.attributes
+        attrs = (self.resource.default_attributes || {}).merge(attrs)
+
+        # adding this line to call outgoing_body_filter
+        attrs = self.resource.outgoing_body_filter(attrs)
+
+        response = faraday_connection.post do |req|
+          req.body = self.resource.adapter.serialize(attrs)
+        end
+        response
+      end
+
+      def put_response(attrs=nil)
+        attrs ||= self.resource.attributes
+        attrs = (self.resource.default_attributes || {}).merge(attrs)
+
+        # adding this line to call outgoing_body_filter
+        attrs = self.resource.outgoing_body_filter(attrs)
+
+        response = faraday_connection.put do |req|
+          req.body = self.resource.adapter.serialize(attrs)
+        end
+        response
+      end
+
+      def patch_response(attrs=nil)
+        attrs ||= self.resource.attributes.changed_attributes
+        attrs = (self.resource.default_attributes || {}).merge(attrs)
+
+        # adding this line to call outgoing_body_filter
+        attrs = self.resource.outgoing_body_filter(attrs)
+
+        response = faraday_connection.patch do |req|
+          req.body = self.resource.adapter.serialize(attrs)
+        end
+        response
+      end
     end
   end
 
