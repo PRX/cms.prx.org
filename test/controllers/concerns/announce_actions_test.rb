@@ -12,6 +12,8 @@ describe Api::TestObjectsController do
     before do
       controller_class.class_eval { include AnnounceActions }
       controller_class.announced_actions = []
+      controller_class.announce_actions(:create, :destroy)
+      controller_class.announce_actions(:update, resource: :parent)
       clear_messages
       define_routes
     end
@@ -21,8 +23,6 @@ describe Api::TestObjectsController do
     end
 
     it 'will call announce' do
-      controller_class.announce_actions(:create)
-
       post :create, { title: 'foo' }.to_json
 
       response.must_be :success?
@@ -31,8 +31,6 @@ describe Api::TestObjectsController do
     end
 
     it 'renames destroy action to delete' do
-      controller_class.announce_actions(:destroy)
-
       delete :destroy, id: 1
 
       response.must_be :success?
@@ -41,8 +39,6 @@ describe Api::TestObjectsController do
     end
 
     it 'will call announce on a different resource' do
-      controller_class.announce_actions(:update, resource: :parent)
-
       put :update, id: 1
 
       response.must_be :success?
