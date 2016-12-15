@@ -35,4 +35,12 @@ describe PRXAccess do
     input = { 'under_score' => 1 }
     resource.outgoing_body_filter(input)['underScore'].must_equal 1
   end
+
+  it 'serializes using the outgoing_body_filter' do
+    stub_request(:post, 'https://cms.prx.org/api/v1').
+      with(body: '{"underScore":1}').
+      to_return(status: 200, body: '{"foo":"bar"}', headers: {})
+
+    prx_access.api.post('under_score' => 1)
+  end
 end

@@ -88,6 +88,22 @@ class Api::TestObjectsController < ActionController::Base
   end
 end
 
+class Api::TestParentsController < ActionController::Base
+  def index; head :no_content; end
+
+  def show; head :no_content; end
+
+  def create; head :no_content; end
+
+  def update; head :no_content; end
+
+  def destroy; head :no_content; end
+
+  def resource
+    @resource ||= TestParent.new(1, true)
+  end
+end
+
 def define_routes
   Rails.application.routes.draw do
     namespace :api do

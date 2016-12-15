@@ -2,7 +2,15 @@
 
 require 'announce_actions'
 
-class Cc1 < Api::TestObjectsController; end
+Api::TestObjectsController.class_eval do
+  include AnnounceActions
+  announce_actions(:update, resource: :parent)
+  announce_actions(:create, :destroy)
+end
+
+Api::TestParentsController.class_eval do
+  include AnnounceActions
+end
 
 describe Api::TestObjectsController do
 
@@ -10,10 +18,8 @@ describe Api::TestObjectsController do
     let (:controller_class) { Api::TestObjectsController }
 
     before do
-      controller_class.class_eval { include AnnounceActions }
-      controller_class.announced_actions = []
-      clear_messages
       define_routes
+      clear_messages
     end
 
     after do
@@ -21,8 +27,6 @@ describe Api::TestObjectsController do
     end
 
     it 'will call announce' do
-      controller_class.announce_actions(:create)
-
       post :create, { title: 'foo' }.to_json
 
       response.must_be :success?
@@ -31,8 +35,6 @@ describe Api::TestObjectsController do
     end
 
     it 'renames destroy action to delete' do
-      controller_class.announce_actions(:destroy)
-
       delete :destroy, id: 1
 
       response.must_be :success?
@@ -41,8 +43,6 @@ describe Api::TestObjectsController do
     end
 
     it 'will call announce on a different resource' do
-      controller_class.announce_actions(:update, resource: :parent)
-
       put :update, id: 1
 
       response.must_be :success?
@@ -52,12 +52,10 @@ describe Api::TestObjectsController do
   end
 
   describe 'test setting announce actions' do
-    let (:controller_class) { Cc1 }
+    let (:controller_class) { Api::TestParentsController }
 
     before do
-      controller_class.class_eval { include AnnounceActions }
       controller_class.announced_actions = []
-      clear_messages
     end
 
     it 'can declare announced actions' do
