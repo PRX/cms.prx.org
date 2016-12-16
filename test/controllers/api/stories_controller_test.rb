@@ -5,7 +5,7 @@ require 'test_helper'
 describe Api::StoriesController do
   let(:story) { create(:story) }
 
-  before(:all) { Story.delete_all }
+  before { Story.delete_all }
 
   describe 'editing' do
 
@@ -15,17 +15,16 @@ describe Api::StoriesController do
     before(:each) do
       class << @controller; attr_accessor :prx_auth_token; end
       @controller.prx_auth_token = token
+      @request.env['CONTENT_TYPE'] = 'application/json'
     end
 
     it 'can create a new story' do
       story_hash = { title: 'create story', set_account_uri: "/api/v1/accounts/#{account.id}" }
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :create, story_hash.to_json, api_version: 'v1', format: 'json'
       assert_response :success
     end
 
     it 'can create a new story with url parameters' do
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :create,
            { title: 'story' }.to_json,
            api_version: 'v1',
@@ -35,9 +34,42 @@ describe Api::StoriesController do
       Story.find(id).account_id.must_equal account.id
     end
 
+    it 'can set description as markdown' do
+      story_hash = {
+        title: 'story',
+        description: '_description_'
+      }
+      post :create, story_hash.to_json, api_request_opts(account_id: account.id)
+      assert_response :success
+      res = JSON.parse(response.body)
+      res['description'].must_equal "<p><em>description</em></p>\n"
+      res['descriptionMd'].must_equal '_description_'
+    end
+
+    it 'can set description_md' do
+      story_hash = {
+        title: 'story',
+        'descriptionMd' => '_description_'
+      }
+      post :create, story_hash.to_json, api_request_opts(account_id: account.id)
+      assert_response :success
+      res = JSON.parse(response.body)
+      res['description'].must_equal "<p><em>description</em></p>\n"
+      res['descriptionMd'].must_equal '_description_'
+    end
+
+    it 'returns descriptionMd for v3 stories' do
+      story_v3 = create(:story_v3, description: "<p><em>description</em></p>\n")
+
+      get(:show, { api_version: 'v1', format: 'json', id: story_v3.id } )
+      assert_response :success
+      res = JSON.parse(response.body)
+      res['descriptionMd'].must_equal "_description_\n\n"
+    end
+
+
     it 'rejects new stories with an invalid account' do
       new_account = create(:account)
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :create,
            { title: 'story' }.to_json,
            api_version: 'v1',
@@ -47,7 +79,6 @@ describe Api::StoriesController do
 
     it 'can update a story' do
       story = create(:story, title: 'not this', account: account)
-      @request.env['CONTENT_TYPE'] = 'application/json'
       put :update,
           { title: 'this' }.to_json,
           api_version: 'v1',
@@ -62,7 +93,6 @@ describe Api::StoriesController do
                      title: 'not this',
                      account: account,
                      published_at: nil)
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :publish, api_version: 'v1', format: 'json', id: story.id
       assert_response :success
       Story.find(story.id).published_at.wont_be_nil
@@ -72,7 +102,6 @@ describe Api::StoriesController do
       story = create(:story,
                      title: 'not this',
                      account: account)
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :unpublish, api_version: 'v1', format: 'json', id: story.id
       assert_response :success
       Story.find(story.id).published_at.must_be_nil

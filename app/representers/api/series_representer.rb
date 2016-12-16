@@ -4,7 +4,7 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   property :id, writeable: false
   property :title
   property :short_description
-  property :description
+  property :description, getter: ->(_o) { description_html }
   property :created_at, writeable: false
   property :updated_at, writeable: false
   property :app_version, writeable: false
