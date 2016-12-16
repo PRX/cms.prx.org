@@ -49,7 +49,7 @@ class Mom
     id
   end
 
-  def self.find(*_args)
+  def self.find_by_id(*_args)
     @@singleton ||= new.tap { |m| m.son = Son.new }
   end
 
