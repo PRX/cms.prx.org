@@ -66,7 +66,6 @@ describe Api::StoriesController do
       res['descriptionMd'].must_equal "_description_\n\n"
     end
 
-
     it 'rejects new stories with an invalid account' do
       new_account = create(:account)
       post :create,
