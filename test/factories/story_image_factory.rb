@@ -3,6 +3,8 @@ FactoryGirl.define do
 
     story
 
+    height 1400
+    width 1400
     status 'complete'
 
     after(:create) { |si| si.update_file!('test.png') unless si.status == 'uploaded' }
