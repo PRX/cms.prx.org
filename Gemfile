@@ -47,6 +47,8 @@ gem 'roar'
 gem 'roar-rails'
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'redcarpet'
+gem 'reverse_markdown'
 
 ## Messaging
 gem 'shoryuken'
