@@ -113,18 +113,32 @@ describe Api::SonsController do
   end
 
   it 'gets the parent' do
-    mom = Mom.find(1)
+    mom = Mom.find_by_id(1)
     mom.wont_be_nil
     @controller.params = { mom_id: 1 }
     @controller.parent_resource.must_equal mom
   end
 
   it 'retrieves the child resource' do
-    mom = Mom.find(1)
+    mom = Mom.find_by_id(1)
     mom.wont_be_nil
     son = mom.son
     son.wont_be_nil
     @controller.params = { mom_id: 1 }
-    @controller.child_resource.must_equal son
+    @controller.child_resource.must_equal mom.son
+  end
+
+  it 'raises not found for missing child resource' do
+    mom = Mom.find_by_id(1)
+    mom.stub(:son, nil) do
+      ->{ @controller.child_resource }.must_raise HalApi::Errors::NotFound
+    end
+  end
+
+  it 'raises not found for missing parent resource' do
+    Mom.stub(:find_by_id, nil) do
+      ->{ @controller.parent_resource }.must_raise HalApi::Errors::NotFound
+      ->{ @controller.child_resource }.must_raise HalApi::Errors::NotFound
+    end
   end
 end
