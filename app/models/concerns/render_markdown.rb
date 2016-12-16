@@ -30,7 +30,7 @@ module RenderMarkdown
       safe_links_only: true,
       hard_wrap: true,
       with_toc_data: true,
-      link_attributes: { rel: 'nofollow', target: "_blank" },
+      link_attributes: { rel: 'nofollow', target: '_blank' },
     }
     Redcarpet::Render::HTML.new(options)
   end
