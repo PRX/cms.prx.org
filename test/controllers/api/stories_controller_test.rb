@@ -60,8 +60,7 @@ describe Api::StoriesController do
 
     it 'returns descriptionMd for v3 stories' do
       story_v3 = create(:story_v3, description: "<p><em>description</em></p>\n")
-
-      get(:show, { api_version: 'v1', format: 'json', id: story_v3.id } )
+      get(:show, api_request_opts(id: story_v3.id))
       assert_response :success
       res = JSON.parse(response.body)
       res['descriptionMd'].must_equal "_description_\n\n"
