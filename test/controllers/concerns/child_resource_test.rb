@@ -131,14 +131,14 @@ describe Api::SonsController do
   it 'raises not found for missing child resource' do
     mom = Mom.find_by_id(1)
     mom.stub(:son, nil) do
-      ->{ @controller.child_resource }.must_raise HalApi::Errors::NotFound
+      -> { @controller.child_resource }.must_raise HalApi::Errors::NotFound
     end
   end
 
   it 'raises not found for missing parent resource' do
     Mom.stub(:find_by_id, nil) do
-      ->{ @controller.parent_resource }.must_raise HalApi::Errors::NotFound
-      ->{ @controller.child_resource }.must_raise HalApi::Errors::NotFound
+      -> { @controller.parent_resource }.must_raise HalApi::Errors::NotFound
+      -> { @controller.child_resource }.must_raise HalApi::Errors::NotFound
     end
   end
 end
