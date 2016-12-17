@@ -23,11 +23,11 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
 
   link :image do
     {
-      href: api_series_series_image_path(represented),
-      title: represented.image.try(:filename)
-    } if represented.id
+      href: api_series_series_image_path(represented, represented.default_image),
+      title: represented.default_image.try(:filename)
+    } if represented && represented.default_image
   end
-  embed :image, class: SeriesImage, decorator: Api::ImageRepresenter
+  embed :default_image, as: :image, class: SeriesImage, decorator: Api::ImageRepresenter
 
   link :account do
     {
