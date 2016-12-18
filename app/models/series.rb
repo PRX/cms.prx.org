@@ -35,7 +35,7 @@ class Series < BaseModel
   }
 
   def default_image
-    @default_image ||= images.order('field(purpose, "profile") desc, created_at desc').first
+    @default_image ||= images.profile
   end
 
   def subscribable?
