@@ -14,7 +14,7 @@ class Image < BaseModel
 
   PROFILE = 'profile'.freeze
   THUMBNAIL = 'thumbnail'.freeze
-  PURPOSES = [PROFILE, THUMBNAIL]
+  PURPOSES = [PROFILE, THUMBNAIL].freeze
 
   def self.profile
     order("field(purpose, '#{Image::PROFILE}') desc, created_at desc").first
