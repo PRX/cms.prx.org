@@ -20,7 +20,6 @@ class Series < BaseModel
   has_many :audio_version_templates
   has_many :distributions, as: :distributable
 
-  # has_one :image, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
   has_many :images, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
 
   before_validation :set_app_version, on: :create
@@ -36,7 +35,7 @@ class Series < BaseModel
   }
 
   def default_image
-    @default_image ||= images.first
+    @default_image ||= images.order('field(purpose, "profile") desc, created_at desc').first
   end
 
   def subscribable?
