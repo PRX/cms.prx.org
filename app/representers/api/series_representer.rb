@@ -38,7 +38,7 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
       count: represented.images.count
     } if represented.id
   end
-  embed :images, paged: true, item_class: SeriesImage, decorator: Api::ImageRepresenter
+  embed :images, paged: true, item_class: SeriesImage, item_decorator: Api::ImageRepresenter
 
   link :account do
     {
