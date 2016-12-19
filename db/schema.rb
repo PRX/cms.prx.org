@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.string   "status",       limit: 255
     t.string   "caption",      limit: 255
     t.string   "credit",       limit: 255
+    t.string   "purpose",      limit: 255
   end
 
   add_index "account_images", ["account_id"], name: "account_images_account_id_fk", using: :btree
@@ -263,6 +264,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "updated_at"
     t.string   "upload_path",  limit: 255
     t.string   "status",       limit: 255
+    t.string   "purpose",      limit: 255
   end
 
   add_index "piece_images", ["piece_id"], name: "piece_images_piece_id_fk", using: :btree
@@ -449,6 +451,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "updated_at"
     t.string   "upload_path",  limit: 255
     t.string   "status",       limit: 255
+    t.string   "purpose",      limit: 255
   end
 
   add_index "series_images", ["series_id"], name: "series_images_series_id_fk", using: :btree
@@ -510,6 +513,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.string   "status",       limit: 255
     t.string   "caption",      limit: 255
     t.string   "credit",       limit: 255
+    t.string   "purpose",      limit: 255
   end
 
   add_index "user_images", ["user_id"], name: "user_images_user_id_fk", using: :btree

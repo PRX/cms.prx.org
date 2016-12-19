@@ -24,6 +24,27 @@ describe Series do
     Series.where(id: v3_series.id).with_deleted.count.must_equal 1
   end
 
+  describe '#images' do
+    let(:series) { create(:series) }
+    let(:image_none) { create(:series_image, series: series, purpose: '') }
+    let(:image_prof) { create(:series_image, series: series, purpose: 'profile') }
+    let(:image_thum) { create(:series_image, series: series, purpose: 'thumbnail') }
+
+    it 'gets the profile image by default' do
+      image_none.wont_be_nil
+      image_prof.wont_be_nil
+      image_thum.wont_be_nil
+      series.default_image.must_equal image_prof
+      series.images.first.wont_equal image_prof
+    end
+
+    it 'gets any image if no profile image' do
+      image_none.wont_be_nil
+      series.default_image.must_equal image_none
+      series.images.first.must_equal image_none
+    end
+  end
+
   describe '#subscribable?' do
     it 'returns true if status is approved' do
       series.subscription_approval_status = Series::SUBSCRIPTION_PRX_APPROVED

@@ -26,18 +26,19 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
 
   link :image do
     {
-      href: api_series_series_image_path(represented),
-      title: represented.image.filename
-    } if represented.id && represented.image
+      href: api_series_series_image_path(represented, represented.default_image),
+      title: represented.default_image.try(:filename)
+    } if represented && represented.default_image
   end
-  embed :image, class: SeriesImage, decorator: Api::ImageRepresenter
+  embed :default_image, as: :image, class: SeriesImage, decorator: Api::ImageRepresenter
 
-  link 'create-image' do
+  link :images do
     {
-      href: api_series_series_image_path(represented),
-      title: 'Create an image'
-    } if represented.id && !represented.image
+      href: api_series_series_images_path(represented),
+      count: represented.images.count
+    } if represented.id
   end
+  embed :images, paged: true, item_class: SeriesImage, item_decorator: Api::ImageRepresenter
 
   link :account do
     {
