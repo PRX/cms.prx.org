@@ -34,8 +34,12 @@ class Distributions::PodcastDistribution < Distribution
       attrs[:subtitle] = owner.short_description
       attrs[:description] = owner.description
       attrs[:summary] = owner.description
-      if owner.default_image
-        attrs[:itunes_image] = { url: owner.default_image.public_url(version: 'original') }
+      if owner.images.profile
+        attrs[:itunes_image] = { url: owner.images.profile.public_url(version: 'original') }
+      end
+
+      if owner.images.thumbnail
+        attrs[:feed_image] = { url: owner.owner.images.thumbnail.public_url(version: 'original') }
       end
     end
 
