@@ -26,4 +26,9 @@ describe Api::Distributions::PodcastDistributionRepresenter do
     json['id'].must_equal distribution.id
     json['properties']['explicit'].must_equal 'clean'
   end
+
+  it 'should have a link to an audio version template' do
+    template_path = "/api/v1/audio_version_templates/#{audio_version_template.id}"
+    json['_links']['prx:audio-version-template']['href'].must_equal template_path
+  end
 end
