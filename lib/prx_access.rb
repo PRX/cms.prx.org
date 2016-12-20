@@ -130,7 +130,7 @@ module PRXAccess
   end
 
   def root_uri(host, path = '')
-    if host =~ /\.org/ # TODO: should .tech's be here too?
+    if host =~ /\.org|\.tech/
       URI::HTTPS.build(host: host, path: path).to_s
     else
       URI::HTTP.build(host: host, path: path).to_s
