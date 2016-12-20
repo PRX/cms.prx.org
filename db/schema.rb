@@ -170,12 +170,13 @@ ActiveRecord::Schema.define(version: 6) do
   add_index "audio_versions", ["piece_id"], name: "audio_versions_piece_id_fk", using: :btree
 
   create_table "distributions", force: :cascade do |t|
-    t.string   "type",               limit: 255
-    t.string   "distributable_type", limit: 255
-    t.integer  "distributable_id",   limit: 4
-    t.string   "url",                limit: 255
-    t.string   "guid",               limit: 255
-    t.text     "properties",         limit: 65535
+    t.string   "type",                      limit: 255
+    t.string   "distributable_type",        limit: 255
+    t.integer  "distributable_id",          limit: 4
+    t.integer  "audio_version_template_id", limit: 4
+    t.string   "url",                       limit: 255
+    t.string   "guid",                      limit: 255
+    t.text     "properties",                limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
   end
