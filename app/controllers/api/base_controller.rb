@@ -63,4 +63,10 @@ class Api::BaseController < ApplicationController
     message = { error: 'You are not authorized to perform this action' }
     render json: message, status: 401
   end
+
+  def wrap_in_transaction
+    ActiveRecord::Base.transaction do
+      yield
+    end
+  end
 end

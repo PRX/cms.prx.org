@@ -13,6 +13,8 @@ class Api::StoryDistributionsController < Api::BaseController
 
   announce_actions resource: :story_resource
 
+  around_action :wrap_in_transaction, only: :create
+
   def story_resource
     resource.try(:story)
   end

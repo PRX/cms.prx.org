@@ -15,6 +15,7 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
     podcast = distribution.get_podcast
     episode = podcast.episodes.post(episode_attributes)
     episode_url = URI.join(feeder_root, episode.links['self'].href).to_s
+    raise 'Failed to get episode url on create' if episode_url.blank?
     update_attributes!(url: episode_url) if episode_url
   end
 
