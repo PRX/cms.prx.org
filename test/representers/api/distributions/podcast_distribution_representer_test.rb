@@ -2,9 +2,11 @@ require 'test_helper'
 
 describe Api::Distributions::PodcastDistributionRepresenter do
 
-  let(:distribution) { create(:podcast_distribution) }
-  let(:representer)  { Api::Distributions::PodcastDistributionRepresenter.new(distribution) }
-  let(:json)         { JSON.parse(representer.to_json) }
+  let(:series) { create(:series) }
+  let(:audio_version_template) { create(:audio_version_template, series: series) }
+  let(:distribution) { create(:podcast_distribution, audio_version_template: audio_version_template) }
+  let(:representer) { Api::Distributions::PodcastDistributionRepresenter.new(distribution) }
+  let(:json) { JSON.parse(representer.to_json) }
 
   before do
     stub_request(:get, "http://feeder.docker/api/v1").
