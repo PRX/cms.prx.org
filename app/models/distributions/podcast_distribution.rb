@@ -39,7 +39,7 @@ class Distributions::PodcastDistribution < Distribution
       end
 
       if owner.images.thumbnail
-        attrs[:feed_image] = { url: owner.owner.images.thumbnail.public_url(version: 'original') }
+        attrs[:feed_image] = { url: owner.images.thumbnail.public_url(version: 'original') }
       end
     end
 
