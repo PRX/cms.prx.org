@@ -66,7 +66,7 @@ class Api::StoriesController < Api::BaseController
     relation.includes(
       { audio_versions: [:audio_files] },
       { account: [:image, :address, { opener: [:image] }] },
-      { series: [:image, :account] },
+      { series: [:images, :account] },
       :images,
       :license
     )
