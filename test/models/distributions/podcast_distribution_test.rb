@@ -24,6 +24,16 @@ describe Distributions::PodcastDistribution do
   end
 
   it 'creates the podcast on feeder' do
+    distribution.stub(:get_account_token, 'token') do
+      distribution.url = nil
+      distribution.account.wont_be_nil
+      distribution.save!
+      distribution.distribute!
+      distribution.url.must_equal(podcast_url)
+    end
+  end
+
+  it 'throws error and rolls back if podcast on feeder fails' do
     distribution.stub(:get_account_token, 'fail') do
       distribution.url = nil
       distribution.account.wont_be_nil
@@ -31,16 +41,6 @@ describe Distributions::PodcastDistribution do
       -> do
         distribution.distribute!
       end.must_raise(HyperResource::ServerError)
-    end
-  end
-
-  it 'throws error and rolls back if podcast on feeder fails' do
-    distribution.stub(:get_account_token, 'token') do
-      distribution.url = nil
-      distribution.account.wont_be_nil
-      distribution.save!
-      distribution.distribute!
-      distribution.url.must_equal(podcast_url)
     end
   end
 
