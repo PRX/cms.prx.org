@@ -13,6 +13,8 @@ class Api::DistributionsController < Api::BaseController
 
   announce_actions resource: :owner_resource
 
+  around_action :wrap_in_transaction, only: :create
+
   def owner_resource
     resource.try(:owner)
   end
