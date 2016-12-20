@@ -9,12 +9,12 @@ describe Api::Distributions::PodcastDistributionRepresenter do
   let(:json) { JSON.parse(representer.to_json) }
 
   before do
-    stub_request(:get, "http://feeder.docker/api/v1").
-      with(headers: { 'Authorization'=>'Bearer token', 'Content-Type'=>'application/json' }).
+    stub_request(:get, 'http://feeder.docker/api/v1').
+      with(headers: { 'Authorization' => 'Bearer token', 'Content-Type' => 'application/json' }).
       to_return(status: 200, body: json_file('feeder_root'))
 
-    stub_request(:post, "http://feeder.docker/api/v1/podcasts").
-      with(headers: {'Authorization'=>'Bearer token', 'Content-Type'=>'application/json'}).
+    stub_request(:post, 'http://feeder.docker/api/v1/podcasts').
+      with(headers: { 'Authorization' => 'Bearer token', 'Content-Type' => 'application/json' }).
       to_return(status: 200, body: json_file('podcast'))
   end
 
