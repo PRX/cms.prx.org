@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'render_markdown'
 
 class Series < BaseModel
   SUBSCRIPTION_STATES = [
@@ -9,6 +10,19 @@ class Series < BaseModel
   ]
 
   include Storied
+  include RenderMarkdown
+
+  def description_html
+    v4? ? markdown_to_html(description) : description
+  end
+
+  def description_md=(md)
+    self.description = md
+  end
+
+  def description_md
+    v4? ? description : html_to_markdown(description)
+  end
 
   acts_as_paranoid
 
