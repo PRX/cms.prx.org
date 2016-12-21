@@ -52,9 +52,6 @@ class Story < BaseModel
 
   before_validation :set_app_version, on: :create
 
-  # indicates piece is published
-  event_attribute :published_at
-
   # indicates piece is published with promos only - not full audio
   event_attribute :promos_only_at
 
@@ -67,8 +64,8 @@ class Story < BaseModel
   # indicates the piece is not publically available, only to the network
   event_attribute :network_only_at
 
-  scope :published, -> { where('`published_at` IS NOT NULL') }
-  scope :unpublished, -> { where('`published_at` IS NULL') }
+  scope :published, -> { where('`published_at` IS NOT NULL AND `published_at` <= now()') }
+  scope :unpublished, -> { where('`published_at` IS NULL OR `published_at` > now()') }
   scope :unseries, -> { where('`series_id` IS NULL') }
   scope :v4, -> { where(app_version: PRX::APP_VERSION) }
   scope :network_visible, -> { where('`network_only_at` IS NULL') }
@@ -162,18 +159,37 @@ class Story < BaseModel
     series && series.subscribable?
   end
 
+  def published
+    published_at && published_at <= DateTime.now
+  end
+
+  alias_method :"published?", :published
+
+  def published=(value)
+    time = if value.is_a?(Date) || value.is_a?(Time)
+      value
+    elsif [true, "1", 1, "t", "true"].include? value
+      DateTime.now
+    elsif [false, "0", 0, "f", "false"].include? value
+      nil
+    else
+      !!value ? DateTime.now : nil
+    end
+    self.published_at = time
+  end
+
   # raising exceptions here to prevent sending publish messages
   #  when not actually a change to be published
-  def publish!
-    if published?
+  def publish!(apublished_at = DateTime.now)
+    if !published_at.nil?
       raise "Story #{id} is already published."
     else
-      update_attributes!(published_at: Time.now)
+      update_attributes!(published_at: apublished_at)
     end
   end
 
   def unpublish!
-    if !published?
+    if published_at.nil?
       raise "Story #{id} is not published."
     else
       update_attributes!(published_at: nil)
@@ -205,6 +221,6 @@ class Story < BaseModel
   def set_app_version
     return unless new_record?
     self.app_version = PRX::APP_VERSION
-    self.deleted_at = Time.now
+    self.deleted_at = DateTime.now
   end
 end
