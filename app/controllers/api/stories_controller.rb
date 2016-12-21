@@ -22,7 +22,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def publish_resource
-    @story ||= Story.unpublished.where(id: params[:id]).first
+    @story ||= Story.where(id: params[:id]).first
   end
 
   def unpublish
@@ -34,7 +34,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def unpublish_resource
-    @story ||= Story.published.where(id: params[:id]).first
+    @story ||= Story.where(id: params[:id]).first
   end
 
   def random
