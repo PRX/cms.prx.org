@@ -95,7 +95,11 @@ class Api::StoryRepresenter < Api::BaseRepresenter
       count: represented.images.count
     } if represented.id
   end
-  embed :images, paged: true, item_class: StoryImage, item_decorator: Api::ImageRepresenter, zoom: false
+  embed :images,
+    paged: true,
+    item_class: StoryImage,
+    item_decorator: Api::ImageRepresenter,
+    zoom: false
 
   link :musical_works do
     {
