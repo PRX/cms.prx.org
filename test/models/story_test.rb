@@ -180,7 +180,7 @@ describe Story do
       end
 
       [true, 't', 'true', '1', 1].each do |v|
-        story.published = true
+        story.published = v
         story.published_at.wont_be_nil
         story.must_be :published?
       end
