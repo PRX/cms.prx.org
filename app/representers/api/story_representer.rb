@@ -8,7 +8,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :episode_identifier
   property :created_at, writeable: false
   property :updated_at, writeable: false
-  property :published_at, writeable: false
+  property :published_at
   property :produced_on
 
   property :duration, writeable: false
@@ -95,7 +95,11 @@ class Api::StoryRepresenter < Api::BaseRepresenter
       count: represented.images.count
     } if represented.id
   end
-  embed :images, paged: true, item_class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
+  embed :images,
+        paged: true,
+        item_class: StoryImage,
+        item_decorator: Api::ImageRepresenter,
+        zoom: false
 
   link :musical_works do
     {

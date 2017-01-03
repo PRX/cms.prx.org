@@ -171,6 +171,20 @@ describe Story do
         story.unpublish!
       end.must_raise(RuntimeError)
     end
+
+    it 'allows the published date to be set via boolean' do
+      [false, 'f', 'false', '0', 0].each do |v|
+        story.published = v
+        story.published_at.must_be_nil
+        story.wont_be :published?
+      end
+
+      [true, 't', 'true', '1', 1].each do |v|
+        story.published = v
+        story.published_at.wont_be_nil
+        story.must_be :published?
+      end
+    end
   end
 
   describe 'deleting' do
