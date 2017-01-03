@@ -174,10 +174,10 @@ describe Story do
 
     it 'allows the published date to be set via boolean' do
       story.published = false
-      story.published.must_be_nil
+      story.published_at.must_be_nil
 
       story.published = true
-      story.published.wont_be_nil
+      story.published_at.wont_be_nil
     end
   end
 
