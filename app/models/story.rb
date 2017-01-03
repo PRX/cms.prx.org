@@ -166,7 +166,11 @@ class Story < BaseModel
   alias_method :"published?", :published
 
   def published=(value)
-    time = if value.is_a?(Date) || value.is_a?(Time)
+    self.published_at = date_for_boolean(value)
+  end
+
+  def date_for_boolean(value)
+    if value.is_a?(Date) || value.is_a?(Time)
       value
     elsif [true, "1", 1, "t", "true"].include? value
       DateTime.now
@@ -175,7 +179,6 @@ class Story < BaseModel
     else
       !!value ? DateTime.now : nil
     end
-    self.published_at = time
   end
 
   # raising exceptions here to prevent sending publish messages
