@@ -2,7 +2,9 @@ require 'test_helper'
 
 describe Distributions::PodcastDistribution do
 
-  let(:distribution) { build(:podcast_distribution) }
+  let(:series) { create(:series) }
+  let(:template) { create(:audio_version_template, series: series) }
+  let(:distribution) { build(:podcast_distribution, audio_version_template: template) }
   let(:podcast_url) { URI.join(distribution.feeder_root, '/api/v1/podcasts/23').to_s }
 
   before do

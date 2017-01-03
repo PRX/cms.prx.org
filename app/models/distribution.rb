@@ -3,7 +3,10 @@ require 'hash_serializer'
 
 class Distribution < BaseModel
   belongs_to :distributable, polymorphic: true, touch: true
+  belongs_to :audio_version_template
+
   has_many :story_distributions
+
   serialize :properties, HashSerializer
 
   def distribute!

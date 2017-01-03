@@ -2,10 +2,11 @@ require 'test_helper'
 
 describe Api::DistributionsController do
 
-  let(:distribution) { create(:distribution) }
   let(:account) { create(:account) }
-  let(:token) { StubToken.new(account.id, ['member']) }
   let(:series) { create(:series, account: account) }
+  let(:audio_version_template) { create(:audio_version_template, series: series) }
+  let(:distribution) { create(:distribution, audio_version_template: audio_version_template) }
+  let(:token) { StubToken.new(account.id, ['member']) }
 
   it 'should show' do
     get :show, api_request_opts(series_id: distribution.owner.id, id: distribution.id)
