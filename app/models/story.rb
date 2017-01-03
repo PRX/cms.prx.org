@@ -172,9 +172,9 @@ class Story < BaseModel
   def date_for_boolean(value)
     if value.is_a?(Date) || value.is_a?(Time)
       value
-    elsif [true, "1", 1, "t", "true"].include? value
+    elsif [true, '1', 1, 't', 'true'].include? value
       DateTime.now
-    elsif [false, "0", 0, "f", "false"].include? value
+    elsif [false, '0', 0, 'f', 'false'].include? value
       nil
     else
       !!value ? DateTime.now : nil
