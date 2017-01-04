@@ -8,7 +8,8 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :episode_identifier
   property :created_at, writeable: false
   property :updated_at, writeable: false
-  property :published_at
+  property :published_at, writeable: false
+  property :released_at
   property :produced_on
 
   property :duration, writeable: false
