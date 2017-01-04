@@ -312,6 +312,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.string   "marketplace_subtitle",    limit: 255
     t.text     "marketplace_information", limit: 65535
     t.integer  "network_id",              limit: 4
+    t.datetime "released_at"
   end
 
   add_index "pieces", ["account_id"], name: "pieces_account_id_fk", using: :btree
