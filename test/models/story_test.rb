@@ -148,8 +148,17 @@ describe Story do
 
     it 'publishes a story' do
       story.published_at = nil
+      story.released_at = nil
       story.publish!
       story.published_at.wont_be_nil
+    end
+
+    it 'publishes a story with a release date' do
+      release_date = 1.week.ago
+      story.published_at = nil
+      story.released_at = release_date
+      story.publish!
+      story.published_at.must_equal release_date
     end
 
     it 'wont publish when already published' do
@@ -163,6 +172,14 @@ describe Story do
       story.published_at = Time.now
       story.unpublish!
       story.published_at.must_be_nil
+    end
+
+    it 'unpublishes a story with a release date' do
+      story.released_at = Time.now
+      story.published_at = story.released_at
+      story.unpublish!
+      story.published_at.must_be_nil
+      story.released_at.wont_be_nil
     end
 
     it 'wont unpublish an unpublished story' do
