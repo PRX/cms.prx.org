@@ -183,13 +183,12 @@ class Story < BaseModel
   end
 
   # raising exceptions here to prevent sending publish messages
-  #  when not actually a change to be published
-  def publish!(apublished_at = nil)
-    apublished_at = released_at || DateTime.now
+  # when not actually a change to be published
+  def publish!
     if !published_at.nil?
       raise "Story #{id} is already published."
     else
-      update_attributes!(published_at: apublished_at)
+      update_attributes!(published_at: (released_at || DateTime.now))
     end
   end
 
