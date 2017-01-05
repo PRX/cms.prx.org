@@ -13,15 +13,20 @@ describe Api::DistributionsController do
     assert_response :success
   end
 
-  before(:each) do
-    class << @controller; attr_accessor :prx_auth_token; end
-    @controller.prx_auth_token = token
-  end
-
   describe '#create' do
+
+    before(:each) do
+      class << @controller; attr_accessor :prx_auth_token; end
+      @controller.prx_auth_token = token
+    end
+
     it 'can create a podcast distribution for a series' do
+      template_uri = "/api/v1/audio_version_templates/#{audio_version_template.id}"
+      podcast_uri = 'http://feeder.prx.org/api/v1/podcast/12345'
       pd_hash = {
-        kind: 'podcast'
+        kind: 'podcast',
+        guid: 'SET TEMPLATE',
+        set_audio_version_template_uri: template_uri
       }
       @request.env['CONTENT_TYPE'] = 'application/json'
       def @controller.after_create_resource(res)
@@ -30,7 +35,8 @@ describe Api::DistributionsController do
       post :create, pd_hash.to_json, api_request_opts(series_id: series.id)
       assert_response :success
       resource = JSON.parse(response.body)
-      resource['_links']['prx:podcast']['href'].must_equal 'http://feeder.prx.org/api/v1/podcast/12345'
+      resource['_links']['prx:podcast']['href'].must_equal podcast_uri
+      resource['_links']['prx:audio-version-template']['href'].must_equal template_uri
     end
   end
 end
