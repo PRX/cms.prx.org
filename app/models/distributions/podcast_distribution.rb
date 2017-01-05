@@ -10,6 +10,10 @@ class Distributions::PodcastDistribution < Distribution
     add_podcast_to_feeder
   end
 
+  def story_distribution_class
+    StoryDistributions::EpisodeDistribution
+  end
+
   def add_podcast_to_feeder
     return unless url.blank?
     client = api(root: feeder_root, account: account.id)

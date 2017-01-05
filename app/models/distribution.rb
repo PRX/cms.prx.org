@@ -13,6 +13,16 @@ class Distribution < BaseModel
     # no op for the super class
   end
 
+  def story_distribution_class
+    StoryDistribution
+  end
+
+  def create_story_distribution(story)
+    story_distribution_class.create(distribution: self, story: story).tap do |d|
+      d.distribute!
+    end
+  end
+
   def owner
     distributable
   end

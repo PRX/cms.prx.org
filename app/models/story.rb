@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'render_markdown'
+require 'newrelic_rpm'
 
 class Story < BaseModel
   self.table_name = 'pieces'
@@ -50,7 +51,9 @@ class Story < BaseModel
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
 
-  before_validation :set_app_version, on: :create
+  before_validation :set_app_version, on: [:create]
+
+  after_commit :create_story_distributions, on: [:create]
 
   # indicates piece is published with promos only - not full audio
   event_attribute :promos_only_at
@@ -209,6 +212,20 @@ class Story < BaseModel
 
   def v4?
     app_version == PRX::APP_VERSION
+  end
+
+  # for each
+  def create_story_distributions
+    series.distributions.each do |distro|
+      Story.transaction do
+        begin
+          story_distro = distro.create_story_distribution(story)
+        rescue StandardError => err
+          logger.error(err)
+          NewRelic::Agent.notice_error(err)
+        end
+      end
+    end
   end
 
   private
