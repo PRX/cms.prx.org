@@ -1,4 +1,4 @@
-FROM ruby:2.1-alpine
+FROM ruby:2.1.9-alpine
 
 MAINTAINER PRX <sysadmin@prx.org>
 
