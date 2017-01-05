@@ -51,8 +51,8 @@ class Story < BaseModel
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
 
-  before_validation :set_app_version, on: [:create]
-
+  before_validation :set_app_version, on: :create
+  before_validation :update_published_to_released
   after_commit :create_story_distributions, on: [:create]
 
   # indicates piece is published with promos only - not full audio
@@ -67,7 +67,7 @@ class Story < BaseModel
   # indicates the piece is not publically available, only to the network
   event_attribute :network_only_at
 
-  scope :published, -> { where('`published_at` IS NOT NULL AND `published_at` <= now()') }
+  scope :published, -> { where('`published_at` <= now()') }
   scope :unpublished, -> { where('`published_at` IS NULL OR `published_at` > now()') }
   scope :unseries, -> { where('`series_id` IS NULL') }
   scope :v4, -> { where(app_version: PRX::APP_VERSION) }
@@ -185,12 +185,12 @@ class Story < BaseModel
   end
 
   # raising exceptions here to prevent sending publish messages
-  #  when not actually a change to be published
-  def publish!(apublished_at = DateTime.now)
+  # when not actually a change to be published
+  def publish!
     if !published_at.nil?
       raise "Story #{id} is already published."
     else
-      update_attributes!(published_at: apublished_at)
+      update_attributes!(published_at: (released_at || DateTime.now))
     end
   end
 
@@ -242,5 +242,15 @@ class Story < BaseModel
     return unless new_record?
     self.app_version = PRX::APP_VERSION
     self.deleted_at = DateTime.now
+  end
+
+  # This is only if the story is published
+  # and the user wants to update the published_at value
+  # does not set the story published_at if it is not currently set to something
+  # will update the datetime when it is published_at
+  def update_published_to_released
+    if published_at && !released_at.nil? && released_at_changed?
+      self.published_at = released_at
+    end
   end
 end
