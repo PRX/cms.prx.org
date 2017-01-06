@@ -39,7 +39,7 @@ describe Api::AudioVersionRepresenter do
   end
 
   it 'doesnt return a link to the template if there is no template' do
-    representer.represented.audio_version_template = nil
+    representer.represented.audio_version_template_id = 'foo'
     json['_links']['prx:audio-version-template'].must_be_nil
   end
 end
