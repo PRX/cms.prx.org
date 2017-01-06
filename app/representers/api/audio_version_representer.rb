@@ -24,7 +24,7 @@ class Api::AudioVersionRepresenter < Api::BaseRepresenter
   #       item_decorator: Api::AudioFileRepresenter
 
   link rel: :audio_version_template, writeable: true do
-    {#
+    {
       href: api_audio_version_template_path(represented.audio_version_template)
     } if represented.audio_version_template_id
   end
