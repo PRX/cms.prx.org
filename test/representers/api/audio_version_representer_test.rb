@@ -38,8 +38,9 @@ describe Api::AudioVersionRepresenter do
     json['_links']['prx:audio-version-template']['href'].wont_be_nil
   end
 
-  it 'doesnt return a link to the template if there is no template' do
-    representer.represented.audio_version_template_id = 'foo'
+  it 'doesnt link to the template if the template has been destroyed' do
+    representer.represented.audio_version_template.destroy!
+    representer.represented.reload
     json['_links']['prx:audio-version-template'].must_be_nil
   end
 end
