@@ -25,6 +25,9 @@ gem 'unf'
 gem 'oauth2'
 gem 'hyperresource'
 
+# Use Sanitize for HTML and CSS whitelisting
+gem 'sanitize'
+
 ## Controller
 gem 'responders', '~> 2.0'
 gem 'hal_api-rails', ' ~> 0.2.9'
