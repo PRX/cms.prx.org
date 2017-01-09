@@ -13,14 +13,13 @@ class Distribution < BaseModel
     # no op for the super class
   end
 
+  # default to the generic distro, override in subclass
   def story_distribution_class
     StoryDistribution
   end
 
   def create_story_distribution(story)
-    story_distribution_class.create(distribution: self, story: story).tap do |d|
-      d.distribute!
-    end
+    story_distribution_class.create(distribution: self, story: story).tap(&:distribute!)
   end
 
   def owner
