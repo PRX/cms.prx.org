@@ -25,6 +25,10 @@ describe Distributions::PodcastDistribution do
       to_return(status: 200, body: json_file('podcast'), headers: {})
   end
 
+  it 'returns episode distribution class' do
+    distribution.story_distribution_class.must_equal StoryDistributions::EpisodeDistribution
+  end
+
   it 'creates the podcast on feeder' do
     distribution.stub(:get_account_token, 'token') do
       distribution.url = nil
@@ -40,9 +44,7 @@ describe Distributions::PodcastDistribution do
       distribution.url = nil
       distribution.account.wont_be_nil
       distribution.save!
-      -> do
-        distribution.distribute!
-      end.must_raise(HyperResource::ServerError)
+      -> { distribution.distribute! }.must_raise(HyperResource::ServerError)
     end
   end
 
