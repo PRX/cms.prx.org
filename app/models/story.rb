@@ -47,13 +47,13 @@ class Story < BaseModel
   has_many :picks, foreign_key: 'playlistable_id'
   has_many :playlists, through: :picks
   has_many :purchases, foreign_key: :purchased_id
+  has_many :distributions, class_name: StoryDistribution, foreign_key: :piece_id
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
 
   before_validation :set_app_version, on: :create
   before_validation :update_published_to_released
-  after_commit :create_story_distributions, on: [:create]
 
   # indicates piece is published with promos only - not full audio
   event_attribute :promos_only_at
@@ -214,16 +214,15 @@ class Story < BaseModel
     app_version == PRX::APP_VERSION
   end
 
-  # for each
+  # for each distribution, create a story distribution
   def create_story_distributions
+    return unless series
     series.distributions.each do |distro|
-      Story.transaction do
-        begin
-          story_distro = distro.create_story_distribution(story)
-        rescue StandardError => err
-          logger.error(err)
-          NewRelic::Agent.notice_error(err)
-        end
+      begin
+        distro.create_story_distribution(self)
+      rescue StandardError => err
+        logger.error(err)
+        NewRelic::Agent.notice_error(err)
       end
     end
   end
