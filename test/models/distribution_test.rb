@@ -32,13 +32,15 @@ describe Distribution do
   end
 
   it 'creates and distributes for story' do
+    mock_distro = MiniTest::Mock.new
     mock_story_distro = MiniTest::Mock.new
+
+    mock_distro.expect(:create, mock_story_distro, [Hash])
     mock_story_distro.expect(:tap, mock_story_distro)
     mock_story_distro.expect(:distribute!, true)
-    mock_distro = MiniTest::Mock.new
-    mock_distro.expect(:create, mock_story_distro, [Hash])
+
     distribution.stub(:story_distribution_class, mock_distro) do
-      story_distribution = distribution.create_story_distribution(story)
+      distribution.create_story_distribution(story)
     end
   end
 end
