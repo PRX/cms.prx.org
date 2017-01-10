@@ -21,6 +21,6 @@ class Api::StoryDistributionRepresenter < Api::BaseRepresenter
   embed :story,
         as: :story,
         item_class: Story,
-        decorator: Api::Min::StoryRepresenter
+        decorator: Api::Min::StoryRepresenter,
         zoom: false
 end
