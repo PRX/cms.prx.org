@@ -32,8 +32,9 @@ describe Story do
 
     it 'creates story distributions' do
       stub_request(:post, 'https://id.prx.org/token').
-        to_return(status: 200, body: '{"access_token":"abc123","token_type":"bearer"}',
-        headers: { 'Content-Type' => 'application/json; charset=utf-8' })
+        to_return(status: 200,
+                  body: '{"access_token":"abc123","token_type":"bearer"}',
+                  headers: { 'Content-Type' => 'application/json; charset=utf-8' })
 
       stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/23').
         to_return(status: 200, body: json_file(:podcast), headers: {})
