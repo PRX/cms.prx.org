@@ -40,7 +40,11 @@ describe Api::StoriesController do
       stub_request(:post, 'https://id.prx.org/token').to_return(status: 500)
 
       series.wont_be_nil
-      story_hash = { title: 'create story', set_account_uri: "/api/v1/accounts/#{account.id}", set_series_uri: "/api/v1/series/#{series.id}" }
+      story_hash = {
+        title: 'create story',
+        set_account_uri: "/api/v1/accounts/#{account.id}",
+        set_series_uri: "/api/v1/series/#{series.id}"
+      }
       post :create, story_hash.to_json, api_version: 'v1', format: 'json'
       assert_response :success
       res = JSON.parse(response.body)
