@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'render_markdown'
+require 'newrelic_rpm'
 
 class Story < BaseModel
   self.table_name = 'pieces'
@@ -46,6 +47,7 @@ class Story < BaseModel
   has_many :picks, foreign_key: 'playlistable_id'
   has_many :playlists, through: :picks
   has_many :purchases, foreign_key: :purchased_id
+  has_many :distributions, class_name: StoryDistribution, foreign_key: :piece_id
 
   has_one :promos, -> { where(promos: true) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id
@@ -210,6 +212,19 @@ class Story < BaseModel
 
   def v4?
     app_version == PRX::APP_VERSION
+  end
+
+  # for each distribution, create a story distribution
+  def create_story_distributions
+    return unless series
+    series.distributions.each do |distro|
+      begin
+        distro.create_story_distribution(self)
+      rescue StandardError => err
+        logger.error(err)
+        NewRelic::Agent.notice_error(err)
+      end
+    end
   end
 
   private

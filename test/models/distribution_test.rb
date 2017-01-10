@@ -1,8 +1,9 @@
 require 'test_helper'
+require 'minitest/mock'
 
 describe Distribution do
-
   let(:distribution) { create(:distribution) }
+  let(:story) { create(:story) }
 
   it 'has a table defined' do
     Distribution.table_name.must_equal 'distributions'
@@ -24,5 +25,22 @@ describe Distribution do
 
   it 'can be created with valid attributes' do
     distribution.must_be :valid?
+  end
+
+  it 'returns story distribution class' do
+    distribution.story_distribution_class.must_equal StoryDistribution
+  end
+
+  it 'creates and distributes for story' do
+    mock_distro = MiniTest::Mock.new
+    mock_story_distro = MiniTest::Mock.new
+
+    mock_distro.expect(:create, mock_story_distro, [Hash])
+    mock_story_distro.expect(:tap, mock_story_distro)
+    mock_story_distro.expect(:distribute!, true)
+
+    distribution.stub(:story_distribution_class, mock_distro) do
+      distribution.create_story_distribution(story)
+    end
   end
 end

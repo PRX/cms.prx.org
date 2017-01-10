@@ -26,6 +26,29 @@ describe Story do
     end
   end
 
+  describe 'distributions' do
+    let(:series) { create(:series) }
+    let(:story) { create(:story, series: series) }
+
+    it 'creates story distributions' do
+      stub_request(:post, 'https://id.prx.org/token').
+        to_return(status: 200,
+                  body: '{"access_token":"abc123","token_type":"bearer"}',
+                  headers: { 'Content-Type' => 'application/json; charset=utf-8' })
+
+      stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/23').
+        to_return(status: 200, body: json_file(:podcast), headers: {})
+
+      stub_request(:post, 'https://feeder.prx.org/api/v1/podcasts/23/episodes').
+        to_return(status: 200, body: json_file(:episode), headers: {})
+
+      series.distributions.count.must_equal 1
+      story.distributions(true).count.must_equal 0
+      story.create_story_distributions
+      story.distributions(true).count.must_equal 1
+    end
+  end
+
   describe 'using default audio version' do
     it 'finds default audio' do
       story.audio_versions.count.must_equal 10

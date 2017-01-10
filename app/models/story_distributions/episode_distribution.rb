@@ -21,7 +21,15 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
 
   def episode_attributes
     {
-      prx_uri: api_story_path(story)
+      prx_uri: api_story_path(story),
+      title: story.title,
+      subtitle: Sanitize.fragment(story.short_description || '').strip,
+      description: Sanitize.fragment(story.short_description || '').strip,
+      summary: story.description,
+      content: story.description,
+      categories: story.tags,
+      published_at: story.published_at,
+      updated_at: story.updated_at
     }
   end
 end

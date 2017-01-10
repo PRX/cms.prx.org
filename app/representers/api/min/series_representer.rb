@@ -19,7 +19,8 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
         as: :stories,
         paged: true,
         item_class: Story,
-        item_decorator: Api::Min::StoryRepresenter
+        item_decorator: Api::Min::StoryRepresenter,
+        zoom: false
 
   link :image do
     {

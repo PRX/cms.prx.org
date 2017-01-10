@@ -110,6 +110,17 @@ class Api::StoryRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :musical_works, paged: true, item_class: MusicalWork, zoom: false
+
+  link :distributions do
+    {
+      href: api_story_story_distributions_path(represented),
+      count: represented.distributions.count
+    } if represented.id
+  end
+  embed :distributions,
+        paged: true,
+        item_class: StoryDistribution,
+        item_decorator: Api::StoryDistributionRepresenter
 end
 
 # TODO:

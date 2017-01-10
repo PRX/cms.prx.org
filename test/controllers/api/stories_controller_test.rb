@@ -3,7 +3,8 @@
 require 'test_helper'
 
 describe Api::StoriesController do
-  let(:story) { create(:story) }
+  let(:series) { create(:series) }
+  let(:story) { create(:story, series: series) }
 
   before { Story.delete_all }
 
@@ -32,6 +33,22 @@ describe Api::StoriesController do
       assert_response :success
       id = JSON.parse(response.body)['id']
       Story.find(id).account_id.must_equal account.id
+    end
+
+    it 'can create a new story and distributions' do
+      # feeder calls do't need to work, but webmock needs a response defined
+      stub_request(:post, 'https://id.prx.org/token').to_return(status: 500)
+
+      series.wont_be_nil
+      story_hash = {
+        title: 'create story',
+        set_account_uri: "/api/v1/accounts/#{account.id}",
+        set_series_uri: "/api/v1/series/#{series.id}"
+      }
+      post :create, story_hash.to_json, api_version: 'v1', format: 'json'
+      assert_response :success
+      res = JSON.parse(response.body)
+      Story.find(res['id']).distributions.count.must_equal 1
     end
 
     it 'can set description as markdown' do
@@ -119,13 +136,13 @@ describe Api::StoriesController do
   end
 
   it 'should list published stories of any app version' do
-    story.must_be :published
+    story1 = create(:story, published_at: 1.day.ago)
     story2 = create(:story, published_at: nil)
-    story3 = create(:story_v3)
+    story3 = create(:story_v3, published_at: 1.day.ago)
 
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
-    assigns[:stories].must_include story
+    assigns[:stories].must_include story1
     assigns[:stories].wont_include story2
     assigns[:stories].must_include story3
   end
@@ -173,12 +190,13 @@ describe Api::StoriesController do
   end
 
   it 'should list only v4 stories' do
-    story.must_be :v4?
+    story1 = create(:story)
+    story1.must_be :v4?
     story2 = create(:story_v3)
     get(:index, api_version: 'v1', format: 'json', filters: 'v4')
     assert_response :success
     assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story
+    assigns[:stories].must_include story1
     assigns[:stories].wont_include story2
   end
 
