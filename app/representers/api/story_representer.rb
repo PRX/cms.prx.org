@@ -32,13 +32,13 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   link rel: :publish, writeable: false do
     {
       href: publish_api_story_path(represented)
-    } if !represented.published?
+    } if represented.published_at.nil?
   end
 
   link rel: :unpublish, writeable: false do
     {
       href: unpublish_api_story_path(represented)
-    } if represented.published?
+    } if !represented.published_at.nil?
   end
 
   link rel: :account, writeable: true do
