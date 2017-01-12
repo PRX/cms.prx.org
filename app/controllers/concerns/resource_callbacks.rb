@@ -35,6 +35,8 @@ module ResourceCallbacks
   end
 
   def after_create_resource(_resource = nil); end
+
   def after_update_resource(_resource = nil); end
+
   def after_destroy_resource(_resource = nil); end
 end
