@@ -13,10 +13,8 @@ class Api::StoriesController < Api::BaseController
 
   announce_actions :create, :update, :delete, :publish, :unpublish
 
-  after_action :create_story_distributions, only: [:create], if: ->() { response.successful? }
-
-  def create_story_distributions
-    resource.create_story_distributions
+  def after_create_resource(res)
+    res.create_story_distributions
   end
 
   def publish
