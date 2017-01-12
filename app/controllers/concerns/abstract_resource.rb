@@ -46,6 +46,6 @@ module AbstractResource
     class_name.safe_constantize
   end
 
-  def after_create_resource(_resource)
+  def after_create_resource(_resource = nil)
   end
 end
