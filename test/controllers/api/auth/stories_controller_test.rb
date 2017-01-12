@@ -98,12 +98,12 @@ describe Api::Auth::StoriesController do
     it 'does not update unowned stories' do
       @request.env['CONTENT_TYPE'] = 'application/json'
       put :update, { title: 'foobar' }.to_json, api_version: 'v1', id: random_story.id
-      assert_response :no_content # TODO: see hal_actions.rb
+      assert_response :not_found
     end
 
     it 'does not delete unowned stories' do
       delete :destroy, api_version: 'v1', id: random_story.id
-      assert_response :no_content # TODO: see hal_actions.rb
+      assert_response :not_found
     end
   end
 
