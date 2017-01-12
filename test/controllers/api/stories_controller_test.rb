@@ -100,7 +100,7 @@ describe Api::StoriesController do
           format: 'json',
           id: story.id
       assert_response :success
-      Story.find(story.id).title.must_equal('this')
+      JSON.parse(response.body)['title'].must_equal('this')
     end
 
     it 'can publish a story' do
