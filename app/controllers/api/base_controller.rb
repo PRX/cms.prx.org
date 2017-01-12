@@ -7,6 +7,7 @@ class Api::BaseController < ApplicationController
   include ApiVersioning
   include ApiFiltering
   include ApiSorting
+  include ResourceCallbacks
   include ChildResource
   include PolymorphicResource
   include AnnounceActions
