@@ -67,7 +67,6 @@ module AnnounceActions
       "Api::Msg::#{name}Representer".safe_constantize ||
       "Api::#{name}Representer".safe_constantize ||
       "Api::Min::#{name}Representer".safe_constantize
-
     end
   end
 end
