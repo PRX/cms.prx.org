@@ -29,7 +29,7 @@ class Series < BaseModel
   belongs_to :account, -> { with_deleted }
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
 
-  has_many :stories, -> { order('episode_number DESC, position DESC, published_at DESC') }
+  has_many :stories, -> { order('episode_number DESC, position DESC, published_at DESC') }, dependent: :destroy
   has_many :schedules
   has_many :audio_version_templates
   has_many :distributions, as: :distributable, dependent: :destroy
