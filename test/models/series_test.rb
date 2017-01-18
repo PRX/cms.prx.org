@@ -25,7 +25,7 @@ describe Series do
   end
 
   describe '#images' do
-    let(:series) { create(:series) }
+    let(:series) { create(:series, images_count: 0) }
     let(:image_none) { create(:series_image, series: series, purpose: '') }
     let(:image_prof) { create(:series_image, series: series, purpose: 'profile') }
     let(:image_thum) { create(:series_image, series: series, purpose: 'thumbnail') }

@@ -40,14 +40,18 @@ class Distributions::PodcastDistribution < Distribution
       attrs[:description] = owner.description
       attrs[:summary] = owner.description
       if owner.images.profile
-        attrs[:itunes_image] = { url: owner.images.profile.public_url(version: 'original') }
+        attrs[:itunes_image] = { url: image_url(:profile) }
       end
 
       if owner.images.thumbnail
-        attrs[:feed_image] = { url: owner.images.thumbnail.public_url(version: 'original') }
+        attrs[:feed_image] = { url: image_url(:thumbnail) }
       end
     end
 
     attrs
+  end
+
+  def image_url(purpose)
+    owner.images.try(purpose).public_url(version: 'original')
   end
 end

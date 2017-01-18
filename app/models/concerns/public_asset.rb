@@ -34,7 +34,7 @@ module PublicAsset
   def public_url(options={})
     options = set_asset_option_defaults(options)
     options[:token] = public_url_token(options)
-    public_asset_path(options)
+    public_asset_url(options)
   end
 
   def asset_url(options={})

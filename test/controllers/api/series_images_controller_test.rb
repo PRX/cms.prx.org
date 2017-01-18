@@ -3,7 +3,7 @@ require 'test_helper'
 describe Api::SeriesImagesController do
   let(:user) { create(:user) }
   let(:series) { create(:series, account: user.individual_account) }
-  let(:series_image) { create(:series_image, series: series) }
+  let(:series_image) { create(:series_image, series: series, purpose: nil) }
   let(:token) { StubToken.new(series.account.id, ['member']) }
 
   before(:each) do
@@ -29,8 +29,7 @@ describe Api::SeriesImagesController do
   end
 
   it 'should add an image' do
-    original = series_image
-    original.id.must_equal series.default_image.id
+    original = series.default_image
 
     image_hash = {
       upload: 'http://thisisatest.com/guid1/image.gif',
