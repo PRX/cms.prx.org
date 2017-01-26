@@ -25,6 +25,4 @@ describe Api::Auth::StoryRepresenter do
   it 'keeps the publish link in the authorization namespace' do
     get_link_href(draft_json, 'prx:publish').must_match /authorization\/stories\/\d+/
   end
-
-
 end
