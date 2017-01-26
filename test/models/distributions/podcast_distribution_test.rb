@@ -59,12 +59,14 @@ describe Distributions::PodcastDistribution do
 
   it 'returns attributes for creating the podcast' do
     attrs = distribution.podcast_attributes
-    attrs.keys.count.must_equal 9
+    attrs.keys.count.must_equal 7
     attrs[:prx_uri].must_equal "/api/v1/series/#{distribution.owner.id}"
     attrs[:prx_account_uri].must_equal "/api/v1/accounts/#{distribution.account.id}"
     attrs[:published_at].wont_be_nil
-    attrs[:feed_image][:url].wont_be_nil
-    attrs[:itunes_image][:url].wont_be_nil
-    attrs[:itunes_image][:url].must_match /^http(.+)cms(.+)original\/test.png/
+  end
+
+  it 'doesnt send image info on create' do
+    attrs = distribution.podcast_attributes
+    attrs.keys.each { |key| key.to_s.wont_match /image/ }
   end
 end
