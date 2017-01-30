@@ -14,6 +14,10 @@ class Api::Auth::AccountsController < Api::AccountsController
   end
 
   def resources_base
-    @accounts ||= current_user.approved_accounts
+    @accounts ||= token_accounts
+  end
+
+  def token_accounts
+    current_user.approved_accounts = Account.where({ id: prx_auth_token.authorized_resources.keys })
   end
 end

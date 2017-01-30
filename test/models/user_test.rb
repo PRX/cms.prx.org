@@ -3,6 +3,8 @@ require 'test_helper'
 describe User do
   let (:user) { create(:user) }
   let (:network) { create(:network, account: user.individual_account) }
+  let (:story) { create(:story, account: user.individual_account) }
+  let (:series) { create(:series, account: user.individual_account) }
 
   it 'has a table defined' do
     User.table_name.must_equal 'users'
@@ -39,9 +41,9 @@ describe User do
     user.networks.must_include network
   end
 
-  it 'has a list of stories for approved accounts' do
-    start_count = user.individual_account.stories.count
-    create(:account, user: user, stories_count: 2)
-    user.approved_account_stories.count.must_equal start_count + 2
+  it 'has a list of stories and series for accounts approved on token' do
+    user.approved_account_stories.must_include story
+    user.approved_account_series.must_include series
+
   end
 end
