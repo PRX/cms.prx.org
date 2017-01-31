@@ -3,9 +3,7 @@ require 'test_helper'
 describe Api::Auth::AccountsController do
 
   let (:user) { create(:user_with_accounts, group_accounts: 2) }
-
   let (:individual_account) { user.individual_account }
-  let (:random_account) { create(:account) }
   let (:member_account) { create(:account) }
   let (:unapproved_account) { create(:account) }
   let (:token) { StubToken.new(nil, nil, user.id) }
@@ -38,11 +36,6 @@ describe Api::Auth::AccountsController do
       assert_response :not_found
     end
 
-    it 'does not show non-member accounts' do
-      get(:show, api_version: 'v1', id: random_account.id)
-      assert_response :not_found
-    end
-
     it 'indexes only member accounts' do
       get(:index, api_version: 'v1')
       assert_response :success
@@ -53,7 +46,6 @@ describe Api::Auth::AccountsController do
       ids.must_include individual_account.id
       ids.must_include member_account.id
       ids.wont_include unapproved_account.id
-      ids.wont_include random_account.id
     end
 
   end
