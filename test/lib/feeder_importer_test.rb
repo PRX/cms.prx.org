@@ -13,7 +13,7 @@ describe FeederImporter do
       with(headers: {'Accept'=>'application/json', 'Authorization'=>'Bearer thisisnotatoken', 'Content-Type'=>'application/json'}).
       to_return(status: 200, body: json_file('99pi'), headers: {})
 
-    stub_request(:get, "https://cms.prx.org/api/v1/").
+    stub_request(:get, "https://cms.prx.org/api/v1").
       with(headers: {'Accept'=>'application/json', 'Authorization'=>'Bearer thisisnotatoken', 'Content-Type'=>'application/json'}).
       to_return(status: 200, body: json_file('cms_root'), headers: {})
 
