@@ -15,8 +15,9 @@ module ApiAuthenticated
   end
 
   def get_authorized_resources
-    if prx_auth_token.authorized_resources
-      current_user.approved_accounts ||= Account.where({ id: prx_auth_token.authorized_resources.keys })
+    token_accounts = prx_auth_token.authorized_resources.try(:keys)
+    if token_accounts
+      current_user.approved_accounts ||= Account.where(id: token_accounts)
     end
   end
 

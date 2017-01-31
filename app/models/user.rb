@@ -52,10 +52,10 @@ class User < BaseModel
   end
 
   def approved_account_stories
-    !approved_accounts.nil? ? Story.where({ account_id: approved_accounts.try(:ids) }) : []
+    !approved_accounts.nil? ? Story.where(account_id: approved_accounts.try(:ids)) : []
   end
 
   def approved_account_series
-    !approved_accounts.nil? ? Series.where({ account_id: approved_accounts.try(:ids) }) : []
+    !approved_accounts.nil? ? Series.where(account_id: approved_accounts.try(:ids)) : []
   end
 end

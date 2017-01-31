@@ -7,15 +7,15 @@ describe Api::Auth::AccountsController do
   let (:individual_account) { user.individual_account }
   let (:random_account) { create(:account) }
   let (:member_account) { create(:account) }
-  let (:unapproved_account) { create(:account)}
+  let (:unapproved_account) { create(:account) }
+  let (:token) { StubToken.new(nil, nil, user.id) }
 
-  let (:token) { StubToken.new(nil, nil, user.id).tap { |t|
-      t.authorized_resources = {
-        member_account.id => "member",
-        individual_account.id => "admin"
-      }
+  before do
+    token.authorized_resources = {
+      member_account.id => 'member',
+      individual_account.id => 'admin'
     }
-  }
+  end
 
   describe 'with a valid token' do
 
