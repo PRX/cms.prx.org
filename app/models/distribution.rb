@@ -3,11 +3,23 @@ require 'hash_serializer'
 
 class Distribution < BaseModel
   belongs_to :distributable, polymorphic: true, touch: true
+  belongs_to :audio_version_template
+
   has_many :story_distributions
+
   serialize :properties, HashSerializer
 
   def distribute!
     # no op for the super class
+  end
+
+  # default to the generic distro, override in subclass
+  def story_distribution_class
+    StoryDistribution
+  end
+
+  def create_story_distribution(story)
+    story_distribution_class.create(distribution: self, story: story).tap(&:distribute!)
   end
 
   def owner

@@ -8,6 +8,10 @@ publish:
     - delete
     - publish
     - unpublish
+  series:
+    - create
+    - update
+    - delete
   image:
     - create
     - update

@@ -17,6 +17,11 @@ describe Api::ImageRepresenter do
     json['id'].must_equal image.id
   end
 
+  it 'returns dimensions' do
+    json['height'].must_equal 1400
+    json['width'].must_equal 1400
+  end
+
   it 'gets the medium representation of an image' do
     image.stub :public_url, ->(opts){ opts[:version] } do
       json['_links']['enclosure']['href'].must_equal 'medium'

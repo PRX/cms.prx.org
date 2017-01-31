@@ -13,8 +13,7 @@ class Api::Auth::SeriesRepresenter < Api::SeriesRepresenter
         paged: true,
         item_class: Story,
         item_decorator: Api::Auth::StoryMinRepresenter,
-        url: ->(_r) { api_authorization_series_stories_path(represented.parent) },
-        zoom: false
+        url: ->(_r) { api_authorization_series_stories_path(represented.parent) }
 
   def self_url(r)
     api_authorization_series_path(r)

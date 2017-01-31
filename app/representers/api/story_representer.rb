@@ -9,13 +9,15 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :created_at, writeable: false
   property :updated_at, writeable: false
   property :published_at, writeable: false
+  property :released_at
   property :produced_on
 
   property :duration, writeable: false
   property :points, writeable: false
   property :app_version, writeable: false
 
-  property :description
+  property :description, getter: ->(_o) { description_html }
+  property :description_md
   property :related_website
   property :broadcast_history
   property :timing_and_cues
@@ -30,13 +32,13 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   link rel: :publish, writeable: false do
     {
       href: publish_api_story_path(represented)
-    } if !represented.published?
+    } if represented.published_at.nil?
   end
 
   link rel: :unpublish, writeable: false do
     {
       href: unpublish_api_story_path(represented)
-    } if represented.published?
+    } if !represented.published_at.nil?
   end
 
   link rel: :account, writeable: true do
@@ -94,7 +96,11 @@ class Api::StoryRepresenter < Api::BaseRepresenter
       count: represented.images.count
     } if represented.id
   end
-  embed :images, paged: true, item_class: StoryImage, decorator: Api::ImageRepresenter, zoom: false
+  embed :images,
+        paged: true,
+        item_class: StoryImage,
+        item_decorator: Api::ImageRepresenter,
+        zoom: false
 
   link :musical_works do
     {
@@ -104,6 +110,17 @@ class Api::StoryRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :musical_works, paged: true, item_class: MusicalWork, zoom: false
+
+  link :distributions do
+    {
+      href: api_story_story_distributions_path(represented),
+      count: represented.distributions.count
+    } if represented.id
+  end
+  embed :distributions,
+        paged: true,
+        item_class: StoryDistribution,
+        item_decorator: Api::StoryDistributionRepresenter
 end
 
 # TODO:

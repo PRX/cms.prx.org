@@ -5,6 +5,10 @@ module PRXAccess
       super(hash.deep_transform_keys { |key| key.to_s.underscore })
     end
 
+    def outgoing_body_filter(hash)
+      super(hash.deep_transform_keys { |key| key.to_s.camelize(:lower) })
+    end
+
     class Link < HyperResource::Link
       attr_accessor :type, :profile
 
@@ -28,6 +32,45 @@ module PRXAccess
             res.profile = self.profile
           end
         end
+      end
+
+      def post_response(attrs=nil)
+        attrs ||= self.resource.attributes
+        attrs = (self.resource.default_attributes || {}).merge(attrs)
+
+        # adding this line to call outgoing_body_filter
+        attrs = resource.outgoing_body_filter(attrs)
+
+        response = faraday_connection.post do |req|
+          req.body = self.resource.adapter.serialize(attrs)
+        end
+        response
+      end
+
+      def put_response(attrs=nil)
+        attrs ||= self.resource.attributes
+        attrs = (self.resource.default_attributes || {}).merge(attrs)
+
+        # adding this line to call outgoing_body_filter
+        attrs = resource.outgoing_body_filter(attrs)
+
+        response = faraday_connection.put do |req|
+          req.body = self.resource.adapter.serialize(attrs)
+        end
+        response
+      end
+
+      def patch_response(attrs=nil)
+        attrs ||= self.resource.attributes.changed_attributes
+        attrs = (self.resource.default_attributes || {}).merge(attrs)
+
+        # adding this line to call outgoing_body_filter
+        attrs = resource.outgoing_body_filter(attrs)
+
+        response = faraday_connection.patch do |req|
+          req.body = self.resource.adapter.serialize(attrs)
+        end
+        response
       end
     end
   end
@@ -72,22 +115,25 @@ module PRXAccess
     root_uri ENV['ID_HOST']
   end
 
-  def cms_root
-    root_uri ENV['CMS_HOST'], '/api/v1'
-  end
-
-  def feeder_root
-    root_uri ENV['FEEDER_HOST'], '/api/v1'
-  end
-
   private
 
+  def method_missing(method, *args)
+    if method =~ /_root$/
+      root_uri ENV[method.to_s.sub(/_root$/, '_HOST').upcase], '/api/v1'
+    else
+      super
+    end
+  end
+
+  def respond_to_missing?(method, include_private = false)
+    method.to_s.ends_with?('_root') || super
+  end
+
   def root_uri(host, path = '')
-    if host =~ /\.org/ # TODO: should .tech's be here too?
+    if host =~ /\.org|\.tech/
       URI::HTTPS.build(host: host, path: path).to_s
     else
       URI::HTTP.build(host: host, path: path).to_s
     end
   end
-
 end

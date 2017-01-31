@@ -13,6 +13,10 @@ class Api::StoriesController < Api::BaseController
 
   announce_actions :create, :update, :delete, :publish, :unpublish
 
+  def after_create_resource(res)
+    res.create_story_distributions
+  end
+
   def publish
     publish_resource.tap do |res|
       authorize res
@@ -22,7 +26,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def publish_resource
-    @story ||= Story.unpublished.where(id: params[:id]).first
+    @story ||= Story.where(id: params[:id]).first
   end
 
   def unpublish
@@ -34,7 +38,7 @@ class Api::StoriesController < Api::BaseController
   end
 
   def unpublish_resource
-    @story ||= Story.published.where(id: params[:id]).first
+    @story ||= Story.where(id: params[:id]).first
   end
 
   def random
@@ -66,7 +70,7 @@ class Api::StoriesController < Api::BaseController
     relation.includes(
       { audio_versions: [:audio_files] },
       { account: [:image, :address, { opener: [:image] }] },
-      { series: [:image, :account] },
+      { series: [:images, :account] },
       :images,
       :license
     )

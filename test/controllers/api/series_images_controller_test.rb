@@ -3,7 +3,7 @@ require 'test_helper'
 describe Api::SeriesImagesController do
   let(:user) { create(:user) }
   let(:series) { create(:series, account: user.individual_account) }
-  let(:series_image) { create(:series_image, series: series) }
+  let(:series_image) { create(:series_image, series: series, purpose: nil) }
   let(:token) { StubToken.new(series.account.id, ['member']) }
 
   before(:each) do
@@ -15,7 +15,7 @@ describe Api::SeriesImagesController do
 
   it 'should show' do
     series_image
-    get(:show, api_request_opts(series_id: series_image.series_id))
+    get(:show, api_request_opts(series_id: series_image.series_id, id: series_image.id))
     assert_response :success
   end
 
@@ -28,9 +28,8 @@ describe Api::SeriesImagesController do
     SeriesImage.find(series_image.id).credit.must_equal('blah credit')
   end
 
-  it 'should create' do
-    original = series_image
-    original.id.must_equal series.image.id
+  it 'should add an image' do
+    original = series.default_image
 
     image_hash = {
       upload: 'http://thisisatest.com/guid1/image.gif',
@@ -44,6 +43,14 @@ describe Api::SeriesImagesController do
     new_image = JSON.parse @response.body
 
     original.id.wont_equal new_image['id']
-    series.image(true).id.must_equal new_image['id']
+    series.images.last.id.must_equal new_image['id']
+  end
+
+  it 'deletes the image, touches the series' do
+    series_update = series.updated_at
+    delete :destroy, api_request_opts(series_id: series.id, id: series_image.id)
+    assert_response :success
+    -> { SeriesImage.find(series_image.id) }.must_raise(ActiveRecord::RecordNotFound)
+    series_update.wont_equal series.reload.updated_at
   end
 end

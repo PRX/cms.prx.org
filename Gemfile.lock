@@ -95,6 +95,7 @@ GEM
     concurrent-ruby (1.0.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
+    crass (1.0.2)
     dalli (2.7.6)
     debug_inspector (0.0.2)
     diffy (3.1.0)
@@ -329,6 +330,8 @@ GEM
     newrelic_rpm (3.17.1.326)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
+    nokogumbo (1.4.10)
+      nokogiri
     oauth2 (1.2.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -401,10 +404,13 @@ GEM
       nokogiri (~> 1.5)
       trollop (~> 2.1)
     rdoc (4.3.0)
+    redcarpet (3.3.4)
     representable (2.3.0)
       uber (~> 0.0.7)
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
+    reverse_markdown (1.0.3)
+      nokogiri
     roar (1.0.4)
       representable (>= 2.0.1, < 2.4.0)
     roar-rails (1.0.1)
@@ -416,6 +422,10 @@ GEM
       uber (>= 0.0.5)
     ruby-progressbar (1.8.1)
     safe_yaml (1.0.4)
+    sanitize (4.4.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.4.4)
+      nokogumbo (~> 1.4.1)
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -520,9 +530,12 @@ DEPENDENCIES
   rails (~> 4.2.1)
   rails_12factor
   rake
+  redcarpet
   responders (~> 2.0)
+  reverse_markdown
   roar
   roar-rails
+  sanitize
   sdoc
   shoryuken
   simplecov

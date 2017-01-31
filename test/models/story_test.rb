@@ -26,6 +26,29 @@ describe Story do
     end
   end
 
+  describe 'distributions' do
+    let(:series) { create(:series) }
+    let(:story) { create(:story, series: series) }
+
+    it 'creates story distributions' do
+      stub_request(:post, 'https://id.prx.org/token').
+        to_return(status: 200,
+                  body: '{"access_token":"abc123","token_type":"bearer"}',
+                  headers: { 'Content-Type' => 'application/json; charset=utf-8' })
+
+      stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/23').
+        to_return(status: 200, body: json_file(:podcast), headers: {})
+
+      stub_request(:post, 'https://feeder.prx.org/api/v1/podcasts/23/episodes').
+        to_return(status: 200, body: json_file(:episode), headers: {})
+
+      series.distributions.count.must_equal 1
+      story.distributions(true).count.must_equal 0
+      story.create_story_distributions
+      story.distributions(true).count.must_equal 1
+    end
+  end
+
   describe 'using default audio version' do
     it 'finds default audio' do
       story.audio_versions.count.must_equal 10
@@ -148,8 +171,17 @@ describe Story do
 
     it 'publishes a story' do
       story.published_at = nil
+      story.released_at = nil
       story.publish!
       story.published_at.wont_be_nil
+    end
+
+    it 'publishes a story with a release date' do
+      release_date = 1.week.ago
+      story.published_at = nil
+      story.released_at = release_date
+      story.publish!
+      story.published_at.must_equal release_date
     end
 
     it 'wont publish when already published' do
@@ -165,11 +197,33 @@ describe Story do
       story.published_at.must_be_nil
     end
 
+    it 'unpublishes a story with a release date' do
+      story.released_at = Time.now
+      story.published_at = story.released_at
+      story.unpublish!
+      story.published_at.must_be_nil
+      story.released_at.wont_be_nil
+    end
+
     it 'wont unpublish an unpublished story' do
       lambda do
         story.unpublish!
         story.unpublish!
       end.must_raise(RuntimeError)
+    end
+
+    it 'allows the published date to be set via boolean' do
+      [false, 'f', 'false', '0', 0].each do |v|
+        story.published = v
+        story.published_at.must_be_nil
+        story.wont_be :published?
+      end
+
+      [true, 't', 'true', '1', 1].each do |v|
+        story.published = v
+        story.published_at.wont_be_nil
+        story.must_be :published?
+      end
     end
   end
 

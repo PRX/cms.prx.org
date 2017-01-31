@@ -28,7 +28,7 @@ PRX::Application.routes.draw do
       end
 
       resources :series, except: [:new, :edit] do
-        resource :series_image, path: 'image', except: [:new, :edit]
+        resources :series_images, path: 'image', except: [:new, :edit]
         resources :stories, only: [:index, :create]
         resources :audio_version_templates, except: [:new, :edit]
         resources :distributions, except: [:new, :edit]
@@ -74,7 +74,10 @@ PRX::Application.routes.draw do
           resources :stories, only: [:index, :create]
         end
 
-        resources :stories, except: [:new, :edit, :create], module: :auth
+        resources :stories, except: [:new, :edit, :create], module: :auth do
+          post 'publish', on: :member
+          post 'unpublish', on: :member
+        end
 
         resources :networks, only: [:index, :show], module: :auth do
           resources :stories, only: [:index]

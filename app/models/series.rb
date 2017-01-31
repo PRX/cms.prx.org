@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'render_markdown'
 
 class Series < BaseModel
   SUBSCRIPTION_STATES = [
@@ -9,18 +10,31 @@ class Series < BaseModel
   ]
 
   include Storied
+  include RenderMarkdown
+
+  def description_html
+    v4? ? markdown_to_html(description) : description
+  end
+
+  def description_md=(md)
+    self.description = md
+  end
+
+  def description_md
+    v4? ? description : html_to_markdown(description)
+  end
 
   acts_as_paranoid
 
   belongs_to :account, -> { with_deleted }
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
 
-  has_many :stories, -> { order('episode_number DESC, position DESC, published_at DESC') }
+  has_many :stories, -> { order('episode_number DESC, position DESC, published_at DESC') }, dependent: :nullify
   has_many :schedules
   has_many :audio_version_templates
-  has_many :distributions, as: :distributable
+  has_many :distributions, as: :distributable, dependent: :destroy
 
-  has_one :image, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
+  has_many :images, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
 
   before_validation :set_app_version, on: :create
 
@@ -33,6 +47,10 @@ class Series < BaseModel
           "`series`.`short_description` like '%#{text}%' OR " +
           "`series`.`description` like '%#{text}%'")
   }
+
+  def default_image
+    @default_image ||= images.profile
+  end
 
   def subscribable?
     subscription_approval_status == SUBSCRIPTION_PRX_APPROVED

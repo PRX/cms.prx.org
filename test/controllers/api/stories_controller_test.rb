@@ -3,9 +3,10 @@
 require 'test_helper'
 
 describe Api::StoriesController do
-  let(:story) { create(:story) }
+  let(:series) { create(:series) }
+  let(:story) { create(:story, series: series) }
 
-  before(:all) { Story.delete_all }
+  before { Story.delete_all }
 
   describe 'editing' do
 
@@ -15,17 +16,16 @@ describe Api::StoriesController do
     before(:each) do
       class << @controller; attr_accessor :prx_auth_token; end
       @controller.prx_auth_token = token
+      @request.env['CONTENT_TYPE'] = 'application/json'
     end
 
     it 'can create a new story' do
       story_hash = { title: 'create story', set_account_uri: "/api/v1/accounts/#{account.id}" }
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :create, story_hash.to_json, api_version: 'v1', format: 'json'
       assert_response :success
     end
 
     it 'can create a new story with url parameters' do
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :create,
            { title: 'story' }.to_json,
            api_version: 'v1',
@@ -35,9 +35,56 @@ describe Api::StoriesController do
       Story.find(id).account_id.must_equal account.id
     end
 
+    it 'can create a new story and distributions' do
+      # feeder calls do't need to work, but webmock needs a response defined
+      stub_request(:post, 'https://id.prx.org/token').to_return(status: 500)
+
+      series.wont_be_nil
+      story_hash = {
+        title: 'create story',
+        set_account_uri: "/api/v1/accounts/#{account.id}",
+        set_series_uri: "/api/v1/series/#{series.id}"
+      }
+      post :create, story_hash.to_json, api_version: 'v1', format: 'json'
+      assert_response :success
+      res = JSON.parse(response.body)
+      Story.find(res['id']).distributions.count.must_equal 1
+    end
+
+    it 'can set description as markdown' do
+      story_hash = {
+        title: 'story',
+        description: '_description_'
+      }
+      post :create, story_hash.to_json, api_request_opts(account_id: account.id)
+      assert_response :success
+      res = JSON.parse(response.body)
+      res['description'].must_equal "<p><em>description</em></p>\n"
+      res['descriptionMd'].must_equal '_description_'
+    end
+
+    it 'can set description_md' do
+      story_hash = {
+        title: 'story',
+        'descriptionMd' => '_description_'
+      }
+      post :create, story_hash.to_json, api_request_opts(account_id: account.id)
+      assert_response :success
+      res = JSON.parse(response.body)
+      res['description'].must_equal "<p><em>description</em></p>\n"
+      res['descriptionMd'].must_equal '_description_'
+    end
+
+    it 'returns descriptionMd for v3 stories' do
+      story_v3 = create(:story_v3, description: "<p><em>description</em></p>\n")
+      get(:show, api_request_opts(id: story_v3.id))
+      assert_response :success
+      res = JSON.parse(response.body)
+      res['descriptionMd'].must_equal "_description_\n\n"
+    end
+
     it 'rejects new stories with an invalid account' do
       new_account = create(:account)
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :create,
            { title: 'story' }.to_json,
            api_version: 'v1',
@@ -47,14 +94,13 @@ describe Api::StoriesController do
 
     it 'can update a story' do
       story = create(:story, title: 'not this', account: account)
-      @request.env['CONTENT_TYPE'] = 'application/json'
       put :update,
           { title: 'this' }.to_json,
           api_version: 'v1',
           format: 'json',
           id: story.id
       assert_response :success
-      Story.find(story.id).title.must_equal('this')
+      JSON.parse(response.body)['title'].must_equal('this')
     end
 
     it 'can publish a story' do
@@ -62,7 +108,6 @@ describe Api::StoriesController do
                      title: 'not this',
                      account: account,
                      published_at: nil)
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :publish, api_version: 'v1', format: 'json', id: story.id
       assert_response :success
       Story.find(story.id).published_at.wont_be_nil
@@ -72,7 +117,6 @@ describe Api::StoriesController do
       story = create(:story,
                      title: 'not this',
                      account: account)
-      @request.env['CONTENT_TYPE'] = 'application/json'
       post :unpublish, api_version: 'v1', format: 'json', id: story.id
       assert_response :success
       Story.find(story.id).published_at.must_be_nil
@@ -92,13 +136,13 @@ describe Api::StoriesController do
   end
 
   it 'should list published stories of any app version' do
-    story.must_be :published
+    story1 = create(:story, published_at: 1.day.ago)
     story2 = create(:story, published_at: nil)
-    story3 = create(:story_v3)
+    story3 = create(:story_v3, published_at: 1.day.ago)
 
     get(:index, { api_version: 'v1', format: 'json' } )
     assert_response :success
-    assigns[:stories].must_include story
+    assigns[:stories].must_include story1
     assigns[:stories].wont_include story2
     assigns[:stories].must_include story3
   end
@@ -146,12 +190,13 @@ describe Api::StoriesController do
   end
 
   it 'should list only v4 stories' do
-    story.must_be :v4?
+    story1 = create(:story)
+    story1.must_be :v4?
     story2 = create(:story_v3)
     get(:index, api_version: 'v1', format: 'json', filters: 'v4')
     assert_response :success
     assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story
+    assigns[:stories].must_include story1
     assigns[:stories].wont_include story2
   end
 

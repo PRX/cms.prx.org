@@ -16,6 +16,12 @@ class Api::AudioVersionRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embeds :audio_files, as: :audio, class: AudioFile, decorator: Api::AudioFileRepresenter
+  # after www.prx.org is fixed, update this to embed a paged representer
+  # embed :audio_files,
+  #       as: :audio,
+  #       paged: true,
+  #       item_class: AudioFile,
+  #       item_decorator: Api::AudioFileRepresenter
 
   link rel: :audio_version_template, writeable: true do
     {

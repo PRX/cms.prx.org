@@ -18,5 +18,9 @@ class Api::StoryDistributionRepresenter < Api::BaseRepresenter
       profile: model_uri(represented.story)
     } if represented.story
   end
-  embed :story, as: :story, item_class: Story, decorator: Api::Min::StoryRepresenter
+  embed :story,
+        as: :story,
+        item_class: Story,
+        decorator: Api::Min::StoryRepresenter,
+        zoom: false
 end

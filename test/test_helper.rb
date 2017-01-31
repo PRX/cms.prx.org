@@ -1,7 +1,7 @@
 ENV['RAILS_ENV'] = 'test'
 
 ENV['CMS_HOST'] = 'cms.prx.org'
-ENV['FEEDER_HOST'] = 'feeder.prx.tech'
+ENV['FEEDER_HOST'] = 'feeder.prx.org'
 ENV['ID_HOST'] = 'id.prx.org'
 ENV['META_HOST'] = 'meta.prx.org'
 ENV['PRX_HOST'] = 'www.prx.org'

@@ -28,13 +28,19 @@ module ChildResource
   end
 
   def child_resource
-    parent_resource.send(child_resource_name)
+    unless res = parent_resource.send(child_resource_name)
+      raise HalApi::Errors::NotFound.new
+    end
+    res
   end
 
   def parent_resource
     parent_class = parent_resource_name.classify.safe_constantize
     parent_key = self.class.child_resource_options[:parent_key] || "#{parent_resource_name}_id"
-    parent_class.find(params[parent_key]) if params[parent_key]
+    unless params[parent_key] && res = parent_class.find_by_id(params[parent_key])
+      raise HalApi::Errors::NotFound.new
+    end
+    res
   end
 
   def create

@@ -3,10 +3,16 @@ require 'hal_api/rails'
 
 class Api::BaseController < ApplicationController
   include HalApi::Controller
+
+  def self.responder
+    Api::ApiResponder
+  end
+
   include Pundit
   include ApiVersioning
   include ApiFiltering
   include ApiSorting
+  include ResourceCallbacks
   include ChildResource
   include PolymorphicResource
   include AnnounceActions
@@ -59,8 +65,17 @@ class Api::BaseController < ApplicationController
 
   private
 
-  def user_not_authorized
-    message = { error: 'You are not authorized to perform this action' }
+  def user_not_authorized(exception = nil)
+    message = { status: 401, message: 'You are not authorized to perform this action' }
+    if exception && Rails.configuration.try(:consider_all_requests_local)
+      message[:backtrace] = exception.backtrace
+    end
     render json: message, status: 401
+  end
+
+  def wrap_in_transaction
+    ActiveRecord::Base.transaction do
+      yield
+    end
   end
 end

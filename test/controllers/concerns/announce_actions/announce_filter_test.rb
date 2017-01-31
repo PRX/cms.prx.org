@@ -38,9 +38,9 @@ describe AnnounceActions::AnnounceFilter do
     filter.announce_action.must_equal('foo')
   end
 
-  it 'defaults to the msg then min decorator when possible' do
+  it 'defaults to the msg decorator when possible' do
     dc = filter.decorator_class('TestObject')
-    dc.must_equal Api::Min::TestObjectRepresenter
+    dc.must_equal Api::TestObjectRepresenter
 
     class Api::Msg::TestObjectRepresenter < Api::Min::TestObjectRepresenter; end
     dc = filter.decorator_class('TestObject')
@@ -50,13 +50,13 @@ describe AnnounceActions::AnnounceFilter do
 
   it 'gets the decorator to use based on the resource' do
     dc = filter.decorator_for_model(resource)
-    dc.must_equal Api::Min::TestObjectRepresenter
+    dc.must_equal Api::TestObjectRepresenter
   end
 
   it 'gets the decorator to use based on the resource base class' do
     FooTestObject.base_class.must_equal TestObject
     dc = filter.decorator_for_model(FooTestObject.new('foo', true))
-    dc.must_equal Api::Min::TestObjectRepresenter
+    dc.must_equal Api::TestObjectRepresenter
   end
 
   it 'can use an optional decorator' do

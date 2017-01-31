@@ -25,6 +25,9 @@ gem 'unf'
 gem 'oauth2'
 gem 'hyperresource'
 
+# Use Sanitize for HTML and CSS whitelisting
+gem 'sanitize'
+
 ## Controller
 gem 'responders', '~> 2.0'
 gem 'hal_api-rails', ' ~> 0.2.9'
@@ -47,6 +50,8 @@ gem 'roar'
 gem 'roar-rails'
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'redcarpet'
+gem 'reverse_markdown'
 
 ## Messaging
 gem 'shoryuken'

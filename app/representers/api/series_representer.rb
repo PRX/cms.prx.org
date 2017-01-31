@@ -4,7 +4,8 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   property :id, writeable: false
   property :title
   property :short_description
-  property :description
+  property :description, getter: ->(_o) { description_html }
+  property :description_md
   property :created_at, writeable: false
   property :updated_at, writeable: false
   property :app_version, writeable: false
@@ -26,18 +27,19 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
 
   link :image do
     {
-      href: api_series_series_image_path(represented),
-      title: represented.image.filename
-    } if represented.id && represented.image
+      href: api_series_series_image_path(represented, represented.default_image),
+      title: represented.default_image.try(:filename)
+    } if represented && represented.default_image
   end
-  embed :image, class: SeriesImage, decorator: Api::ImageRepresenter
+  embed :default_image, as: :image, class: SeriesImage, decorator: Api::ImageRepresenter
 
-  link 'create-image' do
+  link :images do
     {
-      href: api_series_series_image_path(represented),
-      title: 'Create an image'
-    } if represented.id && !represented.image
+      href: api_series_series_images_path(represented),
+      count: represented.images.count
+    } if represented.id
   end
+  embed :images, paged: true, item_class: SeriesImage, item_decorator: Api::ImageRepresenter
 
   link :account do
     {
@@ -55,8 +57,9 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :audio_version_templates,
-        class: AudioVersionTemplate,
-        decorator: Api::AudioVersionTemplateRepresenter,
+        paged: true,
+        item_class: AudioVersionTemplate,
+        item_decorator: Api::AudioVersionTemplateRepresenter,
         zoom: false
 
   link :distributions do
@@ -65,7 +68,8 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
       count: represented.distributions.count
     } if represented.id
   end
-  embeds :distributions,
-        class: Distribution,
-        decorator: Api::DistributionRepresenter
+  embed :distributions,
+        paged: true,
+        item_class: Distribution,
+        item_decorator: Api::DistributionRepresenter
 end

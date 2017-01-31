@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.string   "status",       limit: 255
     t.string   "caption",      limit: 255
     t.string   "credit",       limit: 255
+    t.string   "purpose",      limit: 255
   end
 
   add_index "account_images", ["account_id"], name: "account_images_account_id_fk", using: :btree
@@ -169,12 +170,13 @@ ActiveRecord::Schema.define(version: 6) do
   add_index "audio_versions", ["piece_id"], name: "audio_versions_piece_id_fk", using: :btree
 
   create_table "distributions", force: :cascade do |t|
-    t.string   "type",               limit: 255
-    t.string   "distributable_type", limit: 255
-    t.integer  "distributable_id",   limit: 4
-    t.string   "url",                limit: 255
-    t.string   "guid",               limit: 255
-    t.text     "properties",         limit: 65535
+    t.string   "type",                      limit: 255
+    t.string   "distributable_type",        limit: 255
+    t.integer  "distributable_id",          limit: 4
+    t.integer  "audio_version_template_id", limit: 4
+    t.string   "url",                       limit: 255
+    t.string   "guid",                      limit: 255
+    t.text     "properties",                limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -263,6 +265,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "updated_at"
     t.string   "upload_path",  limit: 255
     t.string   "status",       limit: 255
+    t.string   "purpose",      limit: 255
   end
 
   add_index "piece_images", ["piece_id"], name: "piece_images_piece_id_fk", using: :btree
@@ -309,6 +312,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.string   "marketplace_subtitle",    limit: 255
     t.text     "marketplace_information", limit: 65535
     t.integer  "network_id",              limit: 4
+    t.datetime "released_at"
   end
 
   add_index "pieces", ["account_id"], name: "pieces_account_id_fk", using: :btree
@@ -449,6 +453,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "updated_at"
     t.string   "upload_path",  limit: 255
     t.string   "status",       limit: 255
+    t.string   "purpose",      limit: 255
   end
 
   add_index "series_images", ["series_id"], name: "series_images_series_id_fk", using: :btree
@@ -510,6 +515,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.string   "status",       limit: 255
     t.string   "caption",      limit: 255
     t.string   "credit",       limit: 255
+    t.string   "purpose",      limit: 255
   end
 
   add_index "user_images", ["user_id"], name: "user_images_user_id_fk", using: :btree
