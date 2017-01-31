@@ -9,12 +9,11 @@ describe Api::Auth::AccountsController do
   let (:member_account) { create(:account) }
   let (:unapproved_account) { create(:account)}
 
-  let (:token) { OpenStruct.new.tap { |t|
-    t.authorized_resources = {
-      member_account.id => "member",
-      individual_account.id => "admin"
-    }
-    t.user_id = user.id
+  let (:token) { StubToken.new(nil, nil, user.id).tap { |t|
+      t.authorized_resources = {
+        member_account.id => "member",
+        individual_account.id => "admin"
+      }
     }
   }
 
@@ -55,12 +54,6 @@ describe Api::Auth::AccountsController do
       ids.must_include member_account.id
       ids.wont_include unapproved_account.id
       ids.wont_include random_account.id
-    end
-
-    it 'gets list of approved accounts for a user from users token' do
-      get(:index, api_version: 'v1')
-      assert_response :success
-      user.reload.approved_accounts.wont_be_nil
     end
 
   end

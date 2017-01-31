@@ -3,7 +3,7 @@ require 'test_helper'
 describe Api::AuthorizationsController do
 
   let (:user) { create(:user) }
-  let (:token) { OpenStruct.new.tap { |t| t.user_id = user.id } }
+  let (:token) { StubToken.new(user.individual_account.id, "admin", user.id) }
 
   it 'shows the user with a valid token' do
     @controller.stub(:prx_auth_token, token) do

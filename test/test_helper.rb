@@ -63,9 +63,11 @@ reset_announce
 
 StubToken = Struct.new(:resource, :scopes, :user_id)
 class StubToken
+  attr_accessor :authorized_resources
   @@fake_user_id = 0
 
   def initialize(res, scopes, explicit_user_id = nil)
+    @authorized_resources = { res => scopes }
     if explicit_user_id
       super(res.to_s, scopes, explicit_user_id)
     else
@@ -74,7 +76,7 @@ class StubToken
   end
 
   def authorized?(r, s = nil)
-    resource == r.to_s && (s.nil? || scopes.include?(s.to_s))
+    authorized_resources.keys.include?(r) && (s.nil? || authorized_resources.values.flatten.include?(s.to_s))
   end
 end
 
