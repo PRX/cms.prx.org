@@ -6,10 +6,6 @@ describe User do
   let (:story) { create(:story, account: user.individual_account) }
   let (:series) { create(:series, account: user.individual_account) }
 
-  before do
-    user.approved_accounts = Account.where(id: [story.account_id, series.account_id])
-  end
-
   it 'has a table defined' do
     User.table_name.must_equal 'users'
   end
@@ -45,7 +41,7 @@ describe User do
     user.networks.must_include network
   end
 
-  it 'has a list of stories and series for accounts approved on token' do
+  it 'has a list of stories and series' do
     user.approved_account_stories.must_include story
     user.approved_account_series.must_include series
   end

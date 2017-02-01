@@ -7,10 +7,6 @@ describe Api::AuthorizationRepresenter do
   let(:representer) { Api::AuthorizationRepresenter.new(user) }
   let(:json) { JSON.parse(representer.to_json) }
 
-  before do
-    user.approved_accounts = Account.where(id: account.id)
-  end
-
   def get_link(rel, key = 'href')
     json['_links'][rel] ? json['_links'][rel][key] : nil
   end

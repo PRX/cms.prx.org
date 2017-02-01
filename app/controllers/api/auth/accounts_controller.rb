@@ -14,6 +14,6 @@ class Api::Auth::AccountsController < Api::AccountsController
   end
 
   def resources_base
-    current_user.approved_accounts
+    Authorization.new(prx_auth_token).token_auth_accounts
   end
 end

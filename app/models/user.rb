@@ -15,8 +15,6 @@ class User < BaseModel
 
   after_commit :create_individual_account, on: [:create]
 
-  attr_accessor :approved_accounts
-
   def individual_account
     accounts.where('type = \'IndividualAccount\'').first
   end
@@ -47,15 +45,26 @@ class User < BaseModel
     "#{first_name} #{last_name}"
   end
 
+  def approved_accounts
+    Account.
+      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
+      where(['memberships.user_id = ? and memberships.approved is true', id])
+  end
+
   def approved_active_accounts
-    approved_accounts.try(:active)
+    approved_accounts.active
   end
 
   def approved_account_stories
-    !approved_accounts.nil? ? Story.where(account_id: approved_accounts.try(:ids)) : []
+    Story.
+      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `pieces`.`account_id`').
+      where(['memberships.user_id = ? and memberships.approved is true', id])
   end
 
   def approved_account_series
-    !approved_accounts.nil? ? Series.where(account_id: approved_accounts.try(:ids)) : []
+    Series.
+      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `series`.`account_id`').
+      where(['memberships.user_id = ? and memberships.approved is true', id])
   end
+
 end

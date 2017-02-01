@@ -38,7 +38,7 @@ class Api::Auth::StoriesController < Api::StoriesController
     @stories ||= if params[:network_id]
       super.published
     else
-      current_user.approved_account_stories
+      Authorization.new(prx_auth_token).token_auth_stories
     end
   end
 
@@ -47,7 +47,7 @@ class Api::Auth::StoriesController < Api::StoriesController
       story.creator_id = current_user.id
       story.account_id ||= story.series.try(:account_id)
       story.account_id ||= current_user.account_id
-      story.account_id ||= current_user.approved_accounts.first.try(:id)
+      story.account_id ||= current_user.approved_accounts.first.try(:id) # not sure if I should change this to look at token
     end
   end
 end

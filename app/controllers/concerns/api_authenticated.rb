@@ -7,18 +7,11 @@ module ApiAuthenticated
   extend ActiveSupport::Concern
 
   included do
-    before_filter :authenticate_user!, :get_authorized_resources
+    before_filter :authenticate_user!
   end
 
   def authenticate_user!
     user_not_authorized unless current_user
-  end
-
-  def get_authorized_resources
-    token_accounts = prx_auth_token.authorized_resources.try(:keys)
-    if token_accounts
-      current_user.approved_accounts ||= Account.where(id: token_accounts)
-    end
   end
 
   def cache_show?
