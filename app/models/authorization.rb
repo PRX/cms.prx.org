@@ -6,10 +6,6 @@ class Authorization
 
   def initialize(token)
     @token = token
-    get_authorized_resources
-  end
-
-  def get_authorized_resources
   end
 
   def token_auth_accounts
