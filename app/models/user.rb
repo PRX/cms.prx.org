@@ -66,5 +66,4 @@ class User < BaseModel
       joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `series`.`account_id`').
       where(['memberships.user_id = ? and memberships.approved is true', id])
   end
-
 end

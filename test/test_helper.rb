@@ -78,7 +78,6 @@ class StubToken
   def authorized?(r, s = nil)
     res = authorized_resources.keys
     roles = authorized_resources.values.flatten
-
     res.include?(r) && (s.nil? || roles.include?(s.to_s))
   end
 end
