@@ -13,8 +13,7 @@ describe ApiAuthenticated do
       raise 'user_not_authorized'
     end
 
-    def prx_auth_token
-    end
+    def prx_auth_token; end
   end
 
   let(:controller) { ApiAuthenticatedTestController.new }
