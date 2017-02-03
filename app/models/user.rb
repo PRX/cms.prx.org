@@ -44,26 +44,4 @@ class User < BaseModel
   def name
     "#{first_name} #{last_name}"
   end
-
-  def approved_accounts
-    Account.
-      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id`').
-      where(['memberships.user_id = ? and memberships.approved is true', id])
-  end
-
-  def approved_active_accounts
-    approved_accounts.active
-  end
-
-  def approved_account_stories
-    Story.
-      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `pieces`.`account_id`').
-      where(['memberships.user_id = ? and memberships.approved is true', id])
-  end
-
-  def approved_account_series
-    Series.
-      joins('LEFT OUTER JOIN `memberships` ON `memberships`.`account_id` = `series`.`account_id`').
-      where(['memberships.user_id = ? and memberships.approved is true', id])
-  end
 end

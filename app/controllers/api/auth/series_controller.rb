@@ -10,6 +10,6 @@ class Api::Auth::SeriesController < Api::SeriesController
   represent_with Api::Auth::SeriesRepresenter
 
   def resources_base
-    @series ||= Authorization.new(prx_auth_token).token_auth_series
+    @series ||= authorization.token_auth_series
   end
 end

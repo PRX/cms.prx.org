@@ -40,9 +40,4 @@ describe User do
   it 'has a list of networks' do
     user.networks.must_include network
   end
-
-  it 'has a list of stories and series' do
-    user.approved_account_stories.must_include story
-    user.approved_account_series.must_include series
-  end
 end

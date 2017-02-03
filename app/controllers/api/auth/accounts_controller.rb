@@ -14,6 +14,6 @@ class Api::Auth::AccountsController < Api::AccountsController
   end
 
   def resources_base
-    Authorization.new(prx_auth_token).token_auth_accounts
+    authorization.token_auth_accounts
   end
 end
