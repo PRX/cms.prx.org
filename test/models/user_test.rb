@@ -3,8 +3,6 @@ require 'test_helper'
 describe User do
   let (:user) { create(:user) }
   let (:network) { create(:network, account: user.individual_account) }
-  let (:story) { create(:story, account: user.individual_account) }
-  let (:series) { create(:series, account: user.individual_account) }
 
   it 'has a table defined' do
     User.table_name.must_equal 'users'
