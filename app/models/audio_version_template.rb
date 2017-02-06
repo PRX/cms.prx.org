@@ -6,6 +6,7 @@ class AudioVersionTemplate < BaseModel
   has_many :audio_file_templates, -> { order :position }, dependent: :destroy
 
   has_many :audio_versions, dependent: :nullify
+  has_many :distributions, dependent: :nullify
 
   after_save :touch_audio_versions
 
