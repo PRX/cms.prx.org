@@ -67,8 +67,8 @@ class Story < BaseModel
   # indicates the piece is not publically available, only to the network
   event_attribute :network_only_at
 
-  scope :published, -> { where('`published_at` <= now()') }
-  scope :unpublished, -> { where('`published_at` IS NULL OR `published_at` > now()') }
+  scope :published, -> { where('`published_at` <= ?', Time.now) }
+  scope :unpublished, -> { where('`published_at` IS NULL OR `published_at` > ?', Time.now) }
   scope :unseries, -> { where('`series_id` IS NULL') }
   scope :v4, -> { where(app_version: PRX::APP_VERSION) }
   scope :network_visible, -> { where('`network_only_at` IS NULL') }
