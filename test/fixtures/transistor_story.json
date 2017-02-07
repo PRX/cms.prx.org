@@ -1,0 +1,288 @@
+{
+  "id": 186929,
+  "appVersion": "v4",
+  "title": "This is a title",
+  "shortDescription": "short description",
+  "description": "description",
+  "descriptionMd": "description",
+  "duration": 122,
+  "tags": [],
+  "points": 0,
+  "publishedAt": "2017-02-03T22:11:48.000Z",
+  "createdAt": "2017-02-03T21:53:56.000Z",
+  "updatedAt": "2017-02-03T22:11:48.000Z",
+  "_links": {
+    "alternate": {
+      "href": "https://beta.prx.org/stories/186929",
+      "type": "text/html"
+    },
+    "curies": [
+      {
+        "href": "http://meta.prx.org/relation/{rel}",
+        "name": "prx",
+        "templated": true
+      }
+    ],
+    "profile": {
+      "href": "http://meta.prx.org/model/story"
+    },
+    "prx:account": {
+      "href": "/api/v1/accounts/219544",
+      "profile": "http://meta.prx.org/model/account/individual",
+      "title": "Gigi Blum-Campo"
+    },
+    "prx:audio": {
+      "count": 1,
+      "href": "/api/v1/stories/186929/audio_files"
+    },
+    "prx:audio-versions": {
+      "count": 1,
+      "href": "/api/v1/stories/186929/audio_versions"
+    },
+    "prx:distributions": {
+      "count": 0,
+      "href": "/api/v1/stories/186929/story_distributions"
+    },
+    "prx:images": {
+      "count": 0,
+      "href": "/api/v1/stories/186929/images"
+    },
+    "prx:musical-works": {
+      "count": 0,
+      "href": "/api/v1/stories/186929/musical_works{?page,per,zoom,filters,sorts}",
+      "templated": true
+    },
+    "prx:promos": {
+      "count": 0,
+      "href": "/api/v1/stories/186929/promos"
+    },
+    "prx:series" : {
+       "title" : "Transistor",
+       "href" : "/api/v1/series/12345"
+    },
+    "prx:unpublish": {
+      "href": "/api/v1/stories/186929/unpublish"
+    },
+    "self": {
+      "href": "/api/v1/stories/186929",
+      "profile": "http://meta.prx.org/model/story"
+    }
+  },
+  "_embedded": {
+    "prx:account": {
+      "_embedded": {
+        "prx:image": {
+          "_links": {
+            "enclosure": {
+              "href": "https://cms-staging.prx.tech/pub/8650052ee8af67623aa1dcbdb7b2dbd3/0/web/user_image/39938/medium/profile_pic_medium.png",
+              "type": "image/png"
+            },
+            "original": {
+              "href": "https://cms-staging.prx.tech/pub/9a86a8cbdb02e6fb6bf7ae4d393fd6ff/0/web/user_image/39938/original/profile_pic_medium.png",
+              "type": "image/png"
+            },
+            "profile": {
+              "href": "http://meta.prx.org/model/image/user"
+            },
+            "self": {
+              "href": "/api/v1/users/240077/image",
+              "profile": "http://meta.prx.org/model/image/user"
+            }
+          },
+          "filename": "profile_pic_medium.png",
+          "height": 479,
+          "id": 39938,
+          "size": 350119,
+          "status": "complete",
+          "width": 381
+        }
+      },
+      "_links": {
+        "alternate": {
+          "href": "https://beta.prx.org/accounts/219544",
+          "type": "text/html"
+        },
+        "profile": {
+          "href": "http://meta.prx.org/model/account/individual/min"
+        },
+        "prx:address": {
+          "href": "/api/v1/accounts/219544/address"
+        },
+        "prx:audio-files": {
+          "href": "/api/v1/accounts/219544/audio_files"
+        },
+        "prx:image": {
+          "href": "/api/v1/accounts/219544/image",
+          "title": "profile_pic_medium.png"
+        },
+        "prx:opener": {
+          "href": "/api/v1/users/240077",
+          "title": "gigi-blum-campo"
+        },
+        "prx:series": {
+          "href": "/api/v1/accounts/219544/series{?page,per,zoom,filters,sorts}",
+          "templated": true
+        },
+        "prx:stories": {
+          "count": 7,
+          "href": "/api/v1/accounts/219544/stories{?page,per,zoom,filters,sorts}",
+          "templated": true
+        },
+        "self": {
+          "href": "/api/v1/accounts/219544",
+          "profile": "http://meta.prx.org/model/account/individual/min"
+        }
+      },
+      "id": 219544,
+      "name": "Gigi Blum-Campo",
+      "path": "gigi-blum-campo",
+      "shortName": "Gigi",
+      "type": "IndividualAccount"
+    },
+    "prx:audio": {
+      "_embedded": {
+        "prx:items": [
+          {
+            "_links": {
+              "enclosure": {
+                "href": "https://cms-staging.prx.tech/pub/f95688d51c045e619132260f12f94e90/0/web/audio_file/1200941/broadcast/t121.mp3",
+                "type": "audio/mpeg"
+              },
+              "original": {
+                "href": "/api/v1/audio_files/1200941/original{?expiration}",
+                "templated": true,
+                "type": "audio/mpeg"
+              },
+              "profile": {
+                "href": "http://meta.prx.org/model/audio-file"
+              },
+              "self": {
+                "href": "/api/v1/audio_files/1200941",
+                "profile": "http://meta.prx.org/model/audio-file"
+              }
+            },
+            "duration": 122,
+            "filename": "t121.mp3",
+            "id": 1200941,
+            "label": "Segment A",
+            "position": 1,
+            "size": 482353,
+            "status": "complete"
+          }
+        ]
+      },
+      "_links": {
+        "profile": {
+          "href": "http://meta.prx.org/model/collection/audio-file"
+        },
+        "self": {
+          "href": "/api/v1/stories/186929/audio_files",
+          "profile": "http://meta.prx.org/model/collection/audio-file"
+        }
+      },
+      "count": 1,
+      "total": 1
+    },
+    "prx:distributions": {
+      "total": 1,
+      "count": 1,
+      "_links": {
+        "profile": {
+          "href": "http://meta.prx.org/model/collection/story-distribution"
+        },
+        "self": {
+          "href": "/api/v1/stories/186929/story_distributions",
+          "profile": "http://meta.prx.org/model/collection/story-distribution"
+        }
+      },
+      "_embedded": {
+        "prx:items": [
+          {
+            "url": "https://feeder-staging.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03",
+            "_links": {
+              "prx:story": {
+                "title": "Title",
+                "profile": "http://meta.prx.org/model/story",
+                "href": "/api/v1/stories/186929"
+              },
+              "profile": {
+                "href": "http://meta.prx.org/model/story-distribution/story-distributions/episode-distribution"
+              },
+              "self": {
+                "href": "/api/v1/stories/186929/story_distributions/82",
+                "profile": "http://meta.prx.org/model/story-distribution/story-distributions/episode-distribution"
+              }
+            },
+            "kind": "episode",
+            "id": 82
+          }
+        ]
+      }
+    },
+    "prx:promos": {
+      "_embedded": {
+        "prx:items": []
+      },
+      "_links": {
+        "profile": {
+          "href": "http://meta.prx.org/model/collection/audio-file"
+        },
+        "self": {
+          "href": "/api/v1/stories/186929/audio_files",
+          "profile": "http://meta.prx.org/model/collection/audio-file"
+        }
+      },
+      "count": 0,
+      "total": 0
+    },
+    "prx:series" : {
+      "id": 12345,
+      "appVersion": "v4",
+      "title": "Transistor",
+      "shortDescription": "A podcast of scientific questions and stories featuring guest hosts and reporters.",
+      "_links": {
+        "alternate": {
+          "href": "https://beta.prx.org/series/12345",
+          "type": "text/html"
+        },
+        "curies": [
+          {
+            "href": "http://meta.prx.org/relation/{rel}",
+            "name": "prx",
+            "templated": true
+          }
+        ],
+        "profile": {
+          "href": "http://meta.prx.org/model/series"
+        },
+        "prx:account": {
+          "href": "/api/v1/accounts/8",
+          "profile": "http://meta.prx.org/model/account/individual",
+          "title": "PRX Administrator"
+        },
+        "prx:audio-version-templates": {
+          "count": 0,
+          "href": "/api/v1/series/12345/audio_version_templates"
+        },
+        "prx:images": {
+          "href": "/api/v1/series/12345/images",
+          "title": "Create an image"
+        },
+        "prx:distributions": {
+          "count": 0,
+          "href": "/api/v1/series/12345/distributions{?page,per,zoom,filters,sorts}",
+          "templated": true
+        },
+        "prx:stories": {
+          "count": 0,
+          "href": "/api/v1/series/12345/stories{?page,per,zoom,filters,sorts}",
+          "templated": true
+        },
+        "self": {
+          "href": "/api/v1/series/12345",
+          "profile": "http://meta.prx.org/model/series"
+        }
+      }
+    }
+  }
+}
