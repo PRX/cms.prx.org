@@ -38,17 +38,17 @@ describe PodcastImporter do
       to_return(status: 200, body: json_file('image'), headers: {})
 
     stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/audio_version_templates').
-      with(body: '{"label":"Podcast Audio"}',
+      with(body: '{"label":"Podcast Audio","explicit":"clean"}',
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_template'), headers: {})
 
     stub_request(:post, 'https://cms.prx.org/api/v1/audio_version_templates/172/audio_file_templates').
-      with(body: '{"position":1,"label":"Segment 1"}',
+      with(body: '{"position":1,"label":"Segment A"}',
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_file_template'), headers: {})
 
     stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/distributions').
-      with(body: '{"kind":"podcast"}',
+      with(body: '{"kind":"podcast","setAudioVersionTemplate":"/api/v1/audio_version_templates/172"}',
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('podcast_distribution'), headers: {})
 
@@ -56,8 +56,17 @@ describe PodcastImporter do
       with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 
+    podcast_update = '{"id":51,"title":"Transistor","copyright":"Copyright 2016 PRX",' +
+      '"language":"en-US","updateFrequency":"1","updatePeriod":"hourly",' +
+      '"link":"https://transistor.prx.org","explicit":"clean",' +
+      '"newFeedUrl":"http://feeds.prx.org/transistor_stem","path":"transistor_stem",' +
+      '"author":{"name":"PRX","email":null},' +
+      '"managingEditor":{"name":"PRX","email":"prxwpadmin@prx.org"},' +
+      '"owners":[{"name":"PRX","email":"prxwpadmin@prx.org"}],' +
+      '"itunesCategories":["Science & Medicine","Natural Sciences"],"categories":[],' +
+      '"complete":false,"keywords":[]}'
     stub_request(:put, 'https://feeder.prx.tech/api/v1/podcasts/51').
-      with(body: '{"id":51,"title":"Transistor","explicit":true}',
+      with(body: podcast_update,
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 
@@ -80,7 +89,6 @@ describe PodcastImporter do
       with(body: '{"upload":"http://some.image/file.png"}',
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('image'), headers: {})
-
 
     stub_request(:get, 'https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03').
       with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
@@ -119,22 +127,27 @@ describe PodcastImporter do
   end
 
   it 'creates a series' do
-    series = importer.create_series(feed)
+    series, template = importer.create_series(feed)
     series.attributes.title.must_equal 'Transistor'
+    template.wont_be_nil
   end
 
   it 'creates a podcast distribution' do
-    distribution = importer.create_distribution(feed, series)
+    distribution = importer.create_distribution(series, template)
     distribution.links[:podcast].href.must_equal 'https://feeder.prx.tech/api/v1/podcasts/51'
   end
 
   it 'updates the podcast attributes' do
-    podcast = importer.update_podcast(series, distribution)
+    podcast = importer.update_podcast(series, distribution, feed)
     podcast.must_be :explicit
   end
 
   it 'creates the stories for the feed entries' do
     importer.template = template
     stories = importer.create_stories(feed, series)
+  end
+
+  it 'imports a podcast' do
+    importer.import
   end
 end

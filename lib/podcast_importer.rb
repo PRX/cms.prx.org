@@ -6,7 +6,11 @@ require 'feedjira'
 class PodcastImporter
   include PRXAccess
 
-  attr_accessor :cms_account_path, :podcast_url, :series, :template
+  attr_accessor :cms_account_path, :podcast_url, :series, :template, :stories
+
+  FEED_ATTRS = %w( complete copyright description explicit keywords language
+    subtitle summary title update_frequency update_period
+    author managing_editor new_feed_url owners ).freeze
 
   def initialize(account, podcast_url)
     self.cms_account_path = account
@@ -22,23 +26,19 @@ class PodcastImporter
     feed = rss_feed
 
     # Create the series
-    self.series = create_series(feed)
+    self.series, self.template = create_series(feed)
 
     # Create the podcast distribution
-    distribution = create_distribution(feed, series)
+    distribution = create_distribution(series, template)
 
     # Update podcast attributes
-    podcast = update_podcast(series, distribution)
+    podcast = update_podcast(series, distribution, feed)
 
     # Create the episodes
-    create_stories(feed, series)
-  end
+    self.stories = create_stories(feed, series)
 
-  def update_podcast(series, distribution)
-    podcast = api(root: distribution.podcast.href, headers: distribution.headers).get
-    podcast.attributes[:explicit] = true
-    podcast.put
-    podcast
+    # return true, but the importer has attributes set
+    true
   end
 
   def rss_feed
@@ -51,37 +51,115 @@ class PodcastImporter
     client = api(root: cms_root, account: cms_account_path).get
 
     # create the series
-    series_attributes = {
+    series = client.series.first.post(
       title: podcast.title,
       short_description: podcast.itunes_subtitle,
       description: podcast.description
-    }
-    series = client.series.first.post(series_attributes)
+    )
 
     # Add images to the series
-    if podcast.itunes_image
-      series.images.post(upload: podcast.itunes_image, purpose: Image::PROFILE)
+    if !podcast.itunes_image.blank?
+      series.images.post(
+        upload: podcast.itunes_image,
+        purpose: Image::PROFILE
+      )
     end
 
     if podcast.image && podcast.image.url
-      series.images.post(upload: podcast.image.url, purpose: Image::THUMBNAIL)
+      series.images.post(
+        upload: podcast.image.url,
+        purpose: Image::THUMBNAIL
+      )
     end
 
     # Add the template and a single file template
-    self.template = series.audio_version_templates.post(label: 'Podcast Audio')
-    template.audio_file_templates.post(position: 1, label: 'Segment 1')
+    self.template = series.audio_version_templates.post(
+      label: 'Podcast Audio',
+      explicit: podcast.itunes_explicit
+    )
 
-    series
+    template.audio_file_templates.post(
+      position: 1,
+      label: 'Segment A'
+    )
+
+    [series, template]
   end
 
-  def create_distribution(podcast, series)
-    series.distributions.post(kind: 'podcast')
+  def create_distribution(series, template)
+    template_link = template.links['self'].href
+    series.distributions.post(kind: 'podcast', set_audio_version_template: template_link)
+  end
+
+  def update_podcast(series, distribution, feed)
+    podcast = api(root: distribution.podcast.href, headers: distribution.headers).get
+
+    %w(copyright language update_frequency update_period).each do |atr|
+      podcast.attributes[atr.to_sym] = feed.send(atr)
+    end
+
+    podcast.attributes[:link] = feed.url
+    podcast.attributes[:explicit] = feed.itunes_explicit
+    podcast.attributes[:new_feed_url] = feed.itunes_new_feed_url
+    podcast.attributes[:path] ||= feed.feedburner_name
+
+    podcast.attributes[:author] = person(feed.itunes_author)
+    podcast.attributes[:managing_editor] = person(feed.managing_editor)
+    podcast.attributes[:owners] = Array(feed.itunes_owners).map do |o|
+      { name: o.name, email: o.email }
+    end
+
+    podcast.attributes[:itunes_categories] = parse_itunes_categories(feed)
+    podcast.attributes[:categories] = parse_categories(feed)
+    podcast.attributes[:complete] = (feed.itunes_complete == 'yes')
+    podcast.attributes[:copyright] ||= feed.media_copyright
+    podcast.attributes[:keywords] = parse_keywords(feed)
+
+    podcast.put
+    podcast
+  end
+
+  def person(arg)
+    return nil if arg.blank?
+
+    email = name = nil
+    if arg.is_a?(Hash)
+      email = arg[:email]
+      name = arg[:name]
+    else
+      s = arg.to_s.try(:strip)
+      if match = s.match(/(.+) \((.+)\)/)
+        email = match[1]
+        name = match[2]
+      else
+        name = s
+      end
+    end
+
+    { name: name, email: email }
+  end
+
+  def parse_itunes_categories(feed)
+    Array(feed.itunes_categories).map(&:strip).select { |c| !c.blank? }
+  end
+
+  def parse_categories(feed)
+    mcat = Array(feed.media_categories)
+    rcat = Array(feed.categories)
+    (mcat + rcat).compact.uniq
+  end
+
+  def parse_keywords(feed)
+    ikey = Array(feed.itunes_keywords).map(&:strip)
+    mkey = Array(feed.media_keywords).map(&:strip)
+    (ikey + mkey).compact.uniq
   end
 
   def create_stories(feed, series)
-    feed.entries.each do |entry|
+    feed.entries.map do |entry|
       story = create_story(entry, series)
       update_entry(story, entry)
+      story
     end
   end
 
