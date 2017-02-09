@@ -37,7 +37,7 @@ class Series < BaseModel
   has_many :images, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
 
   before_validation :set_app_version, on: :create
-  before_validation :update_account_for_stories, on: :update
+  after_save :update_account_for_stories, on: :update
 
   event_attribute :subscriber_only_at
 
