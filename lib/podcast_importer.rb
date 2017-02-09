@@ -8,10 +8,6 @@ class PodcastImporter
 
   attr_accessor :cms_account_path, :podcast_url, :series, :template, :stories
 
-  FEED_ATTRS = %w( complete copyright description explicit keywords language
-    subtitle summary title update_frequency update_period
-    author managing_editor new_feed_url owners ).freeze
-
   def initialize(account, podcast_url)
     self.cms_account_path = account
     self.podcast_url = podcast_url
@@ -144,8 +140,8 @@ class PodcastImporter
   end
 
   def parse_categories(feed)
-    mcat = Array(feed.media_categories)
-    rcat = Array(feed.categories)
+    mcat = Array(feed.media_categories).map(&:strip)
+    rcat = Array(feed.categories).map(&:strip)
     (mcat + rcat).compact.uniq
   end
 
@@ -166,7 +162,11 @@ class PodcastImporter
   def create_story(entry, series)
     # create the story - distribution should be auto created
     story_attributes = {
-      title: 'test title'
+      title: entry[:title],
+      short_description: entry[:itunes_subtitle],
+      description: entry[:description],
+      tags: entry[:categories],
+      released_at: entry[:published]
     }
     story = series.stories.post(story_attributes)
 
@@ -180,12 +180,17 @@ class PodcastImporter
     version = story.audio_versions.post(set_audio_version_template: self_link)
 
     # add the audio
-    version.audio.post(upload: 'http://some.audio/file.mp3')
+    enclosure = enclosure_url(entry)
+    version.audio.post(upload: enclosure) if enclosure
 
     # add the image
-    story.images.post(upload: 'http://some.image/file.png')
+    story.images.post(upload: entry.itunes_image) if entry.itunes_image
 
     story
+  end
+
+  def enclosure_url(entry)
+    entry[:feedburner_orig_enclosure_link] || entry[:enclosure].try(:url)
   end
 
   def update_entry(story, entry)
@@ -198,9 +203,25 @@ class PodcastImporter
     episode = api(root: distro['url'], headers: story.headers).get
 
     # update the episode guid and other attributes
+    episode.attributes[:author] = person(entry[:itunes_author] || entry[:author] || entry[:creator])
+    episode.attributes[:block] = (entry[:itunes_block] == 'yes')
+    episode.attributes[:explicit] = entry[:itunes_explicit]
     episode.attributes[:guid] = entry.entry_id
+    episode.attributes[:is_closed_captioned] = (entry[:itunes_is_closed_captioned] == 'yes')
+    episode.attributes[:is_perma_link] = entry[:is_perma_link]
+    episode.attributes[:keywords] = (entry[:itunes_keywords] || '').split(',').map(&:strip)
+    episode.attributes[:position] = entry[:itunes_order]
+    episode.attributes[:url] = episode_url(entry)
     episode.put
     episode
+  end
+
+  def episode_url(entry)
+    url = entry[:feedburner_orig_link] || entry[:url] || entry[:link]
+    if url.match(/libsyn\.com/)
+      url = nil
+    end
+    url
   end
 
   def uri

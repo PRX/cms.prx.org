@@ -22,8 +22,12 @@ describe PodcastImporter do
       with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('cms_root'), headers: {})
 
+    series_create = '{"title":"Transistor","shortDescription":' +
+      '"A podcast of scientific questions and stories featuring guest hosts and reporters.",' +
+      '"description":"A podcast of scientific questions and stories, with many episodes hosted' +
+      ' by key scientists at the forefront of discovery."}'
     stub_request(:post, 'https://cms.prx.org/api/v1/series/').
-      with(body: '{"title":"Transistor","shortDescription":"A podcast of scientific questions and stories featuring guest hosts and reporters.","description":"A podcast of scientific questions and stories, with many episodes hosted by key scientists at the forefront of discovery."}',
+      with(body: series_create,
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_series'), headers: {})
 
@@ -70,8 +74,19 @@ describe PodcastImporter do
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 
+    story_update = '{"title":"Sidedoor from the Smithsonian: Shake it Up",' +
+      '"shortDescription":"An astronomer has turned the night sky into a symphony.",' +
+      '"description":"For the next few episodes, we’re featuring the ' +
+      'Smithsonian’s new series, Sidedoor, about where science, art, history, and humanity ' +
+      'unexpectedly overlap — just like in their museums. In this episode: an astronomer has ' +
+      'turned the night sky into a symphony; an architecture firm has radically re-thought ' +
+      'police stations; and an audiophile builds a successful record … ' +
+      '<a href=\"https://transistor.prx.org/2017/01/sidedoor-from-the-smithsonian-shake-it-up/\" ' +
+      'class=\"more-link\">Continue reading <span class=\"screen-reader-text\">Sidedoor from the ' +
+      'Smithsonian: Shake it Up</span></a>",' +
+      '"tags":["Indie Features"],"releasedAt":"2017-01-20T03:04:12.000Z"}'
     stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/stories').
-      with(body: '{"title":"test title"}',
+      with(body: story_update,
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_story'), headers: {})
 
@@ -80,13 +95,15 @@ describe PodcastImporter do
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_version'), headers: {})
 
+    audio_create = '{"upload":"https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor' +
+      '/cdn-transistor.prx.org/wp-content/uploads/Smithsonian3_Transistor.mp3"}'
     stub_request(:post, 'https://cms.prx.org/api/v1/audio_versions/400094/audio_files').
-      with(body: '{"upload":"http://some.audio/file.mp3"}',
+      with(body: audio_create,
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_audio'), headers: {})
 
     stub_request(:post, 'https://cms.prx.org/api/v1/stories/186929/images').
-      with(body: '{"upload":"http://some.image/file.png"}',
+      with(body: '{"upload":"https://cdn-transistor.prx.org/wp-content/uploads/shake.jpg"}',
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('image'), headers: {})
 
@@ -94,8 +111,14 @@ describe PodcastImporter do
       with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_episode'), headers: {})
 
+    episode_update = '{"guid":"https://transistor.prx.org/?p=1286","title":' +
+      '"Sidedoor from the Smithsonian: Shake it Up","author":{"name":"PRX","email":null},' +
+      '"block":false,"explicit":null,"isClosedCaptioned":false,"isPermaLink":"false",' +
+      '"keywords":[],"position":null,"url":' +
+      '"https://transistor.prx.org/2017/01/sidedoor-from-the-smithsonian-shake-it-up/"}'
     stub_request(:put, "https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03").
-      with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+      with(body: episode_update,
+           headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_episode'), headers: {})
 
   end
@@ -123,7 +146,7 @@ describe PodcastImporter do
   it 'retrieves the feed' do
     feed = importer.rss_feed
     feed.title.must_equal 'Transistor'
-    feed.entries.count.must_equal 49
+    feed.entries.count.must_equal 1
   end
 
   it 'creates a series' do
