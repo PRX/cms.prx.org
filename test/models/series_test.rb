@@ -24,6 +24,13 @@ describe Series do
     Series.where(id: v3_series.id).with_deleted.count.must_equal 1
   end
 
+  it 'changes account_id for stories when own account changes' do
+    series.update_attributes!(account_id: 123)
+    series.stories.each do |story|
+      story.account_id.must_equal 123
+    end
+  end
+
   describe '#images' do
     let(:series) { create(:series, images_count: 0) }
     let(:image_none) { create(:series_image, series: series, purpose: '') }

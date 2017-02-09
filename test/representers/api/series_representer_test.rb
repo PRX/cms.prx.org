@@ -21,4 +21,13 @@ describe Api::SeriesRepresenter do
   it 'includes templates' do
     json['_links']['prx:audio-version-templates'].wont_be_nil
   end
+
+  it 'can set the account' do
+    series.account_id.wont_be_nil
+    series_hash = { title: 'Title', set_account_uri: 'api/v1/accounts/123' }
+    s_representer = Api::SeriesRepresenter.new(Series.new)
+    s_series = s_representer.from_json(series_hash.to_json)
+    s_series.title.must_equal 'Title'
+    s_series.account_id.must_equal 123
+  end
 end
