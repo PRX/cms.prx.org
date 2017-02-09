@@ -87,8 +87,7 @@ describe PodcastImporter do
       to_return(status: 200, body: json_file('transistor_episode'), headers: {})
 
     stub_request(:put, "https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03").
-      with(body: '{"guid":"https://transistor.prx.org/?p=1286","title":"test title"}',
-           headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+      with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_episode'), headers: {})
 
   end

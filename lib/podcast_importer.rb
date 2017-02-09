@@ -79,7 +79,7 @@ class PodcastImporter
   end
 
   def create_stories(feed, series)
-    feed.entries[0..0].each do |entry|
+    feed.entries.each do |entry|
       story = create_story(entry, series)
       update_entry(story, entry)
     end
@@ -112,7 +112,7 @@ class PodcastImporter
 
   def update_entry(story, entry)
     # find the distro from the story
-    distributions = story.response_object['_embedded']['prx:distributions']['_embedded']['prx:items']
+    distributions = story.body['_embedded']['prx:distributions']['_embedded']['prx:items']
     distributions ||= story.distributions.get
     distro = distributions.detect { |d| d['kind'] == 'episode' }
 
