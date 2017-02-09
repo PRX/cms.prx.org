@@ -1,0 +1,34 @@
+{
+  "id": 1200952,
+  "position": 1,
+  "filename": "sampleMP3_Cheerleader.mp3",
+  "label": "Segment A",
+  "status": "complete",
+  "size": 4542485,
+  "duration": 190,
+  "_links": {
+    "original": {
+      "type": "audio/mpeg",
+      "templated": true,
+      "href": "/api/v1/audio_files/1200952/original{?expiration}"
+    },
+    "enclosure": {
+      "type": "audio/mpeg",
+      "href": "https://cms-staging.prx.tech/pub/ca4573e87715ed9181547179e25fc66b/0/web/audio_file/1200952/broadcast/sampleMP3_Cheerleader.mp3"
+    },
+    "curies": [
+      {
+        "templated": true,
+        "href": "http://meta.prx.org/relation/{rel}",
+        "name": "prx"
+      }
+    ],
+    "profile": {
+      "href": "http://meta.prx.org/model/audio-file"
+    },
+    "self": {
+      "profile": "http://meta.prx.org/model/audio-file",
+      "href": "/api/v1/audio_files/1200952"
+    }
+  }
+}

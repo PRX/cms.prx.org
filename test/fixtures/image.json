@@ -1,4 +1,9 @@
 {
+  "id": 17051,
+  "filename": "99-1400.png",
+  "caption": "",
+  "credit": "",
+  "size": 28049,
   "_links": {
     "curies": [
       {
@@ -22,10 +27,5 @@
       "href": "/api/v1/series/12345/image",
       "profile": "http://meta.prx.org/model/image/series"
     }
-  },
-  "caption": "",
-  "credit": "",
-  "filename": "99-1400.png",
-  "id": 17051,
-  "size": 28049
+  }
 }

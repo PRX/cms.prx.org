@@ -37,32 +37,32 @@ describe FeederImporter do
       to_return(status: 200, body: json_file('podcast_distribution'), headers: {})
   }
 
-  it 'importer has account and feed' do
-    importer.feeder_podcast_path.must_equal feeder_path
-    importer.cms_account_path.must_equal account_path
-  end
-
-  it 'can retrieve the podcast from feeder' do
-    importer.stub(:get_account_token, 'thisisnotatoken') do
-      podcast = importer.get_feeder_podcast(feeder_path)
-      podcast.wont_be_nil
-    end
-  end
-
-  it 'creates a series based on a feeder podcast' do
-    podcast = api_resource(JSON.parse(json_file('99pi')), 'http://feeder.prx.tech/api/v1')
-    importer.stub(:get_account_token, 'thisisnotatoken') do
-      series = importer.create_series(podcast)
-      series.wont_be_nil
-    end
-  end
-
-  it 'creates a podcast distribution' do
-    podcast = api_resource(JSON.parse(json_file('99pi')), 'http://feeder.prx.tech/api/v1')
-    series = api_resource(JSON.parse(json_file('99pi_series')), 'http://cms.prx.org/api/v1')
-    importer.stub(:get_account_token, 'thisisnotatoken') do
-      series = importer.create_distribution(podcast, series)
-      series.wont_be_nil
-    end
-  end
+  # it 'importer has account and feed' do
+  #   importer.feeder_podcast_path.must_equal feeder_path
+  #   importer.cms_account_path.must_equal account_path
+  # end
+  #
+  # it 'can retrieve the podcast from feeder' do
+  #   importer.stub(:get_account_token, 'thisisnotatoken') do
+  #     podcast = importer.get_feeder_podcast(feeder_path)
+  #     podcast.wont_be_nil
+  #   end
+  # end
+  #
+  # it 'creates a series based on a feeder podcast' do
+  #   podcast = api_resource(JSON.parse(json_file('99pi')), 'http://feeder.prx.tech/api/v1')
+  #   importer.stub(:get_account_token, 'thisisnotatoken') do
+  #     series = importer.create_series(podcast)
+  #     series.wont_be_nil
+  #   end
+  # end
+  #
+  # it 'creates a podcast distribution' do
+  #   podcast = api_resource(JSON.parse(json_file('99pi')), 'http://feeder.prx.tech/api/v1')
+  #   series = api_resource(JSON.parse(json_file('99pi_series')), 'http://cms.prx.org/api/v1')
+  #   importer.stub(:get_account_token, 'thisisnotatoken') do
+  #     series = importer.create_distribution(podcast, series)
+  #     series.wont_be_nil
+  #   end
+  # end
 end

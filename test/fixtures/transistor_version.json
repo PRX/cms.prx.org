@@ -1,0 +1,25 @@
+{
+  "id": 400094,
+  "label": "Podcast Audio",
+  "explicit": "clean",
+  "_links": {
+    "profile": {
+      "href": "http://meta.prx.org/model/audio-version"
+    },
+    "prx:audio": {
+      "count": 1,
+      "href": "/api/v1/audio_versions/400094/audio_files"
+    },
+    "self": {
+      "profile": "http://meta.prx.org/model/audio-version",
+      "href": "/api/v1/audio_versions/400094"
+    },
+    "curies": [
+      {
+        "templated": true,
+        "name": "prx",
+        "href": "http://meta.prx.org/relation/{rel}"
+      }
+    ]
+  }
+}

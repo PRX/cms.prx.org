@@ -1,0 +1,44 @@
+{
+  "id": 172,
+  "label": "Podcast Audio",
+  "lengthMinimum": 0,
+  "lengthMaximum": 0,
+  "_links": {
+    "self": {
+      "href": "/api/v1/audio_version_templates/172",
+      "profile": "http://meta.prx.org/model/audio-version-template"
+    },
+    "curies": [
+      {
+        "name": "prx",
+        "href": "http://meta.prx.org/relation/{rel}",
+        "templated": true
+      }
+    ],
+    "profile": {
+      "href": "http://meta.prx.org/model/audio-version-template"
+    },
+    "prx:audio-file-templates": {
+      "count": 0,
+      "href": "/api/v1/audio_version_templates/172/audio_file_templates"
+    }
+  },
+  "_embedded": {
+    "prx:audio-file-templates": {
+      "count": 0,
+      "_links": {
+        "profile": {
+          "href": "http://meta.prx.org/model/collection/audio-file-template"
+        },
+        "self": {
+          "profile": "http://meta.prx.org/model/collection/audio-file-template",
+          "href": "/api/v1/audio_version_templates/172/audio_file_templates"
+        }
+      },
+      "_embedded": {
+        "prx:items": []
+      },
+      "total": 0
+    }
+  }
+}

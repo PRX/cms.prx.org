@@ -6,7 +6,7 @@ require 'feedjira'
 class PodcastImporter
   include PRXAccess
 
-  attr_accessor :cms_account_path, :podcast_url
+  attr_accessor :cms_account_path, :podcast_url, :series, :template
 
   def initialize(account, podcast_url)
     self.cms_account_path = account
@@ -22,7 +22,7 @@ class PodcastImporter
     feed = rss_feed
 
     # Create the series
-    series = create_series(feed)
+    self.series = create_series(feed)
 
     # Create the podcast distribution
     distribution = create_distribution(feed, series)
@@ -47,13 +47,15 @@ class PodcastImporter
   end
 
   def create_series(podcast)
+    # make an api client for the account
+    client = api(root: cms_root, account: cms_account_path).get
+
+    # create the series
     series_attributes = {
       title: podcast.title,
       short_description: podcast.itunes_subtitle,
       description: podcast.description
     }
-
-    client = api(root: cms_root, account: cms_account_path).get
     series = client.series.first.post(series_attributes)
 
     # Add images to the series
@@ -65,6 +67,10 @@ class PodcastImporter
       series.images.post(upload: podcast.image.url, purpose: Image::THUMBNAIL)
     end
 
+    # Add the template and a single file template
+    self.template = series.audio_version_templates.post(label: 'Podcast Audio')
+    template.audio_file_templates.post(position: 1, label: 'Segment 1')
+
     series
   end
 
@@ -73,26 +79,50 @@ class PodcastImporter
   end
 
   def create_stories(feed, series)
-    feed.entries.each do |entry|
+    feed.entries[0..0].each do |entry|
       story = create_story(entry, series)
       update_entry(story, entry)
     end
   end
 
   def create_story(entry, series)
-    # create the story
-    #   distribution should be auto created
-    series.stories.post(title: 'test title')
+    # create the story - distribution should be auto created
+    story_attributes = {
+      title: 'test title'
+    }
+    story = series.stories.post(story_attributes)
+
+    # add the audio version
+    version_attributes = {
+      label: 'Podcast Audio',
+      explicit: 'clean'
+    }
+
+    self_link = template.links['self'].href
+    version = story.audio_versions.post(set_audio_version_template: self_link)
 
     # add the audio
+    version.audio.post(upload: 'http://some.audio/file.mp3')
 
     # add the image
+    story.images.post(upload: 'http://some.image/file.png')
+
+    story
   end
 
   def update_entry(story, entry)
     # find the distro from the story
+    distributions = story.response_object['_embedded']['prx:distributions']['_embedded']['prx:items']
+    distributions ||= story.distributions.get
+    distro = distributions.detect { |d| d['kind'] == 'episode' }
+
     # retrieve the episode from feeder
+    episode = api(root: distro['url'], headers: story.headers).get
+
     # update the episode guid and other attributes
+    episode.attributes[:guid] = entry.entry_id
+    episode.put
+    episode
   end
 
   def uri

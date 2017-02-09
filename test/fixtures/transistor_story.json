@@ -198,7 +198,7 @@
       "_embedded": {
         "prx:items": [
           {
-            "url": "https://feeder-staging.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03",
+            "url": "https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03",
             "_links": {
               "prx:story": {
                 "title": "Title",
