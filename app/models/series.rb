@@ -153,6 +153,6 @@ class Series < BaseModel
   end
 
   def update_account_for_stories
-    stories.each {|s| s.update_attributes!(account_id: account_id)} if account_id_changed?
+    stories.each { |s| s.update_attributes!(account_id: account_id) } if account_id_changed?
   end
 end
