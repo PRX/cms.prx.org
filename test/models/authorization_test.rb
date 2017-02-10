@@ -23,4 +23,22 @@ describe Authorization do
     authorization.authorized?(account).must_equal true
     authorization.authorized?(unauth_account).must_equal false
   end
+
+  it 'implements to_model' do
+    authorization.token.attributes = {aur: [1,2,3], uid: 1 }
+    authorization.cache_key.must_equal 'c/authorizations/b9c423a32f16a0997c5c5de0bf906027'
+  end
+
+  it 'implements to_model' do
+    authorization.to_model.must_equal authorization
+  end
+
+  it 'is never persisted' do
+    authorization.wont_be :persisted?
+  end
+
+  it 'will be a root resource based on options' do
+    authorization.is_root_resource = false
+    authorization.is_root_resource.must_equal false
+  end
 end
