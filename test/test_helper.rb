@@ -63,7 +63,7 @@ reset_announce
 
 StubToken = Struct.new(:resource, :scopes, :user_id)
 class StubToken
-  attr_accessor :authorized_resources
+  attr_accessor :authorized_resources, :attributes
   @@fake_user_id = 0
 
   def initialize(res, scopes, explicit_user_id = nil)
