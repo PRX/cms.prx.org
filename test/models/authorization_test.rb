@@ -25,7 +25,7 @@ describe Authorization do
   end
 
   it 'implements to_model' do
-    authorization.token.attributes = {aur: [1,2,3], uid: 1 }
+    authorization.token.attributes = { aur: [1,2,3], uid: 1 }
     authorization.cache_key.must_equal 'c/authorizations/b9c423a32f16a0997c5c5de0bf906027'
   end
 
