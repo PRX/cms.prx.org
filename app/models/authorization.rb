@@ -1,6 +1,9 @@
 # encoding: utf-8
 
 class Authorization
+  extend ActiveModel::Naming
+  include RepresentedModel
+
   attr_accessor :token
   attr_reader :token_auth_accounts
 
@@ -31,5 +34,17 @@ class Authorization
 
   def authorized?(account)
     token_auth_accounts.include?(account)
+  end
+
+  def cache_key
+    token
+  end
+
+  def to_model
+    self
+  end
+
+  def persisted?
+    false
   end
 end
