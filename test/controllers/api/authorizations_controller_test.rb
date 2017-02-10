@@ -17,4 +17,10 @@ describe Api::AuthorizationsController do
     assert_response :unauthorized
   end
 
+  it 'is successful with a valid token' do
+    @controller.stub(:prx_auth_token, token) do
+      get(:show, api_version: 'v1')
+      assert_response :success
+    end
+  end
 end
