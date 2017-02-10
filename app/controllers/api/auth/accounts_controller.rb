@@ -14,6 +14,6 @@ class Api::Auth::AccountsController < Api::AccountsController
   end
 
   def resources_base
-    @accounts ||= current_user.approved_accounts
+    authorization.token_auth_accounts
   end
 end

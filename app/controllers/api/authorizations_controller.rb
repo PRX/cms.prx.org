@@ -10,6 +10,6 @@ class Api::AuthorizationsController < Api::BaseController
   private
 
   def resource
-    current_user
+    authorization
   end
 end

@@ -38,10 +38,4 @@ describe User do
   it 'has a list of networks' do
     user.networks.must_include network
   end
-
-  it 'has a list of stories for approved accounts' do
-    start_count = user.individual_account.stories.count
-    create(:account, user: user, stories_count: 2)
-    user.approved_account_stories.count.must_equal start_count + 2
-  end
 end
