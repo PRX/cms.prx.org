@@ -33,39 +33,41 @@ describe PodcastImporter do
     end
   end
 
-  it 'retrieves the feed' do
-    feed = importer.rss_feed
-    feed.title.must_equal 'Transistor'
-    feed.entries.count.must_equal 1
-  end
+  describe 'import' do
+    it 'retrieves the feed' do
+      feed = importer.rss_feed
+      feed.title.must_equal 'Transistor'
+      feed.entries.count.must_equal 1
+    end
 
-  it 'creates a series' do
-    series, template = importer.create_series(feed)
-    series.attributes.title.must_equal 'Transistor'
-    template.wont_be_nil
-  end
+    it 'creates a series' do
+      series, template = importer.create_series(feed)
+      series.attributes.title.must_equal 'Transistor'
+      template.wont_be_nil
+    end
 
-  it 'creates a podcast distribution' do
-    distribution = importer.create_distribution(series, template)
-    distribution.links[:podcast].href.must_equal 'https://feeder.prx.tech/api/v1/podcasts/51'
-  end
+    it 'creates a podcast distribution' do
+      distribution = importer.create_distribution(series, template)
+      distribution.links[:podcast].href.must_equal 'https://feeder.prx.tech/api/v1/podcasts/51'
+    end
 
-  it 'updates the podcast attributes' do
-    podcast = importer.update_podcast(series, distribution, feed)
-    podcast.must_be :explicit
-  end
+    it 'updates the podcast attributes' do
+      podcast = importer.update_podcast(distribution, feed)
+      podcast.must_be :explicit
+    end
 
-  it 'creates the stories for the feed entries' do
-    importer.template = template
-    stories = importer.create_stories(feed, series)
-    stories.wont_be_nil
-    stories.count.must_equal 1
-  end
+    it 'creates the stories for the feed entries' do
+      importer.template = template
+      stories = importer.create_stories(feed, series)
+      stories.wont_be_nil
+      stories.count.must_equal 1
+    end
 
-  it 'imports a podcast' do
-    importer.import.must_equal true
-    importer.series.wont_be_nil
-    importer.stories.count.must_equal 1
+    it 'imports a podcast' do
+      importer.import.must_equal true
+      importer.series.wont_be_nil
+      importer.stories.count.must_equal 1
+    end
   end
 end
 
@@ -148,14 +150,15 @@ def stub_requests
     to_return(status: 200, body: json_file('transistor_story'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/stories/186929/audio_versions').
-    with(body: '{"setAudioVersionTemplate":"/api/v1/audio_version_templates/172"}',
+    with(body: '{"setAudioVersionTemplate":"/api/v1/audio_version_templates/172",' +
+               '"label":"Podcast Audio","explicit":null}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_version'), headers: {})
 
-  a = '{"upload":"https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor' +
-      '/cdn-transistor.prx.org/wp-content/uploads/Smithsonian3_Transistor.mp3"}'
   stub_request(:post, 'https://cms.prx.org/api/v1/audio_versions/400094/audio_files').
-    with(body: a, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    with(body: '{"upload":"https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor' +
+               '/cdn-transistor.prx.org/wp-content/uploads/Smithsonian3_Transistor.mp3"}',
+         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_audio'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/stories/186929/images').
@@ -178,12 +181,12 @@ def stub_requests
     with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_episode'), headers: {})
 
-  e = '{"guid":"https://transistor.prx.org/?p=1286","title":' +
-      '"Sidedoor from the Smithsonian: Shake it Up","author":{"name":"PRX","email":null},' +
-      '"block":false,"explicit":null,"isClosedCaptioned":false,"isPermaLink":"false",' +
-      '"keywords":[],"position":null,"url":' +
-      '"https://transistor.prx.org/2017/01/sidedoor-from-the-smithsonian-shake-it-up/"}'
   stub_request(:put, 'https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03').
-    with(body: e, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    with(body: '{"guid":"https://transistor.prx.org/?p=1286","title":"Sidedoor from the ' +
+               'Smithsonian: Shake it Up","author":{"name":"PRX","email":null},' +
+               '"block":false,"explicit":null,"isClosedCaptioned":false,"isPermaLink":"false",' +
+               '"keywords":[],"position":null,"url":' +
+               '"https://transistor.prx.org/2017/01/sidedoor-from-the-smithsonian-shake-it-up/"}',
+         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_episode'), headers: {})
 end

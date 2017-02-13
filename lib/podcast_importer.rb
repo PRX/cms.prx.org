@@ -28,7 +28,7 @@ class PodcastImporter
     distribution = create_distribution(series, template)
 
     # Update podcast attributes
-    podcast = update_podcast(series, distribution, feed)
+    podcast = update_podcast(distribution, feed)
 
     # Create the episodes
     self.stories = create_stories(feed, series)
@@ -87,7 +87,7 @@ class PodcastImporter
     series.distributions.post(kind: 'podcast', set_audio_version_template: template_link)
   end
 
-  def update_podcast(series, distribution, feed)
+  def update_podcast(distribution, feed)
     podcast = api(root: distribution.podcast.href, headers: distribution.headers).get
 
     %w(copyright language update_frequency update_period).each do |atr|
@@ -171,13 +171,14 @@ class PodcastImporter
     story = series.stories.post(story_attributes)
 
     # add the audio version
+    self_link = template.links['self'].href
     version_attributes = {
+      set_audio_version_template: self_link,
       label: 'Podcast Audio',
-      explicit: 'clean'
+      explicit: entry[:itunes_explicit]
     }
 
-    self_link = template.links['self'].href
-    version = story.audio_versions.post(set_audio_version_template: self_link)
+    version = story.audio_versions.post(version_attributes)
 
     # add the audio
     enclosure = enclosure_url(entry)
