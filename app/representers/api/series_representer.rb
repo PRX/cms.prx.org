@@ -41,7 +41,7 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   end
   embed :images, paged: true, item_class: SeriesImage, item_decorator: Api::ImageRepresenter
 
-  link :account do
+  link rel: :account, writeable: true do
     {
       href: api_account_path(represented.account),
       title: represented.account.name,

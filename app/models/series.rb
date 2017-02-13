@@ -37,6 +37,7 @@ class Series < BaseModel
   has_many :images, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
 
   before_validation :set_app_version, on: :create
+  after_save :update_account_for_stories, on: :update
 
   event_attribute :subscriber_only_at
 
@@ -149,5 +150,9 @@ class Series < BaseModel
   def set_app_version
     return unless new_record?
     self.app_version = PRX::APP_VERSION
+  end
+
+  def update_account_for_stories
+    stories.each { |s| s.update_attributes!(account_id: account_id) } if account_id_changed?
   end
 end

@@ -4,7 +4,9 @@ describe Api::AuthorizationRepresenter do
 
   let(:user) { create(:user) }
   let(:account) { user.default_account }
-  let(:representer) { Api::AuthorizationRepresenter.new(user) }
+  let(:token) { StubToken.new(account.id, 'admin', user.id) }
+  let(:authorization) { Authorization.new(token) }
+  let(:representer) { Api::AuthorizationRepresenter.new(authorization) }
   let(:json) { JSON.parse(representer.to_json) }
 
   def get_link(rel, key = 'href')
