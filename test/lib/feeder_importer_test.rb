@@ -9,31 +9,31 @@ describe FeederImporter do
   let(:importer) { FeederImporter.new(account_path, feeder_path) }
 
   before {
-    stub_request(:get, "http://feeder.prx.tech/api/v1/podcasts/23").
-      with(headers: {'Accept'=>'application/json', 'Authorization'=>'Bearer thisisnotatoken', 'Content-Type'=>'application/json'}).
+    stub_request(:get, 'http://feeder.prx.tech/api/v1/podcasts/23').
+      with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('99pi'), headers: {})
 
-    stub_request(:get, "https://cms.prx.org/api/v1").
-      with(headers: {'Accept'=>'application/json', 'Authorization'=>'Bearer thisisnotatoken', 'Content-Type'=>'application/json'}).
+    stub_request(:get, 'https://cms.prx.org/api/v1').
+      with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('cms_root'), headers: {})
 
-    stub_request(:post, "https://cms.prx.org/api/v1/series/").
-      with(body: "{\"title\":\"99% Invisible\",\"short_description\":\"A tiny radio show about design, architecture & the 99% invisible activity that shapes our world.\",\"description\":\"Design is everywhere in our lives, perhaps most importantly in the places where we’ve just stopped noticing. 99% Invisible is a weekly exploration of the process and power of design and architecture. From award winning producer Roman Mars. Learn more at <a href=\\\"http://99percentinvisible.org\\\">99percentinvisible.org</a>.<br/> A proud member of Radiotopia, from PRX. Learn more at <a href=\\\"http://radiotopia.fm/\\\">radiotopia.fm</a>.\"}",
-           headers: {'Accept'=>'application/json', 'Authorization'=>'Bearer thisisnotatoken', 'Content-Type'=>'application/json'}).
+    stub_request(:post, 'https://cms.prx.org/api/v1/series/').
+      with(body: '{"title":"99% Invisible","short_description":"A tiny radio show about design, architecture & the 99% invisible activity that shapes our world.","description":"Design is everywhere in our lives, perhaps most importantly in the places where we’ve just stopped noticing. 99% Invisible is a weekly exploration of the process and power of design and architecture. From award winning producer Roman Mars. Learn more at <a href="http://99percentinvisible.org">99percentinvisible.org</a>.<br/> A proud member of Radiotopia, from PRX. Learn more at <a href="http://radiotopia.fm/">radiotopia.fm</a>."}',
+           headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('99pi_series'), headers: {})
 
-    stub_request(:post, "https://cms.prx.org/api/v1/series/12345/image").
-      with(body: "{\"upload\":\"http://cdn-99percentinvisible.prx.org/wp-content/uploads/powerpress/99-1400.png\"}",
-           headers: {'Accept'=>'application/json', 'Authorization'=>'Bearer thisisnotatoken', 'Content-Type'=>'application/json'}).
+    stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/image').
+      with(body: '{"upload":"http://cdn-99percentinvisible.prx.org/wp-content/uploads/powerpress/99-1400.png"}',
+           headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('image'), headers: {})
 
-    stub_request(:get, "http://cms.prx.org/api/v1/series/12345/distributions").
-      with(headers: {'Accept'=>'application/json', 'Content-Type'=>'application/json'}).
+    stub_request(:get, 'http://cms.prx.org/api/v1/series/12345/distributions').
+      with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('distributions_empty'), headers: {})
 
-    stub_request(:post, "http://cms.prx.org/api/v1/series/12345/distributions").
-      with(body: "{\"kind\":\"podcast\",\"url\":\"http://feeder.prx.tech/api/v1/podcasts/23\"}",
-           headers: {'Accept'=>'application/json', 'Content-Type'=>'application/json'}).
+    stub_request(:post, 'http://cms.prx.org/api/v1/series/12345/distributions').
+      with(body: '{"kind":"podcast","url":"http://feeder.prx.tech/api/v1/podcasts/23"}',
+           headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('podcast_distribution'), headers: {})
   }
 
