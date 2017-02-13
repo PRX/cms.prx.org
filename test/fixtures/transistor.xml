@@ -27,7 +27,7 @@
 		<itunes:summary>Transistor is podcast of scientific curiosities and current events, featuring guest hosts, scientists, and story-driven reporters. Presented by radio and podcast powerhouse PRX, with support from the Sloan Foundation.</itunes:summary>
 		<itunes:author>PRX</itunes:author>
 		<itunes:explicit>clean</itunes:explicit>
-		<itunes:image href="https://cdn-transistor.prx.org/wp-content/uploads/powerpress/transistor1400.jpg"/>
+		<itunes:image href="https://cdn-transistor.prx.org/transistor1400.jpg"/>
 		<itunes:owner>
 			<itunes:name>PRX</itunes:name>
 			<itunes:email>prxwpadmin@prx.org</itunes:email>
@@ -37,14 +37,14 @@
 		<itunes:subtitle>A podcast of scientific questions and stories featuring guest hosts and reporters.</itunes:subtitle>
 		<image>
 			<title>Transistor</title>
-			<url>http://cdn-transistor.prx.org/wp-content/uploads/powerpress/transistor300.png</url>
+			<url>http://cdn-transistor.prx.org/transistor300.png</url>
 			<link>https://transistor.prx.org</link>
 		</image>
 		<itunes:category text="Science &amp; Medicine">
 			<itunes:category text="Natural Sciences"/>
 		</itunes:category>
 		<googleplay:category text="Science &amp; Medicine"/>
-		<googleplay:image href="http://cdn-transistor.prx.org/wp-content/uploads/powerpress/transistor1400.jpg"/>
+		<googleplay:image href="http://cdn-transistor.prx.org/transistor1400.jpg"/>
 		<rawvoice:subscribe feed="http://transistor.prx.org/feed/podcast/" itunes="https://itunes.apple.com/us/podcast/transistor/id964305817?at=10l9zE"/>
 		<site xmlns="com-wordpress:feed-additions:1">85675297</site>
 		<atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="http://feeds.prx.org/transistor_stem"/><feedburner:info uri="transistor_stem"/><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/"/>
@@ -75,7 +75,7 @@
 			<post-id xmlns="com-wordpress:feed-additions:1">1286</post-id>
 			<feedburner:origLink>https://transistor.prx.org/2017/01/sidedoor-from-the-smithsonian-shake-it-up/</feedburner:origLink><enclosure url="http://feeds.prx.org/~r/transistor_stem/~5/7X0iW0LgXWg/Smithsonian3_Transistor.mp3" length="29714854" type="audio/mpeg"/>
 			<feedburner:origEnclosureLink>https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/cdn-transistor.prx.org/wp-content/uploads/Smithsonian3_Transistor.mp3</feedburner:origEnclosureLink>
-			<itunes:image href="https://cdn-transistor.prx.org/wp-content/uploads/shake.jpg"/>
+			<itunes:image href="https://cdn-transistor.prx.org/shake.jpg"/>
 		</item>
 	</channel>
 </rss>

@@ -39,7 +39,7 @@ class PodcastImporter
 
   def rss_feed
     response = connection.get(uri.path, uri.query_values)
-    feed = Feedjira::Feed.parse(response.body)
+    Feedjira::Feed.parse(response.body)
   end
 
   def create_series(podcast)
@@ -195,12 +195,15 @@ class PodcastImporter
 
   def update_entry(story, entry)
     # find the distro from the story
-    distributions = story.body['_embedded']['prx:distributions']['_embedded']['prx:items']
-    distributions ||= story.distributions.get
-    distro = distributions.detect { |d| d['kind'] == 'episode' }
+    distributions = story.distributions.get
+    distro = distributions.detect { |d| d.attributes['kind'] == 'episode' }
+
+    # set the guid into the distro, so we can look later for it
+    distro.attributes[:guid] = entry.entry_id
+    distro.put
 
     # retrieve the episode from feeder
-    episode = api(root: distro['url'], headers: story.headers).get
+    episode = api(root: distro.attributes['url'], headers: story.headers).get
 
     # update the episode guid and other attributes
     episode.attributes[:author] = person(entry[:itunes_author] || entry[:author] || entry[:creator])
