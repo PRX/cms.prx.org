@@ -87,8 +87,7 @@ def stub_requests
       '"description":"A podcast of scientific questions and stories, with many episodes hosted' +
       ' by key scientists at the forefront of discovery."}'
   stub_request(:post, 'https://cms.prx.org/api/v1/series/').
-    with(body: s,
-         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    with(body: s, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_series'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/images').
@@ -130,8 +129,7 @@ def stub_requests
       '"itunesCategories":["Science & Medicine","Natural Sciences"],"categories":[],' +
       '"complete":false,"keywords":[]}'
   stub_request(:put, 'https://feeder.prx.tech/api/v1/podcasts/51').
-    with(body: p,
-         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    with(body: p, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 
   u = '{"title":"Sidedoor from the Smithsonian: Shake it Up",' +
@@ -146,20 +144,18 @@ def stub_requests
       'Smithsonian: Shake it Up</span></a>",' +
       '"tags":["Indie Features"],"releasedAt":"2017-01-20T03:04:12.000Z"}'
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/stories').
-    with(body: u,
-         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    with(body: u, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_story'), headers: {})
 
-  stub_request(:post, "https://cms.prx.org/api/v1/stories/186929/audio_versions").
+  stub_request(:post, 'https://cms.prx.org/api/v1/stories/186929/audio_versions').
     with(body: '{"setAudioVersionTemplate":"/api/v1/audio_version_templates/172"}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_version'), headers: {})
 
-  audio_create = '{"upload":"https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor' +
-    '/cdn-transistor.prx.org/wp-content/uploads/Smithsonian3_Transistor.mp3"}'
+  a = '{"upload":"https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor' +
+      '/cdn-transistor.prx.org/wp-content/uploads/Smithsonian3_Transistor.mp3"}'
   stub_request(:post, 'https://cms.prx.org/api/v1/audio_versions/400094/audio_files').
-    with(body: audio_create,
-         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    with(body: a, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_audio'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/stories/186929/images').
@@ -187,8 +183,7 @@ def stub_requests
       '"block":false,"explicit":null,"isClosedCaptioned":false,"isPermaLink":"false",' +
       '"keywords":[],"position":null,"url":' +
       '"https://transistor.prx.org/2017/01/sidedoor-from-the-smithsonian-shake-it-up/"}'
-  stub_request(:put, "https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03").
-    with(body: e,
-         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+  stub_request(:put, 'https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03').
+    with(body: e, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_episode'), headers: {})
 end

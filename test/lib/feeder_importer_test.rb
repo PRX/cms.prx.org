@@ -23,7 +23,7 @@ describe FeederImporter do
       to_return(status: 200, body: json_file('99pi_series'), headers: {})
 
     stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/image').
-      with(body: '{"upload":"http://cdn-99percentinvisible.prx.org/wp-content/uploads/powerpress/99-1400.png"}',
+      with(body: '{"upload":"http://cdn-99percentinvisible.prx.org/99-1400.png"}',
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('image'), headers: {})
 
