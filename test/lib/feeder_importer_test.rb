@@ -8,7 +8,7 @@ describe FeederImporter do
   let(:feeder_path) { '/api/v1/podcasts/23' }
   let(:importer) { FeederImporter.new(account_path, feeder_path) }
 
-  before {
+  before do
     stub_request(:get, 'http://feeder.prx.tech/api/v1/podcasts/23').
       with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('99pi'), headers: {})
@@ -35,7 +35,7 @@ describe FeederImporter do
       with(body: '{"kind":"podcast","url":"http://feeder.prx.tech/api/v1/podcasts/23"}',
            headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('podcast_distribution'), headers: {})
-  }
+  end
 
   # it 'importer has account and feed' do
   #   importer.feeder_podcast_path.must_equal feeder_path

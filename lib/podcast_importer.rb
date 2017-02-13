@@ -230,8 +230,8 @@ class PodcastImporter
 
   def connection
     conn_uri = "#{uri.scheme}://#{uri.host}:#{uri.port}"
-    client ||= Faraday.new(conn_uri) { |stack| stack.adapter :excon }.tap do |c|
-      c.headers[:user_agent] = "PRX CMS FeedValidator"
+    Faraday.new(conn_uri) { |stack| stack.adapter :excon }.tap do |c|
+      c.headers[:user_agent] = 'PRX CMS FeedValidator'
     end
   end
 end
