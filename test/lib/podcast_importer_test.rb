@@ -84,12 +84,12 @@ def stub_requests
     with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('cms_root'), headers: {})
 
-  s = '{"title":"Transistor","shortDescription":' +
-      '"A podcast of scientific questions and stories featuring guest hosts and reporters.",' +
-      '"description":"A podcast of scientific questions and stories, with many episodes hosted' +
-      ' by key scientists at the forefront of discovery."}'
   stub_request(:post, 'https://cms.prx.org/api/v1/series/').
-    with(body: s, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    with(body: '{"title":"Transistor","shortDescription":' +
+               '"A podcast of scientific questions and stories featuring guest hosts and ' +
+               'reporters.","description":"A podcast of scientific questions and stories, ' +
+               'with many episodes hosted by key scientists at the forefront of discovery."}',
+         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_series'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/images').
@@ -121,32 +121,32 @@ def stub_requests
     with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 
-  p = '{"id":51,"title":"Transistor","copyright":"Copyright 2016 PRX",' +
-      '"language":"en-US","updateFrequency":"1","updatePeriod":"hourly",' +
-      '"link":"https://transistor.prx.org","explicit":"clean",' +
-      '"newFeedUrl":"http://feeds.prx.org/transistor_stem","path":"transistor_stem",' +
-      '"author":{"name":"PRX","email":null},' +
-      '"managingEditor":{"name":"PRX","email":"prxwpadmin@prx.org"},' +
-      '"owners":[{"name":"PRX","email":"prxwpadmin@prx.org"}],' +
-      '"itunesCategories":["Science & Medicine","Natural Sciences"],"categories":[],' +
-      '"complete":false,"keywords":[]}'
   stub_request(:put, 'https://feeder.prx.tech/api/v1/podcasts/51').
-    with(body: p, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    with(body: '{"id":51,"title":"Transistor","copyright":"Copyright 2016 PRX",' +
+               '"language":"en-US","updateFrequency":"1","updatePeriod":"hourly",' +
+               '"link":"https://transistor.prx.org","explicit":"clean",' +
+               '"newFeedUrl":"http://feeds.prx.org/transistor_stem","path":"transistor_stem",' +
+               '"author":{"name":"PRX","email":null},' +
+               '"managingEditor":{"name":"PRX","email":"prxwpadmin@prx.org"},' +
+               '"owners":[{"name":"PRX","email":"prxwpadmin@prx.org"}],' +
+               '"itunesCategories":["Science & Medicine","Natural Sciences"],"categories":[],' +
+               '"complete":false,"keywords":[]}',
+    headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 
-  u = '{"title":"Sidedoor from the Smithsonian: Shake it Up",' +
-      '"shortDescription":"An astronomer has turned the night sky into a symphony.",' +
-      '"description":"For the next few episodes, we’re featuring the ' +
-      'Smithsonian’s new series, Sidedoor, about where science, art, history, and humanity ' +
-      'unexpectedly overlap — just like in their museums. In this episode: an astronomer has ' +
-      'turned the night sky into a symphony; an architecture firm has radically re-thought ' +
-      'police stations; and an audiophile builds a successful record … ' +
-      '<a href=\"https://transistor.prx.org/2017/01/sidedoor-from-the-smithsonian-shake-it-up/\" ' +
-      'class=\"more-link\">Continue reading <span class=\"screen-reader-text\">Sidedoor from the ' +
-      'Smithsonian: Shake it Up</span></a>",' +
-      '"tags":["Indie Features"],"releasedAt":"2017-01-20T03:04:12.000Z"}'
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/stories').
-    with(body: u, headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    with(body: '{"title":"Sidedoor from the Smithsonian: Shake it Up",' +
+               '"shortDescription":"An astronomer has turned the night sky into a symphony.",' +
+               '"description":"For the next few episodes, we’re featuring the ' +
+               'Smithsonian’s new series, Sidedoor, about where science, art, history, and ' +
+               'humanity unexpectedly overlap — just like in their museums. In this episode: ' +
+               'an astronomer has turned the night sky into a symphony; an architecture firm ' +
+               'has radically re-thought police stations; and an audiophile builds a successful ' +
+               'record … <a href=\"https://transistor.prx.org/2017/01/sidedoor-from-the-' +
+               'smithsonian-shake-it-up/\" class=\"more-link\">Continue reading <span class=' +
+               '\"screen-reader-text\">Sidedoor from the Smithsonian: Shake it Up</span></a>",' +
+               '"tags":["Indie Features"],"releasedAt":"2017-01-20T03:04:12.000Z"}',
+         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_story'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/stories/186929/audio_versions').
