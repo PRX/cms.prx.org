@@ -74,6 +74,28 @@ describe Api::SeriesController do
       new_series.account_id.must_equal account.id
     end
 
+    it 'creates a series with set account uri' do
+      series_params = {
+        title: 'foobar',
+        set_account_uri: "/api/v1/accounts/#{account.id}"
+      }
+      post :create, series_params.to_json, api_version: 'v1'
+      assert_response :success
+      new_series = Series.find(JSON.parse(response.body)['id'])
+      new_series.title.must_equal 'foobar'
+      new_series.must_be :v4?
+      new_series.account_id.must_equal account.id
+    end
+
+    it 'creates a series with no account specified' do
+      post :create, { title: 'foobar' }.to_json, api_version: 'v1'
+      assert_response :success
+      new_series = Series.find(JSON.parse(response.body)['id'])
+      new_series.title.must_equal 'foobar'
+      new_series.must_be :v4?
+      new_series.account_id.must_equal account.id
+    end
+
     it 'updates a series' do
       Series.find(series.id).title.wont_equal('foobar')
       put :update, { title: 'foobar' }.to_json, api_version: 'v1', id: series.id

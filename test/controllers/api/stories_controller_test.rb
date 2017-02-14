@@ -3,20 +3,23 @@
 require 'test_helper'
 
 describe Api::StoriesController do
-  let(:series) { create(:series) }
+  let(:account) { create(:account) }
+  let(:series) { create(:series, account: account) }
   let(:story) { create(:story, series: series) }
 
   before { Story.delete_all }
 
   describe 'editing' do
-
-    let(:account) { create(:account) }
-    let(:token) { StubToken.new(account.id, ['member']) }
+    let (:user) { create(:user) }
+    let (:token) { StubToken.new(account.id, ['member'], user.id) }
 
     before(:each) do
       class << @controller; attr_accessor :prx_auth_token; end
       @controller.prx_auth_token = token
       @request.env['CONTENT_TYPE'] = 'application/json'
+
+      # for `create`, feeder calls don't need to work, but webmock needs a response defined
+      stub_request(:post, 'https://id.prx.org/token').to_return(status: 500)
     end
 
     it 'can create a new story' do
@@ -35,10 +38,26 @@ describe Api::StoriesController do
       Story.find(id).account_id.must_equal account.id
     end
 
-    it 'can create a new story and distributions' do
-      # feeder calls do't need to work, but webmock needs a response defined
-      stub_request(:post, 'https://id.prx.org/token').to_return(status: 500)
+    it 'can create a new story for a series' do
+      post :create,
+           { title: 'story' }.to_json,
+           api_version: 'v1',
+           series_id: series.id
+      assert_response :success
+      id = JSON.parse(response.body)['id']
+      Story.find(id).account_id.must_equal account.id
+    end
 
+    it 'can create a new story for a series' do
+      post :create,
+           { title: 'story', set_series_uri: "/api/v1/series/#{series.id}" }.to_json,
+           api_version: 'v1'
+      assert_response :success
+      id = JSON.parse(response.body)['id']
+      Story.find(id).account_id.must_equal account.id
+    end
+
+    it 'can create a new story and distributions' do
       series.wont_be_nil
       story_hash = {
         title: 'create story',

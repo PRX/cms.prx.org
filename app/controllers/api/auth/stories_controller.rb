@@ -41,13 +41,4 @@ class Api::Auth::StoriesController < Api::StoriesController
       authorization.token_auth_stories
     end
   end
-
-  def create_resource
-    super.tap do |story|
-      story.creator_id = current_user.id
-      story.account_id ||= story.series.try(:account_id)
-      story.account_id ||= current_user.account_id if authorization.authorized?(current_user.default_account)
-      story.account_id ||= authorization.token_auth_accounts.first.try(:id)
-    end
-  end
 end

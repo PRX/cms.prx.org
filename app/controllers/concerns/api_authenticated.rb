@@ -14,10 +14,6 @@ module ApiAuthenticated
     user_not_authorized unless current_user
   end
 
-  def authorization
-    Authorization.new(prx_auth_token)
-  end
-
   def cache_show?
     false
   end
@@ -25,5 +21,4 @@ module ApiAuthenticated
   def cache_index?
     false
   end
-
 end
