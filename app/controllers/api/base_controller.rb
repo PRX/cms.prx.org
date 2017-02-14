@@ -63,6 +63,10 @@ class Api::BaseController < ApplicationController
     @current_user = user
   end
 
+  def authorization
+    Authorization.new(prx_auth_token) if prx_auth_token
+  end
+
   private
 
   def user_not_authorized(exception = nil)
