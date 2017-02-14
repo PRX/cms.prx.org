@@ -80,11 +80,11 @@ def stub_requests
               body: '{"access_token":"thisisnotatoken","token_type":"bearer"}',
               headers: { 'Content-Type' => 'application/json; charset=utf-8' })
 
-  stub_request(:get, 'https://cms.prx.org/api/v1').
-    with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
-    to_return(status: 200, body: json_file('cms_root'), headers: {})
+  stub_request(:get, 'https://cms.prx.org/api/v1/accounts/8').
+    with(headers: { 'Authorization'=>'Bearer thisisnotatoken' }).
+    to_return(status: 200, body: json_file('account'), headers: {})
 
-  stub_request(:post, 'https://cms.prx.org/api/v1/series/').
+  stub_request(:post, 'https://cms.prx.org/api/v1/accounts/8/series').
     with(body: '{"title":"Transistor","shortDescription":' +
                '"A podcast of scientific questions and stories featuring guest hosts and ' +
                'reporters.","description":"A podcast of scientific questions and stories, ' +
@@ -103,12 +103,13 @@ def stub_requests
     to_return(status: 200, body: json_file('image'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/audio_version_templates').
-    with(body: '{"label":"Podcast Audio","explicit":"clean"}',
+    with(body: '{"label":"Podcast Audio","explicit":"clean","promos":false,' +
+               '"lengthMinimum":0,"lengthMaximum":0}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_template'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/audio_version_templates/172/audio_file_templates').
-    with(body: '{"position":1,"label":"Segment A"}',
+    with(body: '{"position":1,"label":"Segment A","lengthMinimum":0,"lengthMaximum":0}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_file_template'), headers: {})
 
@@ -129,8 +130,8 @@ def stub_requests
                '"author":{"name":"PRX","email":null},' +
                '"managingEditor":{"name":"PRX","email":"prxwpadmin@prx.org"},' +
                '"owners":[{"name":"PRX","email":"prxwpadmin@prx.org"}],' +
-               '"itunesCategories":["Science & Medicine","Natural Sciences"],"categories":[],' +
-               '"complete":false,"keywords":[]}',
+               '"itunesCategories":[{"name":"Science & Medicine","subcategories":["Natural Sciences"]}],' +
+               '"categories":[],"complete":false,"keywords":[]}',
     headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 

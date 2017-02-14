@@ -2,6 +2,7 @@
 require 'prx_access'
 require 'addressable/uri'
 require 'feedjira'
+require 'itunes_category_validator'
 
 class PodcastImporter
   include PRXAccess
@@ -44,10 +45,10 @@ class PodcastImporter
 
   def create_series(podcast)
     # make an api client for the account
-    client = api(root: cms_root, account: cms_account_path).get
+    account = api(root: cms_root, account: cms_account_path).tap { |c| c.href = cms_account_path }.get
 
     # create the series
-    series = client.series.first.post(
+    series = account.series.post(
       title: podcast.title,
       short_description: podcast.itunes_subtitle,
       description: podcast.description
@@ -71,12 +72,17 @@ class PodcastImporter
     # Add the template and a single file template
     self.template = series.audio_version_templates.post(
       label: 'Podcast Audio',
-      explicit: podcast.itunes_explicit
+      explicit: podcast.itunes_explicit,
+      promos: false,
+      length_minimum: 0,
+      length_maximum: 0
     )
 
     template.audio_file_templates.post(
       position: 1,
-      label: 'Segment A'
+      label: 'Segment A',
+      length_minimum: 0,
+      length_maximum: 0
     )
 
     [series, template]
@@ -136,7 +142,18 @@ class PodcastImporter
   end
 
   def parse_itunes_categories(feed)
-    Array(feed.itunes_categories).map(&:strip).select { |c| !c.blank? }
+    itunes_cats = {}
+    cats = Array(feed.itunes_categories).map(&:strip).select { |c| !c.blank? }
+    cats.each do |cat|
+      if ITunesCategoryValidator.is_category?(cat)
+        itunes_cats[cat] ||= []
+      elsif parent_cat = ITunesCategoryValidator.is_subcategory?(cat)
+        itunes_cats[parent_cat] ||= []
+        itunes_cats[parent_cat] << cat
+      end
+    end
+
+    itunes_cats.keys.map { |n| { name: n, subcategories: itunes_cats[n]} }
   end
 
   def parse_categories(feed)
