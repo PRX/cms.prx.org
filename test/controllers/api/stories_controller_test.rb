@@ -17,6 +17,9 @@ describe Api::StoriesController do
       class << @controller; attr_accessor :prx_auth_token; end
       @controller.prx_auth_token = token
       @request.env['CONTENT_TYPE'] = 'application/json'
+
+      # for `create`, feeder calls don't need to work, but webmock needs a response defined
+      stub_request(:post, 'https://id.prx.org/token').to_return(status: 500)
     end
 
     it 'can create a new story' do
@@ -36,8 +39,6 @@ describe Api::StoriesController do
     end
 
     it 'can create a new story for a series' do
-      stub_request(:post, 'https://id.prx.org/token').to_return(status: 500)
-
       post :create,
            { title: 'story' }.to_json,
            api_version: 'v1',
@@ -48,8 +49,6 @@ describe Api::StoriesController do
     end
 
     it 'can create a new story for a series' do
-      stub_request(:post, 'https://id.prx.org/token').to_return(status: 500)
-
       post :create,
            { title: 'story', set_series_uri: "/api/v1/series/#{series.id}" }.to_json,
            api_version: 'v1'
@@ -59,8 +58,6 @@ describe Api::StoriesController do
     end
 
     it 'can create a new story and distributions' do
-      stub_request(:post, 'https://id.prx.org/token').to_return(status: 500)
-
       series.wont_be_nil
       story_hash = {
         title: 'create story',
