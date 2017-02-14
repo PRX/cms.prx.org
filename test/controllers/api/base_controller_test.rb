@@ -7,13 +7,13 @@ describe Api::BaseController do
     assert_response :success
   end
 
-  it "determines show action options for roar" do
+  it 'determines show action options for roar' do
     @controller.class.resource_representer = 'rr'
     @controller.send(:show_options)[:represent_with].must_equal 'rr'
   end
 
-  it "can parse a zoom parameter" do
-    @controller.params[:zoom] = "a,test"
+  it 'can parse a zoom parameter' do
+    @controller.params[:zoom] = 'a,test'
     @controller.send(:zoom_param).must_equal ['a', 'test']
   end
 
@@ -22,20 +22,28 @@ describe Api::BaseController do
     response.status.must_equal 204
   end
 
-  describe "#current_user" do
-    it "returns nil if there is no current user" do
-      get(:entrypoint, api_version: "v1")
+  describe '#current_user' do
+    it 'returns nil if there is no current user' do
+      get(:entrypoint, api_version: 'v1')
 
       @controller.current_user.must_be_nil
     end
 
-    it "returns a user if there is one" do
+    it 'returns a user if there is one' do
       TokenData = Struct.new(:user_id)
       user = create(:user)
-      get(:entrypoint, api_version: "v1")
+      get(:entrypoint, api_version: 'v1')
       @request.env['prx.auth'] = TokenData.new(user.id)
 
       @controller.current_user.must_equal user
+    end
+
+    it 'builds an authorization from token' do
+      @controller.stub(:current_user, true) do
+        @controller.stub(:prx_auth_token, StubToken.new(123, 'admin', nil)) do
+          @controller.authorization.wont_be_nil
+        end
+      end
     end
   end
 end

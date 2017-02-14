@@ -34,13 +34,4 @@ describe ApiAuthenticated do
     err = assert_raises { controller.authenticate_user! }
     err.message.must_match /user_not_authorized/
   end
-
-  it 'builds an authorization from token' do
-    controller.stub(:current_user, true) do
-      controller.stub(:prx_auth_token, StubToken.new(123, 'admin', nil)) do
-        controller.authorization.wont_be_nil
-      end
-    end
-  end
-
 end
