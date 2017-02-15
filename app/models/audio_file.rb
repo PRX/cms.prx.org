@@ -51,6 +51,10 @@ class AudioFile < BaseModel
     [VALID, COMPLETE, TRANSFORMING, TRANSFORM_FAILED, TRANSFORMED].include? status
   end
 
+  def compliant_with_template?
+    audio_errors.nil?
+  end
+
   def validate_on_template
     template = audio_version.
                try(:audio_version_template).
@@ -62,10 +66,9 @@ class AudioFile < BaseModel
 
     errors = template.validate_audio_file_lengths(self)
     if errors.empty?
-      self.audio_status = VALID
       self.audio_errors = nil
     else
-      self.audio_status = INVALID
+      self.status = INVALID
       self.audio_errors = errors
     end
   end
