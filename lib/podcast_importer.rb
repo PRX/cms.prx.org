@@ -90,7 +90,7 @@ class PodcastImporter
 
   def create_distribution(series, template)
     template_link = template.links['self'].href
-    series.distributions.post(kind: 'podcast', set_audio_version_template: template_link)
+    series.distributions.post(kind: 'podcast', set_audio_version_template_uri: template_link)
   end
 
   def update_podcast(distribution, feed)
@@ -194,15 +194,17 @@ class PodcastImporter
       label: 'Podcast Audio',
       explicit: entry[:itunes_explicit]
     }
-
     version = story.audio_versions.post(version_attributes)
 
     # add the audio
     enclosure = enclosure_url(entry)
-    version.audio.post(upload: enclosure) if enclosure
+    version.audio.post(label: 'Segment A', upload: enclosure) if enclosure
 
     # add the image
     story.images.post(upload: entry.itunes_image) if entry.itunes_image
+
+    # publish this so the released_at gets set as the published_at
+    story.publish.post()
 
     story
   end
@@ -220,10 +222,8 @@ class PodcastImporter
     distro.attributes[:guid] = entry.entry_id
     distro.put
 
-    # retrieve the episode from feeder
-    episode = api(root: distro.attributes['url'], headers: story.headers).get
-
-    # update the episode guid and other attributes
+    # using authorized endpoint, update the episode guid and other attributes
+    episode = api(root: feeder_auth_url(distro.attributes['url']), headers: story.headers)
     episode.attributes[:author] = person(entry[:itunes_author] || entry[:author] || entry[:creator])
     episode.attributes[:block] = (entry[:itunes_block] == 'yes')
     episode.attributes[:explicit] = entry[:itunes_explicit]
@@ -235,6 +235,14 @@ class PodcastImporter
     episode.attributes[:url] = episode_url(entry)
     episode.put
     episode
+  end
+
+  def feeder_auth_url(url)
+    result = url
+    if url && !url.match(/authorization/)
+      result = url.gsub('/episodes/', '/authorization/episodes/')
+    end
+    result
   end
 
   def episode_url(entry)

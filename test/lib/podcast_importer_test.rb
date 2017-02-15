@@ -114,7 +114,7 @@ def stub_requests
     to_return(status: 200, body: json_file('transistor_file_template'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/distributions').
-    with(body: '{"kind":"podcast","setAudioVersionTemplate":"/api/v1/audio_version_templates/172"}',
+    with(body: '{"kind":"podcast","setAudioVersionTemplateUri":"/api/v1/audio_version_templates/172"}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('podcast_distribution'), headers: {})
 
@@ -157,8 +157,9 @@ def stub_requests
     to_return(status: 200, body: json_file('transistor_version'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/audio_versions/400094/audio_files').
-    with(body: '{"upload":"https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor' +
-               '/cdn-transistor.prx.org/wp-content/uploads/Smithsonian3_Transistor.mp3"}',
+    with(body: '{"label":"Segment A","upload":"https://dts.podtrac.com/redirect.mp3/' +
+               'media.blubrry.com/transistor/cdn-transistor.prx.org/wp-content/uploads/' +
+               'Smithsonian3_Transistor.mp3"}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_audio'), headers: {})
 
@@ -166,6 +167,16 @@ def stub_requests
     with(body: '{"upload":"https://cdn-transistor.prx.org/shake.jpg"}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('image'), headers: {})
+
+  stub_request(:post, "https://cms.prx.org/api/v1/stories/186929/publish").
+    with(body: '{"id":186929,"appVersion":"v4","title":"This is a title","shortDescription":' +
+               '"short description","description":"description","descriptionMd":"description",' +
+               '"duration":122,"tags":[],"points":0,"publishedAt":null,"releasedAt":' +
+               '"2017-02-03T22:11:48.000Z","createdAt":"2017-02-03T21:53:56.000Z","updatedAt":' +
+               '"2017-02-03T22:11:48.000Z"}',
+         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    to_return(status: 200, body: json_file('transistor_story'), headers: {})
+
 
   stub_request(:get, 'https://cms.prx.org/api/v1/stories/186929/story_distributions').
     with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
@@ -178,15 +189,10 @@ def stub_requests
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_distribution'), headers: {})
 
-  stub_request(:get, 'https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03').
-    with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
-    to_return(status: 200, body: json_file('transistor_episode'), headers: {})
-
-  stub_request(:put, 'https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03').
-    with(body: '{"guid":"https://transistor.prx.org/?p=1286","title":"Sidedoor from the ' +
-               'Smithsonian: Shake it Up","author":{"name":"PRX","email":null},' +
-               '"block":false,"explicit":null,"isClosedCaptioned":false,"isPermaLink":"false",' +
-               '"keywords":[],"position":null,"url":' +
+  stub_request(:put, 'https://feeder.prx.tech/api/v1/authorization/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03').
+    with(body: '{"author":{"name":"PRX","email":null},"block":false,"explicit":null,"guid":' +
+               '"https://transistor.prx.org/?p=1286","isClosedCaptioned":false,"isPermaLink":' +
+               '"false","keywords":[],"position":null,"url":' +
                '"https://transistor.prx.org/2017/01/sidedoor-from-the-smithsonian-shake-it-up/"}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_episode'), headers: {})

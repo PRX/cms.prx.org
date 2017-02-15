@@ -8,7 +8,8 @@
   "duration": 122,
   "tags": [],
   "points": 0,
-  "publishedAt": "2017-02-03T22:11:48.000Z",
+  "publishedAt": null,
+  "releasedAt": "2017-02-03T22:11:48.000Z",
   "createdAt": "2017-02-03T21:53:56.000Z",
   "updatedAt": "2017-02-03T22:11:48.000Z",
   "_links": {
@@ -60,8 +61,8 @@
        "title" : "Transistor",
        "href" : "/api/v1/series/12345"
     },
-    "prx:unpublish": {
-      "href": "/api/v1/stories/186929/unpublish"
+    "prx:publish": {
+      "href": "/api/v1/stories/186929/publish"
     },
     "self": {
       "href": "/api/v1/stories/186929",
