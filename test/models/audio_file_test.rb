@@ -52,7 +52,7 @@ describe AudioFile do
     aft = audio_version_template_with_file_templates.audio_file_templates.find do |ft|
       ft.label == "Main Segment" && ft.position == 1
     end
-    aft.stub(:validate_audio_file, audio_file) { true }
+    aft.stub(:validate_audio_file, audio_file) { audio_file.audio_status = "Valid" }
     audio_file.update_attributes!(label: "Main Segment", position: 1)
     audio_file.audio_status.must_equal "Valid"
   end
