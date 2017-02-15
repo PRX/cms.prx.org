@@ -205,7 +205,7 @@ class PodcastImporter
     story.images.post(upload: entry.itunes_image) if entry.itunes_image
 
     # publish this so the released_at gets set as the published_at
-    story.publish.post()
+    story.publish.post
 
     story
   end
@@ -248,7 +248,7 @@ class PodcastImporter
 
   def episode_url(entry)
     url = entry[:feedburner_orig_link] || entry[:url] || entry[:link]
-    if url.match(/libsyn\.com/)
+    if url =~ /libsyn\.com/
       url = nil
     end
     url

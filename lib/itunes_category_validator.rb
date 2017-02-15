@@ -1,9 +1,11 @@
 class ITunesCategoryValidator < ActiveModel::Validator
   CATEGORIES = {
-    'Arts' => ['Design', 'Fashion & Beauty', 'Food', 'Literature', 'Performing Arts', 'Visual Arts'],
+    'Arts' => ['Design', 'Fashion & Beauty', 'Food',
+               'Literature', 'Performing Arts', 'Visual Arts'],
     'Business' => ['Business News', 'Careers', 'Investing', 'Management & Marketing', 'Shopping'],
     'Comedy' => [],
-    'Education' => ['Educational Technology', 'Higher Education', 'K-12', 'Language Courses', 'Training'],
+    'Education' => ['Educational Technology', 'Higher Education',
+                    'K-12', 'Language Courses', 'Training'],
     'Games & Hobbies' => ['Automotive', 'Aviation', 'Hobbies', 'Other Games', 'Video Games'],
     'Government & Organizations' => ['Local', 'National', 'Non-Profit', 'Regional'],
     'Health' => ['Alternative Health', 'Fitness & Nutrition', 'Self-Help', 'Sexuality'],
@@ -17,7 +19,7 @@ class ITunesCategoryValidator < ActiveModel::Validator
     'Sports & Recreation' => ['Amateur', 'College & High School', 'Outdoor', 'Professional'],
     'Technology' => ['Gadgets', 'Tech News', 'Podcasting', 'Software How-To'],
     'TV & Film' => []
-  }
+  }.freeze
 
   def validate(record)
     if category?(record.name)

@@ -118,7 +118,8 @@ def stub_requests
     to_return(status: 200, body: json_file('transistor_file_template'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/distributions').
-    with(body: '{"kind":"podcast","setAudioVersionTemplateUri":"/api/v1/audio_version_templates/172"}',
+    with(body: '{"kind":"podcast",' +
+               '"setAudioVersionTemplateUri":"/api/v1/audio_version_templates/172"}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('podcast_distribution'), headers: {})
 
@@ -172,7 +173,7 @@ def stub_requests
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('image'), headers: {})
 
-  stub_request(:post, "https://cms.prx.org/api/v1/stories/186929/publish").
+  stub_request(:post, 'https://cms.prx.org/api/v1/stories/186929/publish').
     with(body: '{"id":186929,"appVersion":"v4","title":"This is a title","shortDescription":' +
                '"short description","description":"description","descriptionMd":"description",' +
                '"duration":122,"tags":[],"points":0,"publishedAt":null,"releasedAt":' +
@@ -180,7 +181,6 @@ def stub_requests
                '"2017-02-03T22:11:48.000Z"}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_story'), headers: {})
-
 
   stub_request(:get, 'https://cms.prx.org/api/v1/stories/186929/story_distributions').
     with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
