@@ -124,6 +124,8 @@ ActiveRecord::Schema.define(version: 6) do
     t.string   "channel_mode",     limit: 255
     t.string   "status",           limit: 255
     t.string   "format",           limit: 255
+    t.string   "audio_status",     limit: 255
+    t.string   "audio_errors",     limit: 255
     t.datetime "deleted_at"
     t.string   "listenable_type",  limit: 255
     t.integer  "listenable_id",    limit: 4

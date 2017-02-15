@@ -35,7 +35,7 @@ class AudioFile < BaseModel
   skip_callback :commit, :after, :remove_file! # don't remove s3 file
   fixerable_upload :upload, :file
 
-  after_commit :validate_on_template, only: [:update, :create]
+  before_save :validate_on_template, only: [:update, :create]
 
   before_validation do
     if upload
@@ -59,6 +59,13 @@ class AudioFile < BaseModel
                   aft.position == position && (aft.label == label || (aft.label.nil? || label.nil?))
                 end
     return unless template
-    template.validate_audio_file(self)
+
+    errors = template.validate_audio_file_lengths(self)
+    puts "validating"
+    if errors.empty?
+      self.audio_status, self.audio_errors = VALID, nil
+    else
+      self.audio_status, self.audio_errors = INVALID, errors
+    end
   end
 end

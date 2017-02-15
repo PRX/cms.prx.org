@@ -1,13 +1,11 @@
 require 'test_helper'
 
 describe AudioFile do
-  let(:audio_version_template_with_file_templates) {
-    FactoryGirl.create(:audio_version_template_with_file_templates)
-  }
-  let(:audio_version) { FactoryGirl.create(:audio_version_with_template,
-    audio_version_template: audio_version_template_with_file_templates)}
-  let(:audio_file) { FactoryGirl.create(:audio_file, audio_version: audio_version) }
-  let(:audio_file_uploaded) { FactoryGirl.create(:audio_file_uploaded) }
+  let(:audio_version) { create(:audio_version_with_template) }
+  let(:file_templates) { create_list(:audio_file_template, 3,
+    audio_version_template: audio_version.audio_version_template) }
+  let(:audio_file) { audio_version.audio_files.first }
+  let(:audio_file_uploaded) { create(:audio_file_uploaded) }
 
   it 'has a table defined' do
     AudioFile.table_name.must_equal 'audio_files'
@@ -49,11 +47,13 @@ describe AudioFile do
   end
 
   it 'validates self based on template' do
-    aft = audio_version_template_with_file_templates.audio_file_templates.find do |ft|
-      ft.label == "Main Segment" && ft.position == 1
+    aft = file_templates.find { |ft| ft.label == 'Main Segment' && ft.position == 1 }.tap do |ft|
+      ft.length_minimum, ft.length_maximum = 1, 10
     end
-    aft.stub(:validate_audio_file, audio_file) { audio_file.audio_status = "Valid" }
-    audio_file.update_attributes!(label: "Main Segment", position: 1)
-    audio_file.audio_status.must_equal "Valid"
+    aft.stub(:validate_audio_file_lengths, '') do
+      audio_file.update_attributes!(position: 1, label: 'Main Segment')
+      audio_file.audio_status.must_equal 'invalid'
+      audio_file.audio_errors.must_include 'must be between 1 and 10.'
+    end
   end
 end

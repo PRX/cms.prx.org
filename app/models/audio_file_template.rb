@@ -21,7 +21,16 @@ class AudioFileTemplate < BaseModel
     self.length_maximum ||= 0
   end
 
-  def validate_audio_file(file)
-    true
+  def validate_audio_file_lengths(file)
+    audio_errors = ''
+    shorter_than_min = file.length < length_minimum
+    longer_than_max = length_maximum != 0 && file.length > length_maximum
+
+    if shorter_than_min || longer_than_max
+      audio_errors << "Audio file #{file.position} '#{file.label}' is #{file.length}, " +
+      "but the '#{file.label}' must be between #{length_minimum} " +
+      "and #{length_maximum}."
+    end
+    return audio_errors
   end
 end
