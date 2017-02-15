@@ -7,7 +7,8 @@ require 'itunes_category_validator'
 class PodcastImporter
   include PRXAccess
 
-  attr_accessor :cms_account_path, :podcast_url, :series, :template, :stories
+  attr_accessor :cms_account_path, :podcast_url
+  attr_accessor :series, :template, :stories, :podcast, :distribution
 
   def initialize(account, podcast_url)
     self.cms_account_path = account
@@ -26,10 +27,10 @@ class PodcastImporter
     self.series, self.template = create_series(feed)
 
     # Create the podcast distribution
-    distribution = create_distribution(series, template)
+    self.distribution = create_distribution(series, template)
 
     # Update podcast attributes
-    podcast = update_podcast(distribution, feed)
+    self.podcast = update_podcast(distribution, feed)
 
     # Create the episodes
     self.stories = create_stories(feed, series)
@@ -45,7 +46,8 @@ class PodcastImporter
 
   def create_series(podcast)
     # make an api client for the account
-    account = api(root: cms_root, account: cms_account_path).tap { |c| c.href = cms_account_path }.get
+    client = api(root: cms_root, account: cms_account_path)
+    account = client.tap { |c| c.href = cms_account_path }.get
 
     # create the series
     series = account.series.post(
@@ -143,17 +145,16 @@ class PodcastImporter
 
   def parse_itunes_categories(feed)
     itunes_cats = {}
-    cats = Array(feed.itunes_categories).map(&:strip).select { |c| !c.blank? }
-    cats.each do |cat|
-      if ITunesCategoryValidator.is_category?(cat)
+    Array(feed.itunes_categories).map(&:strip).select { |c| !c.blank? }.each do |cat|
+      if ITunesCategoryValidator.category?(cat)
         itunes_cats[cat] ||= []
-      elsif parent_cat = ITunesCategoryValidator.is_subcategory?(cat)
+      elsif parent_cat = ITunesCategoryValidator.subcategory?(cat)
         itunes_cats[parent_cat] ||= []
         itunes_cats[parent_cat] << cat
       end
     end
 
-    itunes_cats.keys.map { |n| { name: n, subcategories: itunes_cats[n]} }
+    itunes_cats.keys.map { |n| { name: n, subcategories: itunes_cats[n] } }
   end
 
   def parse_categories(feed)

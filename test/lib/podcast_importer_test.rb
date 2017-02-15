@@ -33,13 +33,15 @@ describe PodcastImporter do
     end
   end
 
-  describe 'import' do
+  describe 'retrieve' do
     it 'retrieves the feed' do
       feed = importer.rss_feed
       feed.title.must_equal 'Transistor'
       feed.entries.count.must_equal 1
     end
+  end
 
+  describe 'import steps' do
     it 'creates a series' do
       series, template = importer.create_series(feed)
       series.attributes.title.must_equal 'Transistor'
@@ -62,7 +64,9 @@ describe PodcastImporter do
       stories.wont_be_nil
       stories.count.must_equal 1
     end
+  end
 
+  describe 'full import' do
     it 'imports a podcast' do
       importer.import.must_equal true
       importer.series.wont_be_nil
@@ -81,7 +85,7 @@ def stub_requests
               headers: { 'Content-Type' => 'application/json; charset=utf-8' })
 
   stub_request(:get, 'https://cms.prx.org/api/v1/accounts/8').
-    with(headers: { 'Authorization'=>'Bearer thisisnotatoken' }).
+    with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('account'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/accounts/8/series').
@@ -130,9 +134,9 @@ def stub_requests
                '"author":{"name":"PRX","email":null},' +
                '"managingEditor":{"name":"PRX","email":"prxwpadmin@prx.org"},' +
                '"owners":[{"name":"PRX","email":"prxwpadmin@prx.org"}],' +
-               '"itunesCategories":[{"name":"Science & Medicine","subcategories":["Natural Sciences"]}],' +
-               '"categories":[],"complete":false,"keywords":[]}',
-    headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+               '"itunesCategories":[{"name":"Science & Medicine","subcategories":' +
+               '["Natural Sciences"]}],"categories":[],"complete":false,"keywords":[]}',
+         headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/stories').
