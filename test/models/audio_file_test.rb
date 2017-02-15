@@ -4,8 +4,8 @@ describe AudioFile do
   let(:audio_version) { create(:audio_version_with_template) }
   let(:file_templates) do
     create_list(:audio_file_template,
-                 3,
-                 audio_version_template: audio_version.audio_version_template)
+                3,
+                audio_version_template: audio_version.audio_version_template)
   end
   let(:audio_file) { audio_version.audio_files.first }
   let(:audio_file_uploaded) { create(:audio_file_uploaded) }
