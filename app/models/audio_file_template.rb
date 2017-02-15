@@ -20,4 +20,8 @@ class AudioFileTemplate < BaseModel
     self.length_minimum ||= 0
     self.length_maximum ||= 0
   end
+
+  def validate_audio_file(file)
+    true
+  end
 end

@@ -44,4 +44,19 @@ describe AudioFile do
     story.updated_at.must_be :>, stamp
     version.updated_at.must_be :>, stamp
   end
+
+  it 'validates self based on template' do
+    mock_version = MiniTest::Mock.new
+    mock_version_template = MiniTest::Mock.new
+    mock_templates_list = MiniTest::Mock.new
+    mock_file_template = MiniTest::Mock.new
+
+    mock_version.expect(:audio_version_template, mock_version_template)
+    mock_version_template.expect(:audio_file_templates, mock_templates_list)
+    mock_templates_list.expect(:find, mock_file_template)
+
+    audio_file.stub(:audio_version, mock_version) do
+      audio_file.update_attributes!(label: "Main Segment", position: 1)
+    end
+  end
 end

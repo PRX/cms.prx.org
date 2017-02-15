@@ -35,6 +35,8 @@ class AudioFile < BaseModel
   skip_callback :commit, :after, :remove_file! # don't remove s3 file
   fixerable_upload :upload, :file
 
+  after_commit :validate_on_template, only: [:update, :create]
+
   before_validation do
     if upload
       self.status ||= UPLOADED
@@ -47,5 +49,16 @@ class AudioFile < BaseModel
 
   def fixerable_final?
     [VALID, COMPLETE, TRANSFORMING, TRANSFORM_FAILED, TRANSFORMED].include? status
+  end
+
+  def validate_on_template
+    template = audio_version
+                .try(:audio_version_template)
+                .try(:audio_file_templates)
+                .try(:find) do |aft|
+                  aft.position == position && (aft.label == label || (aft.label.nil? || label.nil?))
+                end
+    return unless template
+    template.validate_audio_file(self)
   end
 end
