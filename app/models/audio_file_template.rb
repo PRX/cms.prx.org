@@ -28,9 +28,9 @@ class AudioFileTemplate < BaseModel
 
     if shorter_than_min || longer_than_max
       audio_errors << "Audio file #{file.position} '#{file.label}' is #{file.length}, " +
-      "but the '#{file.label}' must be between #{length_minimum} " +
-      "and #{length_maximum}."
+                      "but the '#{file.label}' must be between #{length_minimum} " +
+                      "and #{length_maximum}."
     end
-    return audio_errors
+    audio_errors
   end
 end
