@@ -3,8 +3,10 @@ require 'test_helper'
 describe AudioFile do
   let(:audio_version) { create(:audio_version_with_template) }
   let(:file_templates) do
-     create_list(:audio_file_template, 3, audio_version_template: audio_version.audio_version_template)
-   end
+     create_list(:audio_file_template,
+                 3,
+                 audio_version_template: audio_version.audio_version_template)
+  end
   let(:audio_file) { audio_version.audio_files.first }
   let(:audio_file_uploaded) { create(:audio_file_uploaded) }
 
@@ -48,10 +50,11 @@ describe AudioFile do
   end
 
   it 'validates self based on template' do
-    aft = file_templates.find { |ft| ft.label == 'Main Segment' && ft.position == 1 }.tap do |ft|
+    file_templates.find { |ft| ft.label == 'Main Segment' && ft.position == 1 }.tap do |ft|
       ft.length_minimum = 1
       ft.length_maximum = 10
     end
+
     audio_file.update_attributes!(position: 1, label: 'Main Segment')
     audio_file.audio_status.must_equal 'invalid'
     audio_file.audio_errors.must_include 'must be between 1 and 10.'
