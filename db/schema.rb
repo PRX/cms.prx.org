@@ -288,6 +288,8 @@ ActiveRecord::Schema.define(version: 6) do
     t.text     "broadcast_history",       limit: 65535
     t.text     "intro",                   limit: 65535
     t.text     "outro",                   limit: 65535
+    t.string   "status",                  limit: 255
+    t.text     "version_errors",          limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "length",                  limit: 4
