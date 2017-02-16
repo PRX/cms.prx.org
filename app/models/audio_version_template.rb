@@ -37,10 +37,10 @@ class AudioVersionTemplate < BaseModel
     audio_versions.update_all(updated_at: Time.now)
   end
 
-  def validate_audio_version(aud_ver)
-    (audio_file_count_errors(aud_ver) +
-     audio_length_errors(aud_ver) +
-     label_mismatch_errors(aud_ver)).strip
+  def validate_audio_version(audio_version)
+    (audio_file_count_errors(audio_version) +
+     audio_length_errors(audio_version) +
+     label_mismatch_errors(audio_version)).strip
   end
 
   private
