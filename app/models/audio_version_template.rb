@@ -49,7 +49,7 @@ class AudioVersionTemplate < BaseModel
     file_count_errors = ''
     num_audio_files = audio_version.audio_files.count
     if !segment_count.nil? && audio_version.audio_files.count != segment_count
-      file_count_errors << "Audio version #{audio_version.label} has #{num_audio_files}, " +
+      file_count_errors << "Audio version #{audio_version.label} has #{num_audio_files} " +
                            "audio files, but must have #{segment_count} segments. "
     end
     file_count_errors
