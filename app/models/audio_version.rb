@@ -23,7 +23,6 @@ class AudioVersion < BaseModel
 
   alias_method :duration, :length
 
-
   def self.policy_class
     StoryAttributePolicy
   end

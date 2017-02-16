@@ -3,7 +3,7 @@ require 'test_helper'
 describe AudioVersionTemplate do
 
   let(:audio_version_template) { create(:audio_version_template) }
-  let(:audio_version) { create(:audio_version, audio_version_template: audio_version_template)}
+  let(:audio_version) { create(:audio_version, audio_version_template: audio_version_template) }
 
   it 'has a table defined' do
     AudioVersionTemplate.table_name.must_equal 'audio_version_templates'
