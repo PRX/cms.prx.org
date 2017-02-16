@@ -124,7 +124,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.string   "channel_mode",     limit: 255
     t.string   "status",           limit: 255
     t.string   "format",           limit: 255
-    t.string   "audio_errors",     limit: 255
+    t.text     "audio_errors",     limit: 65535
     t.datetime "deleted_at"
     t.string   "listenable_type",  limit: 255
     t.integer  "listenable_id",    limit: 4
@@ -157,6 +157,8 @@ ActiveRecord::Schema.define(version: 6) do
     t.text     "content_advisory",          limit: 65535
     t.text     "timing_and_cues",           limit: 65535
     t.text     "transcript",                limit: 65535
+    t.text     "file_errors",               limit: 65535
+    t.string   "status",                    limit: 255
     t.boolean  "news_hole_break"
     t.boolean  "floating_break"
     t.boolean  "bottom_of_hour_break"

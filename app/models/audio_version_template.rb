@@ -12,6 +12,8 @@ class AudioVersionTemplate < BaseModel
 
   after_touch :touch_audio_versions
 
+  before_validation :set_defaults, on: :create
+
   validates :label, presence: true
 
   validates :length_minimum,
@@ -26,8 +28,62 @@ class AudioVersionTemplate < BaseModel
     SeriesAttributePolicy
   end
 
+  def set_defaults
+    self.length_minimum ||= 0
+    self.length_maximum ||= 0
+  end
+
   def touch_audio_versions
     audio_versions.update_all(updated_at: Time.now)
   end
 
+  def validate_audio_version(audio_version)
+    (audio_file_count_errors + audio_length_errors + label_mismatch_errors).strip
+  end
+
+  private
+
+  def audio_file_count_errors(audio_version)
+    file_count_errors = ''
+    num_audio_files = audio_version.audio_files.count
+    if audio_version.audio_files.count != segment_count
+      file_count_errors << "Audio version #{audio_version.label} has #{num_audio_files}, " +
+                           "audio files, but must have #{segment_count} segments. "
+    end
+    file_count_errors
+  end
+
+  def audio_length_errors(audio_version)
+    length_errors = ''
+    shorter_than_min = audio_version.length < length_minimum
+    longer_than_max = length_maximum != 0 && audio_version.length > length_maximum
+    if shorter_than_min || longer_than_max
+      length_errors << "Audio version #{audio_version.label} is #{audio_version.length}, " +
+                       "but the '#{audio_version.label}' must be between #{length_minimum} " +
+                       "and #{length_maximum}. "
+    end
+    length_errors
+  end
+
+  def label_mismatch_errors(audio_version)
+    label_errors = ''
+
+    if audio_version.label != label
+      label_errors << "Audio version #{label} should be labelled #{label}. "
+    end
+
+    req_pos_and_labels = {}
+    audio_file_templates.each { |aft| req_pos_and_labels[aft.position] = aft.label }
+
+    audio_version.audio_files.each do |af|
+      template_label = req_pos_and_labels[af.position]
+      no_label = template_label.nil? || af.label.nil?
+      label_mismatch = template_label != af.label
+      if !no_label && label_mismatch
+        label_errors << "Audio file #{af.position} of audio version #{audio_version.label} should be " +
+                        "#{template_label}, not #{af.label}. "
+      end
+    end
+    label_errors
+  end
 end
