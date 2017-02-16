@@ -28,6 +28,7 @@ class AudioVersion < BaseModel
   end
 
   private
+
   def validate_on_template
     return unless audio_version_template
 
