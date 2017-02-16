@@ -23,8 +23,13 @@ class AudioVersion < BaseModel
 
   alias_method :duration, :length
 
+
   def self.policy_class
     StoryAttributePolicy
+  end
+
+  def compliant_with_template?
+    file_errors.nil?
   end
 
   private

@@ -29,6 +29,7 @@ describe AudioVersion do
       audio_version_with_template.update_attributes(explicit: 'explicit')
       audio_version_with_template.file_errors.must_include 'must be between'
       audio_version_with_template.status.must_equal 'invalid'
+      audio_version_with_template.wont_be(:compliant_with_template?)
     end
   end
 end
