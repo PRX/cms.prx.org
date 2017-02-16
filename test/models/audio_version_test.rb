@@ -17,8 +17,18 @@ describe AudioVersion do
     audio_version.length(true).must_equal audio_version.duration
   end
 
-  it 'can have a template' do
-    audio_version = create(:audio_version_with_template)
-    audio_version.audio_version_template(true).wont_be_nil
+  describe 'with a template' do
+
+    let(:audio_version_with_template) { create(:audio_version_with_template) }
+
+    it 'can have a template' do
+      audio_version_with_template.audio_version_template(true).wont_be_nil
+    end
+
+    it 'validates self against template before save' do
+      audio_version_with_template.update_attributes(explicit: 'explicit')
+      audio_version_with_template.file_errors.must_include 'must be between'
+      audio_version_with_template.status.must_equal 'invalid'
+    end
   end
 end
