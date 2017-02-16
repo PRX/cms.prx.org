@@ -48,7 +48,7 @@ class AudioVersionTemplate < BaseModel
   def audio_file_count_errors(audio_version)
     file_count_errors = ''
     num_audio_files = audio_version.audio_files.count
-    if audio_version.audio_files.count != segment_count
+    if !segment_count.nil? && audio_version.audio_files.count != segment_count
       file_count_errors << "Audio version #{audio_version.label} has #{num_audio_files}, " +
                            "audio files, but must have #{segment_count} segments. "
     end
@@ -70,8 +70,8 @@ class AudioVersionTemplate < BaseModel
   def label_mismatch_errors(audio_version)
     label_errors = ''
 
-    if audio_version.label != label
-      label_errors << "Audio version #{label} should be labelled #{label}. "
+    if audio_version.label.downcase.strip != label.downcase.strip
+      label_errors << "Audio version #{audio_version.label} should be labelled #{label}. "
     end
 
     req_pos_and_labels = {}

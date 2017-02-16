@@ -52,7 +52,7 @@ class AudioFile < BaseModel
   end
 
   def compliant_with_template?
-    status == VALID && audio_errors.nil?
+    audio_errors.nil?
   end
 
   def validate_on_template
