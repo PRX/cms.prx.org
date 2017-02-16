@@ -12,7 +12,7 @@ class AudioVersion < BaseModel
   belongs_to :audio_version_template
   has_many :audio_files, -> { order :position }, dependent: :destroy
 
-  after_touch :validate_on_template
+  before_save :validate_on_template
 
   acts_as_paranoid
 
@@ -27,6 +27,7 @@ class AudioVersion < BaseModel
     StoryAttributePolicy
   end
 
+  private
   def validate_on_template
     return unless audio_version_template
 
