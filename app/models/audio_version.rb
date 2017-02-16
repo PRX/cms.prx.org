@@ -31,7 +31,6 @@ class AudioVersion < BaseModel
     return unless audio_version_template
 
     audio_files.each do |af|
-      af.validate_on_template
       if !af.compliant_with_template?
         self.status = INVALID
         self.file_errors = af.audio_errors
