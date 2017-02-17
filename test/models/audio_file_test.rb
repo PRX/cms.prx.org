@@ -58,9 +58,14 @@ describe AudioFile do
     end
     audio_version.audio_version_template.audio_file_templates = file_templates
 
-    audio_file.update_attributes!(position: 1, label: 'Main Segment')
+    audio_file.update_attributes(position: 1, label: 'Main Segment')
     audio_file.audio_errors.must_include 'must be between 1 and 10.'
     audio_file.wont_be(:compliant_with_template?)
     audio_file.status.must_equal 'invalid'
+
+    audio_file.update_attributes(status: 'complete', length: 5)
+    audio_file.audio_errors.must_be_nil
+    audio_file.status.wont_equal 'invalid'
+    audio_file.must_be(:compliant_with_template?)
   end
 end

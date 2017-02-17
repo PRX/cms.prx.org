@@ -57,6 +57,8 @@ class AudioFile < BaseModel
 
   def validate_on_template
     # don't bother checking template for audio file that's not yet ready
+    # note: this does mean that files previously deemed invalid by template
+    # will never make it past this line & will stay INVALID.
     return if [NOTFOUND, VALIDATING, INVALID, FAILED].include?(status)
 
     template = audio_version.
