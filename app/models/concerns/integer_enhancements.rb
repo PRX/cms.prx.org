@@ -3,11 +3,11 @@
 module IntegerEnhancements
 
   def positive?
-      self > 0
+    self > 0
   end
 
   def negative?
-      self < 0
+    self < 0
   end
 
   def to_time_string
@@ -35,7 +35,7 @@ module IntegerEnhancements
     time_values = time_duration(seconds)
     last_zero = true
     nums = [:hour, :minute, :second].collect do |unit|
-      if last_zero &&  (time_values[unit]).zero?
+      if last_zero && (time_values[unit]).zero?
         nil
       else
         last_zero = false
@@ -53,9 +53,9 @@ module IntegerEnhancements
     return { second: 0 } if seconds <= 0
     secs = seconds
     [[:hour, 3600], [:minute, 60], [:second, 1]].inject({}) do |values, each|
-      unit,size = each
-      values[unit] = ((secs <= 0) ? 0 : (secs / size))
-      secs = (secs <= 0) ? 0 : (secs % size)
+      unit, size = each
+      values[unit] = (secs <= 0) ? 0 : (secs / size)
+      secs = secs <= 0 ? 0 : (secs % size)
       values
     end
   end
