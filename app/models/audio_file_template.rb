@@ -36,8 +36,9 @@ class AudioFileTemplate < BaseModel
     longer_than_max = length_maximum != 0 && file.length > length_maximum
 
     if shorter_than_min || longer_than_max
-      length_errors << "Audio file #{file.position} '#{file.label}' is #{file.length.to_time_string}, " +
-                       "but the '#{file.label}' must be between #{length_minimum.to_time_string} " +
+      length_errors << "Audio file #{file.position} '#{file.label}' is " +
+                       "#{file.length.to_time_string}, but the '#{file.label}' " +
+                       "must be between #{length_minimum.to_time_string} " +
                        "and #{length_maximum.to_time_string}."
     end
     length_errors
