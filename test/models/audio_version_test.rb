@@ -25,11 +25,17 @@ describe AudioVersion do
       audio_version_with_template.audio_version_template(true).wont_be_nil
     end
 
-    it 'validates self against template before save' do
+    it 'validates self based on template' do
       audio_version_with_template.update_attributes(explicit: 'explicit')
       audio_version_with_template.file_errors.must_include 'must be between'
       audio_version_with_template.status.must_equal 'invalid'
       audio_version_with_template.wont_be(:compliant_with_template?)
+
+      audio_version_with_template.instance_variable_set('@_length', 50)
+      audio_version_with_template.update_attributes(explicit: 'explicit')
+      audio_version_with_template.file_errors.must_be_nil
+      audio_version_with_template.status.must_equal 'valid'
+      audio_version_with_template.must_be(:compliant_with_template?)
     end
   end
 end
