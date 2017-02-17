@@ -60,9 +60,9 @@ class AudioVersionTemplate < BaseModel
     shorter_than_min = audio_version.length < length_minimum
     longer_than_max = length_maximum != 0 && audio_version.length > length_maximum
     if shorter_than_min || longer_than_max
-      length_errors << "Duration of audio version #{audio_version.label} is #{audio_version.length}, " +
-                       "but the '#{audio_version.label}' must be between #{length_minimum}" +
-                       "and #{length_maximum}. "
+      length_errors << "Duration of audio version #{audio_version.label} is " +
+                       "#{audio_version.length}, but the '#{audio_version.label}' must be " +
+                       "between #{length_minimum} and #{length_maximum}."
     end
     length_errors
   end

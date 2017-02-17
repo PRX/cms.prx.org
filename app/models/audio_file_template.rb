@@ -34,17 +34,17 @@ class AudioFileTemplate < BaseModel
 
     if shorter_than_min || longer_than_max
       length_errors << "Audio file #{file.position} '#{file.label}' is #{file.length}, " +
-                      "but the '#{file.label}' must be between #{length_minimum} " +
-                      "and #{length_maximum}."
+                       "but the '#{file.label}' must be between #{length_minimum} " +
+                       "and #{length_maximum}."
     end
     length_errors
   end
 
   def label_mismatch_errors(file)
     if file.label.downcase.strip == label.downcase.strip
-      return ''
+      ''
     else
-      return "Audio file at position #{position} should be labeled #{label}, not #{file.label}."
+      "Audio file at position #{position} should be labeled #{label}, not #{file.label}."
     end
   end
 end
