@@ -22,7 +22,7 @@ class AudioFileTemplate < BaseModel
   end
 
   def validate_audio_file(file)
-    [audio_length_errors(file), label_mismatch_errors(file)].join(' ')
+    [audio_length_errors(file), label_mismatch_errors(file)].join(' ').strip
   end
 
   private

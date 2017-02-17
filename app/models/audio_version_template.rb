@@ -40,7 +40,7 @@ class AudioVersionTemplate < BaseModel
   def validate_audio_version(audio_version)
     [audio_file_count_errors(audio_version),
      audio_length_errors(audio_version),
-     label_mismatch_errors(audio_version)].join(' ')
+     label_mismatch_errors(audio_version)].join(' ').strip
   end
 
   private
