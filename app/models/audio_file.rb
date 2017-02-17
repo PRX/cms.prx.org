@@ -62,12 +62,10 @@ class AudioFile < BaseModel
     template = audio_version.
                try(:audio_version_template).
                try(:audio_file_templates).
-               try(:find) do |aft|
-                 aft.position == position && (aft.label == label || (aft.label.nil? || label.nil?))
-               end
+               try(:find) { |aft| aft.position == position }
     return unless template
 
-    errors = template.validate_audio_file_lengths(self)
+    errors = template.validate_audio_file(self)
     if errors.empty?
       self.audio_errors = nil
     else

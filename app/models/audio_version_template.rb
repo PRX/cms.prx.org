@@ -60,7 +60,7 @@ class AudioVersionTemplate < BaseModel
     shorter_than_min = audio_version.length < length_minimum
     longer_than_max = length_maximum != 0 && audio_version.length > length_maximum
     if shorter_than_min || longer_than_max
-      length_errors << "Audio version #{audio_version.label} is #{audio_version.length}, " +
+      length_errors << "Duration of audio version #{audio_version.label} is #{audio_version.length}, " +
                        "but the '#{audio_version.label}' must be between #{length_minimum} " +
                        "and #{length_maximum}. "
     end
@@ -71,7 +71,7 @@ class AudioVersionTemplate < BaseModel
     label_errors = ''
 
     if audio_version.label.downcase.strip != label.downcase.strip
-      label_errors << "Audio version #{audio_version.label} should be labelled #{label}. "
+      label_errors << "Audio version #{audio_version.label} should be labeled #{label}. "
     end
 
     req_pos_and_labels = {}

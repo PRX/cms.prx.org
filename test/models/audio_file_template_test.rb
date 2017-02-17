@@ -14,6 +14,6 @@ describe AudioFileTemplate do
   end
 
   it 'can validate a file against itself' do
-    audio_file_template.validate_audio_file_lengths(audio_file).must_include 'must be between'
+    audio_file_template.validate_audio_file(audio_file).must_include 'must be between'
   end
 end
