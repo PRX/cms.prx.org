@@ -262,12 +262,13 @@ class Story < BaseModel
     version_errors = ''
     audio_versions.each do |av|
       if av.status == INVALID
-        version_errors << "Invalid audio version: #{av.label}"
+        version_errors << "Invalid audio version: #{av.label}. "
       end
     end
 
     if version_errors.empty?
       self.status = VALID
+      self.version_errors = nil
     else
       self.status = INVALID
       self.version_errors = version_errors.strip
