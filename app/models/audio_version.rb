@@ -2,8 +2,7 @@
 
 class AudioVersion < BaseModel
 
-  VALID            = 'valid'.freeze
-  INVALID          = 'invalid'.freeze
+  include ValidityFlag
 
   belongs_to :story, -> { with_deleted },
              class_name: 'Story',

@@ -6,9 +6,7 @@ class Story < BaseModel
   self.table_name = 'pieces'
 
   include RenderMarkdown
-
-  VALID            = 'valid'.freeze
-  INVALID          = 'invalid'.freeze
+  include ValidityFlag
 
   def description_html
     v4? ? markdown_to_html(description) : description

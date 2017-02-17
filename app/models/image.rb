@@ -5,16 +5,7 @@ class Image < BaseModel
 
   include PublicAsset
   include Fixerable
-
-  UPLOADED = 'uploaded'.freeze
-  NOTFOUND = 'not found'.freeze
-  INVALID = 'invalid'.freeze
-  FAILED = 'failed'.freeze
-  COMPLETE = 'complete'.freeze
-
-  PROFILE = 'profile'.freeze
-  THUMBNAIL = 'thumbnail'.freeze
-  PURPOSES = [PROFILE, THUMBNAIL].freeze
+  include ValidityFlag
 
   def self.profile
     order("field(purpose, '#{Image::PROFILE}') desc, created_at desc").first

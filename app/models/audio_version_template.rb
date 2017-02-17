@@ -1,6 +1,9 @@
 # encoding: utf-8
 
 class AudioVersionTemplate < BaseModel
+
+  include IntegerEnhancements
+
   belongs_to :series, touch: true
 
   has_many :audio_file_templates, -> { order :position }, dependent: :destroy
@@ -61,8 +64,8 @@ class AudioVersionTemplate < BaseModel
     longer_than_max = length_maximum != 0 && audio_version.length > length_maximum
     if shorter_than_min || longer_than_max
       length_errors << "Duration of audio version #{audio_version.label} is " +
-                       "#{audio_version.length}, but the '#{audio_version.label}' must be " +
-                       "between #{length_minimum} and #{length_maximum}."
+                       "#{audio_version.length.to_time_string}, but the '#{audio_version.label}' must be " +
+                       "between #{length_minimum.to_time_string} and #{length_maximum.to_time_string}."
     end
     length_errors
   end
