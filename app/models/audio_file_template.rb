@@ -22,7 +22,7 @@ class AudioFileTemplate < BaseModel
   end
 
   def validate_audio_file(file)
-    (audio_length_errors(file) + label_mismatch_errors(file)).strip
+    [audio_length_errors(file), label_mismatch_errors(file)].join(' ')
   end
 
   private
@@ -44,7 +44,7 @@ class AudioFileTemplate < BaseModel
     if file.label.downcase.strip == label.downcase.strip
       return ''
     else
-      return "Audio file at position #{position} should be labeled #{label}, not #{file.label}. "
+      return "Audio file at position #{position} should be labeled #{label}, not #{file.label}."
     end
   end
 end

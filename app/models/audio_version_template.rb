@@ -38,9 +38,9 @@ class AudioVersionTemplate < BaseModel
   end
 
   def validate_audio_version(audio_version)
-    (audio_file_count_errors(audio_version) +
-     audio_length_errors(audio_version) +
-     label_mismatch_errors(audio_version)).strip
+    [audio_file_count_errors(audio_version),
+     audio_length_errors(audio_version),
+     label_mismatch_errors(audio_version)].join(' ')
   end
 
   private
@@ -50,7 +50,7 @@ class AudioVersionTemplate < BaseModel
     num_audio_files = audio_version.audio_files.count
     if !segment_count.nil? && audio_version.audio_files.count != segment_count
       file_count_errors << "Audio version #{audio_version.label} has #{num_audio_files} " +
-                           "audio files, but must have #{segment_count} segments. "
+                           "audio files, but must have #{segment_count} segments."
     end
     file_count_errors
   end
@@ -61,7 +61,7 @@ class AudioVersionTemplate < BaseModel
     longer_than_max = length_maximum != 0 && audio_version.length > length_maximum
     if shorter_than_min || longer_than_max
       length_errors << "Duration of audio version #{audio_version.label} is #{audio_version.length}, " +
-                       "but the '#{audio_version.label}' must be between #{length_minimum} " +
+                       "but the '#{audio_version.label}' must be between #{length_minimum}" +
                        "and #{length_maximum}. "
     end
     length_errors
@@ -71,7 +71,7 @@ class AudioVersionTemplate < BaseModel
     label_errors = ''
 
     if audio_version.label.downcase.strip != label.downcase.strip
-      label_errors << "Audio version #{audio_version.label} should be labeled #{label}. "
+      label_errors << "Audio version #{audio_version.label} should be labeled #{label}."
     end
 
     req_pos_and_labels = {}
