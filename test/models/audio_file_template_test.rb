@@ -25,6 +25,5 @@ describe AudioFileTemplate do
   it 'leaves a file alone if file complies with template' do
     audio_file.update(length: 5)
     audio_file_template.validate_audio_file(audio_file).must_be(:empty?)
-
   end
 end
