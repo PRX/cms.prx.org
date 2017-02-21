@@ -28,8 +28,11 @@ describe Api::StoryRepresenter do
 
   describe 'status flags' do
     let(:invalid_audio_versions) { create_list(:audio_version_with_template, 5) }
+    let(:valid_audio_versions) { create_list(:audio_version, 5) }
 
     it 'shows valid if story is valid' do
+      story.audio_versions.wont_be(:empty?)
+      story.update(title: 'Title!')
       json.keys.must_include('status')
       json['status'].must_equal 'valid'
     end
@@ -44,7 +47,6 @@ describe Api::StoryRepresenter do
       json['status'].must_equal 'invalid'
       json['versionErrors'].must_include 'Invalid audio version:'
     end
-
   end
 
   describe 'serialize' do
