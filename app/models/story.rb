@@ -257,23 +257,23 @@ class Story < BaseModel
   end
 
   def validate_audio_versions
-    version_errors = ''
+    av_errors = ''
     if audio_versions.empty?
-      version_errors << "Story '#{title}' has no audio."
+      av_errors << "Story '#{title}' has no audio."
     else
       audio_versions.each do |av|
-        if av.status == INVALID
-          version_errors << "Invalid audio version: '#{av.label}.' "
+        if !av.compliant_with_template? || av.status == INVALID
+          av_errors << "Invalid audio version: '#{av.label}.' "
         end
       end
     end
 
-    if version_errors.empty?
+    if av_errors.empty?
       self.status = VALID
       self.version_errors = nil
     else
       self.status = INVALID
-      self.version_errors = version_errors.strip
+      self.version_errors = av_errors.strip
     end
   end
 end
