@@ -258,9 +258,13 @@ class Story < BaseModel
 
   def validate_audio_versions
     version_errors = ''
-    audio_versions.each do |av|
-      if av.status == INVALID
-        version_errors << "Invalid audio version: #{av.label}. "
+    if audio_versions.empty?
+      version_errors << "Story '#{title}' has no audio."
+    else
+      audio_versions.each do |av|
+        if av.status == INVALID
+          version_errors << "Invalid audio version: '#{av.label}.' "
+        end
       end
     end
 

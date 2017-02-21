@@ -31,6 +31,13 @@ describe Story do
     let(:invalid_audio_versions) { create_list(:audio_version_with_template, 5) }
     let(:valid_audio_versions) { create_list(:audio_version, 5) }
 
+    it 'is invalid if it has no audio' do
+      story.audio_versions = []
+      story.update(title: 'test title')
+      story.status.must_equal 'invalid'
+      story.version_errors.must_include 'has no audio.'
+    end
+
     it 'is invalid if any its audio versions are invalid' do
       story.audio_versions = invalid_audio_versions
       story.update(title: 'Title!')
