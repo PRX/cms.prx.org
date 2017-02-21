@@ -48,7 +48,7 @@ class AudioFileTemplate < BaseModel
     if file.label.downcase.strip == label.downcase.strip
       ''
     else
-      "Audio file at position #{position} should be labeled #{label}, not #{file.label}."
+      "Audio file at position #{position} should be labeled '#{label}', not '#{file.label}'."
     end
   end
 end

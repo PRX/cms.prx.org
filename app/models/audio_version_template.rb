@@ -63,7 +63,7 @@ class AudioVersionTemplate < BaseModel
     shorter_than_min = audio_version.length < length_minimum
     longer_than_max = length_maximum != 0 && audio_version.length > length_maximum
     if shorter_than_min || longer_than_max
-      length_errors << "Duration of audio version #{audio_version.label} is " +
+      length_errors << "Duration of audio version '#{audio_version.label}' is " +
                        "#{audio_version.length.to_time_string}, but the " +
                        "'#{audio_version.label}' must be between " +
                        "#{length_minimum.to_time_string} and #{length_maximum.to_time_string}."
@@ -75,7 +75,7 @@ class AudioVersionTemplate < BaseModel
     label_errors = ''
 
     if audio_version.label.downcase.strip != label.downcase.strip
-      label_errors << "Audio version #{audio_version.label} should be labeled #{label}."
+      label_errors << "Audio version '#{audio_version.label}' should be labeled '#{label}'."
     end
 
     req_pos_and_labels = {}
@@ -86,8 +86,8 @@ class AudioVersionTemplate < BaseModel
       no_label = template_label.nil? || af.label.nil?
       label_mismatch = template_label != af.label
       if !no_label && label_mismatch
-        label_errors << "Audio file #{af.position} of audio version #{audio_version.label} " +
-                        "should be #{template_label}, not #{af.label}. "
+        label_errors << "Audio file #{af.position} of audio version '#{audio_version.label}' " +
+                        "should be '#{template_label}', not '#{af.label}'. "
       end
     end
     label_errors
