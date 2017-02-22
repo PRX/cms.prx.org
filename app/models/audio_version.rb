@@ -35,13 +35,12 @@ class AudioVersion < BaseModel
   def validate_on_template
     return unless audio_version_template
 
-    noncompliant_file = audio_files.find do |af|
+    noncompliant_file_errors = audio_files.select do |af|
       !af.compliant_with_template? || af.status == INVALID
-    end
-    if noncompliant_file
+    end.try(:map) { |af| af.file_errors }.join(',')
+    if !noncompliant_file_errors.empty?
       self.status = INVALID
-      self.file_errors = noncompliant_file.audio_errors ||
-                         "Invalid audio file at position: #{noncompliant_file.position}."
+      self.file_errors = noncompliant_file_errors
       return
     end
 
