@@ -67,7 +67,8 @@ PRX::Application.routes.draw do
 
       resource :authorization, only: [:show] do
         resources :accounts, only: [:index, :show], module: :auth do
-          resources :stories, only: [:index, :create]
+          resources :stories, only: [:index, :create, :update]
+          resources :podcast_imports, except: [:new, :edit]
         end
 
         resources :series, except: [:new, :edit, :create], module: :auth do
