@@ -10,13 +10,26 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
     add_episode_to_feeder
   end
 
-  def add_episode_to_feeder
+  def add_episode_to_feeder(create_attributes = {})
     return unless url.blank?
     podcast = distribution.get_podcast
-    episode = podcast.episodes.post(episode_attributes)
+    episode = podcast.episodes.post(episode_attributes.merge(create_attributes))
     episode_url = URI.join(feeder_root, episode.links['self'].href).to_s
     raise 'Failed to get episode url on create' if episode_url.blank?
     update_attributes!(url: episode_url) if episode_url
+    episode
+  end
+
+  def get_episode
+    api(root: feeder_root, account: distribution.account.id).tap { |a| a.href = auth_url }.get
+  end
+
+  def auth_url
+    result = self.url
+    if result && !result.match(/authorization/)
+      result = result.gsub('/episodes/', '/authorization/episodes/')
+    end
+    result
   end
 
   def episode_attributes
