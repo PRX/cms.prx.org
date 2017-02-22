@@ -59,7 +59,7 @@ describe AudioFile do
     audio_version.audio_version_template.audio_file_templates = file_templates
 
     audio_file.update_attributes(position: 1, label: 'Main Segment')
-    audio_file.audio_errors.must_include 'must be between'
+    audio_file.audio_errors.must_include 'long, but must be'
     audio_file.wont_be(:compliant_with_template?)
     audio_file.status.must_equal 'invalid'
 

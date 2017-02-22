@@ -17,11 +17,6 @@ describe AudioFileTemplate do
     audio_file_template.validate_audio_file(audio_file).must_include 'long, but must be'
   end
 
-  it 'can tell if file label doesnt match template' do
-    audio_file.update(label: 'Wrong label!')
-    audio_file_template.validate_audio_file(audio_file).must_include 'should be labeled'
-  end
-
   it 'leaves a file alone if file complies with template' do
     audio_file.update(length: 5)
     audio_file_template.validate_audio_file(audio_file).must_be(:empty?)
