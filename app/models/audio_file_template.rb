@@ -31,6 +31,8 @@ class AudioFileTemplate < BaseModel
   private
 
   def audio_length_errors(file)
+    return "Audio file '#{file.label}' has no duration." unless file.length
+
     length_errors = ''
     shorter_than_min = file.length < length_minimum
     longer_than_max = length_maximum != 0 && file.length > length_maximum
