@@ -37,7 +37,7 @@ class AudioVersion < BaseModel
 
     noncompliant_file_errors = audio_files.select do |af|
       !af.compliant_with_template? || af.status == INVALID
-    end.try(:map) { |af| af.file_errors }.join(',')
+    end.try(:map) { |af| af.audio_errors }.join(',')
     if !noncompliant_file_errors.empty?
       self.status = INVALID
       self.file_errors = noncompliant_file_errors
