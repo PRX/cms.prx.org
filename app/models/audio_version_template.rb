@@ -42,8 +42,7 @@ class AudioVersionTemplate < BaseModel
 
   def validate_audio_version(audio_version)
     [audio_file_count_errors(audio_version),
-     audio_length_errors(audio_version),
-     label_mismatch_errors(audio_version)].join(' ').strip
+     audio_length_errors(audio_version)].join(' ').strip
   end
 
   private
@@ -69,27 +68,5 @@ class AudioVersionTemplate < BaseModel
                        "- #{length_maximum.to_time_string} long."
     end
     length_errors
-  end
-
-  def label_mismatch_errors(audio_version)
-    label_errors = ''
-
-    if audio_version.label.downcase.strip != label.downcase.strip
-      label_errors << "Audio version '#{audio_version.label}' should be labeled '#{label}'."
-    end
-
-    req_pos_and_labels = {}
-    audio_file_templates.each { |aft| req_pos_and_labels[aft.position] = aft.label }
-
-    audio_version.audio_files.each do |af|
-      template_label = req_pos_and_labels[af.position]
-      no_label = template_label.nil? || af.label.nil?
-      label_mismatch = template_label != af.label
-      if !no_label && label_mismatch
-        label_errors << "Audio file #{af.position} of audio version '#{audio_version.label}' " +
-                        "should be '#{template_label}', not '#{af.label}'. "
-      end
-    end
-    label_errors
   end
 end

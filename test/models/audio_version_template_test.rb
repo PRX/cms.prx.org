@@ -28,12 +28,6 @@ describe AudioVersionTemplate do
     error_results.must_include 'long, but must be'
   end
 
-  it 'can tell if version label doesnt match template' do
-    audio_version.update(label: 'Wrong label!')
-    error_results = audio_version_template.validate_audio_version(audio_version)
-    error_results.must_include 'should be labeled'
-  end
-
   it 'leaves a file alone if file complies with template' do
     audio_version_template.length_minimum = 0
     audio_version_template.validate_audio_version(audio_version).must_be(:empty?)
