@@ -10,7 +10,7 @@ class Api::Auth::PodcastImportsController < Api::BaseController
   filter_params :url
 
   def after_create_resource(res)
-    res.import if res
+    res.try(:import)
   end
 
   def filtered(resources)

@@ -25,7 +25,7 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
   end
 
   def auth_url
-    result = self.url
+    result = url
     if result && !result.match(/authorization/)
       result = result.gsub('/episodes/', '/authorization/episodes/')
     end
