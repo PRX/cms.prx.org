@@ -10,7 +10,7 @@ describe PodcastImporter do
   let(:importer) { PodcastImporter.new(account_path, podcast_url) }
 
   before do
-    stub_requests
+    stub_import_requests
   end
 
   let(:feed) { Feedjira::Feed.parse(test_file('/fixtures/transistor.xml')) }
@@ -75,7 +75,7 @@ describe PodcastImporter do
   end
 end
 
-def stub_requests
+def stub_import_requests
   stub_request(:get, 'http://feeds.prx.org/transistor_stem').
     to_return(status: 200, body: test_file('/fixtures/transistor.xml'), headers: {})
 
