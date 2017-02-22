@@ -26,6 +26,14 @@ class Series < BaseModel
 
   acts_as_paranoid
 
+  def self.paranoia_scope
+    where(
+      arel_table[paranoia_column].eq(paranoia_sentinel_value).or(
+        arel_table['app_version'].eq(PRX::APP_VERSION)
+      )
+    )
+  end
+
   belongs_to :account, -> { with_deleted }
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
 
@@ -150,6 +158,7 @@ class Series < BaseModel
   def set_app_version
     return unless new_record?
     self.app_version = PRX::APP_VERSION
+    self.deleted_at = DateTime.now
   end
 
   def update_account_for_stories
