@@ -23,7 +23,7 @@ FactoryGirl.define do
 
     factory :series_v3 do
       after(:create, :stub) do |series, _evaluator|
-        series.update_attributes(app_version: 'v3')
+        series.update_attributes(app_version: 'v3', deleted_at: nil)
       end
     end
   end
