@@ -43,9 +43,9 @@ describe Api::StoryRepresenter do
       representer = Api::StoryRepresenter.new(story)
       json = JSON.parse(representer.to_json)
 
-      json.keys.must_include('versionErrors')
+      json.keys.must_include('statusMsg')
       json['status'].must_equal 'invalid'
-      json['versionErrors'].must_include 'Invalid audio version:'
+      json['statusMsg'].must_include 'Invalid audio version:'
     end
   end
 

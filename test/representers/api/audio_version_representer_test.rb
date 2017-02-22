@@ -43,4 +43,8 @@ describe Api::AudioVersionRepresenter do
     representer.represented.reload
     json['_links']['prx:audio-version-template'].must_be_nil
   end
+
+  it 'shows version validity' do
+    json.keys.must_include('status')
+  end
 end

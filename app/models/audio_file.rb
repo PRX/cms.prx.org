@@ -37,7 +37,7 @@ class AudioFile < BaseModel
   end
 
   def compliant_with_template?
-    audio_errors.nil?
+    status_msg.nil?
   end
 
   def validate_on_template
@@ -49,10 +49,10 @@ class AudioFile < BaseModel
 
     errors = template.validate_audio_file(self)
     if errors.empty?
-      self.audio_errors = nil
+      self.status_msg = nil
     else
       self.status = INVALID
-      self.audio_errors = errors
+      self.status_msg = errors
     end
   end
 end

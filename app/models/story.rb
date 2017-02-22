@@ -270,10 +270,10 @@ class Story < BaseModel
 
     if av_errors.empty?
       self.status = VALID
-      self.version_errors = nil
+      self.status_msg = nil
     else
       self.status = INVALID
-      self.version_errors = av_errors.strip
+      self.status_msg = av_errors.strip
     end
   end
 end

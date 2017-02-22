@@ -35,21 +35,21 @@ describe Story do
       story.audio_versions = []
       story.update(title: 'test title')
       story.status.must_equal 'invalid'
-      story.version_errors.must_include 'has no audio.'
+      story.status_msg.must_include 'has no audio.'
     end
 
     it 'is invalid if any its audio versions are invalid' do
       story.audio_versions = invalid_audio_versions
       story.update(title: 'Title!')
       story.status.must_equal 'invalid'
-      story.version_errors.must_include 'Invalid audio version: '
+      story.status_msg.must_include 'Invalid audio version: '
     end
 
     it 'is valid if all its audio versions are valid' do
       story.audio_versions = valid_audio_versions
       story.update(title: 'Title!')
       story.status.must_equal 'valid'
-      story.version_errors.must_be_nil
+      story.status_msg.must_be_nil
     end
   end
 
