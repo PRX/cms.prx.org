@@ -25,7 +25,7 @@ describe AudioVersionTemplate do
 
   it 'can tell if version length doesnt match template' do
     error_results = audio_version_template.validate_audio_version(audio_version)
-    error_results.must_include 'must be between'
+    error_results.must_include 'long, but must be'
   end
 
   it 'can tell if version label doesnt match template' do

@@ -14,7 +14,7 @@ describe AudioFileTemplate do
   end
 
   it 'can tell if file length doesnt match template' do
-    audio_file_template.validate_audio_file(audio_file).must_include 'must be between'
+    audio_file_template.validate_audio_file(audio_file).must_include 'long, but must be'
   end
 
   it 'can tell if file label doesnt match template' do
