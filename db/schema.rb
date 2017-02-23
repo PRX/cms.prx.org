@@ -193,6 +193,15 @@ ActiveRecord::Schema.define(version: 6) do
 
   add_index "formats", ["piece_id"], name: "formats_piece_id_fk", using: :btree
 
+  create_table "podcast_imports", force: :cascade do |t|
+    t.integer  "account_id", limit: 4
+    t.integer  "series_id",  limit: 4
+    t.string   "url",        limit: 255
+    t.string   "status",     limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "licenses", force: :cascade do |t|
     t.integer  "piece_id",         limit: 4
     t.string   "website_usage",    limit: 255

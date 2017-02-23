@@ -16,6 +16,7 @@ class Account < BaseModel
   has_many :memberships
   has_many :websites, as: :browsable
   has_many :playlists
+  has_many :podcast_imports
 
   has_many :network_memberships
   has_many :networks, through: :network_memberships

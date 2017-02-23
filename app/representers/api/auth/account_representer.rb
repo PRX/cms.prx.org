@@ -15,6 +15,19 @@ class Api::Auth::AccountRepresenter < Api::AccountRepresenter
         item_decorator: Api::Auth::StoryMinRepresenter,
         url: ->(_r) { api_authorization_account_stories_path(represented.parent) }
 
+  link :podcast_imports do
+    {
+      href: "#{api_authorization_account_podcast_imports_path(represented)}#{index_url_params}",
+      templated: true,
+      count: represented.podcast_imports.count
+    }
+  end
+  embed :podcast_imports,
+        paged: true,
+        item_class: PodcastImport,
+        item_decorator: Api::Auth::PodcastImportRepresenter,
+        url: ->(_r) { api_authorization_account_podcast_imports_path(represented.parent) }
+
   def self_url(r)
     api_authorization_account_path(r)
   end

@@ -105,7 +105,6 @@ module PRXAccess
     oauth_options = { site: id_root, token_url: '/token' }
     client = OAuth2::Client.new(id, se, oauth_options) do |faraday|
       faraday.request  :url_encoded
-      faraday.response :logger
       faraday.adapter  :excon
     end
     client.client_credentials.get_token(account: account).token

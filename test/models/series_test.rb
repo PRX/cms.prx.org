@@ -5,29 +5,37 @@ describe Series do
   let(:series) { create(:series, episode_start_at: episode_start_at) }
   let(:v3_series) { create(:series_v3, episode_start_at: episode_start_at) }
 
-  it 'has stories' do
-    series.stories.count.must_be :>, 0
+  describe 'basics' do
+    it 'is deleted by default' do
+      create(:series).must_be :deleted?
+    end
+
+    it 'has stories' do
+      series.stories.count.must_be :>, 0
+    end
+
+    it 'has a story count' do
+      public_stories_count = series.stories.published.network_visible.series_visible.count
+      series.public_stories.count.must_equal public_stories_count
+    end
+
+    it 'changes account_id for stories when own account changes' do
+      series.update_attributes!(account_id: 123)
+      series.stories.each do |story|
+        story.account_id.must_equal 123
+      end
+    end
   end
 
-  it 'has a story count' do
-    public_stories_count = series.stories.published.network_visible.series_visible.count
-    series.public_stories.count.must_equal public_stories_count
-  end
+  describe 'deleting' do
+    it 'actually deletes v4 series' do
+      series.destroy!
+      Series.unscoped.where(id: series.id).count.must_equal 0
+    end
 
-  it 'actually deletes v4 series' do
-    series.destroy!
-    Series.where(id: series.id).with_deleted.count.must_equal 0
-  end
-
-  it 'soft deletes v3 series' do
-    v3_series.destroy!
-    Series.where(id: v3_series.id).with_deleted.count.must_equal 1
-  end
-
-  it 'changes account_id for stories when own account changes' do
-    series.update_attributes!(account_id: 123)
-    series.stories.each do |story|
-      story.account_id.must_equal 123
+    it 'soft deletes v3 series' do
+      v3_series.destroy!
+      Series.unscoped.where(id: v3_series.id).count.must_equal 1
     end
   end
 

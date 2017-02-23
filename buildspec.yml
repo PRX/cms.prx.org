@@ -1,0 +1,29 @@
+version: 0.1
+phases:
+  pre_build:
+    commands:
+      - apt-get update -y
+      - apt-get install -y jq
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --region $ECR_REGION)
+  build:
+    commands:
+      - docker build -t $ECR_REPOSITORY_NAME:$((ECR_IMAGE_TAG+1)) .
+      - docker tag $ECR_REPOSITORY_NAME:$((ECR_IMAGE_TAG+1)) $AWS_ACCOUNT_ID.dkr.ecr.$ECR_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$((ECR_IMAGE_TAG+1))
+      - docker-compose run cms testsetup
+      - docker-compose run cms test
+  post_build:
+    commands:
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$ECR_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$((ECR_IMAGE_TAG+1))
+      - aws s3 cp s3://$TEMPLATE_CONFIG_BUCKET/$TEMPLATE_CONFIG_ARTIFACT $TEMPLATE_CONFIG_ARTIFACT
+      - unzip $TEMPLATE_CONFIG_ARTIFACT
+      - jq --arg tag $((ECR_IMAGE_TAG+1)) '.Parameters.CmsECRImageTag = $tag' staging.json > staging2.json
+      - rm staging.json && mv staging2.json staging.json
+      - zip $TEMPLATE_CONFIG_ARTIFACT staging.json
+      - aws s3 cp $TEMPLATE_CONFIG_ARTIFACT s3://$TEMPLATE_CONFIG_BUCKET/
+      # that will trigger a Root Stack CodePipeline execution
+artifacts:
+  # It seems like CodePipeline and CodeBuild expect an artifact here. Currently
+  # we don't need any, so this is essentially a no-op.
+  files:
+    - README.md
