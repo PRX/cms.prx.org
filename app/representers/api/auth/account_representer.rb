@@ -25,7 +25,7 @@ class Api::Auth::AccountRepresenter < Api::AccountRepresenter
   embed :podcast_imports,
         paged: true,
         item_class: PodcastImport,
-        item_decorator: Api::Auth::StoryMinRepresenter,
+        item_decorator: Api::Auth::PodcastImportRepresenter,
         url: ->(_r) { api_authorization_account_podcast_imports_path(represented.parent) }
 
   def self_url(r)
