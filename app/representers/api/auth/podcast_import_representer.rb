@@ -14,7 +14,7 @@ class Api::Auth::PodcastImportRepresenter < Api::BaseRepresenter
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
 
-  link rel: :series, writeable: true do
+  link :series do
     {
       href: api_series_path(represented.series),
       title: represented.series.title
