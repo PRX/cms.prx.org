@@ -1,4 +1,3 @@
-# import script for a podcast live in feeder & dovetail
 require 'prx_access'
 require 'addressable/uri'
 require 'feedjira'
