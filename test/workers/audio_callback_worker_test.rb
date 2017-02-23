@@ -79,19 +79,19 @@ describe AudioCallbackWorker do
 
   it 'sets download errors' do
     perform(downloaded: false)
-    audio.status.must_equal AudioFile::NOTFOUND
+    audio.status.must_equal AudioCallbackWorker::NOTFOUND
     audio.fixerable_final?.must_equal false
   end
 
   it 'sets validation errors' do
     perform(valid: false)
-    audio.status.must_equal AudioFile::INVALID
+    audio.status.must_equal AudioCallbackWorker::INVALID
     audio.fixerable_final?.must_equal false
   end
 
   it 'sets processing errors' do
     perform(processed: false)
-    audio.status.must_equal AudioFile::FAILED
+    audio.status.must_equal AudioCallbackWorker::FAILED
     audio.fixerable_final?.must_equal false
   end
 

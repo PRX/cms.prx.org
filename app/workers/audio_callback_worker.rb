@@ -1,5 +1,6 @@
 class AudioCallbackWorker
   include Shoryuken::Worker
+  include ValidityFlag
 
   class UnknownAudioTypeError < StandardError; end
 
@@ -25,20 +26,19 @@ class AudioCallbackWorker
     # job['channels'] = ffmpeg.channels
     # job['layout'] = ffmpeg.channel_layout
     audio.channel_mode = if job['channels'] == 2
-                           AudioFile::STEREO
+                           STEREO
                          elsif job['channels'] == 1
-                           AudioFile::SINGLE_CHANNEL
+                           SINGLE_CHANNEL
                          end
-
     if !job['downloaded']
-      audio.status = AudioFile::NOTFOUND
+      audio.status = NOTFOUND
     elsif !job['valid']
-      audio.status = AudioFile::INVALID
+      audio.status = INVALID
     elsif !job['processed']
-      audio.status = AudioFile::FAILED
+      audio.status = FAILED
     else
       audio.upload_path = nil
-      audio.status = AudioFile::COMPLETE
+      audio.status = COMPLETE
     end
 
     Shoryuken.logger.info("Updating #{job['type']}[#{audio.id}]: status => #{audio.status}")

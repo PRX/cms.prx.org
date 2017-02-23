@@ -56,19 +56,19 @@ describe ImageCallbackWorker do
 
   it 'sets download errors' do
     perform(downloaded: false)
-    image.status.must_equal Image::NOTFOUND
+    image.status.must_equal ImageCallbackWorker::NOTFOUND
     image.fixerable_final?.must_equal false
   end
 
   it 'sets validation errors' do
     perform(valid: false)
-    image.status.must_equal Image::INVALID
+    image.status.must_equal ImageCallbackWorker::INVALID
     image.fixerable_final?.must_equal false
   end
 
   it 'sets resize errors' do
     perform(resized: false)
-    image.status.must_equal Image::FAILED
+    image.status.must_equal ImageCallbackWorker::FAILED
     image.fixerable_final?.must_equal false
   end
 

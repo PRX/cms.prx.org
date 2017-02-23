@@ -1,5 +1,6 @@
 class ImageCallbackWorker
   include Shoryuken::Worker
+  include ValidityFlag
 
   class UnknownImageTypeError < StandardError; end
 
@@ -17,14 +18,14 @@ class ImageCallbackWorker
     image.content_type = mime_type || job['format']
 
     if !job['downloaded']
-      image.status = Image::NOTFOUND
+      image.status = NOTFOUND
     elsif !job['valid']
-      image.status = Image::INVALID
+      image.status = INVALID
     elsif !job['resized']
-      image.status = Image::FAILED
+      image.status = FAILED
     else
       image.upload_path = nil
-      image.status = Image::COMPLETE
+      image.status = COMPLETE
     end
 
     Shoryuken.logger.info("Updating #{job['type']}[#{image.id}]: status => #{image.status}")
