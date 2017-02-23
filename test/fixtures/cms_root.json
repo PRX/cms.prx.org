@@ -1,0 +1,95 @@
+{
+  "_links": {
+    "curies": [
+      {
+        "href": "http://meta.prx.org/relation/{rel}",
+        "name": "prx",
+        "templated": true
+      }
+    ],
+    "profile": {
+      "href": "http://meta.prx.org/model/api"
+    },
+    "prx:account": [
+      {
+        "href": "/api/v1/accounts/{id}{?zoom}",
+        "profile": "http://meta.prx.org/model/account",
+        "templated": true,
+        "title": "Get a single account"
+      }
+    ],
+    "prx:accounts": [
+      {
+        "href": "/api/v1/accounts{?page,per,zoom,filters,sorts}",
+        "profile": "http://meta.prx.org/model/collection/account",
+        "templated": true,
+        "title": "Get a paged collection of accounts"
+      }
+    ],
+    "prx:authorization": {
+      "href": "/api/v1/authorization",
+      "profile": "http://meta.prx.org/model/user",
+      "templated": false,
+      "title": "Get information about the active authorization for this request"
+    },
+    "prx:network": [
+      {
+        "href": "/api/v1/networks/{id}{?zoom}",
+        "profile": "http://meta.prx.org/model/network",
+        "templated": true,
+        "title": "Get a single network"
+      }
+    ],
+    "prx:networks": [
+      {
+        "href": "/api/v1/networks{?page,per,zoom,filters,sorts}",
+        "profile": "http://meta.prx.org/model/collection/network",
+        "templated": true,
+        "title": "Get a paged collection of networks"
+      }
+    ],
+    "prx:picks": [
+      {
+        "href": "/api/v1/picks{?page,per,zoom,filters,sorts}",
+        "profile": "http://meta.prx.org/model/collection/pick",
+        "templated": true,
+        "title": "Get a paged collection of the most recent picks"
+      }
+    ],
+    "prx:series": [
+      {
+        "href": "/api/v1/series/{id}{?zoom}",
+        "profile": "http://meta.prx.org/model/series",
+        "templated": true,
+        "title": "Get a single series"
+      },
+      {
+        "href": "/api/v1/series{?page,per,zoom,filters,sorts}",
+        "profile": "http://meta.prx.org/model/collection/series",
+        "templated": true,
+        "title": "Get a paged collection of series"
+      }
+    ],
+    "prx:stories": [
+      {
+        "href": "/api/v1/stories{?page,per,zoom,filters,sorts}",
+        "profile": "http://meta.prx.org/model/collection/story",
+        "templated": true,
+        "title": "Get a paged collection of stories"
+      }
+    ],
+    "prx:story": [
+      {
+        "href": "/api/v1/stories/{id}{?zoom}",
+        "profile": "http://meta.prx.org/model/story",
+        "templated": true,
+        "title": "Get a single story"
+      }
+    ],
+    "self": {
+      "href": "/api/v1",
+      "profile": "http://meta.prx.org/model/api"
+    }
+  },
+  "version": "v1"
+}

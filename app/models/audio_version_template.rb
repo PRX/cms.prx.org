@@ -29,5 +29,4 @@ class AudioVersionTemplate < BaseModel
   def touch_audio_versions
     audio_versions.update_all(updated_at: Time.now)
   end
-
 end

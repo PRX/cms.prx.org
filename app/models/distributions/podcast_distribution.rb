@@ -14,13 +14,14 @@ class Distributions::PodcastDistribution < Distribution
     StoryDistributions::EpisodeDistribution
   end
 
-  def add_podcast_to_feeder
+  def add_podcast_to_feeder(create_attributes = {})
     return unless url.blank?
     client = api(root: feeder_root, account: account.id)
-    podcast = client.podcasts.first.post(podcast_attributes)
+    podcast = client.podcasts.first.post(podcast_attributes.merge(create_attributes))
     podcast_url = URI.join(feeder_root, podcast.links['self'].href).to_s
     raise 'Failed to get podcast url on create' if podcast_url.blank?
     update_attributes!(url: podcast_url)
+    podcast
   end
 
   def get_podcast

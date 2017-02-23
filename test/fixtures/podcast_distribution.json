@@ -1,0 +1,29 @@
+{
+   "kind" : "podcast",
+   "id" : 33,
+   "_links" : {
+      "curies" : [
+         {
+            "href" : "http://meta.prx.org/relation/{rel}",
+            "templated" : true,
+            "name" : "prx"
+         }
+      ],
+      "prx:owner" : {
+         "href" : "/api/v1/series/12345",
+         "profile" : "http://meta.prx.org/model/series/distributions"
+      },
+      "self" : {
+         "href" : "/api/v1/series/12345/distributions/33",
+         "profile" : "http://meta.prx.org/model/distribution/distributions/podcast/distributions"
+      },
+      "profile" : {
+         "href" : "http://meta.prx.org/model/distribution/distributions/podcast/distributions"
+      },
+      "prx:podcast" : {
+         "profile" : "http://meta.prx.org/model/podcast/distributions",
+         "href" : "https://feeder.prx.tech/api/v1/podcasts/51"
+      }
+   },
+   "url" : "https://feeder.prx.tech/api/v1/podcasts/51"
+}

@@ -1,0 +1,24 @@
+{
+  "_embedded": {
+    "prx:items": [
+    ]
+  },
+  "_links": {
+    "curies": [
+      {
+        "href": "http://meta.prx.org/relation/{rel}",
+        "name": "prx",
+        "templated": true
+      }
+    ],
+    "profile": {
+      "href": "http://meta.prx.org/model/collection/distribution"
+    },
+    "self": {
+      "href": "/api/v1/series/12345/distributions",
+      "profile": "http://meta.prx.org/model/collection/distribution"
+    }
+  },
+  "count": 0,
+  "total": 0
+}

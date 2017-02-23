@@ -1,0 +1,19 @@
+{
+  "id": 82,
+  "kind": "episode",
+  "url": "https://feeder.prx.tech/api/v1/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03",
+  "_links": {
+    "prx:story": {
+      "title": "Title",
+      "profile": "http://meta.prx.org/model/story",
+      "href": "/api/v1/stories/186929"
+    },
+    "profile": {
+      "href": "http://meta.prx.org/model/story-distribution/story-distributions/episode-distribution"
+    },
+    "self": {
+      "href": "/api/v1/stories/186929/story_distributions/82",
+      "profile": "http://meta.prx.org/model/story-distribution/story-distributions/episode-distribution"
+    }
+  }
+}

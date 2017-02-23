@@ -25,6 +25,12 @@ gem 'unf'
 gem 'oauth2'
 gem 'hyperresource'
 
+# feed import
+gem 'feedjira'
+gem 'addressable'
+gem 'faraday'
+gem 'excon'
+
 # Use Sanitize for HTML and CSS whitelisting
 gem 'sanitize'
 
