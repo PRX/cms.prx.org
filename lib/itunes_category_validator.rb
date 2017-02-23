@@ -47,7 +47,10 @@ class ITunesCategoryValidator < ActiveModel::Validator
 
   def self.subcategory?(subcat, category = nil)
     cats = category ? [category] : CATEGORIES.keys
-    !!cats.detect { |c| CATEGORIES[c].include?(subcat) }
+    cats.each do |c|
+      return c if CATEGORIES[c].include?(subcat)
+    end
+    nil
   end
 
   def subcategory?(subcat, cat = nil)
