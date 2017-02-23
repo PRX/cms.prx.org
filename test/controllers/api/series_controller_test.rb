@@ -6,6 +6,8 @@ describe Api::SeriesController do
   let(:series) { create(:series, account: account) }
   let(:v3_series) { create(:series_v3, account: account) }
 
+  before { Series.delete_all }
+
   it 'should show' do
     get(:show, api_version: 'v1', format: 'json', id: series.id)
     assert_response :success
