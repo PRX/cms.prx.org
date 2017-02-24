@@ -11,7 +11,7 @@ module AnnounceActions
     attr_accessor :announced_actions
 
     def announce_actions(*args)
-      self.announced_actions ||= []
+      self.announced_actions ||= Hash.new { |hash, action| hash[action] = [] }
 
       options = args.extract_options!
 
@@ -19,12 +19,13 @@ module AnnounceActions
       actions = [:create, :update, :destroy] if actions.empty?
 
       actions.each do |action|
-        next if announced_actions.include?(action)
+        next if announced_actions.include?(action) &&
+                announced_actions[action].include?(options)
 
         add_announce_filter(action, options)
-
         # remember this action already announcing, prevent dupes
-        self.announced_actions << action
+        debugger
+        self.announced_actions[action] << options
       end
     end
 
