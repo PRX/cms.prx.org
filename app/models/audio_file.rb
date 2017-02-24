@@ -41,6 +41,9 @@ class AudioFile < BaseModel
   end
 
   def validate_on_template
+    # only do template validations once the audio callback worker has finished
+    return unless status == COMPLETE
+
     template = audio_version.
                try(:audio_version_template).
                try(:audio_file_templates).

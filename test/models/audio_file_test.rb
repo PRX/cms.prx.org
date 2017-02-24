@@ -68,4 +68,10 @@ describe AudioFile do
     audio_file.status.wont_equal 'invalid'
     audio_file.must_be(:compliant_with_template?)
   end
+
+  it 'doesnt validate on template unless audio has processed' do
+    audio_file.update(status: 'failed')
+    audio_file.update_attributes(position: 1, label: 'Main Segment')
+    audio_file.status.must_equal 'failed'
+  end
 end
