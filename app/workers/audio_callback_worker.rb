@@ -32,9 +32,7 @@ class AudioCallbackWorker
                          end
     if !job['downloaded']
       audio.status = NOTFOUND
-    elsif !job['valid']
-      audio.status = INVALID
-    elsif !job['processed']
+    elsif !job['valid'] || !job['processed']
       audio.status = FAILED
     else
       audio.upload_path = nil
