@@ -1,6 +1,7 @@
 class ImageCallbackWorker
   include Shoryuken::Worker
   include ValidityFlag
+  include Announce::Publisher
 
   class UnknownImageTypeError < StandardError; end
 
@@ -30,6 +31,9 @@ class ImageCallbackWorker
 
     Shoryuken.logger.info("Updating #{job['type']}[#{image.id}]: status => #{image.status}")
     image.save!
+    # announce the audio changes using the story as resource -- or do we want series?
+    announce(:image, :update, id: image.story.id, resource: image.story)
+
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
   rescue UnknownImageTypeError

@@ -9,10 +9,10 @@ describe AudioCallbackWorker do
     audio.story = create(:story)
   end
 
-  before(:each) {
+  before(:each) do
     Shoryuken::Logging.logger.level = Logger::FATAL
     clear_messages
-  }
+  end
 
   after(:each) { Shoryuken::Logging.logger.level = Logger::INFO }
 

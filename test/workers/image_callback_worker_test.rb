@@ -3,9 +3,13 @@ require 'test_helper'
 describe ImageCallbackWorker do
 
   let(:worker) { ImageCallbackWorker.new }
-  let(:image) { FactoryGirl.create(:story_image_uploaded) }
+  let(:image) { create(:story_image_uploaded) }
 
-  before(:each) { Shoryuken::Logging.logger.level = Logger::FATAL }
+  before(:each) do
+    Shoryuken::Logging.logger.level = Logger::FATAL
+    clear_messages
+  end
+
   after(:each) { Shoryuken::Logging.logger.level = Logger::INFO }
 
   def perform(attrs = {})
@@ -70,6 +74,15 @@ describe ImageCallbackWorker do
     perform(resized: false)
     image.status.must_equal ImageCallbackWorker::FAILED
     image.fixerable_final?.must_equal false
+  end
+
+  it 'announces image updates with story as resource' do
+    perform(name: 'foo.bar')
+    last_message.wont_be_nil
+    last_message['subject'].must_equal :image
+    last_message['action'].must_equal :update
+    last_message['body'][:id].must_equal image.story.id
+    last_message['body'][:resource].must_equal image.story
   end
 
 end
