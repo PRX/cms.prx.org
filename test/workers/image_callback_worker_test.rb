@@ -4,6 +4,7 @@ describe ImageCallbackWorker do
 
   let(:worker) { ImageCallbackWorker.new }
   let(:image) { create(:story_image_uploaded) }
+  let(:series_image) { create(:series_image) }
 
   before(:each) do
     Shoryuken::Logging.logger.level = Logger::FATAL
@@ -76,13 +77,19 @@ describe ImageCallbackWorker do
     image.fixerable_final?.must_equal false
   end
 
-  it 'announces image updates with story as resource' do
+  it 'announces story updates for story-image' do
     perform(name: 'foo.bar')
     last_message.wont_be_nil
-    last_message['subject'].must_equal :image
+    last_message['subject'].must_equal :story
     last_message['action'].must_equal :update
-    last_message['body'][:id].must_equal image.story.id
-    last_message['body'][:resource].must_equal image.story
+    last_message['body'].must_equal image.story
   end
 
+  it 'announces series updates for series-image' do
+    perform(name: 'foo.bar', id: series_image.id, type: series_image.class.table_name)
+    last_message.wont_be_nil
+    last_message['subject'].must_equal :series
+    last_message['action'].must_equal :update
+    last_message['body'].must_equal series_image.series
+  end
 end

@@ -31,8 +31,13 @@ class ImageCallbackWorker
 
     Shoryuken.logger.info("Updating #{job['type']}[#{image.id}]: status => #{image.status}")
     image.save!
-    # announce the audio changes using the story as resource -- or do we want series?
-    announce(:image, :update, id: image.story.id, resource: image.story)
+
+    # announce the image changes on its story or series
+    if image.is_a?(StoryImage)
+      announce(:story, :update, image.story)
+    elsif image.is_a?(SeriesImage)
+      announce(:series, :update, image.series)
+    end
 
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
