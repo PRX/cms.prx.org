@@ -26,6 +26,29 @@ describe Api::StoryRepresenter do
     end
   end
 
+  describe 'status flags' do
+    let(:invalid_audio_versions) { create_list(:audio_version_with_template, 5) }
+    let(:valid_audio_versions) { create_list(:audio_version, 5) }
+
+    it 'shows valid if story is valid' do
+      story.audio_versions.wont_be(:empty?)
+      story.update(title: 'Title!')
+      json.keys.must_include('status')
+      json['status'].must_equal 'valid'
+    end
+
+    it 'shows invalid, plus errors, if story is invalid' do
+      story.audio_versions = invalid_audio_versions
+      story.update(title: 'Title!')
+      representer = Api::StoryRepresenter.new(story)
+      json = JSON.parse(representer.to_json)
+
+      json.keys.must_include('statusMessage')
+      json['status'].must_equal 'invalid'
+      json['statusMessage'].must_include 'Invalid audio version:'
+    end
+  end
+
   describe 'serialize' do
 
     it 'can serialize an unsaved story' do

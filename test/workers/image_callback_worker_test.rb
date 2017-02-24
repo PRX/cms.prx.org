@@ -3,9 +3,14 @@ require 'test_helper'
 describe ImageCallbackWorker do
 
   let(:worker) { ImageCallbackWorker.new }
-  let(:image) { FactoryGirl.create(:story_image_uploaded) }
+  let(:image) { create(:story_image_uploaded) }
+  let(:series_image) { create(:series_image) }
 
-  before(:each) { Shoryuken::Logging.logger.level = Logger::FATAL }
+  before(:each) do
+    Shoryuken::Logging.logger.level = Logger::FATAL
+    clear_messages
+  end
+
   after(:each) { Shoryuken::Logging.logger.level = Logger::INFO }
 
   def perform(attrs = {})
@@ -56,20 +61,35 @@ describe ImageCallbackWorker do
 
   it 'sets download errors' do
     perform(downloaded: false)
-    image.status.must_equal Image::NOTFOUND
+    image.status.must_equal ImageCallbackWorker::NOTFOUND
     image.fixerable_final?.must_equal false
   end
 
   it 'sets validation errors' do
     perform(valid: false)
-    image.status.must_equal Image::INVALID
+    image.status.must_equal ImageCallbackWorker::INVALID
     image.fixerable_final?.must_equal false
   end
 
   it 'sets resize errors' do
     perform(resized: false)
-    image.status.must_equal Image::FAILED
+    image.status.must_equal ImageCallbackWorker::FAILED
     image.fixerable_final?.must_equal false
   end
 
+  it 'announces story updates for story-image' do
+    perform(name: 'foo.bar')
+    last_message.wont_be_nil
+    last_message['subject'].must_equal :story
+    last_message['action'].must_equal :update
+    last_message['body'].must_equal image.story
+  end
+
+  it 'announces series updates for series-image' do
+    perform(name: 'foo.bar', id: series_image.id, type: series_image.class.table_name)
+    last_message.wont_be_nil
+    last_message['subject'].must_equal :series
+    last_message['action'].must_equal :update
+    last_message['body'].must_equal series_image.series
+  end
 end

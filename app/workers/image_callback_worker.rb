@@ -1,5 +1,7 @@
 class ImageCallbackWorker
   include Shoryuken::Worker
+  include ValidityFlag
+  include Announce::Publisher
 
   class UnknownImageTypeError < StandardError; end
 
@@ -17,18 +19,26 @@ class ImageCallbackWorker
     image.content_type = mime_type || job['format']
 
     if !job['downloaded']
-      image.status = Image::NOTFOUND
+      image.status = NOTFOUND
     elsif !job['valid']
-      image.status = Image::INVALID
+      image.status = INVALID
     elsif !job['resized']
-      image.status = Image::FAILED
+      image.status = FAILED
     else
       image.upload_path = nil
-      image.status = Image::COMPLETE
+      image.status = COMPLETE
     end
 
     Shoryuken.logger.info("Updating #{job['type']}[#{image.id}]: status => #{image.status}")
     image.save!
+
+    # announce the image changes on its story or series
+    if image.is_a?(StoryImage)
+      announce(:story, :update, image.story)
+    elsif image.is_a?(SeriesImage)
+      announce(:series, :update, image.series)
+    end
+
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
   rescue UnknownImageTypeError

@@ -6,6 +6,7 @@ class Story < BaseModel
   self.table_name = 'pieces'
 
   include RenderMarkdown
+  include ValidityFlag
 
   def description_html
     v4? ? markdown_to_html(description) : description
@@ -54,6 +55,8 @@ class Story < BaseModel
 
   before_validation :set_app_version, on: :create
   before_validation :update_published_to_released
+
+  before_save :validate_audio_versions
 
   # indicates piece is published with promos only - not full audio
   event_attribute :promos_only_at
@@ -250,6 +253,27 @@ class Story < BaseModel
   def update_published_to_released
     if published_at && !released_at.nil? && released_at_changed?
       self.published_at = released_at
+    end
+  end
+
+  def validate_audio_versions
+    av_errors = ''
+    if audio_versions.empty?
+      av_errors << "Story '#{title}' has no audio."
+    else
+      audio_versions.each do |av|
+        if !av.compliant_with_template? || av.status == INVALID
+          av_errors << "Invalid audio version: '#{av.label}.' "
+        end
+      end
+    end
+
+    if av_errors.empty?
+      self.status = VALID
+      self.status_message = nil
+    else
+      self.status = INVALID
+      self.status_message = av_errors.strip
     end
   end
 end

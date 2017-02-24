@@ -5,7 +5,7 @@ require 'audio_file' if !defined?(AudioFile)
 
 describe Api::AudioFileRepresenter do
 
-  let(:audio_file)  { FactoryGirl.create(:audio_file) }
+  let(:audio_file)  { create(:audio_file) }
   let(:representer) { Api::AudioFileRepresenter.new(audio_file) }
   let(:json)        { JSON.parse(representer.to_json) }
 
@@ -25,5 +25,9 @@ describe Api::AudioFileRepresenter do
 
   it 'links to the original' do
     json['_links']['original']['href'].must_match /#{audio_file.id}\/original/
+  end
+
+  it 'shows file validity' do
+    json.keys.must_include('status')
   end
 end

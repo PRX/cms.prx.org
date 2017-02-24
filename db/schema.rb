@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.string   "channel_mode",     limit: 255
     t.string   "status",           limit: 255
     t.string   "format",           limit: 255
+    t.text     "status_message",       limit: 65535
     t.datetime "deleted_at"
     t.string   "listenable_type",  limit: 255
     t.integer  "listenable_id",    limit: 4
@@ -156,6 +157,8 @@ ActiveRecord::Schema.define(version: 6) do
     t.text     "content_advisory",          limit: 65535
     t.text     "timing_and_cues",           limit: 65535
     t.text     "transcript",                limit: 65535
+    t.text     "status_message",                limit: 65535
+    t.string   "status",                    limit: 255
     t.boolean  "news_hole_break"
     t.boolean  "floating_break"
     t.boolean  "bottom_of_hour_break"
@@ -294,6 +297,8 @@ ActiveRecord::Schema.define(version: 6) do
     t.text     "broadcast_history",       limit: 65535
     t.text     "intro",                   limit: 65535
     t.text     "outro",                   limit: 65535
+    t.string   "status",                  limit: 255
+    t.text     "status_message",              limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "length",                  limit: 4

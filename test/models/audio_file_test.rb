@@ -1,10 +1,15 @@
 require 'test_helper'
 
 describe AudioFile do
+  let(:audio_file_uploaded) { create(:audio_file_uploaded) }
 
-  let(:audio_file) { FactoryGirl.create(:audio_file) }
-
-  let(:audio_file_uploaded) { FactoryGirl.create(:audio_file_uploaded) }
+  let(:audio_version) { create(:audio_version_with_template) }
+  let(:file_templates) do
+    create_list(:audio_file_template,
+                3,
+                audio_version_template: audio_version.audio_version_template)
+  end
+  let(:audio_file) { create(:audio_file, audio_version: audio_version) }
 
   it 'has a table defined' do
     AudioFile.table_name.must_equal 'audio_files'
@@ -43,5 +48,30 @@ describe AudioFile do
 
     story.updated_at.must_be :>, stamp
     version.updated_at.must_be :>, stamp
+  end
+
+  it 'validates self based on template' do
+    audio_version.audio_version_template.wont_be_nil
+    file_templates.find { |ft| ft.label == 'Main Segment' && ft.position == 1 }.tap do |ft|
+      ft.length_minimum = 1
+      ft.length_maximum = 10
+    end
+    audio_version.audio_version_template.audio_file_templates = file_templates
+
+    audio_file.update_attributes(position: 1, label: 'Main Segment')
+    audio_file.status_message.must_include 'long, but must be'
+    audio_file.wont_be(:compliant_with_template?)
+    audio_file.status.must_equal 'invalid'
+
+    audio_file.update_attributes(status: 'complete', length: 5)
+    audio_file.status_message.must_be_nil
+    audio_file.status.wont_equal 'invalid'
+    audio_file.must_be(:compliant_with_template?)
+  end
+
+  it 'doesnt validate on template unless audio has processed' do
+    audio_file.update(status: 'failed')
+    audio_file.update_attributes(position: 1, label: 'Main Segment')
+    audio_file.status.must_equal 'failed'
   end
 end

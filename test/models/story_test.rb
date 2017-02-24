@@ -26,6 +26,33 @@ describe Story do
     end
   end
 
+  describe 'checking audio versions' do
+    let(:story) { create(:story) }
+    let(:invalid_audio_versions) { create_list(:audio_version_with_template, 5) }
+    let(:valid_audio_versions) { create_list(:audio_version, 5) }
+
+    it 'is invalid if it has no audio' do
+      story.audio_versions = []
+      story.update(title: 'test title')
+      story.status.must_equal 'invalid'
+      story.status_message.must_include 'has no audio.'
+    end
+
+    it 'is invalid if any its audio versions are invalid' do
+      story.audio_versions = invalid_audio_versions
+      story.update(title: 'Title!')
+      story.status.must_equal 'invalid'
+      story.status_message.must_include 'Invalid audio version: '
+    end
+
+    it 'is valid if all its audio versions are valid' do
+      story.audio_versions = valid_audio_versions
+      story.update(title: 'Title!')
+      story.status.must_equal 'valid'
+      story.status_message.must_be_nil
+    end
+  end
+
   describe 'distributions' do
     let(:series) { create(:series) }
     let(:story) { create(:story, series: series) }

@@ -7,6 +7,7 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
   property :filename, writeable: false
   property :label
   property :status, writeable: false
+  property :status_message, writeable: false
   property :size
   property :duration
 

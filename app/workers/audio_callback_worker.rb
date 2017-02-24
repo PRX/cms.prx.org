@@ -1,5 +1,7 @@
 class AudioCallbackWorker
   include Shoryuken::Worker
+  include ValidityFlag
+  include Announce::Publisher
 
   class UnknownAudioTypeError < StandardError; end
 
@@ -25,24 +27,24 @@ class AudioCallbackWorker
     # job['channels'] = ffmpeg.channels
     # job['layout'] = ffmpeg.channel_layout
     audio.channel_mode = if job['channels'] == 2
-                           AudioFile::STEREO
+                           STEREO
                          elsif job['channels'] == 1
-                           AudioFile::SINGLE_CHANNEL
+                           SINGLE_CHANNEL
                          end
-
     if !job['downloaded']
-      audio.status = AudioFile::NOTFOUND
-    elsif !job['valid']
-      audio.status = AudioFile::INVALID
-    elsif !job['processed']
-      audio.status = AudioFile::FAILED
+      audio.status = NOTFOUND
+    elsif !job['valid'] || !job['processed']
+      audio.status = FAILED
     else
       audio.upload_path = nil
-      audio.status = AudioFile::COMPLETE
+      audio.status = COMPLETE
     end
 
     Shoryuken.logger.info("Updating #{job['type']}[#{audio.id}]: status => #{audio.status}")
     audio.save!
+    # announce the audio changes on its story.
+    announce(:story, :update, audio.story)
+
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
   end
