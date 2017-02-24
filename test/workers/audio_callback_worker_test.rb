@@ -100,10 +100,9 @@ describe AudioCallbackWorker do
   it 'announces audio updates with story as resource' do
     perform(name: 'foo.bar')
     last_message.wont_be_nil
-    last_message['subject'].must_equal :audio
+    last_message['subject'].must_equal :story
     last_message['action'].must_equal :update
-    last_message['body'][:id].must_equal audio.story.id
-    last_message['body'][:resource].must_equal audio.story
+    last_message['body'].must_equal audio.story
   end
 
   it 'triggers template validations chain before save' do
@@ -112,6 +111,6 @@ describe AudioCallbackWorker do
     perform(name: 'foo.bar')
     audio.story.status.wont_be_nil
     audio.audio_version.wont_be_nil
-    last_message['body'][:resource].status.wont_be_nil
+    last_message['body'].status.wont_be_nil
   end
 end
