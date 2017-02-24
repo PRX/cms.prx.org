@@ -3,9 +3,17 @@ require 'test_helper'
 describe AudioCallbackWorker do
 
   let(:worker) { AudioCallbackWorker.new }
-  let(:audio) { FactoryGirl.create(:audio_file_uploaded) }
+  let(:audio) { create(:audio_file_uploaded) }
 
-  before(:each) { Shoryuken::Logging.logger.level = Logger::FATAL }
+  before(:all) do
+    audio.story = create(:story)
+  end
+
+  before(:each) {
+    Shoryuken::Logging.logger.level = Logger::FATAL
+    clear_messages
+  }
+
   after(:each) { Shoryuken::Logging.logger.level = Logger::INFO }
 
   # {
@@ -45,14 +53,14 @@ describe AudioCallbackWorker do
     audio.layer.must_equal 2
     audio.bit_rate.must_equal 128
     audio.frequency.must_equal 44.1
-    audio.channel_mode.must_equal(AudioFile::STEREO)
+    audio.channel_mode.must_equal(AudioCallbackWorker::STEREO)
   end
 
   it 'sets the status to point at the final audio file' do
     perform(name: 'foo.bar')
     audio.filename.must_equal 'foo.bar'
     audio.upload_path.must_be_nil
-    audio.status.must_equal AudioFile::COMPLETE
+    audio.status.must_equal AudioCallbackWorker::COMPLETE
     audio.fixerable_final?.must_equal true
   end
 
@@ -83,16 +91,27 @@ describe AudioCallbackWorker do
     audio.fixerable_final?.must_equal false
   end
 
-  it 'sets validation errors' do
-    perform(valid: false)
-    audio.status.must_equal AudioCallbackWorker::INVALID
-    audio.fixerable_final?.must_equal false
-  end
-
   it 'sets processing errors' do
     perform(processed: false)
     audio.status.must_equal AudioCallbackWorker::FAILED
     audio.fixerable_final?.must_equal false
   end
 
+  it 'announces audio updates with story as resource' do
+    perform(name: 'foo.bar')
+    last_message.wont_be_nil
+    last_message['subject'].must_equal :audio
+    last_message['action'].must_equal :update
+    last_message['body'][:id].must_equal audio.story.id
+    last_message['body'][:resource].must_equal audio.story
+  end
+
+  it 'triggers template validations chain before save' do
+    audio.story.status = nil
+    audio.audio_version.status = nil
+    perform(name: 'foo.bar')
+    audio.story.status.wont_be_nil
+    audio.audio_version.wont_be_nil
+    last_message['body'][:resource].status.wont_be_nil
+  end
 end

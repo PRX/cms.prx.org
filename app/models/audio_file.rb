@@ -53,6 +53,7 @@ class AudioFile < BaseModel
     errors = template.validate_audio_file(self)
     if errors.empty?
       self.status_msg = nil
+      self.status = VALID
     else
       self.status = INVALID
       self.status_msg = errors

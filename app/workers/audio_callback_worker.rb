@@ -1,6 +1,7 @@
 class AudioCallbackWorker
   include Shoryuken::Worker
   include ValidityFlag
+  include Announce::Publisher
 
   class UnknownAudioTypeError < StandardError; end
 
@@ -41,6 +42,9 @@ class AudioCallbackWorker
 
     Shoryuken.logger.info("Updating #{job['type']}[#{audio.id}]: status => #{audio.status}")
     audio.save!
+    # announce the audio changes using the story as resource.
+    announce(:audio, :update, id: audio.story.id, resource: audio.story)
+
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
   end
