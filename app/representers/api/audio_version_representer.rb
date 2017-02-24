@@ -7,7 +7,7 @@ class Api::AudioVersionRepresenter < Api::BaseRepresenter
   property :explicit
   property :transcript
   property :status, writeable: false
-  property :status_msg, writeable: false
+  property :status_message, writeable: false
 
 
   set_link_property(rel: :story, writeable: true)

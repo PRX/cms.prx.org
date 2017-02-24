@@ -59,12 +59,12 @@ describe AudioFile do
     audio_version.audio_version_template.audio_file_templates = file_templates
 
     audio_file.update_attributes(position: 1, label: 'Main Segment')
-    audio_file.status_msg.must_include 'long, but must be'
+    audio_file.status_message.must_include 'long, but must be'
     audio_file.wont_be(:compliant_with_template?)
     audio_file.status.must_equal 'invalid'
 
     audio_file.update_attributes(status: 'complete', length: 5)
-    audio_file.status_msg.must_be_nil
+    audio_file.status_message.must_be_nil
     audio_file.status.wont_equal 'invalid'
     audio_file.must_be(:compliant_with_template?)
   end

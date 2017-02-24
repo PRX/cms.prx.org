@@ -27,7 +27,7 @@ class AudioVersion < BaseModel
   end
 
   def compliant_with_template?
-    status_msg.nil?
+    status_message.nil?
   end
 
   private
@@ -40,17 +40,17 @@ class AudioVersion < BaseModel
     end
     if !noncompliant_files.empty?
       self.status = INVALID
-      self.status_msg = noncompliant_files.map(&:status_msg).join(', ')
+      self.status_message = noncompliant_files.map(&:status_message).join(', ')
       return
     end
 
     errors = audio_version_template.validate_audio_version(self)
     if errors.empty?
       self.status = VALID
-      self.status_msg = nil
+      self.status_message = nil
     else
       self.status = INVALID
-      self.status_msg = errors
+      self.status_message = errors
     end
   end
 end
