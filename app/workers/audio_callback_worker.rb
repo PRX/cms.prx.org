@@ -37,7 +37,7 @@ class AudioCallbackWorker
       audio.status = FAILED
     else
       audio.upload_path = nil
-      audio.status = COMPLETE
+      audio.status = TRANSFORMED
     end
 
     Shoryuken.logger.info("Updating #{job['type']}[#{audio.id}]: status => #{audio.status}")

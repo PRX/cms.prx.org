@@ -30,11 +30,11 @@ describe Api::StoryRepresenter do
     let(:invalid_audio_versions) { create_list(:audio_version_with_template, 5) }
     let(:valid_audio_versions) { create_list(:audio_version, 5) }
 
-    it 'shows valid if story is valid' do
+    it 'shows complete status if story has all valid and complete audio' do
       story.audio_versions.wont_be(:empty?)
       story.update(title: 'Title!')
       json.keys.must_include('status')
-      json['status'].must_equal 'valid'
+      json['status'].must_equal 'complete'
     end
 
     it 'shows invalid, plus errors, if story is invalid' do

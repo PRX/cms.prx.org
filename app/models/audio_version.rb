@@ -46,7 +46,7 @@ class AudioVersion < BaseModel
 
     errors = audio_version_template.validate_audio_version(self)
     if errors.empty?
-      self.status = VALID
+      self.status = COMPLETE
       self.status_message = nil
     else
       self.status = INVALID
