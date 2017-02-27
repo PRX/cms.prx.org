@@ -30,7 +30,7 @@ describe AudioVersion do
       audio_version_with_template.instance_variable_set('@_length', 50)
       audio_version_with_template.update_attributes(explicit: 'explicit')
       audio_version_with_template.status_message.must_be_nil
-      audio_version_with_template.status.must_equal 'valid'
+      audio_version_with_template.status.must_equal 'complete'
       audio_version_with_template.must_be(:compliant_with_template?)
     end
 

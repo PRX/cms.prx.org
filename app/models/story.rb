@@ -269,7 +269,7 @@ class Story < BaseModel
     end
 
     if av_errors.empty?
-      self.status = VALID
+      self.status = COMPLETE
       self.status_message = nil
     else
       self.status = INVALID

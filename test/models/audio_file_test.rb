@@ -63,9 +63,9 @@ describe AudioFile do
     audio_file.wont_be(:compliant_with_template?)
     audio_file.status.must_equal 'invalid'
 
-    audio_file.update_attributes(status: 'complete', length: 5)
+    audio_file.update_attributes(status: 'mp3s created', length: 5)
     audio_file.status_message.must_be_nil
-    audio_file.status.wont_equal 'invalid'
+    audio_file.status.must_equal 'complete'
     audio_file.must_be(:compliant_with_template?)
   end
 

@@ -48,7 +48,7 @@ describe Story do
     it 'is valid if all its audio versions are valid' do
       story.audio_versions = valid_audio_versions
       story.update(title: 'Title!')
-      story.status.must_equal 'valid'
+      story.status.must_equal 'complete'
       story.status_message.must_be_nil
     end
   end
