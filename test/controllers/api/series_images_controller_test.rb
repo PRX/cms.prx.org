@@ -66,7 +66,5 @@ describe Api::SeriesImagesController do
     assert_response :success
     -> { SeriesImage.find(series_image.id) }.must_raise(ActiveRecord::RecordNotFound)
     series_update.wont_equal series.reload.updated_at
-    last_message['subject'].to_s.must_equal 'image'
-    last_message['action'].to_s.must_equal 'delete'
   end
 end
