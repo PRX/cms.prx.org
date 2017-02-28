@@ -67,6 +67,7 @@ describe Api::TestObjectsController do
       controller_class.announce_actions(:destroy)
       controller_class.announce_actions(:destroy, :update)
       controller_class.announced_actions.size.must_equal 2
+      controller_class.announced_actions['destroy'].size.must_equal 1
     end
 
     it 'allows same action to be announced multiple times with different resource or subject' do
