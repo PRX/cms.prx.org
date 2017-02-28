@@ -19,12 +19,10 @@ module AnnounceActions
       actions = [:create, :update, :destroy] if actions.empty?
 
       actions.each do |action|
-        next if announced_actions.include?(action) &&
-                announced_actions[action].include?(options)
+        next if announced_actions[action].include?(options)
 
         add_announce_filter(action, options)
-        # remember this action already announcing, prevent dupes
-        debugger
+        # remember this action-options combo already announcing, prevent dupes
         self.announced_actions[action] << options
       end
     end
