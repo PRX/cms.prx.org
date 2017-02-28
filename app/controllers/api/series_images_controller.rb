@@ -5,7 +5,7 @@ class Api::SeriesImagesController < Api::BaseController
 
   filter_resources_by :series_id
 
-  announce_actions :create, :destroy, decorator: Api::Msg::ImageRepresenter, subject: :image
+  announce_actions decorator: Api::Msg::ImageRepresenter, subject: :image
   announce_actions :update, resource: :series_resource
 
   represent_with Api::ImageRepresenter

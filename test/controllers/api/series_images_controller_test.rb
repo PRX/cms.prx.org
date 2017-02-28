@@ -23,9 +23,23 @@ describe Api::SeriesImagesController do
     image_hash = { credit: 'blah credit' }
     put(:update, image_hash.to_json, api_request_opts(series_id: series.id, id: series_image.id))
     assert_response :success
-    last_message['subject'].to_s.must_equal 'series'
-    last_message['action'].to_s.must_equal 'update'
     SeriesImage.find(series_image.id).credit.must_equal('blah credit')
+  end
+
+  it 'should announce image updates on both image and series' do
+    image_hash = { credit: 'other blah credit' }
+    put(:update, image_hash.to_json, api_request_opts(series_id: series.id, id: series_image.id))
+    assert_response :success
+
+    published_messages.length.must_equal 2
+    img_message = published_messages.find { |msg| msg['subject'] == 'image' }
+    series_message = published_messages.find { |msg| msg['subject'] == 'series' }
+
+    img_message.wont_be_nil
+    JSON.parse(img_message['body'])['id'].must_equal series_image.id
+
+    series_message.wont_be_nil
+    JSON.parse(series_message['body'])['id'].must_equal series.id
   end
 
   it 'should add an image' do
