@@ -23,7 +23,7 @@ describe Api::SeriesImagesController do
     image_hash = { credit: 'blah credit' }
     put(:update, image_hash.to_json, api_request_opts(series_id: series.id, id: series_image.id))
     assert_response :success
-    last_message['subject'].to_s.must_equal 'image'
+    last_message['subject'].to_s.must_equal 'series'
     last_message['action'].to_s.must_equal 'update'
     SeriesImage.find(series_image.id).credit.must_equal('blah credit')
   end
@@ -52,5 +52,7 @@ describe Api::SeriesImagesController do
     assert_response :success
     -> { SeriesImage.find(series_image.id) }.must_raise(ActiveRecord::RecordNotFound)
     series_update.wont_equal series.reload.updated_at
+    last_message['subject'].to_s.must_equal 'image'
+    last_message['action'].to_s.must_equal 'delete'
   end
 end
