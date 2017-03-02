@@ -82,7 +82,7 @@ describe ImageCallbackWorker do
     last_message.wont_be_nil
     last_message['subject'].must_equal :story
     last_message['action'].must_equal :update
-    last_message['body'].must_equal image.story
+    JSON.parse(last_message['body'])['id'].must_equal image.story.id
   end
 
   it 'announces series updates for series-image' do
@@ -90,6 +90,6 @@ describe ImageCallbackWorker do
     last_message.wont_be_nil
     last_message['subject'].must_equal :series
     last_message['action'].must_equal :update
-    last_message['body'].must_equal series_image.series
+    JSON.parse(last_message['body'])['id'].must_equal series_image.series.id
   end
 end

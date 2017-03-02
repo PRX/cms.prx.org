@@ -43,7 +43,7 @@ class AudioCallbackWorker
     Shoryuken.logger.info("Updating #{job['type']}[#{audio.id}]: status => #{audio.status}")
     audio.save!
     # announce the audio changes on its story.
-    announce(:story, :update, audio.story)
+    announce(:story, :update, Api::StoryRepresenter.new(audio.story).to_json)
 
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
