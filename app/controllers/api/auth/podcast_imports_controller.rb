@@ -9,6 +9,12 @@ class Api::Auth::PodcastImportsController < Api::BaseController
 
   filter_params :url
 
+  def create_resource
+    super.tap do |podcast_import|
+      podcast_import.user_id ||= current_user.id
+    end
+  end
+
   def after_create_resource(res)
     res.try(:import_later)
   end
