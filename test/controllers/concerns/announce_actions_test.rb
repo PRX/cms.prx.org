@@ -55,7 +55,7 @@ describe Api::TestObjectsController do
     let (:controller_class) { Api::TestParentsController }
 
     before do
-      controller_class.announced_actions = []
+      controller_class.announced_actions = Hash.new { |h, k| h[k] = [] }
     end
 
     it 'can declare announced actions' do
@@ -63,16 +63,24 @@ describe Api::TestObjectsController do
       controller_class.announced_actions.size.must_equal 1
     end
 
-    it 'prevents dupe announcements' do
+    it 'prevents dupe announcements on same resource or subject' do
       controller_class.announce_actions(:destroy)
       controller_class.announce_actions(:destroy, :update)
       controller_class.announced_actions.size.must_equal 2
+      controller_class.announced_actions['destroy'].size.must_equal 1
+    end
+
+    it 'allows same action to be announced multiple times with different resource or subject' do
+      controller_class.announce_actions(:destroy)
+      controller_class.announce_actions(:destroy, subject: 'bar')
+      controller_class.announce_actions(:destroy, subject: 'foo')
+      controller_class.announced_actions['destroy'].size.must_equal 3
     end
 
     it 'defaults to create, update, and destroy' do
       default_actions = [:create, :destroy, :update]
       controller_class.announce_actions
-      controller_class.announced_actions.sort.must_equal default_actions
+      controller_class.announced_actions.keys.sort.must_equal default_actions
     end
   end
 end
