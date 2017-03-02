@@ -102,7 +102,7 @@ describe AudioCallbackWorker do
     last_message.wont_be_nil
     last_message['subject'].must_equal :story
     last_message['action'].must_equal :update
-    last_message['body'].must_equal audio.story
+    JSON.parse(last_message['body'])['id'].must_equal audio.story.id
   end
 
   it 'triggers template validations chain before save' do
@@ -111,6 +111,6 @@ describe AudioCallbackWorker do
     perform(name: 'foo.bar')
     audio.story.status.wont_be_nil
     audio.audio_version.wont_be_nil
-    last_message['body'].status.wont_be_nil
+    JSON.parse(last_message['body'])['status'].wont_be_nil
   end
 end
