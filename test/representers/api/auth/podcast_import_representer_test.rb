@@ -2,10 +2,11 @@ require 'test_helper'
 
 describe Api::Auth::PodcastImportRepresenter do
 
+  let(:user) { create(:user) }
   let(:account) { create(:account) }
   let(:podcast_url) { 'http://feeds.prx.org/transistor_stem' }
   let(:series) { create(:series, account: account) }
-  let(:importer) { PodcastImport.create(account: account, url: podcast_url, series: series) }
+  let(:importer) { PodcastImport.create(user: user, account: account, url: podcast_url, series: series) }
   let(:representer) { Api::Auth::PodcastImportRepresenter.new(importer) }
   let(:json) { JSON.parse(representer.to_json) }
 
