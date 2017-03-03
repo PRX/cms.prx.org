@@ -91,7 +91,6 @@ group :development do
 end
 
 group :test do
-  gem 'test_after_commit'
   gem 'minitest-around'
   gem 'minitest-spec-rails'
   gem 'minitest-reporters', require: false

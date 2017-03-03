@@ -461,8 +461,6 @@ GEM
     sshkit (1.11.4)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    test_after_commit (1.1.0)
-      activerecord (>= 3.2)
     test_xml (0.1.8)
       diffy (~> 3.0)
       nokogiri (>= 1.3.2)
@@ -553,7 +551,6 @@ DEPENDENCIES
   simplecov
   slackistrano
   spring
-  test_after_commit
   unf
   web-console (~> 2.0)
   webmock

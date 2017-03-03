@@ -8,6 +8,7 @@ FactoryGirl.define do
 
     after(:create) do |user, _evaluator|
       user.individual_account = create(:individual_account)
+      user.update_attributes!(account_id: user.individual_account.id)
       user.reload
     end
 

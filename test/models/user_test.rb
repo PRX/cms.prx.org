@@ -18,6 +18,7 @@ describe User do
 
   it 'creates an individual account on user create' do
     new_user = User.create(first_name: 'New', last_name: 'User')
+    new_user.run_callbacks(:commit)
     new_user.individual_account.wont_be_nil
   end
 
