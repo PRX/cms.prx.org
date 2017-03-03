@@ -58,5 +58,6 @@ class AudioFile < BaseModel
       self.status = INVALID
       self.status_message = errors
     end
+    audio_version.try(:save!)
   end
 end
