@@ -27,7 +27,8 @@ describe Story do
   end
 
   describe 'checking audio versions' do
-    let(:story) { create(:story) }
+    let(:template) { create(:audio_version_template) }
+    let(:story) { create(:story, series: template.series) }
     let(:invalid_audio_versions) { create_list(:audio_version_with_template, 5) }
     let(:valid_audio_versions) { create_list(:audio_version, 5) }
 

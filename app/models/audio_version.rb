@@ -52,5 +52,6 @@ class AudioVersion < BaseModel
       self.status = INVALID
       self.status_message = errors
     end
+    story.try(:save!)
   end
 end
