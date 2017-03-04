@@ -57,11 +57,15 @@ describe AudioCallbackWorker do
   end
 
   it 'sets the status to point at the final audio file' do
-    perform(name: 'foo.bar')
-    audio.filename.must_equal 'foo.bar'
-    audio.upload_path.must_be_nil
-    audio.status.must_equal AudioCallbackWorker::TRANSFORMED
-    audio.fixerable_final?.must_equal true
+    AudioFile.stub(:find, audio) do
+      audio.stub(:set_status, true) do
+        perform(name: 'foo.bar')
+        audio.filename.must_equal 'foo.bar'
+        audio.upload_path.must_be_nil
+        audio.status.must_equal AudioCallbackWorker::TRANSFORMED
+        audio.fixerable_final?.must_equal true
+      end
+    end
   end
 
   it 'decodes audio mime-types' do

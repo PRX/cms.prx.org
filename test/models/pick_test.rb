@@ -1,8 +1,7 @@
 require 'test_helper'
 
 describe Pick do
-
-  let(:pick) { build_stubbed(:pick) }
+  let(:pick) { build(:pick) }
 
   it 'has a table defined' do
     Pick.table_name.must_equal 'playlistings'
@@ -15,5 +14,4 @@ describe Pick do
   it 'has an account' do
     pick.must_respond_to 'account'
   end
-
 end

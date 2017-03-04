@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe Purchase do
-  let(:purchase) { build_stubbed(:purchase) }
+  let(:purchase) { build(:purchase) }
 
   it 'should have a table defined' do
     Purchase.table_name.must_equal 'purchases'
