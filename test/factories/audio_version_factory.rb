@@ -6,6 +6,7 @@ FactoryGirl.define do
     content_advisory 'Content Advisory'
     transcript 'Transcript of all the text in this audio'
     promos false
+    status 'complete'
 
     transient do
       audio_files_count 1
@@ -15,6 +16,7 @@ FactoryGirl.define do
       c = evaluator.audio_files_count
       c = (rand(5) + 1) if (evaluator.audio_files_count == 0)
       FactoryGirl.create_list(:audio_file, c, audio_version: audio_version)
+      audio_version.reload
     end
 
     factory :promos do

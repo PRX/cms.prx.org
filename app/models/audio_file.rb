@@ -20,7 +20,9 @@ class AudioFile < BaseModel
   skip_callback :commit, :after, :remove_file! # don't remove s3 file
   fixerable_upload :upload, :file
 
-  before_save :validate_on_template, only: [:update, :create]
+  before_save :set_status, only: [:update, :create]
+  after_save :update_version_status, if: :status_changed?
+  after_destroy :update_version_status
 
   before_validation do
     if upload
@@ -40,7 +42,11 @@ class AudioFile < BaseModel
     status_message.nil?
   end
 
-  def validate_on_template
+  def update_version_status
+    audio_version.try(:save!)
+  end
+
+  def set_status
     # only do template validations once the audio callback worker has succeeded
     return if [UPLOADED, NOTFOUND, FAILED].include? status
 
@@ -48,9 +54,9 @@ class AudioFile < BaseModel
                try(:audio_version_template).
                try(:audio_file_templates).
                try(:find) { |aft| aft.position == position }
-    return unless template
 
-    errors = template.validate_audio_file(self)
+    errors = template ? template.validate_audio_file(self) : []
+
     if errors.empty?
       self.status_message = nil
       self.status = COMPLETE

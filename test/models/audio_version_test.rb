@@ -20,7 +20,7 @@ describe AudioVersion do
   describe 'with a template' do
 
     let(:audio_version_with_template) { create(:audio_version_with_template) }
-    let(:audio_file) { create(:audio_file, status_message: 'Foo bar') }
+    let(:audio_file) { create(:audio_file, status_message: 'Foo bar', status: 'uploaded') }
 
     it 'can have a template' do
       audio_version_with_template.audio_version_template(true).wont_be_nil

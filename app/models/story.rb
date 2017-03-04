@@ -56,7 +56,7 @@ class Story < BaseModel
   before_validation :set_app_version, on: :create
   before_validation :update_published_to_released
 
-  before_save :validate_audio_versions
+  before_save :set_status, only: [:update, :create]
 
   # indicates piece is published with promos only - not full audio
   event_attribute :promos_only_at
@@ -256,7 +256,7 @@ class Story < BaseModel
     end
   end
 
-  def validate_audio_versions
+  def set_status
     av_errors = ''
     if audio_versions.empty?
       av_errors << "Story '#{title}' has no audio."

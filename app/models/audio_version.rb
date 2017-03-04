@@ -11,7 +11,9 @@ class AudioVersion < BaseModel
   belongs_to :audio_version_template
   has_many :audio_files, -> { order :position }, dependent: :destroy
 
-  before_save :validate_on_template
+  before_save :set_status, only: [:update, :create]
+  after_save :update_story_status, if: :status_changed?
+  after_destroy :update_story_status
 
   acts_as_paranoid
 
@@ -32,9 +34,11 @@ class AudioVersion < BaseModel
 
   private
 
-  def validate_on_template
-    return unless audio_version_template
+  def update_story_status
+    story.try(:save!)
+  end
 
+  def set_status
     noncompliant_files = audio_files.select do |af|
       !af.compliant_with_template? || af.status == INVALID
     end
@@ -44,7 +48,7 @@ class AudioVersion < BaseModel
       return
     end
 
-    errors = audio_version_template.validate_audio_version(self)
+    errors = audio_version_template ? audio_version_template.validate_audio_version(self) : []
     if errors.empty?
       self.status = COMPLETE
       self.status_message = nil
