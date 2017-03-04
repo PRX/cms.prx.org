@@ -4,7 +4,7 @@ describe AccountablePolicy do
   let(:non_member_token) { StubToken.new(account.id + 1, ['no']) }
   let(:member_token) { StubToken.new(account.id, ['member']) }
   let(:account) { build_stubbed(:account) }
-  let(:story) { build(:story, account: account)}
+  let(:story) { build(:story, account: account) }
 
   describe '#update?' do
     it 'returns false if user is not present' do
