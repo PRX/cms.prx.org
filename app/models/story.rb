@@ -140,7 +140,7 @@ class Story < BaseModel
   end
 
   def tags=(ts)
-    self.user_tags = ts.uniq.sort.map { |t| UserTag.new(name: t) }
+    self.user_tags = (ts || []).uniq.sort.map { |t| UserTag.new(name: t) }
   end
 
   def transcript

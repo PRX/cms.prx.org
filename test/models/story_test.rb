@@ -186,6 +186,14 @@ describe Story do
       story.must_respond_to(:user_tags)
     end
 
+    it 'can set tags as a list' do
+      story.tags = ['a', 'b', 'b']
+      story.user_tags.count.must_equal 2
+      story.user_tags.map(&:to_tag).sort.must_equal ['a', 'b']
+      story.tags = nil
+      story.user_tags.count.must_equal 0
+    end
+
     it 'returns tones, topics, formats, and user tags with #tags' do
       topic = create(:topic, story: story, name: 'Asian')
       tones = create(:tone, story: story, name: 'Amusing')
