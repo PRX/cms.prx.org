@@ -1,8 +1,8 @@
 require 'test_helper'
 
 describe Story do
-  let(:story) { build_stubbed(:story, audio_versions_count: 10) }
-  let(:promos_only) { build_stubbed(:story_promos_only) }
+  let(:story) { create(:story, audio_versions_count: 10) }
+  let(:promos_only) { create(:story_promos_only) }
 
   describe 'basics' do
     it 'has a table defined' do
@@ -23,6 +23,41 @@ describe Story do
 
     it 'is deleted by default' do
       create(:story).must_be :deleted?
+    end
+  end
+
+  describe 'status updates' do
+    let(:story) { create(:story) }
+
+    it 'changes to valid when audio file updated' do
+      av = story.audio_versions(true).first
+      af = av.audio_files(true).first
+
+      story.update_column(:status, 'invalid')
+      av.update_column(:status, 'invalid')
+      af.update_column(:status, 'mp3s created')
+
+      af.save!
+
+      [af, av, story].each { |m| m.reload.status.must_equal 'complete' }
+    end
+
+    it 'changes to valid when invalid audio file destroyed' do
+      av = story.audio_versions(true).first
+      af = av.audio_files(true).first
+
+      af.status.must_equal 'complete'
+      av.status.must_equal 'complete'
+      story.status.must_equal 'complete'
+
+      af.update_columns(status: 'invalid', status_message: 'bad')
+      af.run_callbacks(:save)
+
+      [af, av, story].each { |m| m.reload.status.must_equal 'invalid' }
+
+      af.destroy
+
+      [av, story].each { |m| m.reload.status.must_equal 'complete' }
     end
   end
 

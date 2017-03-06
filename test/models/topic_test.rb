@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Topic do
 
-  let(:topic) { build_stubbed(:topic) }
+  let(:topic) { build(:topic) }
 
   it 'has a table defined' do
     Topic.table_name.must_equal 'topics'

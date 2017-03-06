@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Tone do
 
-  let(:tone) { build_stubbed(:tone) }
+  let(:tone) { build(:tone) }
 
   it 'has a table defined' do
     Tone.table_name.must_equal 'tones'

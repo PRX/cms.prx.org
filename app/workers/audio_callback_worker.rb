@@ -48,5 +48,4 @@ class AudioCallbackWorker
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
   end
-
 end

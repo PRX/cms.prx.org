@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe Tagging do
-  let(:tagging) { build_stubbed(:tagging) }
+  let(:tagging) { build(:tagging) }
 
   it 'has a table defined' do
     Tagging.table_name.must_equal 'taggings'

@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Format do
 
-  let(:format) { build_stubbed(:format) }
+  let(:format) { build(:format) }
 
   it 'has a table defined' do
     Format.table_name.must_equal 'formats'
