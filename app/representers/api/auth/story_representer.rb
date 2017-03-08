@@ -18,4 +18,17 @@ class Api::Auth::StoryRepresenter < Api::StoryRepresenter
       href: unpublish_api_authorization_story_path(represented)
     } if !represented.published_at.nil?
   end
+
+  link :audio do
+    {
+      href: api_authorization_audio_files_path(represented.id),
+      count: represented.default_audio.count
+    } if represented.id
+  end
+  embed :default_audio,
+        as: :audio,
+        paged: true,
+        item_class: AudioFile,
+        item_decorator: Api::Auth::AudioFileRepresenter,
+        per: :all
 end

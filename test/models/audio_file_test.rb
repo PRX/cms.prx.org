@@ -32,6 +32,12 @@ describe AudioFile do
     audio_file_uploaded.public_asset_filename.must_equal 'test.mp3'
   end
 
+  it 'complete audio has a storage url' do
+    s3_file = "s3://#{ENV['AWS_BUCKET']}/public/audio_files/#{audio_file.id}/test.mp2"
+    audio_file.fixerable_final_storage_url.must_equal s3_file
+    audio_file_uploaded.fixerable_final_storage_url.must_equal nil
+  end
+
   it 'updates story and version timestamps' do
     story = create(:story)
     version = create(:audio_version, story: story)

@@ -120,6 +120,17 @@ module Fixerable
     end
   end
 
+  def fixerable_final_storage_url
+    return unless fixerable_final?
+    scheme = self.class.fixerable_storage.invert[fixfinal.fog_credentials[:provider]]
+    options = {
+      scheme: scheme,
+      host: fixfinal.fog_directory,
+      path: "/#{fixfinal.path}",
+    }
+    URI::Generic.build(options).to_s
+  end
+
   def fixerable_final_path
     fixfinal.store_dir
   end

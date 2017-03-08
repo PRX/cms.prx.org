@@ -53,6 +53,15 @@ describe Fixerable do
     end
   end
 
+  it 'can get the final storage url' do
+    model.stub(:fixerable_final?, true) do
+      model.fixerable_final_storage_url.must_equal "s3://#{ENV['AWS_BUCKET']}/"
+    end
+
+    model.the_temp_field = 'https://s3.aws.amazon.com/prx-development/another.mp3'
+    model.fixerable_final_storage_url.must_equal nil
+  end
+
   it 'signs HEAD requests for temp aws uploads' do
     fake_store = Fog::Storage::AWS.new(aws_access_key_id: 'foo', aws_secret_access_key: 'bar')
     Fog::Storage::AWS.stub(:new, fake_store) do

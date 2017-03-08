@@ -71,6 +71,8 @@ PRX::Application.routes.draw do
           resources :podcast_imports, except: [:new, :edit]
         end
 
+        resources :audio_files, except: [:new, :edit]
+
         resources :series, except: [:new, :edit, :create], module: :auth do
           resources :stories, only: [:index, :create]
         end
