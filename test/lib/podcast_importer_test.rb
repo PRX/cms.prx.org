@@ -134,7 +134,7 @@ def stub_import_requests
                '"newFeedUrl":"http://feeds.prx.org/transistor_stem","path":"transistor_stem",' +
                '"author":{"name":"PRX","email":null},' +
                '"managingEditor":{"name":"PRX","email":"prxwpadmin@prx.org"},' +
-               '"owners":[{"name":"PRX","email":"prxwpadmin@prx.org"}],' +
+               '"owner":{"name":"PRX","email":"prxwpadmin@prx.org"},' +
                '"itunesCategories":[{"name":"Science & Medicine","subcategories":' +
                '["Natural Sciences"]}],"categories":[],"complete":false,"keywords":[]}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).

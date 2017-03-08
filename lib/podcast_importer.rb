@@ -108,9 +108,7 @@ class PodcastImporter
 
     podcast.attributes[:author] = person(feed.itunes_author)
     podcast.attributes[:managing_editor] = person(feed.managing_editor)
-    podcast.attributes[:owners] = Array(feed.itunes_owners).map do |o|
-      { name: o.name, email: o.email }
-    end
+    podcast.attributes[:owner] = person(feed.owner)
 
     podcast.attributes[:itunes_categories] = parse_itunes_categories(feed)
     podcast.attributes[:categories] = parse_categories(feed)
