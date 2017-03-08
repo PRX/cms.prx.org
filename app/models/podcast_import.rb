@@ -67,12 +67,17 @@ class PodcastImport < BaseModel
   end
 
   def create_series_from_podcast(feed = self.feed)
+    description = feed.description
+    if feed.itunes_summary
+      description = feed.itunes_summary if feed.itunes_summary.length > feed.description.length
+    end
+
     # create the series
     self.series = create_series!(
       account: account,
       title: feed.title,
       short_description: feed.itunes_subtitle,
-      description: feed.description
+      description: description
     )
     save!
 
@@ -126,12 +131,12 @@ class PodcastImport < BaseModel
     podcast_attributes[:explicit] = feed.itunes_explicit
     podcast_attributes[:new_feed_url] = feed.itunes_new_feed_url
     podcast_attributes[:path] ||= feed.feedburner_name
+    podcast_attributes[:feedburner_url] ||= feedburner_url(feed.feedburner_name)
+    podcast_attributes[:url] ||= feedburner_url(feed.feedburner_name)
 
     podcast_attributes[:author] = person(feed.itunes_author)
     podcast_attributes[:managing_editor] = person(feed.managing_editor)
-    podcast_attributes[:owners] = Array(feed.itunes_owners).map do |o|
-      { name: o.name, email: o.email }
-    end
+    podcast_attributes[:owner] = owner(feed.itunes_owners)
 
     podcast_attributes[:itunes_categories] = parse_itunes_categories(feed)
     podcast_attributes[:categories] = parse_categories(feed)
@@ -141,6 +146,16 @@ class PodcastImport < BaseModel
 
     self.podcast = distribution.add_podcast_to_feeder(podcast_attributes)
     podcast
+  end
+
+  def feedburner_url(fb_name)
+    fb_name ? "http://feeds.feedburner.com/#{fb_name}" : nil
+  end
+
+  def owner(itunes_owners)
+    if o = itunes_owners.try(:first)
+      { name: o.name, email: o.email }
+    end
   end
 
   def person(arg)

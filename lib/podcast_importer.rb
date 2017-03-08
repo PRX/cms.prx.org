@@ -105,12 +105,12 @@ class PodcastImporter
     podcast.attributes[:explicit] = feed.itunes_explicit
     podcast.attributes[:new_feed_url] = feed.itunes_new_feed_url
     podcast.attributes[:path] ||= feed.feedburner_name
+    podcast.attributes[:feedburner_url] ||= feedburner_url(feed.feedburner_name)
+    podcast.attributes[:url] ||= feedburner_url(feed.feedburner_name)
 
     podcast.attributes[:author] = person(feed.itunes_author)
     podcast.attributes[:managing_editor] = person(feed.managing_editor)
-    podcast.attributes[:owners] = Array(feed.itunes_owners).map do |o|
-      { name: o.name, email: o.email }
-    end
+    podcast.attributes[:owner] = owner(feed.itunes_owners)
 
     podcast.attributes[:itunes_categories] = parse_itunes_categories(feed)
     podcast.attributes[:categories] = parse_categories(feed)
@@ -120,6 +120,16 @@ class PodcastImporter
 
     podcast.put
     podcast
+  end
+
+  def feedburner_url(fb_name)
+    fb_name ? "http://feeds.feedburner.com/#{fb_name}" : nil
+  end
+
+  def owner(itunes_owners)
+    if o = itunes_owners.try(:first)
+      { name: o.name, email: o.email }
+    end
   end
 
   def person(arg)
