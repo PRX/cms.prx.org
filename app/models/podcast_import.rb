@@ -66,18 +66,17 @@ class PodcastImport < BaseModel
     end
   end
 
-  def create_series_from_podcast(feed = self.feed)
-    description = feed.description
-    if feed.itunes_summary
-      description = feed.itunes_summary if feed.itunes_summary.length > feed.description.length
-    end
+  def feed_description(feed)
+    [feed.itunes_summary, feed.description].find { |d| !d.blank? }
+  end
 
+  def create_series_from_podcast(feed = self.feed)
     # create the series
     self.series = create_series!(
       account: account,
       title: feed.title,
       short_description: feed.itunes_subtitle,
-      description: description
+      description: feed_description(feed)
     )
     save!
 
@@ -127,6 +126,7 @@ class PodcastImport < BaseModel
       podcast_attributes[atr.to_sym] = feed.send(atr)
     end
 
+    podcast_attributes[:summary] = feed.itunes_summary
     podcast_attributes[:link] = feed.url
     podcast_attributes[:explicit] = feed.itunes_explicit
     podcast_attributes[:new_feed_url] = feed.itunes_new_feed_url
@@ -232,13 +232,18 @@ class PodcastImport < BaseModel
     end
   end
 
+  def entry_description(entry)
+    atr = [:content, :itunes_summary, :description].find { |d| !entry[d].blank? }
+    entry[atr] if atr
+  end
+
   def create_story(entry, series)
     story = series.stories.create!(
       creator_id: user_id,
       account_id: series.account_id,
       title: entry[:title],
       short_description: entry[:itunes_subtitle],
-      description: entry[:description],
+      description_html: entry_description(entry),
       tags: entry[:categories],
       published_at: entry[:published]
     )
@@ -278,6 +283,9 @@ class PodcastImport < BaseModel
     )
 
     create_attributes = {}
+    if entry[:itunes_summary] && entry[:itunes_summary] != entry_description(entry)
+      create_attributes[:summary] = entry[:itunes_summary]
+    end
     create_attributes[:author] = person(entry[:itunes_author] || entry[:author] || entry[:creator])
     create_attributes[:block] = (entry[:itunes_block] == 'yes')
     create_attributes[:explicit] = entry[:itunes_explicit]
