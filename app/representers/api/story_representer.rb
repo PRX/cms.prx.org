@@ -18,7 +18,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :status, writeable: false
   property :status_message, writeable: false
 
-  property :description, getter: ->(_o) { description_html }
+  property :description_html, as: :description
   property :description_md
   property :related_website
   property :broadcast_history
