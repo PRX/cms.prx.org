@@ -130,6 +130,7 @@ class PodcastImport < BaseModel
     podcast_attributes[:link] = feed.url
     podcast_attributes[:explicit] = feed.itunes_explicit
     podcast_attributes[:new_feed_url] = feed.itunes_new_feed_url
+    podcast_attributes[:enclosure_prefix] ||= enclosure_prefix(feed.entries.first)
     podcast_attributes[:path] ||= feed.feedburner_name
     podcast_attributes[:feedburner_url] ||= feedburner_url(feed.feedburner_name)
     podcast_attributes[:url] ||= feedburner_url(feed.feedburner_name)
@@ -146,6 +147,25 @@ class PodcastImport < BaseModel
 
     self.podcast = distribution.add_podcast_to_feeder(podcast_attributes)
     podcast
+  end
+
+  def enclosure_prefix(podcast_item)
+    prefix = ''
+    link = [podcast_item.feedburner_orig_enclosure_link,
+            podcast_item.enclosure.try(:url),
+            podcast_item.media_contents.first.try(:url)].find do |url|
+              url.try(:match, /podtrac/) || url.try(:match, /blubrry/)
+            end
+    if scheme = link.try(:match, /^https?:\/\//)
+      prefix += scheme.to_s
+    end
+    if podtrac = link.try(:match, /\/(\w+\.podtrac.com\/.+?\.mp3\/)/)
+      prefix += podtrac[1]
+    end
+    if blubrry = link.try(:match, /\/(media\.blubrry\.com\/[^\/]+\/)/)
+      prefix += blubrry[1]
+    end
+    prefix
   end
 
   def feedburner_url(fb_name)
