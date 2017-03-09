@@ -12,6 +12,10 @@ class Series < BaseModel
   include Storied
   include RenderMarkdown
 
+  def description_html=(html)
+    self.description = v4? ? html_to_markdown(html) : html
+  end
+
   def description_html
     v4? ? markdown_to_html(description) : description
   end
