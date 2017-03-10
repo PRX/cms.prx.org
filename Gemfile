@@ -30,6 +30,7 @@ gem 'feedjira'
 gem 'addressable'
 gem 'faraday'
 gem 'excon'
+gem 'loofah'
 
 # Use Sanitize for HTML and CSS whitelisting
 gem 'sanitize'
