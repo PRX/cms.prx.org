@@ -520,6 +520,7 @@ DEPENDENCIES
   highline
   hyperresource
   kaminari
+  loofah
   minitest (~> 5.9.1)
   minitest-around
   minitest-reporters
