@@ -78,7 +78,7 @@ describe Api::StoriesController do
       post :create, story_hash.to_json, api_request_opts(account_id: account.id)
       assert_response :success
       res = JSON.parse(response.body)
-      res['description'].must_equal "<p><em>description</em></p>"
+      res['description'].must_equal '<p><em>description</em></p>'
       res['descriptionMd'].must_equal '_description_'
     end
 
@@ -90,16 +90,16 @@ describe Api::StoriesController do
       post :create, story_hash.to_json, api_request_opts(account_id: account.id)
       assert_response :success
       res = JSON.parse(response.body)
-      res['description'].must_equal "<p><em>description</em></p>"
+      res['description'].must_equal '<p><em>description</em></p>'
       res['descriptionMd'].must_equal '_description_'
     end
 
     it 'returns descriptionMd for v3 stories' do
-      story_v3 = create(:story_v3, description: "<p><em>description</em></p>")
+      story_v3 = create(:story_v3, description: '<p><em>description</em></p>')
       get(:show, api_request_opts(id: story_v3.id))
       assert_response :success
       res = JSON.parse(response.body)
-      res['descriptionMd'].must_equal "_description_"
+      res['descriptionMd'].must_equal '_description_'
     end
 
     it 'rejects new stories with an invalid account' do
