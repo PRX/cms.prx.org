@@ -34,7 +34,7 @@ describe Api::Auth::StoriesController do
 
     it 'indexes stories with unpublished first, recently published after' do
       published_story.published_at.must_be :<, latest_story.published_at
-      get(:index, api_version: 'v1', format: 'json', account_id: account.id, sorts: 'published_at:desc')
+      get(:index, api_request_opts(account_id: account.id, sorts: 'published_at:desc'))
       assert_response :success
       assigns[:stories][0].wont_be :published?
       assigns[:stories][1].published_at.must_be :>, assigns[:stories][2].published_at
@@ -42,7 +42,7 @@ describe Api::Auth::StoriesController do
 
     it 'indexes stories with unpublished first, oldest published after' do
       published_story.published_at.must_be :<, latest_story.published_at
-      get(:index, api_version: 'v1', format: 'json', account_id: account.id, sorts: 'published_at:asc')
+      get(:index, api_request_opts(account_id: account.id, sorts: 'published_at:asc'))
       assert_response :success
       assigns[:stories][0].wont_be :published?
       assigns[:stories][1].published_at.must_be :<, assigns[:stories][2].published_at
