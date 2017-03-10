@@ -8,12 +8,14 @@ module RenderMarkdown
   extend ActiveSupport::Concern
 
   def html_to_markdown(str)
-    ReverseMarkdown.convert(str)
+    return nil unless str
+    ReverseMarkdown.convert(str).strip
   end
 
-  def markdown_to_html(str = '')
+  def markdown_to_html(str)
+    return nil unless str
     md = Redcarpet::Markdown.new(markdown_html_renderer, markdown_extensions)
-    md.render(str || '')
+    md.render(str || '').strip
   end
 
   def markdown_extensions
