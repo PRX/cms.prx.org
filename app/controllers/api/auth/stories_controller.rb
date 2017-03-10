@@ -19,6 +19,13 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   before_filter :check_user_network, only: [:index], if: -> { params[:network_id] }
 
+  def sorted(arel)
+    if pub_sort = (sorts || []).find_index { |s| s.keys.first == 'published_at' }
+      sorts.insert(pub_sort, 'ISNULL(`pieces`.`published_at`) DESC')
+    end
+    super
+  end
+
   def check_user_network
     user_not_authorized unless current_user.networks.exists?(params[:network_id])
   end
