@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'prx_access'
 
 class Distributions::PodcastDistribution < Distribution
@@ -39,7 +40,6 @@ class Distributions::PodcastDistribution < Distribution
       attrs[:title] = owner.title
       attrs[:subtitle] = owner.short_description
       attrs[:description] = owner.description
-      attrs[:summary] = owner.description
     end
 
     attrs
