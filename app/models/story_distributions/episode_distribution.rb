@@ -36,10 +36,9 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
     {
       prx_uri: api_story_path(story),
       title: story.title,
-      subtitle: Sanitize.fragment(story.short_description || '').strip,
-      description: Sanitize.fragment(story.description_html || '').strip,
-      summary: story.description,
-      content: story.description,
+      subtitle: story.short_description,
+      description: story.description_html,
+      content: story.description_html,
       categories: story.tags,
       published_at: story.published_at,
       updated_at: story.updated_at
