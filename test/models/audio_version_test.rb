@@ -48,5 +48,21 @@ describe AudioVersion do
       audio_version_with_template.status.must_equal 'invalid'
       audio_version_with_template.wont_be(:compliant_with_template?)
     end
+
+    it 'shows self as invalid if any audio file is not found or failed' do
+      audio_file.update(status: 'not found')
+      audio_version_with_template.audio_files << audio_file
+      audio_version_with_template.update_attributes(explicit: 'explicit')
+      audio_version_with_template.status_message.must_include 'not found'
+      audio_version_with_template.status.must_equal 'invalid'
+      audio_version_with_template.wont_be(:compliant_with_template?)
+
+      audio_file.update(status: 'failed')
+      audio_version_with_template.audio_files << audio_file
+      audio_version_with_template.update_attributes(explicit: 'explicit')
+      audio_version_with_template.status_message.must_include 'failed to process'
+      audio_version_with_template.status.must_equal 'invalid'
+      audio_version_with_template.wont_be(:compliant_with_template?)
+    end
   end
 end
