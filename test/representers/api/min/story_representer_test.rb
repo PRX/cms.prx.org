@@ -26,4 +26,8 @@ describe Api::Min::StoryRepresenter do
       json['duration'].must_equal 212
     end
   end
+
+  it 'includes story status' do
+    json['status'].wont_be_nil
+  end
 end
