@@ -48,7 +48,15 @@ class AudioFile < BaseModel
 
   def set_status
     # only do template validations once the audio callback worker has succeeded
-    return if [UPLOADED, NOTFOUND, FAILED].include? status
+    if status == UPLOADED
+      return
+    elsif status == NOTFOUND
+      self.status_message = "Audio file #{label} not found."
+      return
+    elsif status == FAILED
+      self.status_message = "Audio file #{label} failed to process."
+      return
+    end
 
     template = audio_version.
                try(:audio_version_template).

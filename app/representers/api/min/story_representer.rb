@@ -11,6 +11,9 @@ class Api::Min::StoryRepresenter < Api::BaseRepresenter
   property :published_at, writeable: false
   property :produced_on
 
+  property :status, writeable: false
+  property :status_message, writeable: false
+
   property :duration, writeable: false
   property :points, writeable: false
   property :app_version, writeable: false

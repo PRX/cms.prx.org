@@ -75,9 +75,15 @@ describe AudioFile do
     audio_file.must_be(:compliant_with_template?)
   end
 
-  it 'doesnt validate on template unless audio has processed' do
+  it 'doesnt validate on template unless audio has processed successfully' do
     audio_file.update(status: 'failed')
     audio_file.update_attributes(position: 1, label: 'Main Segment')
     audio_file.status.must_equal 'failed'
+    audio_file.status_message.must_include 'Audio file Main Segment failed to process'
+
+    audio_file.update(status: 'not found')
+    audio_file.update_attributes(position: 1, label: 'Main Segment2')
+    audio_file.status.must_equal 'not found'
+    audio_file.status_message.must_include 'Audio file Main Segment2 not found'
   end
 end
