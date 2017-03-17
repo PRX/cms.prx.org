@@ -41,7 +41,13 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
       content: story.description_html,
       categories: story.tags,
       published_at: story.published_at,
-      updated_at: story.updated_at
+      updated_at: story.updated_at,
+      url: default_url(story)
     }
+  end
+
+  def default_url(story)
+    path = "#{story.class.name.underscore.pluralize}/#{story.id}"
+    ENV['PRX_HOST'].nil? ? nil : "https://#{ENV['PRX_HOST']}/#{path}"
   end
 end
