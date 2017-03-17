@@ -49,6 +49,6 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
 
   def default_url(story)
     path = "#{story.class.name.underscore.pluralize}/#{story.id}"
-    "https://#{ENV['PRX_HOST'] || 'beta.prx.org'}/#{path}"
+    ENV['PRX_HOST'].nil? ? nil : "https://#{ENV['PRX_HOST']}/#{path}"
   end
 end
