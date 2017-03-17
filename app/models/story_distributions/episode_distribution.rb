@@ -13,9 +13,7 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
   def add_episode_to_feeder(create_attributes = {})
     return unless url.blank?
     podcast = distribution.get_podcast
-    post_attributes = episode_attributes.merge(create_attributes)
-    post_attributes['url'] = default_url(story) if create_attributes.empty?
-    episode = podcast.episodes.post(post_attributes)
+    episode = podcast.episodes.post(episode_attributes.merge(create_attributes))
     episode_url = URI.join(feeder_root, episode.links['self'].href).to_s
     raise 'Failed to get episode url on create' if episode_url.blank?
     update_attributes!(url: episode_url) if episode_url
@@ -43,7 +41,8 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
       content: story.description_html,
       categories: story.tags,
       published_at: story.published_at,
-      updated_at: story.updated_at
+      updated_at: story.updated_at,
+      url: default_url(story)
     }
   end
 
