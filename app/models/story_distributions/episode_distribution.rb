@@ -13,7 +13,9 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
   def add_episode_to_feeder(create_attributes = {})
     return unless url.blank?
     podcast = distribution.get_podcast
-    episode = podcast.episodes.post(episode_attributes.merge(create_attributes))
+    post_attributes = episode_attributes.merge(create_attributes)
+    post_attributes['url'] = default_url(story) if create_attributes.empty?
+    episode = podcast.episodes.post(post_attributes)
     episode_url = URI.join(feeder_root, episode.links['self'].href).to_s
     raise 'Failed to get episode url on create' if episode_url.blank?
     update_attributes!(url: episode_url) if episode_url
@@ -43,5 +45,10 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
       published_at: story.published_at,
       updated_at: story.updated_at
     }
+  end
+
+  def default_url(story)
+    path = "#{story.class.name.underscore.pluralize}/#{story.id}"
+    "https://#{ENV['PRX_HOST'] || 'beta.prx.org'}/#{path}"
   end
 end
