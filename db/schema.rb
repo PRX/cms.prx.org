@@ -198,6 +198,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.integer  "account_id", limit: 4
     t.integer  "series_id",  limit: 4
     t.string   "url",        limit: 255
+    t.text     "config",     limit: 65535
     t.string   "status",     limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
