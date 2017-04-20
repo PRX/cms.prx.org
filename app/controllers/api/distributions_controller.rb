@@ -11,7 +11,7 @@ class Api::DistributionsController < Api::BaseController
 
   filter_resources_by :series_id
 
-  announce_actions resource: :owner_resource
+  announce_actions resource: :owner_resource, action: :update
 
   around_action :wrap_in_transaction, only: :create
 

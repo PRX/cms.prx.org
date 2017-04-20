@@ -11,7 +11,7 @@ class Api::StoryDistributionsController < Api::BaseController
 
   filter_resources_by :story_id
 
-  announce_actions resource: :story_resource
+  announce_actions resource: :story_resource, action: :update
 
   around_action :wrap_in_transaction, only: :create
 
