@@ -5,7 +5,7 @@ class Api::AudioVersionsController < Api::BaseController
 
   filter_resources_by :story_id
 
-  announce_actions resource: :story_resource
+  announce_actions resource: :story_resource, action: :update
 
   def story_resource
     resource.try(:story)
