@@ -130,6 +130,12 @@ describe Api::StoryRepresenter do
     end
   end
 
+  describe 'audio versions' do
+    it 'includes the audio versions' do
+      json['_embedded']['prx:audio-versions'].wont_be_nil
+    end
+  end
+
   describe 'series info' do
     let(:schedule) { create(:schedule) }
     let(:series) { schedule.series }
