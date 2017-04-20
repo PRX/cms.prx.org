@@ -22,7 +22,7 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
     {
       href: represented.public_url(version: :broadcast, extension: 'mp3'),
       type: 'audio/mpeg'
-    } if represented.id && represented.upload
+    } if represented.id
   end
 
   link :original do
