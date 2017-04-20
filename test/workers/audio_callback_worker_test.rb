@@ -37,7 +37,8 @@ describe AudioCallbackWorker do
       id: audio.id,
       downloaded: true,
       valid: true,
-      processed: true
+      processed: true,
+      name: 'test.mp2'
     }
     worker.perform(nil, defaults.merge(attrs).with_indifferent_access)
     audio.reload
