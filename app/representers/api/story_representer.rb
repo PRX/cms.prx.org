@@ -90,7 +90,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
       count: represented.audio_versions.count
     } if represented.id
   end
-  embed :audio_versions, paged: true, item_class: AudioVersion, zoom: false
+  embed :audio_versions, paged: true, item_class: AudioVersion
 
   link :images do
     {
