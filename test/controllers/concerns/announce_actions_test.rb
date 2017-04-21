@@ -4,7 +4,7 @@ require 'announce_actions'
 
 Api::TestObjectsController.class_eval do
   include AnnounceActions
-  announce_actions(:update, resource: :parent)
+  announce_actions(:update, resource: :parent, action: :change)
   announce_actions(:create, :destroy)
 end
 
@@ -42,12 +42,12 @@ describe Api::TestObjectsController do
       last_message['action'].to_s.must_equal 'delete'
     end
 
-    it 'will call announce on a different resource' do
+    it 'will call announce on a different resource and action' do
       put :update, id: 1
 
       response.must_be :success?
       last_message['subject'].to_s.must_equal 'test_parent'
-      last_message['action'].to_s.must_equal 'update'
+      last_message['action'].to_s.must_equal 'change'
     end
   end
 
