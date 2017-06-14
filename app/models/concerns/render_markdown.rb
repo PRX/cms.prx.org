@@ -16,11 +16,11 @@ module RenderMarkdown
     return nil unless str
     md = Redcarpet::Markdown.new(markdown_html_renderer, markdown_extensions)
     str = md.render(str || '').strip
-    str = convert_escaped_newlines(str || '')
+    convert_escaped_newlines(str)
   end
 
   def convert_escaped_newlines(str)
-    str.gsub(/\\<br>/, "<br>")
+    str.gsub(/\\<br>/, '<br>')
   end
 
   def markdown_extensions

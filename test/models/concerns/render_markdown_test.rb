@@ -19,8 +19,8 @@ describe TestMarkdownModel do
   end
 
   it 'converts escaped new lines without slashes' do
-    model.markdown_to_html("one\n\n\\\nanother\n").must_equal "<p>one</p>\n\n<p><br>\nanother</p>"
-    model.markdown_to_html("one\n\\\n\\\n\\\nanother\n").must_equal "<p>one<br>\n<br>\n<br>\n<br>\nanother</p>"
-    model.markdown_to_html("one\n\\\n\\\nanother\n").must_equal "<p>one<br>\n<br>\n<br>\nanother</p>"
+    model.markdown_to_html("o\n\n\\\na\n").must_equal "<p>o</p>\n\n<p><br>\na</p>"
+    model.markdown_to_html("o\n\\\n\\\n\\\na\n").must_equal "<p>o<br>\n<br>\n<br>\n<br>\na</p>"
+    model.markdown_to_html("o\n\\\n\\\na\n").must_equal "<p>o<br>\n<br>\n<br>\na</p>"
   end
 end
