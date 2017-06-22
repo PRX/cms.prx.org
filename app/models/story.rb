@@ -60,7 +60,7 @@ class Story < BaseModel
   has_many :playlists, through: :picks
   has_many :purchases, foreign_key: :purchased_id
   has_many :distributions,
-           class_name: StoryDistribution,
+           class_name: 'StoryDistribution',
            foreign_key: :piece_id,
            dependent: :destroy
 
