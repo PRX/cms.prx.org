@@ -64,7 +64,10 @@ class Story < BaseModel
            foreign_key: :piece_id,
            dependent: :destroy
 
-  has_one :promos, -> { where(promos: true).includes(:audio_files) }, class_name: 'AudioVersion', foreign_key: :piece_id
+  has_one :promos,
+          -> { where(promos: true).includes(:audio_files) },
+          class_name: 'AudioVersion',
+          foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id, dependent: :destroy
 
   before_validation :set_app_version, on: :create
