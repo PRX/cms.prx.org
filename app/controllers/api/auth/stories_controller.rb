@@ -13,7 +13,7 @@ class Api::Auth::StoriesController < Api::StoriesController
               allowed: [:id, :created_at, :updated_at, :published_at, :title,
                         :episode_number, :position]
 
-  announce_actions :create, :update, :delete, :publish, :unpublish
+  announce_actions :create, :update, :destroy, :publish, :unpublish
 
   represent_with Api::Auth::StoryRepresenter
 

@@ -11,7 +11,7 @@ class Api::StoriesController < Api::BaseController
               allowed: [:id, :created_at, :updated_at, :published_at, :title,
                         :episode_number, :position]
 
-  announce_actions :create, :update, :delete, :publish, :unpublish
+  announce_actions :create, :update, :destroy, :publish, :unpublish
 
   def after_create_resource(res)
     res.create_story_distributions
