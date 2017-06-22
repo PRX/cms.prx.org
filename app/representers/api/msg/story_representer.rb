@@ -1,6 +1,10 @@
 # encoding: utf-8
 
 class Api::Msg::StoryRepresenter < Api::StoryRepresenter
+  def self_url(represented)
+    api_story_path(represented)
+  end
+
   # main thing needed here is the audio with the s3 notifications
   link :audio do
     {
