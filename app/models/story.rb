@@ -40,17 +40,17 @@ class Story < BaseModel
   belongs_to :network
 
   has_many :images,
-    -> { where(parent_id: nil).order(:position) },
-    class_name: 'StoryImage',
-    foreign_key: :piece_id,
-    dependent: :destroy
+           -> { where(parent_id: nil).order(:position) },
+           class_name: 'StoryImage',
+           foreign_key: :piece_id,
+           dependent: :destroy
   has_many :audio_versions, -> { where(promos: false).includes(:audio_files) }, foreign_key: :piece_id
   has_many :audio_files, through: :audio_versions
   has_many :producers, foreign_key: :piece_id, dependent: :destroy
   has_many :musical_works,
-    -> { order(:position) },
-    foreign_key: :piece_id,
-    dependent: :destroy
+           -> { order(:position) },
+           foreign_key: :piece_id,
+           dependent: :destroy
   has_many :topics, foreign_key: :piece_id, dependent: :destroy
   has_many :tones, foreign_key: :piece_id, dependent: :destroy
   has_many :formats, foreign_key: :piece_id, dependent: :destroy
@@ -60,9 +60,9 @@ class Story < BaseModel
   has_many :playlists, through: :picks
   has_many :purchases, foreign_key: :purchased_id
   has_many :distributions,
-    class_name: StoryDistribution,
-    foreign_key: :piece_id,
-    dependent: :destroy
+           class_name: StoryDistribution,
+           foreign_key: :piece_id,
+           dependent: :destroy
 
   has_one :promos, -> { where(promos: true).includes(:audio_files) }, class_name: 'AudioVersion', foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id, dependent: :destroy
