@@ -18,4 +18,10 @@ describe Api::Msg::StoryRepresenter do
     af = json['_embedded']['prx:audio']['_embedded']['prx:items'].first
     get_link_href(af, 'prx:storage').must_match /s3:\/\//
   end
+
+  it 'has an id on a deleted resource' do
+    story.destroy
+    json = JSON.parse(Api::Msg::StoryRepresenter.new(story).to_json)
+    json['_links']['self']['href'].must_match /api\/v1\/stories\/\d+/
+  end
 end
