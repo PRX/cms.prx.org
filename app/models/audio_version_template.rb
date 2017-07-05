@@ -21,11 +21,13 @@ class AudioVersionTemplate < BaseModel
 
   validates :length_minimum,
             presence: true,
-            numericality: { less_than_or_equal_to: :length_maximum }
+            numericality: true
 
   validates :length_maximum,
             presence: true,
-            numericality: { greater_than_or_equal_to: :length_minimum }
+            numericality: true
+
+  validate :max_is_greater_than_min_if_set
 
   def self.policy_class
     SeriesAttributePolicy
@@ -68,5 +70,11 @@ class AudioVersionTemplate < BaseModel
                        "- #{length_maximum.to_time_string} long."
     end
     length_errors
+  end
+
+  def max_is_greater_than_min_if_set
+    if length_maximum != 0 && length_minimum > length_maximum
+      errors.add(:length_mininum, 'must be less than or equal to length maximum')
+    end
   end
 end
