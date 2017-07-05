@@ -21,4 +21,16 @@ describe AudioFileTemplate do
     audio_file.update(length: 5)
     audio_file_template.validate_audio_file(audio_file).must_be(:empty?)
   end
+
+  it 'checks template min against max' do
+    audio_file_template.length_minimum = 20
+    audio_file_template.length_maximum = 10
+    audio_file_template.wont_be :valid?
+  end
+
+  it 'allows template max to be unset' do
+    audio_file_template.length_minimum = 20
+    audio_file_template.length_maximum = 0
+    audio_file_template.must_be :valid?
+  end
 end
