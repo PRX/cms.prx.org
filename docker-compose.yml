@@ -11,7 +11,11 @@ cms:
   command: web
   environment:
     VIRTUAL_HOST: cms.prx.docker
+    LOCAL_ENV: "true"
+    DB_ENV_MYSQL_USER: root
+    DB_ENV_MYSQL_PASSWORD: password
     DB_PORT_3306_TCP_ADDR: db
+    DB_PORT_3306_TCP_PORT: "3306"
   # tty: true
   # stdin_open: true
 worker:
@@ -20,6 +24,12 @@ worker:
     - .:/app
   env_file:
     - .env
+  environment:
+    LOCAL_ENV: "true"
+    DB_ENV_MYSQL_USER: root
+    DB_ENV_MYSQL_PASSWORD: password
+    DB_PORT_3306_TCP_ADDR: db
+    DB_PORT_3306_TCP_PORT: "3306"
   links:
     - db
   command: worker
@@ -27,6 +37,9 @@ db:
   image: mysql
   env_file:
     - .env
+  environment:
+    MYSQL_DATABASE: cms_development
+    MYSQL_ROOT_PASSWORD: password
   ports:
     - "3306:3306"
   command: mysqld --log_error_verbosity=1

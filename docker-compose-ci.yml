@@ -1,0 +1,22 @@
+cms:
+  build: .
+  links:
+    - db
+  ports:
+    - 3000:3000
+  command: test
+  environment:
+    VIRTUAL_HOST: cms.prx.docker
+    LOCAL_ENV: "true"
+    DB_ENV_MYSQL_USER: root
+    DB_ENV_MYSQL_PASSWORD: password
+    DB_PORT_3306_TCP_ADDR: db
+    DB_PORT_3306_TCP_PORT: "3306"
+db:
+  image: mysql
+  environment:
+    MYSQL_DATABASE: cms_test
+    MYSQL_ROOT_PASSWORD: password
+  ports:
+    - 3306:3306
+  command: mysqld --log_error_verbosity=1

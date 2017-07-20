@@ -1,10 +1,16 @@
 FROM ruby:2.1.9-alpine
 
 MAINTAINER PRX <sysadmin@prx.org>
+LABEL org.prx.app="yes"
 
-RUN apk --update add ca-certificates ruby ruby-irb ruby-json ruby-rake \
+RUN apk --no-cache add ca-certificates ruby ruby-irb ruby-json ruby-rake \
     ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev mysql-client \
-    linux-headers libc-dev zlib libxml2 libxslt libffi less
+    linux-headers libc-dev zlib libxml2 libxslt libffi less git groff python \
+    py-pip py-setuptools && \
+    pip --no-cache-dir install awscli
+
+RUN git clone -o github https://github.com/PRX/aws-secrets && \
+    cp ./aws-secrets/bin/* /usr/local/bin
 
 ENV TINI_VERSION v0.9.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static /tini
