@@ -12,6 +12,8 @@ cms:
     DB_ENV_MYSQL_PASSWORD: password
     DB_PORT_3306_TCP_ADDR: db
     DB_PORT_3306_TCP_PORT: "3306"
+    AWS_ACCESS_KEY_ID: fake
+    AWS_SECRET_ACCESS_KEY: credentials
 db:
   image: mysql
   environment:
