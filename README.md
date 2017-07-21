@@ -52,7 +52,8 @@ Also be sure to install `docker-compose` along with the toolbox.
 # Build the `web` container, it will also be used for `worker`
 docker-compose build
 
-# Start the mysql `db`
+# Start the mysql `db` - if this doesn't work, try a "docker-compose up" first,
+# kill that, and then run this command again
 docker-compose start db
 
 # ... and run migrations against it
