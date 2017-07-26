@@ -17,6 +17,38 @@ describe AudioVersion do
     audio_version.length(true).must_equal audio_version.duration
   end
 
+  describe 'checks that files match' do
+    let(:av) { create(:audio_version, audio_files_count: 4) }
+
+    it 'validates audio files match on channel' do
+      av.audio_files.first.update_column(:channel_mode, 'STEREO')
+      av.audio_files.last.update_column(:channel_mode, 'SINGLE_CHANNEL')
+      # triggering status check; normally this would happen via the audio callback worker
+      # changing the status on an audio file's status from UPLOADED to COMPLETE
+      # and triggering the file's own status check + :after_save callback up the chain
+      av.send(:set_status)
+      av.status_message.wont_be_nil
+      av.status.must_equal 'invalid'
+    end
+
+    it 'validates audio files match on frequency' do
+      sample_freq = av.audio_files.first.frequency
+      av.audio_files.first.update_column(:frequency, sample_freq + 1)
+      av.audio_files.last.update_column(:frequency, sample_freq - 1)
+      av.send(:set_status)
+      av.status_message.wont_be_nil
+      av.status.must_equal 'invalid'
+    end
+
+    it 'validates audio files match on bitrate' do
+      av.audio_files.first.update_column(:bit_rate, 320)
+      av.audio_files.last.update_column(:bit_rate, 256)
+      av.send(:set_status)
+      av.status_message.wont_be_nil
+      av.status.must_equal 'invalid'
+    end
+  end
+
   describe 'with a template' do
 
     let(:audio_version_with_template) { create(:audio_version_with_template) }
