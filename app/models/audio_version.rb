@@ -35,7 +35,7 @@ class AudioVersion < BaseModel
   private
 
   def audio_formats_match?
-    [:frequency, :bit_rate, :channel_mode].each do |format|
+    %i(frequency bit_rate channel_mode).each do |format|
       return false if audio_files.map(&format).compact.uniq.length > 1
     end
     true
