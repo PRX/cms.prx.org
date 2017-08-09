@@ -47,6 +47,22 @@ describe AudioVersion do
       av.status_message.wont_be_nil
       av.status.must_equal 'invalid'
     end
+
+    it 'validates audio files match on content type' do
+      av.audio_files.first.update_column(:content_type, 'audio/mpeg')
+      av.audio_files.last.update_column(:content_type, 'audio/x-wav')
+      av.send(:set_status)
+      av.status_message.wont_be_nil
+      av.status.must_equal 'invalid'
+    end
+
+    it 'validates audio files match on layer' do
+      av.audio_files.first.update_column(:layer, 2)
+      av.audio_files.last.update_column(:layer, 3)
+      av.send(:set_status)
+      av.status_message.wont_be_nil
+      av.status.must_equal 'invalid'
+    end
   end
 
   describe 'with a template' do
