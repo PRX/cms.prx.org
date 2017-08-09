@@ -35,7 +35,7 @@ class AudioFile < BaseModel
   end
 
   def fixerable_final?
-    [VALID, COMPLETE, TRANSFORMING, TRANSFORM_FAILED, TRANSFORMED].include? status
+    [INVALID, VALID, COMPLETE, TRANSFORMING, TRANSFORM_FAILED, TRANSFORMED].include? status
   end
 
   def compliant_with_template?
