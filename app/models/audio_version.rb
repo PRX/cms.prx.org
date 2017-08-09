@@ -34,6 +34,13 @@ class AudioVersion < BaseModel
 
   private
 
+  def audio_formats_match?
+    %i(content_type layer frequency bit_rate channel_mode).each do |format|
+      return false if audio_files.map(&format).compact.uniq.length > 1
+    end
+    true
+  end
+
   def update_story_status
     story.try(:save!)
   end
@@ -45,6 +52,12 @@ class AudioVersion < BaseModel
     if !noncompliant_files.empty?
       self.status = INVALID
       self.status_message = noncompliant_files.map(&:status_message).join(', ')
+      return
+    end
+
+    if !audio_formats_match?
+      self.status = INVALID
+      self.status_message = 'Audio file formats do not match'
       return
     end
 
