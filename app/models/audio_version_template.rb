@@ -54,7 +54,7 @@ class AudioVersionTemplate < BaseModel
     num_audio_files = audio_version.audio_files.count
     if !segment_count.nil? && audio_version.audio_files.count != segment_count
       file_count_errors << "Audio version #{audio_version.label} has #{num_audio_files} " +
-                           "audio files, but must have #{segment_count} segments."
+                           "audio files but must have #{segment_count} segments."
     end
     file_count_errors
   end
@@ -65,9 +65,13 @@ class AudioVersionTemplate < BaseModel
     longer_than_max = length_maximum != 0 && audio_version.length > length_maximum
     if shorter_than_min || longer_than_max
       length_errors << "Audio version '#{audio_version.label}' is " +
-                       "#{audio_version.length.to_time_string} long, but " +
-                       "must be #{length_minimum.to_time_string} " +
-                       "- #{length_maximum.to_time_string} long."
+                       "#{audio_version.length.to_time_string} long but must be " +
+      length_errors << if length_maximum != 0
+                         "#{length_minimum.to_time_string} - " +
+                         "#{length_maximum.to_time_string} long."
+                       else
+                         "more than #{length_minimum.to_time_string} long."
+                       end
     end
     length_errors
   end
