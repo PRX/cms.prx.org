@@ -21,12 +21,4 @@ describe Api::Auth::AudioFileRepresenter do
     store = json['_links']['prx:storage']['href']
     store.must_equal "s3://#{ENV['AWS_BUCKET']}/public/audio_files/#{audio_file.id}/test.mp2"
   end
-
-  it 'reveals the analyzed audio format' do
-    json['contentType'].must_equal 'audio/mpeg'
-    json['layer'].must_equal 2
-    json['frequency'].must_equal '44.1'
-    json['bitRate'].must_equal 128
-    json['channelMode'].must_equal 'Single Channel'
-  end
 end

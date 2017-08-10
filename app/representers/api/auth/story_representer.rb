@@ -31,10 +31,4 @@ class Api::Auth::StoryRepresenter < Api::StoryRepresenter
         item_class: AudioFile,
         item_decorator: Api::Auth::AudioFileRepresenter,
         per: :all
-
-  # use authorized representer
-  embed :audio_versions,
-        paged: true,
-        item_class: AudioVersion,
-        item_decorator: Api::Auth::AudioVersionRepresenter
 end

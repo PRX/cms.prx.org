@@ -11,6 +11,12 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
   property :size
   property :duration
 
+  property :content_type, writeable: false
+  property :layer, writeable: false
+  property :frequency, writeable: false
+  property :bit_rate, writeable: false
+  property :channel_mode, writeable: false
+
   # provide an accessible url to the audio media file for upload
   property :upload, readable: false
 

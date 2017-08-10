@@ -30,4 +30,12 @@ describe Api::AudioFileRepresenter do
   it 'shows file validity' do
     json.keys.must_include('status')
   end
+
+  it 'shows the analyzed audio format' do
+    json['contentType'].must_equal 'audio/mpeg'
+    json['layer'].must_equal 2
+    json['frequency'].must_equal '44.1'
+    json['bitRate'].must_equal 128
+    json['channelMode'].must_equal 'Single Channel'
+  end
 end
