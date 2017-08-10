@@ -37,6 +37,7 @@ describe Api::Auth::StoryRepresenter do
     af.keys.must_include 'frequency'
     af.keys.must_include 'bitRate'
     af.keys.must_include 'channelMode'
+    get_link_href(av, 'self').must_match /authorization\/audio_versions\/\d+/
     get_link_href(af, 'self').must_match /authorization\/audio_files\/\d+/
   end
 end
