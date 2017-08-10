@@ -14,7 +14,19 @@ describe AudioFileTemplate do
   end
 
   it 'can tell if file length doesnt match template' do
-    audio_file_template.validate_audio_file(audio_file).must_include 'long, but must be'
+    msg = audio_file_template.validate_audio_file(audio_file)
+    msg.must_include 'long but must be 1 second - 10 seconds'
+  end
+
+  it 'validates with just a minimum' do
+    audio_file_template.update(length_minimum: 120, length_maximum: 0)
+    msg = audio_file_template.validate_audio_file(audio_file)
+    msg.must_include 'but must be more than 2 minutes'
+  end
+
+  it 'does not validate anything if all 0s' do
+    audio_file_template.update(length_minimum: 0, length_maximum: 0)
+    audio_file_template.validate_audio_file(audio_file).must_equal ''
   end
 
   it 'leaves a file alone if file complies with template' do

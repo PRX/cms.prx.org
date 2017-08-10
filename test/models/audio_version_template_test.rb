@@ -20,12 +20,23 @@ describe AudioVersionTemplate do
   it 'can tell if version doesnt have enough segments' do
     audio_version_template.segment_count = 2
     error_results = audio_version_template.validate_audio_version(audio_version)
-    error_results.must_include 'has 1 audio files, but must have'
+    error_results.must_include 'has 1 audio files but must have 2'
   end
 
   it 'can tell if version length doesnt match template' do
     error_results = audio_version_template.validate_audio_version(audio_version)
-    error_results.must_include 'long, but must be'
+    error_results.must_include 'long but must be 10 seconds - 1 minute and'
+  end
+
+  it 'validates with just a minimum' do
+    audio_version_template.update(length_minimum: 120, length_maximum: 0)
+    error_results = audio_version_template.validate_audio_version(audio_version)
+    error_results.must_include 'long but must be more than 2 minutes'
+  end
+
+  it 'does not validate anything if all 0s' do
+    audio_version_template.update(length_minimum: 0, length_maximum: 0)
+    audio_version_template.validate_audio_version(audio_version).must_equal ''
   end
 
   it 'leaves a file alone if file complies with template' do

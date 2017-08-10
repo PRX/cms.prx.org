@@ -84,7 +84,7 @@ describe AudioVersion do
 
     it 'shows self as invalid if incompliant with template' do
       audio_version_with_template.update_attributes(explicit: 'explicit')
-      audio_version_with_template.status_message.must_include 'long, but must be'
+      audio_version_with_template.status_message.must_include 'long but must be'
       audio_version_with_template.status.must_equal 'invalid'
       audio_version_with_template.wont_be(:compliant_with_template?)
     end

@@ -30,4 +30,13 @@ describe Api::Auth::StoryRepresenter do
     af = pub_json['_embedded']['prx:audio']['_embedded']['prx:items'].first
     get_link_href(af, 'prx:storage').must_match /s3:\/\//
   end
+
+  it 'has auth audio versions' do
+    av = pub_json['_embedded']['prx:audio-versions']['_embedded']['prx:items'].first
+    af = av['_embedded']['prx:audio'].first
+    af.keys.must_include 'frequency'
+    af.keys.must_include 'bitRate'
+    af.keys.must_include 'channelMode'
+    get_link_href(af, 'self').must_match /authorization\/audio_files\/\d+/
+  end
 end
