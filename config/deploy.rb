@@ -54,7 +54,8 @@ namespace :deploy do
         with rails_env: fetch(:rails_env) do
           log = release_path.join('log/production.worker.log')
           pid = release_path.join('tmp/pids/production.worker.pid')
-          opts = "-al #{log} -c /bin/sh --pidFile #{pid} --workingDir #{release_path}"
+          dotenv_cli = '/opt/node/current/bin/dotenv'
+          opts = "-al #{log} -c #{dotenv_cli} --pidFile #{pid} --workingDir #{release_path}"
 
           # stop any running worker
           execute :forever, :stop, "$(cat #{pid})" if test("[ -f #{pid} ]")
