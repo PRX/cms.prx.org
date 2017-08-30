@@ -21,7 +21,7 @@ class AudioFile < BaseModel
   fixerable_upload :upload, :file
 
   before_save :set_status, only: [:update, :create]
-  after_commit :update_version_status, if: Proc.new { |af| af.previous_changes.key?(:status) }
+  after_commit :update_version_status
   after_destroy :update_version_status
 
   before_validation do
@@ -43,7 +43,10 @@ class AudioFile < BaseModel
   end
 
   def update_version_status
-    audio_version.try(:save!)
+    return unless audio_version
+    audio_version.with_lock do
+      audio_version.save!
+    end
   end
 
   def set_status
