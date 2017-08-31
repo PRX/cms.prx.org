@@ -38,6 +38,8 @@ describe Story do
       af.update_column(:status, 'mp3s created')
 
       af.save!
+      af.run_callbacks(:commit)
+      av.run_callbacks(:commit)
 
       [af, av, story].each { |m| m.reload.status.must_equal 'complete' }
     end
@@ -45,18 +47,17 @@ describe Story do
     it 'changes to valid when invalid audio file destroyed' do
       av = story.audio_versions(true).first
       af = av.audio_files(true).first
-
-      af.status.must_equal 'complete'
-      av.status.must_equal 'complete'
-      story.status.must_equal 'complete'
+      af.run_callbacks(:commit)
+      av.run_callbacks(:commit)
+      [af, av, story].each { |m| m.reload.status.must_equal 'complete' }
 
       af.update_columns(status: 'invalid', status_message: 'bad')
-      af.run_callbacks(:save)
-
+      af.run_callbacks(:commit)
+      av.run_callbacks(:commit)
       [af, av, story].each { |m| m.reload.status.must_equal 'invalid' }
 
       af.destroy
-
+      av.run_callbacks(:commit)
       [av, story].each { |m| m.reload.status.must_equal 'complete' }
     end
   end

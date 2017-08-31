@@ -12,7 +12,7 @@ class AudioVersion < BaseModel
   has_many :audio_files, -> { order :position }, dependent: :destroy
 
   before_save :set_status, only: [:update, :create]
-  after_save :update_story_status, if: :status_changed?
+  after_commit :update_story_status
   after_destroy :update_story_status
 
   acts_as_paranoid
@@ -42,7 +42,10 @@ class AudioVersion < BaseModel
   end
 
   def update_story_status
-    story.try(:save!)
+    return unless story
+    story.with_lock do
+      story.save!
+    end
   end
 
   def set_status
