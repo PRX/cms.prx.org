@@ -1,0 +1,589 @@
+{
+  "count": 10,
+  "total": 57,
+  "_embedded": {
+    "prx:items": [
+      {
+        "id": "28481cfb-1b0e-4a92-91a9-27d4f4ceb7b7",
+        "createdAt": "2017-08-16T15:31:01.991Z",
+        "updatedAt": "2017-08-31T16:53:22.915Z",
+        "guid": "prx_40_28481cfb-1b0e-4a92-91a9-27d4f4ceb7b7",
+        "prxUri": "/api/v1/stories/212920",
+        "publishedAt": "2017-09-04T04:00:00.000Z",
+        "keywordXid": "2017-09-04_28481cfb-1_hurry up and listen",
+        "url": "https://beta.prx.org/stories/212920",
+        "title": "Hurry Up and Listen",
+        "subtitle": "Find a quiet place to listen to the science of soundscapes.",
+        "description": "<p>Underneath our vrooms, beeps, and rumbles, natural sound may be more important than we think.</p>",
+        "content": "<p>Underneath our vrooms, beeps, and rumbles, natural sound may be more important than we think.</p>",
+        "summaryPreview": "Underneath our vrooms, beeps, and rumbles, natural sound may be more important than we think.",
+        "explicit": "",
+        "duration": 650.21385,
+        "keywords": [],
+        "categories": [
+          "science"
+        ],
+        "author": {},
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/28481cfb-1b0e-4a92-91a9-27d4f4ceb7b7/77fc4c66-76d1-4ef7-8148-981da6108c4a.mp3",
+            "type": "audio/mpeg",
+            "size": 13006409,
+            "duration": "650.21385",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/28481cfb-1b0e-4a92-91a9-27d4f4ceb7b7",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/28481cfb-1b0e-4a92-91a9-27d4f4ceb7b7/hurry_up_transistor.mp3",
+            "type": "audio/mpeg",
+            "size": 13006409,
+            "duration": 650,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/212920"
+          }
+        }
+      },
+      {
+        "id": "603fedcd-d07a-4566-b689-16d9355e8a21",
+        "createdAt": "2017-08-16T14:54:42.151Z",
+        "updatedAt": "2017-08-31T16:53:21.464Z",
+        "guid": "prx_40_603fedcd-d07a-4566-b689-16d9355e8a21",
+        "prxUri": "/api/v1/stories/212914",
+        "publishedAt": "2017-08-21T04:00:00.000Z",
+        "keywordXid": "2017-08-21_603fedcd-d_a job for the bee te",
+        "url": "https://beta.prx.org/stories/212914",
+        "title": "A Job for the Bee Team",
+        "subtitle": "Come along as scientists get to the bottom of a killer pesticide.",
+        "description": "<p>On May 2, 2015, beekeepers Pam Arnold and Kristy Allen got hit with a pesticide. They couldn't see it or smell it, but when they saw their bees writhing on the ground and dying they knew something was seriously wrong. They called a panel of scientists at the Minnesota Department of Agriculture.</p>",
+        "content": "<p>On May 2, 2015, beekeepers Pam Arnold and Kristy Allen got hit with a pesticide. They couldn't see it or smell it, but when they saw their bees writhing on the ground and dying they knew something was seriously wrong. They called a panel of scientists at the Minnesota Department of Agriculture.</p>",
+        "summaryPreview": "On May 2, 2015, beekeepers Pam Arnold and Kristy Allen got hit with a pesticide. They couldn't see it or smell it, but when they saw their bees writhing on the ground and dying they knew something was seriously wrong. They called a panel of scientists at the Minnesota Department of Agriculture.",
+        "explicit": "",
+        "duration": 638.7461,
+        "keywords": [],
+        "categories": [
+          "bees",
+          "science"
+        ],
+        "author": {},
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/603fedcd-d07a-4566-b689-16d9355e8a21/7f992f75-3ad0-4dda-a1a4-0f6edecbddf0.mp3",
+            "type": "audio/mpeg",
+            "size": 12777061,
+            "duration": "638.7461",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/603fedcd-d07a-4566-b689-16d9355e8a21",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/603fedcd-d07a-4566-b689-16d9355e8a21/A_Job_for_the_Bee_Team.mp3",
+            "type": "audio/mpeg",
+            "size": 12777061,
+            "duration": 638,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/212914"
+          }
+        }
+      },
+      {
+        "id": "56ecf284-0d90-4066-9216-b89ef38811f5",
+        "createdAt": "2017-08-08T16:34:15.615Z",
+        "updatedAt": "2017-08-31T16:53:01.169Z",
+        "guid": "prx_40_56ecf284-0d90-4066-9216-b89ef38811f5",
+        "prxUri": "/api/v1/stories/212368",
+        "publishedAt": "2017-08-08T16:34:13.000Z",
+        "keywordXid": "2017-08-08_56ecf284-0_an ovarian transplan",
+        "url": "https://beta.prx.org/stories/212368",
+        "title": "An Ovarian Transplant Between Twins",
+        "subtitle": "Thirty-six-year-old twins Carol and Katy are physically identical in every way but one: Katy was born without ovaries, and wanted to start a family. ",
+        "description": "<p>Thirty-six-year-old twins Carol and Katy are physically identical in every way but one: Katy was born without ovaries, and wanted to start a family. The science and ethics behind ovarian transplants as a treatment for infertility.</p>",
+        "content": "<p>Thirty-six-year-old twins Carol and Katy are physically identical in every way but one: Katy was born without ovaries, and wanted to start a family. The science and ethics behind ovarian transplants as a treatment for infertility.</p>",
+        "summaryPreview": "Thirty-six-year-old twins Carol and Katy are physically identical in every way but one: Katy was born without ovaries, and wanted to start a family. The science and ethics behind ovarian transplants as a treatment for infertility.",
+        "explicit": "",
+        "duration": 678.58285,
+        "keywords": [],
+        "categories": [],
+        "author": {},
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/56ecf284-0d90-4066-9216-b89ef38811f5/8d35fce1-5a85-4f0d-af8a-3de25fcc9730.mp3",
+            "type": "audio/mpeg",
+            "size": 13573802,
+            "duration": "678.58285",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/56ecf284-0d90-4066-9216-b89ef38811f5",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/56ecf284-0d90-4066-9216-b89ef38811f5/Ovarian_Transplants_Transistor_2.mp3",
+            "type": "audio/mpeg",
+            "size": 13573802,
+            "duration": 678,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/212368"
+          }
+        }
+      },
+      {
+        "id": "66cd19f9-807a-4d6c-9014-10554b025cdb",
+        "createdAt": "2017-05-15T20:08:43.805Z",
+        "updatedAt": "2017-08-31T16:52:55.649Z",
+        "guid": "prx_40_66cd19f9-807a-4d6c-9014-10554b025cdb",
+        "prxUri": "/api/v1/stories/205055",
+        "publishedAt": "2017-05-17T02:45:40.298Z",
+        "keywordXid": "2017-05-17_66cd19f9-8_tick tock biological",
+        "url": "https://beta.prx.org/stories/205055",
+        "title": "Tick Tock Biological Clock",
+        "subtitle": "The data used for the \"fertility cliff\" is old... really old! Come along as we find out why.",
+        "description": "<p>The headlines are often full of advice for women about when they should have children. Marnie Chesterton goes digging into the fertility stats and myths for modern women. Prepare to be surprised.</p>",
+        "content": "<p>The headlines are often full of advice for women about when they should have children. Marnie Chesterton goes digging into the fertility stats and myths for modern women. Prepare to be surprised.</p>",
+        "summaryPreview": "The headlines are often full of advice for women about when they should have children. Marnie Chesterton goes digging into the fertility stats and myths for modern women. Prepare to be surprised.",
+        "explicit": "",
+        "duration": 661.57715,
+        "keywords": [],
+        "categories": [
+          "health",
+          "pregnancy",
+          "science",
+          "women"
+        ],
+        "author": {},
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/66cd19f9-807a-4d6c-9014-10554b025cdb/3532c81c-6e62-4846-a816-ff3bf9f72893.mp3",
+            "type": "audio/mpeg",
+            "size": 13233682,
+            "duration": "661.57715",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/66cd19f9-807a-4d6c-9014-10554b025cdb",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/66cd19f9-807a-4d6c-9014-10554b025cdb/Fertility_Cliff_Transistor.mp3",
+            "type": "audio/mpeg",
+            "size": 13233682,
+            "duration": 661,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/205055"
+          }
+        }
+      },
+      {
+        "id": "561076e7-a0e8-4d62-93bc-7b34c9d35ce2",
+        "createdAt": "2017-04-28T04:27:23.053Z",
+        "updatedAt": "2017-08-31T16:52:58.367Z",
+        "guid": "prx_40_561076e7-a0e8-4d62-93bc-7b34c9d35ce2",
+        "prxUri": "/api/v1/stories/203966",
+        "publishedAt": "2017-04-28T13:08:43.510Z",
+        "keywordXid": "2017-04-28_561076e7-a_owning the clouds",
+        "url": "https://beta.prx.org/stories/203966",
+        "title": "Owning the Clouds",
+        "subtitle": "The science of controlling the weather (or trying to).",
+        "description": "<p>Humans have always been interested in controlling the weather. In the past we used raindances and sacrifices; today we turn to science. Cloud seeding is practiced all over the world, but there's still a lot we don't know about it. Delve into the surprising history, the controversial present, and the uncertain future of cloud seeding.</p>",
+        "content": "<p>Humans have always been interested in controlling the weather. In the past we used raindances and sacrifices; today we turn to science. Cloud seeding is practiced all over the world, but there's still a lot we don't know about it. Delve into the surprising history, the controversial present, and the uncertain future of cloud seeding.</p>",
+        "summaryPreview": "Humans have always been interested in controlling the weather. In the past we used raindances and sacrifices; today we turn to science. Cloud seeding is practiced all over the world, but there's still a lot we don't know about it. Delve into the surprising history, the controversial present, and the uncertain future of cloud seeding.",
+        "explicit": "",
+        "duration": 631.646125,
+        "keywords": [],
+        "categories": [
+          "clouds",
+          "rain",
+          "science",
+          "weather"
+        ],
+        "author": {},
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/561076e7-a0e8-4d62-93bc-7b34c9d35ce2/b675428c-37e9-4542-a999-b99f28229db5.mp3",
+            "type": "audio/mpeg",
+            "size": 15225043,
+            "duration": "631.646125",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/561076e7-a0e8-4d62-93bc-7b34c9d35ce2",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/561076e7-a0e8-4d62-93bc-7b34c9d35ce2/Owning_The_Clouds_Transistor.mp3",
+            "type": "audio/mpeg",
+            "size": 15225043,
+            "duration": 631,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/203966"
+          }
+        }
+      },
+      {
+        "id": "6d70b7b3-9e1d-4c1c-b28d-03f1afb75d41",
+        "createdAt": "2017-04-03T20:51:48.330Z",
+        "updatedAt": "2017-08-31T16:52:57.581Z",
+        "guid": "prx_40_6d70b7b3-9e1d-4c1c-b28d-03f1afb75d41",
+        "prxUri": "/api/v1/stories/202085",
+        "publishedAt": "2017-04-03T20:54:10.274Z",
+        "keywordXid": "2017-04-03_6d70b7b3-9_spotting fake art --",
+        "url": "https://beta.prx.org/stories/202085",
+        "title": "Spotting Fake Art -- with Math",
+        "subtitle": "Math and art meet at the museum.",
+        "description": "<p>Visual stylometry is a branch of mathematics that can determine the style of a particular artist’s body of work.</p>",
+        "content": "<p>Visual stylometry is a branch of mathematics that can determine the style of a particular artist’s body of work.</p>",
+        "summaryPreview": "Visual stylometry is a branch of mathematics that can determine the style of a particular artist’s body of work.",
+        "duration": 457.50855,
+        "keywords": [],
+        "categories": [
+          "art",
+          "math",
+          "science"
+        ],
+        "author": {},
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/6d70b7b3-9e1d-4c1c-b28d-03f1afb75d41/283da536-fff2-4333-a567-378526e1ecad.mp3",
+            "type": "audio/mpeg",
+            "size": 9152316,
+            "duration": "457.50855",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/6d70b7b3-9e1d-4c1c-b28d-03f1afb75d41",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/6d70b7b3-9e1d-4c1c-b28d-03f1afb75d41/Visual_Stylometry_Transistor_1_.mp3",
+            "type": "audio/mpeg",
+            "size": 9152316,
+            "duration": 457,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/202085"
+          }
+        }
+      },
+      {
+        "id": "540e0253-847c-4c7e-9608-761738f0ecca",
+        "createdAt": "2017-03-14T14:56:26.094Z",
+        "updatedAt": "2017-08-31T16:52:53.589Z",
+        "guid": "http://transistor.prx.org/?p=78",
+        "prxUri": "/api/v1/stories/200276",
+        "publishedAt": "2015-02-02T18:36:16.000Z",
+        "keywordXid": "2015-02-02_540e0253-8_we are stardust",
+        "url": "https://transistor.prx.org/2015/02/episode-1-we-are-stardust/",
+        "title": "We Are Stardust",
+        "subtitle": "We're closer than ever before to discovering if we're not alone in the universe. The host for this episode of Transistor, astrophysicist Michelle Thaller, visits the NASA lab that discovered that meteorites contain some of the very same chemical elemen...",
+        "description": "<p>We’re closer than ever before to discovering if we’re not alone in the universe. The host for this episode of <em>Transistor</em>, <a href=\"http://transistor.prx.org/about-our-hosts#michelle\" rel=\"nofollow\" target=\"_blank\">astrophysicist Michelle Thaller</a>, visits the NASA lab that discovered that meteorites contain some of the very same chemical elements that <em>we</em> contain. Then, Michelle talks to a Vatican planetary scientist about how science and religion can meet on the topic of life beyond Earth.</p>\n\n<p><strong>Inside the Episode:</strong></p>\n\n<p><a href=\"http://astrobiology.gsfc.nasa.gov/analytical/glavin.html\" rel=\"nofollow\" target=\"_blank\">Astrobiologist Danny Glavin</a> works at the NASA Goddard Center for Astrobiology. Here are some of those “mad scientist machines” from the lab.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/IMG_0135-copy.jpg\"><br><br>\nThis nanoelectrospray emitter is used by the lab to analyze very small samples. It gives sample molecules an electric charge, then transfers them to a mass spectrometer, which identifies the molecules by their mass.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/DSCN3476-copy.jpg\"><br><br>\nMass spectrometer instrument used to detect amino acids in meteorite sample extracts.</p>\n\n<p>Learn more about <a href=\"http://vaticanobservatory.org/about-us/personnel-and-research/73-personnel-and-research/brother-guy/325-brother-guy\" rel=\"nofollow\" target=\"_blank\">Vatican planetary scientist Br. Guy Consolmagno</a> and his <a href=\"http://www.imagecatholicbooks.com/book/228109/would-you-baptize-an-extraterrestrial/\" rel=\"nofollow\" target=\"_blank\">most recent book</a>.</p>\n\n<p><em>This episode was produced by <a href=\"http://transistor.prx.org/about-our-producers\" rel=\"nofollow\" target=\"_blank\">Lauren Ober</a> and edited by Katie Davis. Mix and sound design by <a href=\"http://www.whitneyajones.com\" rel=\"nofollow\" target=\"_blank\">Whitney Jones</a>.</em></p>\n\n<p><em>Photos courtesy of NASA.</em></p>",
+        "content": "<p>We’re closer than ever before to discovering if we’re not alone in the universe. The host for this episode of <em>Transistor</em>, <a href=\"http://transistor.prx.org/about-our-hosts#michelle\" rel=\"nofollow\" target=\"_blank\">astrophysicist Michelle Thaller</a>, visits the NASA lab that discovered that meteorites contain some of the very same chemical elements that <em>we</em> contain. Then, Michelle talks to a Vatican planetary scientist about how science and religion can meet on the topic of life beyond Earth.</p>\n\n<p><strong>Inside the Episode:</strong></p>\n\n<p><a href=\"http://astrobiology.gsfc.nasa.gov/analytical/glavin.html\" rel=\"nofollow\" target=\"_blank\">Astrobiologist Danny Glavin</a> works at the NASA Goddard Center for Astrobiology. Here are some of those “mad scientist machines” from the lab.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/IMG_0135-copy.jpg\"><br><br>\nThis nanoelectrospray emitter is used by the lab to analyze very small samples. It gives sample molecules an electric charge, then transfers them to a mass spectrometer, which identifies the molecules by their mass.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/DSCN3476-copy.jpg\"><br><br>\nMass spectrometer instrument used to detect amino acids in meteorite sample extracts.</p>\n\n<p>Learn more about <a href=\"http://vaticanobservatory.org/about-us/personnel-and-research/73-personnel-and-research/brother-guy/325-brother-guy\" rel=\"nofollow\" target=\"_blank\">Vatican planetary scientist Br. Guy Consolmagno</a> and his <a href=\"http://www.imagecatholicbooks.com/book/228109/would-you-baptize-an-extraterrestrial/\" rel=\"nofollow\" target=\"_blank\">most recent book</a>.</p>\n\n<p><em>This episode was produced by <a href=\"http://transistor.prx.org/about-our-producers\" rel=\"nofollow\" target=\"_blank\">Lauren Ober</a> and edited by Katie Davis. Mix and sound design by <a href=\"http://www.whitneyajones.com\" rel=\"nofollow\" target=\"_blank\">Whitney Jones</a>.</em></p>\n\n<p><em>Photos courtesy of NASA.</em></p>",
+        "summary": "We're closer than ever before to discovering if we're not alone in the universe. The host for this episode of Transistor, astrophysicist Michelle Thaller, visits the NASA lab that discovered that meteorites contain some of the very same chemical elements that we contain. Then, Michelle talks to a Vatican planetary scientist about how science and religion can meet on the topic of life beyond Earth.",
+        "block": false,
+        "isClosedCaptioned": false,
+        "isPermaLink": false,
+        "duration": 979.9836,
+        "keywords": [],
+        "categories": [
+          "Michelle Thaller",
+          "Podcast"
+        ],
+        "author": {
+          "name": "PRX"
+        },
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/540e0253-847c-4c7e-9608-761738f0ecca/c857a0cf-55bd-4f8e-b30d-08169277a340.mp3",
+            "type": "audio/mpeg",
+            "size": 9801966,
+            "duration": "979.9836",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/540e0253-847c-4c7e-9608-761738f0ecca",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/540e0253-847c-4c7e-9608-761738f0ecca/1_Transistor_We_Are_Stardust.mp3",
+            "type": "audio/mpeg",
+            "size": 9801966,
+            "duration": 979,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/200276"
+          }
+        }
+      },
+      {
+        "id": "99c10d00-fa9d-4e96-8f5f-8d7539afdc4e",
+        "createdAt": "2017-03-14T14:56:24.818Z",
+        "updatedAt": "2017-08-29T21:30:44.277Z",
+        "guid": "http://transistor.prx.org/?p=85",
+        "prxUri": "/api/v1/stories/200275",
+        "publishedAt": "2015-02-02T20:28:17.000Z",
+        "keywordXid": "2015020220_99c10d00fa_food meet fungus",
+        "url": "https://transistor.prx.org/2015/02/episode-2-food-meet-fungus/",
+        "title": "Food, Meet Fungus",
+        "subtitle": "In her episodes of Transistor, biologist Christina Agapakis is exploring the microbiome: the trillions of bacteria, fungi, and viruses that live in and on our body.   She starts with food. Bacteria-rich foods such as tempeh, cheese,",
+        "description": "<p><img src=\"http://transistor.prx.org/wp-content/uploads/IMG_8178.jpg\"><br><br>\nYour host Christina in a<br><br>\n tempeh kitchen, for science!</p>\n\n<p>In her episodes of <em>Transistor</em>, <a href=\"http://transistor.prx.org/about-our-hosts#christina\" rel=\"nofollow\" target=\"_blank\">biologist Christina Agapakis</a> is <strong>exploring the microbiome: the trillions of bacteria, fungi, and viruses that live in and on our body</strong>. The microbiome is hot right now and in these episodes Christina will explore what we do know in the face of so much hope and hype.</p>\n\n<p><strong>She starts with food.</strong> Bacteria-rich foods such as tempeh, cheese, pickles and yogurt have long been praised for their probiotic effect. But can you really add enough good bacteria to your digestive system to outnumber the bad?</p>\n\n<p><strong>Inside the Episode:</strong></p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/IMG_8196.jpg\"><br><br>\nBarry’s business partner Gordon Bennett<br><br>\n mixing the <em>Rhizopus</em> culture into the soybeans.</p>\n\n<p>Christina pays a visit to an industrial kitchen in Long Island City, Queens, where Barry Schwartz and a small team meet up every other week to make Barry’s Tempeh, <a href=\"http://growninbrooklyn.com/\" rel=\"nofollow\" target=\"_blank\">the only fresh tempeh sold in New York State</a>.</p>\n\n<p>Wanting to better understand tempeh – aka “blue cheese of tofu” – Christina then calls her friend <a href=\"http://uci.academia.edu/ColinCahill\" rel=\"nofollow\" target=\"_blank\">Colin Cahill</a> in Indonesia where tempeh originated. He explains how it’s more than just soybeans and fungus that give tempeh in Indonesia its regional flavor.</p>\n\n<p>Then, if a single bacteria food like tempeh is good, studying a more complex ecosystem like the bacteria on cheese rind might tell us more about bacteria interact with each other and in our digestive systems – at least that’s <a href=\"https://sites.google.com/site/theduttonlab/\" rel=\"nofollow\" target=\"_blank\">Harvard biologist Rachel Dutton</a>‘s goal. She’s studied more than a hundred different types of cheese from around the world, trying to better understand how cheese gets its flavor and why they are all so different. She’s now the go-to biologist for world-famous chefs like David Chang of Momufuko and Jim Lahey of Sullivan Street Bakery in New York, helping them explore ways to make foods taste new, different and better.</p>\n\n<p>Christina then shares her early love of fermentation with fermentation revivalist <a href=\"http://www.wildfermentation.com/who-is-sandorkraut/\" rel=\"nofollow\" target=\"_blank\">Sandor Katz</a>. Sandor’s never met a fermented food he didn’t like, but he’s skeptical of anyone who says fermented foods can make us healthy on their own.</p>\n\n<p><em>This episode was produced by <a href=\"http://transistor.prx.org/about-our-producers#kerry\" rel=\"nofollow\" target=\"_blank\">Kerry Donahue</a> and Sruthi Pinnamaneni, and mixed by Tim Einenkel.</em></p>",
+        "content": "<p><img src=\"http://transistor.prx.org/wp-content/uploads/IMG_8178.jpg\"><br><br>\nYour host Christina in a<br><br>\n tempeh kitchen, for science!</p>\n\n<p>In her episodes of <em>Transistor</em>, <a href=\"http://transistor.prx.org/about-our-hosts#christina\" rel=\"nofollow\" target=\"_blank\">biologist Christina Agapakis</a> is <strong>exploring the microbiome: the trillions of bacteria, fungi, and viruses that live in and on our body</strong>. The microbiome is hot right now and in these episodes Christina will explore what we do know in the face of so much hope and hype.</p>\n\n<p><strong>She starts with food.</strong> Bacteria-rich foods such as tempeh, cheese, pickles and yogurt have long been praised for their probiotic effect. But can you really add enough good bacteria to your digestive system to outnumber the bad?</p>\n\n<p><strong>Inside the Episode:</strong></p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/IMG_8196.jpg\"><br><br>\nBarry’s business partner Gordon Bennett<br><br>\n mixing the <em>Rhizopus</em> culture into the soybeans.</p>\n\n<p>Christina pays a visit to an industrial kitchen in Long Island City, Queens, where Barry Schwartz and a small team meet up every other week to make Barry’s Tempeh, <a href=\"http://growninbrooklyn.com/\" rel=\"nofollow\" target=\"_blank\">the only fresh tempeh sold in New York State</a>.</p>\n\n<p>Wanting to better understand tempeh – aka “blue cheese of tofu” – Christina then calls her friend <a href=\"http://uci.academia.edu/ColinCahill\" rel=\"nofollow\" target=\"_blank\">Colin Cahill</a> in Indonesia where tempeh originated. He explains how it’s more than just soybeans and fungus that give tempeh in Indonesia its regional flavor.</p>\n\n<p>Then, if a single bacteria food like tempeh is good, studying a more complex ecosystem like the bacteria on cheese rind might tell us more about bacteria interact with each other and in our digestive systems – at least that’s <a href=\"https://sites.google.com/site/theduttonlab/\" rel=\"nofollow\" target=\"_blank\">Harvard biologist Rachel Dutton</a>‘s goal. She’s studied more than a hundred different types of cheese from around the world, trying to better understand how cheese gets its flavor and why they are all so different. She’s now the go-to biologist for world-famous chefs like David Chang of Momufuko and Jim Lahey of Sullivan Street Bakery in New York, helping them explore ways to make foods taste new, different and better.</p>\n\n<p>Christina then shares her early love of fermentation with fermentation revivalist <a href=\"http://www.wildfermentation.com/who-is-sandorkraut/\" rel=\"nofollow\" target=\"_blank\">Sandor Katz</a>. Sandor’s never met a fermented food he didn’t like, but he’s skeptical of anyone who says fermented foods can make us healthy on their own.</p>\n\n<p><em>This episode was produced by <a href=\"http://transistor.prx.org/about-our-producers#kerry\" rel=\"nofollow\" target=\"_blank\">Kerry Donahue</a> and Sruthi Pinnamaneni, and mixed by Tim Einenkel.</em></p>",
+        "summary": "In her episodes of Transistor, biologist Christina Agapakis is exploring the microbiome: the trillions of bacteria, fungi, and viruses that live in and on our body.   She starts with food. Bacteria-rich foods such as tempeh, cheese, pickles and yogurt have long been praised for their probiotic effect. But can you really add enough good bacteria to your digestive system to outnumber the bad?",
+        "block": false,
+        "isClosedCaptioned": false,
+        "isPermaLink": false,
+        "duration": 1070.5991,
+        "keywords": [],
+        "categories": [
+          "Christina Agapakis",
+          "Podcast"
+        ],
+        "author": {
+          "name": "PRX"
+        },
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/99c10d00-fa9d-4e96-8f5f-8d7539afdc4e/da533a4a-11db-4f21-a129-d95270f42511.mp3",
+            "type": "audio/mpeg",
+            "size": 42823964,
+            "duration": "1070.5991",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/99c10d00-fa9d-4e96-8f5f-8d7539afdc4e",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/99c10d00-fa9d-4e96-8f5f-8d7539afdc4e/2_Transistor_Food_Meet_Fungus.mp3",
+            "type": "audio/mpeg",
+            "size": 42823964,
+            "duration": 1070,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/200275"
+          }
+        }
+      },
+      {
+        "id": "a06a1023-a6f6-43b5-9f33-d0d245b6f9a3",
+        "createdAt": "2017-03-14T14:56:23.698Z",
+        "updatedAt": "2017-08-29T21:31:42.040Z",
+        "guid": "http://transistor.prx.org/?p=276",
+        "prxUri": "/api/v1/stories/200274",
+        "publishedAt": "2015-02-09T22:12:04.000Z",
+        "keywordXid": "2015020922_a06a1023a6_totally cerebral unt",
+        "url": "https://transistor.prx.org/2015/02/episode-3-totally-cerebral-untangling-the-mystery-of-memory/",
+        "title": "Totally Cerebral: Untangling the Mystery of Memory",
+        "subtitle": "In her episodes of Transistor, neuroscientist Wendy Suzuki introduces us to scientists who have uncovered some of the deepest secrets about how our brains make us who we are.  She begins by talking with groundbreaking experimental psychologist Brenda M...",
+        "description": "<p>How has our understanding of the mysterious tissue between our ears changed in the past 50 years? In her <em>Totally Cerebral</em> episodes on <em>Transistor</em>, <a href=\"http://transistor.prx.org/about-our-hosts/#wendy\" rel=\"nofollow\" target=\"_blank\">neuroscientist Wendy Suzuki</a> <strong>introduces us to scientists who have uncovered some of the deepest secrets about how our brains make us who we are</strong>.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/Brenda_Milner.jpg\"><br><br>\nBrenda Milner in 2011 | Photo by <a href=\"http://en.wikipedia.org/wiki/Brenda_Milner#mediaviewer/File:Brenda_Milner.jpg\" rel=\"nofollow\" target=\"_blank\">Eva Blue</a></p>\n\n<p><strong>Wendy begins by talking with groundbreaking experimental psychologist Brenda Milner</strong> , who in the 1950s, completely changed our understanding of the parts of the brain important for forming new long-term memories. Through her observation and careful study of patients with profound amnesia, Brenda wrote a paper in 1957 that broke with the accepted theories about memory, and blew open the entire field of neuroscience.</p>\n\n<p><strong>Inside the Episode</strong></p>\n\n<p><a href=\"http://transistor.prx.org/wp-content/uploads/shutterstock_235279540.jpg\" rel=\"nofollow\" target=\"_blank\"><img src=\"http://transistor.prx.org/wp-content/uploads/shutterstock_235279540.jpg\"></a></p>\n\n<p>The brain! The front view shows the location of the right and left hippocampus (in orange/yellow) within the brain’s temporal lobe. The side view shows the location of the left hippocampus (in orange/yellow) within the temporal lobe. (Click to enlarge.)</p>\n\n<p><a href=\"http://www.mcgill.ca/about/history/mcgill-pioneers/milner\" rel=\"nofollow\" target=\"_blank\">Brenda Milner</a> was born in 1918, and she is still working and using the same wooden chair in her office at McGill University in Montreal, where she wrote her pioneering paper on HM and memory. In fact, if you listen carefully in the episode you may hear the faint squeak of her wooden desk chair, which she has used for more than 50 years. Brenda has received numerous prizes for her work, including the Kavli Prize in 2014.</p>\n\n<p><a href=\"http://transistor.prx.org/wp-content/uploads/HM_in-front-of-house.jpg\" rel=\"nofollow\" target=\"_blank\"><img src=\"http://transistor.prx.org/wp-content/uploads/HM_in-front-of-house.jpg\"></a><br><br>\nHM as a young man</p>\n\n<p>Patient HM is perhaps the most famous amnesic patient in history. He had experimental surgery in 1953 to address his severe epilepsy, and when he woke up it was immediately clear that something was horribly wrong.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/Author-Photo-Credit-Louis-Fabian-Bachrach.jpg\"><br><br>\nSuzanne Corkin</p>\n\n<p>For 47 years, Suzanne Corkin, a former student of Brenda Milner, studied HM in her own lab at MIT. She’s the author of <a href=\"http://www.amazon.com/Permanent-Present-Tense-Unforgettable-Amnesic/dp/0465031595\" rel=\"nofollow\" target=\"_blank\">Permanent Present Tense: The Unforgettable Life of the Amnesic Patient HM</a>. We’ll hear more from Suzanne in the <a href=\"http://transistor.prx.org/2015/02/episode-4-totally-cerebral-the-man-without-a-memory/\" rel=\"nofollow\" target=\"_blank\">next episode of Transistor</a>.</p>\n\n<p><em>This episode was produced by <a href=\"http://transistor.prx.org/about-our-producers/#julie\" rel=\"nofollow\" target=\"_blank\">Julie Burstein</a>, with editing and sound design by <a href=\"http://www.wbez.org/users/djohn\" rel=\"nofollow\" target=\"_blank\">Derek John</a>. Host Wendy Suzuki’s book <a href=\"http://wendysuzuki.com/\" rel=\"nofollow\" target=\"_blank\">Healthy Brain, Happy Life</a>, goes on sale May 19, 2015.</em></p>\n\n<p><em>Brain image from <a href=\"http://www.shutterstock.com/pic-235279540/stock-photo-female-hippocampus-brain-anatomy-blue-concept.html\" rel=\"nofollow\" target=\"_blank\">Shutterstock</a>.</em></p>",
+        "content": "<p>How has our understanding of the mysterious tissue between our ears changed in the past 50 years? In her <em>Totally Cerebral</em> episodes on <em>Transistor</em>, <a href=\"http://transistor.prx.org/about-our-hosts/#wendy\" rel=\"nofollow\" target=\"_blank\">neuroscientist Wendy Suzuki</a> <strong>introduces us to scientists who have uncovered some of the deepest secrets about how our brains make us who we are</strong>.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/Brenda_Milner.jpg\"><br><br>\nBrenda Milner in 2011 | Photo by <a href=\"http://en.wikipedia.org/wiki/Brenda_Milner#mediaviewer/File:Brenda_Milner.jpg\" rel=\"nofollow\" target=\"_blank\">Eva Blue</a></p>\n\n<p><strong>Wendy begins by talking with groundbreaking experimental psychologist Brenda Milner</strong> , who in the 1950s, completely changed our understanding of the parts of the brain important for forming new long-term memories. Through her observation and careful study of patients with profound amnesia, Brenda wrote a paper in 1957 that broke with the accepted theories about memory, and blew open the entire field of neuroscience.</p>\n\n<p><strong>Inside the Episode</strong></p>\n\n<p><a href=\"http://transistor.prx.org/wp-content/uploads/shutterstock_235279540.jpg\" rel=\"nofollow\" target=\"_blank\"><img src=\"http://transistor.prx.org/wp-content/uploads/shutterstock_235279540.jpg\"></a></p>\n\n<p>The brain! The front view shows the location of the right and left hippocampus (in orange/yellow) within the brain’s temporal lobe. The side view shows the location of the left hippocampus (in orange/yellow) within the temporal lobe. (Click to enlarge.)</p>\n\n<p><a href=\"http://www.mcgill.ca/about/history/mcgill-pioneers/milner\" rel=\"nofollow\" target=\"_blank\">Brenda Milner</a> was born in 1918, and she is still working and using the same wooden chair in her office at McGill University in Montreal, where she wrote her pioneering paper on HM and memory. In fact, if you listen carefully in the episode you may hear the faint squeak of her wooden desk chair, which she has used for more than 50 years. Brenda has received numerous prizes for her work, including the Kavli Prize in 2014.</p>\n\n<p><a href=\"http://transistor.prx.org/wp-content/uploads/HM_in-front-of-house.jpg\" rel=\"nofollow\" target=\"_blank\"><img src=\"http://transistor.prx.org/wp-content/uploads/HM_in-front-of-house.jpg\"></a><br><br>\nHM as a young man</p>\n\n<p>Patient HM is perhaps the most famous amnesic patient in history. He had experimental surgery in 1953 to address his severe epilepsy, and when he woke up it was immediately clear that something was horribly wrong.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/Author-Photo-Credit-Louis-Fabian-Bachrach.jpg\"><br><br>\nSuzanne Corkin</p>\n\n<p>For 47 years, Suzanne Corkin, a former student of Brenda Milner, studied HM in her own lab at MIT. She’s the author of <a href=\"http://www.amazon.com/Permanent-Present-Tense-Unforgettable-Amnesic/dp/0465031595\" rel=\"nofollow\" target=\"_blank\">Permanent Present Tense: The Unforgettable Life of the Amnesic Patient HM</a>. We’ll hear more from Suzanne in the <a href=\"http://transistor.prx.org/2015/02/episode-4-totally-cerebral-the-man-without-a-memory/\" rel=\"nofollow\" target=\"_blank\">next episode of Transistor</a>.</p>\n\n<p><em>This episode was produced by <a href=\"http://transistor.prx.org/about-our-producers/#julie\" rel=\"nofollow\" target=\"_blank\">Julie Burstein</a>, with editing and sound design by <a href=\"http://www.wbez.org/users/djohn\" rel=\"nofollow\" target=\"_blank\">Derek John</a>. Host Wendy Suzuki’s book <a href=\"http://wendysuzuki.com/\" rel=\"nofollow\" target=\"_blank\">Healthy Brain, Happy Life</a>, goes on sale May 19, 2015.</em></p>\n\n<p><em>Brain image from <a href=\"http://www.shutterstock.com/pic-235279540/stock-photo-female-hippocampus-brain-anatomy-blue-concept.html\" rel=\"nofollow\" target=\"_blank\">Shutterstock</a>.</em></p>",
+        "summary": "In her episodes of Transistor, neuroscientist Wendy Suzuki introduces us to scientists who have uncovered some of the deepest secrets about how our brains make us who we are.  She begins by talking with groundbreaking experimental psychologist Brenda Milner, who in the 1950s, completely changed our understanding of the parts of the brain important for forming new long-term memories.",
+        "block": false,
+        "isClosedCaptioned": false,
+        "isPermaLink": false,
+        "duration": 1830.0604,
+        "keywords": [],
+        "categories": [
+          "Podcast",
+          "Wendy Suzuki"
+        ],
+        "author": {
+          "name": "PRX"
+        },
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/a06a1023-a6f6-43b5-9f33-d0d245b6f9a3/dda8f457-42ce-419f-b513-3756c4b06077.mp3",
+            "type": "audio/mpeg",
+            "size": 36603378,
+            "duration": "1830.0604",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/a06a1023-a6f6-43b5-9f33-d0d245b6f9a3",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/a06a1023-a6f6-43b5-9f33-d0d245b6f9a3/3_Transistor_Totally_Cerebral_Untangling_the_Mystery_of_Memory.mp3",
+            "type": "audio/mpeg",
+            "size": 36603378,
+            "duration": 1830,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/200274"
+          }
+        }
+      },
+      {
+        "id": "d9936c6e-7256-4b38-b54a-91ec219c15f0",
+        "createdAt": "2017-03-14T14:56:22.743Z",
+        "updatedAt": "2017-08-29T21:31:41.944Z",
+        "guid": "http://transistor.prx.org/?p=286",
+        "prxUri": "/api/v1/stories/200273",
+        "publishedAt": "2015-02-09T22:33:07.000Z",
+        "keywordXid": "2015020922_d9936c6e72_totally cerebral the",
+        "url": "https://transistor.prx.org/2015/02/episode-4-totally-cerebral-the-man-without-a-memory/",
+        "title": "Totally Cerebral: The Man Without a Memory",
+        "subtitle": "Imagine remembering your childhood, your parents, the history you learned in school, but never being able to form a new long term memory after the age of 27.  Welcome to the life of the famous amnesic patient “HM”.",
+        "description": "<p>(This is part 2 of a series on memory. Please listen to <a href=\"http://transistor.prx.org/2015/02/episode-3-totally-cerebral-untangling-the-mystery-of-memory/\" rel=\"nofollow\" target=\"_blank\">Episode 3</a> first!)</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/henry-in-lab-reduced.jpg\"><br><br>\nHenry Moliason (Patient HM) in the lab</p>\n\n<p>Imagine that every time you met someone new, the moment they left the room you forgot you had ever spoken to them, and when they returned it was as if you had never seen them before. Imagine remembering your childhood, your parents, the history you learned in school, but never being able to form a new long term memory after the age of 27.</p>\n\n<p>Welcome to the life of the famous amnesic patient “HM”, who had experimental surgery to relieve his terrible epilepsy, and woke up with a profound memory impairment. Neuroscientist Suzanne Corkin studied HM for almost half a century, and considered him a friend, even though he could never remember how he knew her. Suzanne gives us a glimpse of what daily life was like for him, and his tremendous contribution to our understanding of how our memories work.</p>\n\n<p><strong>Inside the Episode</strong></p>\n\n<p>For 50 years, Patient HM’s true identity was hidden from the public, but when he died in 2008 we learned his name was Henry Moliason. We hear him speak in this episode, and talk about his cheerful willingness to undergo test after test (though once they were finished, he couldn’t remember ever having done them) in order to help others.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/download-2.jpeg\">  </p>\n\n<p>Suzanne Corkin has written a moving and fascinating account of HM’s life and contribution to science called <a href=\"http://www.amazon.com/Permanent-Present-Tense-Unforgettable-Amnesic/dp/0465031595\" rel=\"nofollow\" target=\"_blank\">Permanent Present Tense: The Unforgettable Life of the Amnesic Patient HM</a>.</p>\n\n<p><em>This episode was hosted by <a href=\"http://transistor.prx.org/about-our-hosts/#wendy\" rel=\"nofollow\" target=\"_blank\">Wendy Suzuki</a> and produced by <a href=\"http://transistor.prx.org/about-our-producers/#julie\" rel=\"nofollow\" target=\"_blank\">Julie Burstein</a>, with editing and sound design by <a href=\"http://www.wbez.org/users/djohn\" rel=\"nofollow\" target=\"_blank\">Derek John</a>. Host Wendy Suzuki’s book <a href=\"http://wendysuzuki.com/\" rel=\"nofollow\" target=\"_blank\">Healthy Brain, Happy Life</a>, goes on sale May 19, 2015.</em></p>",
+        "content": "<p>(This is part 2 of a series on memory. Please listen to <a href=\"http://transistor.prx.org/2015/02/episode-3-totally-cerebral-untangling-the-mystery-of-memory/\" rel=\"nofollow\" target=\"_blank\">Episode 3</a> first!)</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/henry-in-lab-reduced.jpg\"><br><br>\nHenry Moliason (Patient HM) in the lab</p>\n\n<p>Imagine that every time you met someone new, the moment they left the room you forgot you had ever spoken to them, and when they returned it was as if you had never seen them before. Imagine remembering your childhood, your parents, the history you learned in school, but never being able to form a new long term memory after the age of 27.</p>\n\n<p>Welcome to the life of the famous amnesic patient “HM”, who had experimental surgery to relieve his terrible epilepsy, and woke up with a profound memory impairment. Neuroscientist Suzanne Corkin studied HM for almost half a century, and considered him a friend, even though he could never remember how he knew her. Suzanne gives us a glimpse of what daily life was like for him, and his tremendous contribution to our understanding of how our memories work.</p>\n\n<p><strong>Inside the Episode</strong></p>\n\n<p>For 50 years, Patient HM’s true identity was hidden from the public, but when he died in 2008 we learned his name was Henry Moliason. We hear him speak in this episode, and talk about his cheerful willingness to undergo test after test (though once they were finished, he couldn’t remember ever having done them) in order to help others.</p>\n\n<p><img src=\"http://transistor.prx.org/wp-content/uploads/download-2.jpeg\">  </p>\n\n<p>Suzanne Corkin has written a moving and fascinating account of HM’s life and contribution to science called <a href=\"http://www.amazon.com/Permanent-Present-Tense-Unforgettable-Amnesic/dp/0465031595\" rel=\"nofollow\" target=\"_blank\">Permanent Present Tense: The Unforgettable Life of the Amnesic Patient HM</a>.</p>\n\n<p><em>This episode was hosted by <a href=\"http://transistor.prx.org/about-our-hosts/#wendy\" rel=\"nofollow\" target=\"_blank\">Wendy Suzuki</a> and produced by <a href=\"http://transistor.prx.org/about-our-producers/#julie\" rel=\"nofollow\" target=\"_blank\">Julie Burstein</a>, with editing and sound design by <a href=\"http://www.wbez.org/users/djohn\" rel=\"nofollow\" target=\"_blank\">Derek John</a>. Host Wendy Suzuki’s book <a href=\"http://wendysuzuki.com/\" rel=\"nofollow\" target=\"_blank\">Healthy Brain, Happy Life</a>, goes on sale May 19, 2015.</em></p>",
+        "summary": "Imagine remembering your childhood, your parents, the history you learned in school, but never being able to form a new long term memory after the age of 27.  Welcome to the life of the famous amnesic patient “HM”. Neuroscientist Suzanne Corkin studied HM for almost half a century, and considered him a friend, even though he could never remember how he knew her. Suzanne gives us a glimpse of what daily life was like for him, and his tremendous contribution to our understanding of how our memories work.",
+        "block": false,
+        "isClosedCaptioned": false,
+        "isPermaLink": false,
+        "duration": 2267.42855,
+        "keywords": [],
+        "categories": [
+          "Podcast",
+          "Wendy Suzuki"
+        ],
+        "author": {
+          "name": "PRX"
+        },
+        "media": [
+          {
+            "href": "https://f.prxu.org/40/d9936c6e-7256-4b38-b54a-91ec219c15f0/2133c945-1c75-4139-9749-5892bf074042.mp3",
+            "type": "audio/mpeg",
+            "size": 45350734,
+            "duration": "2267.42855",
+            "status": "complete"
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "/api/v1/episodes/d9936c6e-7256-4b38-b54a-91ec219c15f0",
+            "profile": "http://meta.prx.org/model/episode"
+          },
+          "profile": {
+            "href": "http://meta.prx.org/model/episode"
+          },
+          "enclosure": {
+            "href": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/dovetail.prxu.org/40/d9936c6e-7256-4b38-b54a-91ec219c15f0/4_Transistor_Totally_Cerebral_The_Man_Without_a_Memory.mp3",
+            "type": "audio/mpeg",
+            "size": 45350734,
+            "duration": 2267,
+            "status": "complete"
+          },
+          "prx:podcast": {
+            "href": "/api/v1/podcasts/40"
+          },
+          "prx:story": {
+            "href": "https://cms.prx.org/api/v1/stories/200273"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "/api/v1/podcasts/40/episodes",
+      "profile": "http://meta.prx.org/model/collection/episode"
+    },
+    "profile": {
+      "href": "http://meta.prx.org/model/collection/episode"
+    },
+    "curies": [
+      {
+        "name": "prx",
+        "href": "http://meta.prx.org/relation/{rel}",
+        "templated": true
+      }
+    ],
+    "next": {
+      "href": "/api/v1/podcasts/40/episodes?page=2"
+    },
+    "first": {
+      "href": "/api/v1/podcasts/40/episodes"
+    },
+    "last": {
+      "href": "/api/v1/podcasts/40/episodes?page=6"
+    }
+  }
+}

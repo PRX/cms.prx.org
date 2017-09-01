@@ -39,7 +39,16 @@ describe FeederImporter do
     series.account_id.must_equal 8
     series.creator_id.must_equal 8
     series.short_description.must_match /^A podcast of scientific questions/
-    series.description.must_match /^<p>Transistor is podcast of scientific curiosities/
+    series.description_html.must_match /^<p>Transistor is podcast of scientific curiosities/
+
+    series.images.profile.wont_be_nil
+    series.images.profile.upload.must_equal podcast.itunes_image['url']
+
+    series.images.thumbnail.wont_be_nil
+    series.images.thumbnail.upload.must_equal podcast.feed_image['url']
+
+    series.audio_version_templates.size.must_equal 1
+    series.audio_version_templates.first.audio_file_templates.size.must_equal 1
   end
 end
 
@@ -52,4 +61,9 @@ def stub_import_requests
   stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/40').
     with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
+
+
+  stub_request(:get, "https://feeder.prx.org/api/v1/podcasts/40/episodes").
+    with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+    to_return(status: 200, body: json_file('transistor_episodes'), headers: {})
 end
