@@ -49,6 +49,8 @@ describe FeederImporter do
 
     series.audio_version_templates.size.must_equal 1
     series.audio_version_templates.first.audio_file_templates.size.must_equal 1
+
+    series.distributions.size.must_equal 1
   end
 end
 
