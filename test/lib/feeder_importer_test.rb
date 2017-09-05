@@ -62,7 +62,7 @@ describe FeederImporter do
       with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 
-    stub_request(:get, "https://feeder.prx.org/api/v1/podcasts/40/episodes").
+    stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/40/episodes').
       with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
       to_return(status: 200, body: json_file('transistor_episodes'), headers: {})
   end
