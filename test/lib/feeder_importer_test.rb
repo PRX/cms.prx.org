@@ -25,9 +25,9 @@ describe FeederImporter do
   end
 
   it 'retrieves the feeder podcast' do
-    podcast = importer.retrieve_podcast
-    podcast.wont_be_nil
-    podcast.title.must_equal 'Transistor'
+    remote_podcast = importer.retrieve_podcast
+    remote_podcast.wont_be_nil
+    remote_podcast.title.must_equal 'Transistor'
   end
 
   it 'creates a series' do
