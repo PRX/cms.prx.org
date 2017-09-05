@@ -20,17 +20,17 @@ describe FeederImporter do
     feeder_importer_stub_import_requests
   end
 
-  it "makes a new importer" do
+  it 'makes a new importer' do
     importer.wont_be_nil
   end
 
-  it "retrieves the feeder podcast" do
+  it 'retrieves the feeder podcast' do
     podcast = importer.retrieve_podcast
     podcast.wont_be_nil
     podcast.title.must_equal 'Transistor'
   end
 
-  it "creates a series" do
+  it 'creates a series' do
     importer.podcast = podcast
     series = importer.create_series
     series.wont_be_nil
