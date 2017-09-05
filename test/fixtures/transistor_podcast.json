@@ -1,7 +1,69 @@
 {
-  "id": 51,
+  "id": 40,
+  "createdAt": "2017-03-14T14:55:39.394Z",
+  "updatedAt": "2017-08-31T16:53:25.236Z",
+  "prxUri": "/api/v1/series/37677",
+  "prxAccountUri": "/api/v1/accounts/3437",
+  "publishedAt": "2017-08-21T04:00:00.000Z",
+  "publishedUrl": "https://f.prxu.org/40/feed-rss.xml",
+  "path": 40,
+  "url": "http://feeds.feedburner.com/transistor_stem",
+  "newFeedUrl": "http://feeds.prx.org/transistor_stem",
+  "feedburnerUrl": "http://feeds.feedburner.com/transistor_stem",
+  "link": "https://transistor.prx.org",
   "title": "Transistor",
+  "subtitle": "A podcast of scientific questions and stories featuring guest hosts and reporters.",
+  "description": "<p>Transistor is podcast of scientific curiosities and current events, featuring guest hosts, scientists, and story-driven reporters. Presented by radio and podcast powerhouse PRX, with support from the Sloan Foundation. </p>",
+  "summary": "Transistor is podcast of scientific curiosities and current events, featuring guest hosts, scientists, and story-driven reporters. Presented by radio and podcast powerhouse PRX, with support from the Sloan Foundation.",
+  "explicit": "clean",
+  "complete": false,
+  "copyright": "Copyright 2016 PRX",
+  "language": "en-US",
+  "owner": {
+    "name": "PRX",
+    "email": "prxwpadmin@prx.org"
+  },
+  "author": {
+    "name": "PRX"
+  },
+  "managingEditor": {
+    "name": "PRX",
+    "email": "prxwpadmin@prx.org"
+  },
+  "keywords": [],
+  "categories": [],
+  "itunesCategories": [
+    {
+      "name": "Science & Medicine",
+      "subcategories": [
+        "Natural Sciences"
+      ]
+    }
+  ],
+  "itunesImage": {
+    "url": "https://f.prxu.org/40/images/b92f9f81-3687-4bc8-8eeb-06473e654d70/transistor1400.jpg",
+    "format": "jpeg",
+    "height": 1400,
+    "width": 1400,
+    "size": 482410
+  },
+  "feedImage": {
+    "url": "https://f.prxu.org/40/images/d26df941-a0cc-421a-acdc-8364ad9531da/transistor300.png",
+    "format": "png",
+    "height": 300,
+    "width": 300,
+    "size": 51113
+  },
+  "enclosureTemplate": "https://dovetail.prxu.org/{slug}/{guid}/{original_filename}",
+  "enclosurePrefix": "https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/",
   "_links": {
+    "self": {
+      "href": "/api/v1/podcasts/40",
+      "profile": "http://meta.prx.org/model/podcast"
+    },
+    "profile": {
+      "href": "http://meta.prx.org/model/podcast"
+    },
     "curies": [
       {
         "name": "prx",
@@ -9,16 +71,15 @@
         "templated": true
       }
     ],
-    "self": {
-      "href": "/api/v1/podcasts/51",
-      "profile": "http://meta.prx.org/model/podcast"
-    },
-    "profile": {
-      "href": "http://meta.prx.org/model/podcast"
-    },
     "prx:episodes": {
-      "href": "/api/v1/podcasts/51/episodes",
-      "count": 0
+      "href": "/api/v1/podcasts/40/episodes",
+      "count": 56
+    },
+    "prx:series": {
+      "href": "https://cms.prx.org/api/v1/series/37677"
+    },
+    "prx:account": {
+      "href": "https://cms.prx.org/api/v1/accounts/3437"
     }
   }
 }
