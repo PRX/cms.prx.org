@@ -125,7 +125,7 @@ def stub_import_requests
 
   stub_request(:get, 'https://feeder.prx.tech/api/v1/podcasts/51').
     with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
-    to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
+    to_return(status: 200, body: json_file('transistor_podcast_basic'), headers: {})
 
   stub_request(:put, 'https://feeder.prx.tech/api/v1/podcasts/51').
     with(body: '{"id":51,"title":"Transistor","copyright":"Copyright 2016 PRX",' +
@@ -140,7 +140,7 @@ def stub_import_requests
                '"itunesCategories":[{"name":"Science & Medicine","subcategories":' +
                '["Natural Sciences"]}],"categories":[],"complete":false,"keywords":[]}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
-    to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
+    to_return(status: 200, body: json_file('transistor_podcast_basic'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/stories').
     with(body: '{"title":"Sidedoor from the Smithsonian: Shake it Up",' +

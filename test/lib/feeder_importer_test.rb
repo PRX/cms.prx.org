@@ -16,10 +16,9 @@ describe FeederImporter do
     end
   end
 
-  before do
-    stub_import_requests
+  before(:each) do
+    feeder_importer_stub_import_requests
   end
-
 
   it "makes a new importer" do
     importer.wont_be_nil
@@ -52,20 +51,19 @@ describe FeederImporter do
 
     series.distributions.size.must_equal 1
   end
-end
 
-def stub_import_requests
-  stub_request(:post, 'https://id.prx.org/token').
-    to_return(status: 200,
-              body: '{"access_token":"thisisnotatoken","token_type":"bearer"}',
-              headers: { 'Content-Type' => 'application/json; charset=utf-8' })
+  def feeder_importer_stub_import_requests
+    stub_request(:post, 'https://id.prx.org/token').
+      to_return(status: 200,
+                body: '{"access_token":"thisisnotatoken","token_type":"bearer"}',
+                headers: { 'Content-Type' => 'application/json; charset=utf-8' })
 
-  stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/40').
-    with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
-    to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
+    stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/40').
+      with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+      to_return(status: 200, body: json_file('transistor_podcast'), headers: {})
 
-
-  stub_request(:get, "https://feeder.prx.org/api/v1/podcasts/40/episodes").
-    with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
-    to_return(status: 200, body: json_file('transistor_episodes'), headers: {})
+    stub_request(:get, "https://feeder.prx.org/api/v1/podcasts/40/episodes").
+      with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
+      to_return(status: 200, body: json_file('transistor_episodes'), headers: {})
+  end
 end
