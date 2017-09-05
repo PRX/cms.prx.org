@@ -25,14 +25,13 @@ describe FeederImporter do
   end
 
   it 'retrieves the feeder podcast' do
-    remote_podcast = importer.retrieve_podcast
+    remote_podcast = importer.retrieve_podcast(account_id, feeder_podcast_url)
     remote_podcast.wont_be_nil
     remote_podcast.title.must_equal 'Transistor'
   end
 
   it 'creates a series' do
-    importer.podcast = podcast
-    series = importer.create_series
+    series = importer.create_series(podcast)
     series.wont_be_nil
     series.title.must_equal 'Transistor'
     series.account_id.must_equal 8

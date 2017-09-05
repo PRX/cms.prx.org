@@ -31,17 +31,17 @@ class FeederImporter
     self.series = Series.create!(attrs)
 
     # Add images to the series
-    if podcast.attributes['itunes_image'] && podcast.itunes_image['url']
+    if pcast.attributes['itunes_image'] && pcast.itunes_image['url']
       image = series.images.create!(
-        upload: clean_string(podcast.itunes_image['url']),
+        upload: clean_string(pcast.itunes_image['url']),
         purpose: Image::PROFILE
       )
       announce_image(image)
     end
 
-    if podcast.attributes['feed_image'] && podcast.feed_image['url']
+    if pcast.attributes['feed_image'] && pcast.feed_image['url']
       image = series.images.create!(
-        upload: clean_string(podcast.feed_image['url']),
+        upload: clean_string(pcast.feed_image['url']),
         purpose: Image::THUMBNAIL
       )
       announce_image(image)
@@ -56,7 +56,7 @@ class FeederImporter
     )
 
     num_segments = 1
-    episode = podcast.episodes.first
+    episode = pcast.episodes.first
     if episode.attributes['media']
       num_segments = [episode.media.count, num_segments].max
     end
