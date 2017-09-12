@@ -26,4 +26,15 @@ class Api::DistributionRepresenter < Api::BaseRepresenter
   embed :audio_version_template,
         class: AudioVersionTemplate,
         decorator: Api::AudioVersionTemplateRepresenter
+
+  link :audio_version_templates do
+    {
+      href: api_distribution_audio_version_templates_path(represented),
+      count: represented.audio_version_templates.count
+    } if represented.id
+  end
+  embed :audio_version_templates,
+        paged: true,
+        item_class: AudioVersionTemplate,
+        item_decorator: Api::AudioVersionTemplateRepresenter
 end

@@ -5,7 +5,8 @@ describe Api::Distributions::PodcastDistributionRepresenter do
   let(:series) { create(:series) }
   let(:template) { create(:audio_version_template, series: series) }
   let(:distribution) { create(:podcast_distribution, audio_version_template: template) }
-  let(:representer) { Api::Distributions::PodcastDistributionRepresenter.new(distribution) }
+  let(:distribution_templates) { DistributionTemplate.create(distribution: distribution, audio_version_template: template) }
+  let(:representer) { distribution_templates; Api::Distributions::PodcastDistributionRepresenter.new(distribution) }
   let(:json) { JSON.parse(representer.to_json) }
 
   before do
