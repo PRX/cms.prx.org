@@ -7,6 +7,8 @@ class AudioVersionTemplate < BaseModel
   belongs_to :series, touch: true
 
   has_many :audio_file_templates, -> { order :position }, dependent: :destroy
+  has_many :distribution_templates, dependent: :destroy
+  has_many :distributions, through: :distribution_templates
 
   has_many :audio_versions, dependent: :nullify
   has_many :distributions, dependent: :nullify

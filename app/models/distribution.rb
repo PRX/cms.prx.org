@@ -6,6 +6,8 @@ class Distribution < BaseModel
   belongs_to :audio_version_template
 
   has_many :story_distributions
+  has_many :distribution_templates, dependent: :destroy
+  has_many :audio_version_templates, through: :distribution_templates
 
   serialize :properties, HashSerializer
 
