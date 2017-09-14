@@ -45,4 +45,11 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
       count: represented.distributions.count
     } if represented.id
   end
+
+  link :audio_version_templates do
+    {
+      href: api_distribution_audio_version_templates_path(represented),
+      count: represented.audio_version_templates.count
+    } if represented.id
+  end
 end
