@@ -14,12 +14,30 @@ module AbstractResource
   def create
     create_resource.tap do |res|
       consume! res, create_options
-      res = res.becomes(res.type.safe_constantize) if res.type
       hal_authorize res
       res.save!
       after_create_resource(res)
       respond_with root_resource(res), abstract_create_options(res)
     end
+  end
+
+  def create_resource
+    res = super
+    new_kind = request_kind
+    if res.class.respond_to?(:class_for_kind) && !new_kind.blank?
+      res = res.becomes(res.class.class_for_kind(new_kind))
+    end
+    res
+  end
+
+  def request_kind
+    JSON.parse(incoming_string)['kind']
+  end
+
+  def incoming_string
+    body = request.body
+    body.rewind
+    body.read
   end
 
   def abstract_create_options(res)
