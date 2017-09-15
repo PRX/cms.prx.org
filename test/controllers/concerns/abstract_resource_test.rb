@@ -54,10 +54,6 @@ class Dog < Mammal
   def id
     1
   end
-
-  def initialize
-    self.woof = 'WOOF'
-  end
 end
 
 class Api::MammalsController < ActionController::Base
@@ -103,6 +99,5 @@ describe Api::MammalsController do
     response.must_be :success?
     dog = JSON.parse(response.body)
     dog['type'].must_equal 'Dog'
-    dog['woof'].must_equal 'WOOF'
   end
 end
