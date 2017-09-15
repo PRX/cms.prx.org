@@ -5,6 +5,18 @@ class Api::DistributionRepresenter < Api::BaseRepresenter
   property :guid
   property :url
   property :kind
+
+  property :set_audio_version_template_uris,
+           readable: false,
+           reader: ->(doc, _args) do
+             distribution_templates.clear
+             Array(doc['set_audio_version_template_uris']).each do |uri|
+               if avt = AudioVersionTemplate.find_by_id(id_from_url(uri))
+                 distribution_templates.build(audio_version_template: avt)
+               end
+             end
+           end
+
   hash :properties
 
   def self_url(represented)

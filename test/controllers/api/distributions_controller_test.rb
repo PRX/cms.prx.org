@@ -38,5 +38,25 @@ describe Api::DistributionsController do
       resource['_links']['prx:podcast']['href'].must_equal podcast_uri
       resource['_links']['prx:audio-version-template']['href'].must_equal template_uri
     end
+
+    it 'can create a podcast distribution for a series with multiple templates' do
+      template_uri = "/api/v1/audio_version_templates/#{audio_version_template.id}"
+      podcast_uri = 'http://feeder.prx.org/api/v1/podcast/12345'
+      pd_hash = {
+        kind: 'podcast',
+        guid: 'SET TEMPLATE',
+        set_audio_version_template_uris: [template_uri]
+      }
+      @request.env['CONTENT_TYPE'] = 'application/json'
+      def @controller.after_create_resource(res)
+        res.update_attributes!(url: 'http://feeder.prx.org/api/v1/podcast/12345')
+      end
+      post :create, pd_hash.to_json, api_request_opts(series_id: series.id)
+      assert_response :success
+      resource = JSON.parse(response.body)
+      resource['_links']['prx:podcast']['href'].must_equal podcast_uri
+      distro = Distribution.find(resource['id'])
+      resource['_links']['prx:audio-version-templates']['count'].must_equal 1
+    end
   end
 end
