@@ -21,6 +21,16 @@ describe PublicAssetsController do
     assert_response :unauthorized
   end
 
+  it 'should get not found for nonexistent asset' do
+    options = audio_file.set_asset_option_defaults
+    options[:token] = audio_file.public_url_token(options)
+    options[:id] = 0
+
+    get(:show, options)
+
+    assert_response :not_found
+  end
+
   it 'should get redirected to asset for valid request' do
     options = audio_file.set_asset_option_defaults
     options[:token] = audio_file.public_url_token(options)
@@ -47,5 +57,4 @@ describe PublicAssetsController do
 
     response.status.must_equal 204
   end
-
 end
