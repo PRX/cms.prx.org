@@ -14,7 +14,7 @@ class PublicAssetsController < ApplicationController
   end
 
   def show_head
-    show(head:true)
+    show(head: true)
   end
 
   def show_options
