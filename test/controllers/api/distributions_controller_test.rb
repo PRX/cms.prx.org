@@ -55,7 +55,6 @@ describe Api::DistributionsController do
       assert_response :success
       resource = JSON.parse(response.body)
       resource['_links']['prx:podcast']['href'].must_equal podcast_uri
-      distro = Distribution.find(resource['id'])
       resource['_links']['prx:audio-version-templates']['count'].must_equal 1
     end
   end
