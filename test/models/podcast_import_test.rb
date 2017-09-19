@@ -17,9 +17,9 @@ describe PodcastImport do
   let(:series) { create(:series) }
   let(:template) { create(:audio_version_template, series: series) }
   let(:distribution) do
-    build(:podcast_distribution,
-          audio_version_template: template,
-          url: 'https://feeder.prx.org/api/v1/podcasts/51')
+    create(:podcast_distribution, distributable: series, url: 'https://feeder.prx.org/api/v1/podcasts/51').tap do |dist|
+      dist.audio_version_templates << template
+    end
   end
 
   let(:podcast) do
