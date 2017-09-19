@@ -19,7 +19,6 @@ describe PodcastImport do
     create(:podcast_distribution,
            distributable: series,
            url: 'https://feeder.prx.org/api/v1/podcasts/51')
-    end
   end
 
   let(:podcast) do
