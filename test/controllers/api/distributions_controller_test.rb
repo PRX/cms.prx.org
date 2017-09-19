@@ -5,7 +5,11 @@ describe Api::DistributionsController do
   let(:account) { create(:account) }
   let(:series) { create(:series, account: account) }
   let(:audio_version_template) { create(:audio_version_template, series: series) }
-  let(:distribution) { create(:distribution, audio_version_template: audio_version_template) }
+  let(:distribution) do
+    create(:distribution, distributable: series).tap do |dist|
+      dist.audio_version_templates << audio_version_template
+    end
+  end
   let(:token) { StubToken.new(account.id, ['member']) }
 
   it 'should show' do
