@@ -1,21 +1,20 @@
 # encoding: utf-8
 
 class PublicAssetsController < ApplicationController
-
-  def show
-    if asset = find_valid_asset
-      redirect_to asset.asset_url(params)
+  def show(options = {})
+    if asset = find_asset
+      if asset.public_url_valid?(params)
+        redirect_to asset.asset_url params.merge(options)
+      else
+        head 401
+      end
     else
-      head 401
+      head 404
     end
   end
 
   def show_head
-    if asset = find_valid_asset
-      redirect_to asset.asset_url params.merge(head: true)
-    else
-      head 401
-    end
+    show(head: true)
   end
 
   def show_options
@@ -25,9 +24,7 @@ class PublicAssetsController < ApplicationController
 
   private
 
-  def find_valid_asset
-    asset = params[:class].camelize.constantize.find(params[:id])
-    asset if asset.public_url_valid?(params)
+  def find_asset
+    params[:class].camelize.constantize.find_by_id(params[:id])
   end
-
 end
