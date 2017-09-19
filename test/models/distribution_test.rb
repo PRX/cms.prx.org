@@ -43,4 +43,16 @@ describe Distribution do
       distribution.create_story_distribution(story)
     end
   end
+
+  it 'updates templates with an array of ids' do
+    avt1 = create(:audio_version_template, series_id: distribution.distributable_id)
+    avt2 = create(:audio_version_template, series_id: distribution.distributable_id)
+    avt3 = create(:audio_version_template)
+    create(:distribution_template, distribution: distribution, audio_version_template: avt1)
+
+    distribution.audio_version_template_ids.must_equal [avt1.id]
+    distribution.set_template_ids([avt2.id, avt3.id, 0])
+    distribution.save
+    distribution.audio_version_template_ids.sort.must_equal [avt2.id]
+  end
 end

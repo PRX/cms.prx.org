@@ -8,14 +8,7 @@ class Api::DistributionRepresenter < Api::BaseRepresenter
 
   property :set_audio_version_template_uris,
            readable: false,
-           reader: ->(doc, _args) do
-             distribution_templates.clear
-             Array(doc['set_audio_version_template_uris']).each do |uri|
-               if avt = AudioVersionTemplate.find_by_id(id_from_url(uri))
-                 distribution_templates.build(audio_version_template: avt)
-               end
-             end
-           end
+           reader: ->(doc, _a) { set_template_ids(Array(doc['set_audio_version_template_uris'])) }
 
   hash :properties
 

@@ -9,6 +9,19 @@ class Distribution < BaseModel
   has_many :audio_version_templates, through: :distribution_templates
   serialize :properties, HashSerializer
 
+  def set_template_ids(ids)
+    keep = []
+    Array(ids).map(&:to_i).uniq.each do |avt_id|
+      if distribution_templates.exists?(audio_version_template_id: avt_id)
+        keep << avt_id
+      elsif avt = AudioVersionTemplate.where(id: avt_id, series_id: distributable_id).first
+        keep << avt_id
+        distribution_templates.build(audio_version_template: avt)
+      end
+    end
+    distribution_templates.where(['audio_version_template_id not in (?)', keep]).delete_all
+  end
+
   def audio_version_template
     audio_version_templates.first
   end
