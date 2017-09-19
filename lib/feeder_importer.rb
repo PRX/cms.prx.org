@@ -17,6 +17,31 @@ class FeederImporter
   def import
     retrieve_podcast
     create_series
+    create_episodes
+  end
+
+  def create_stories(pcast = podcast)
+    pcast.episodes.each do |episode|
+      create_story(pcast, episode)
+    end
+  end
+
+  def create_story(pcast, episode)
+    attrs = {
+      title: episode.attributes[:title],
+      description_html: episode.attributes[:description],
+      short_description: episode.attributes[:subtitle],
+      tags: episode.attributes[:categories],
+      published_at: episode.attributes[:published_at]
+    }
+    story = series.stories.create!(attrs)
+
+    story.audio_versions.create!(
+      audio_version_template: template,
+      explicit: episode.attributes[:explicit]
+    )
+
+    story
   end
 
   def create_series(pcast = podcast)

@@ -51,6 +51,12 @@ describe FeederImporter do
     series.distributions.size.must_equal 1
   end
 
+  it 'creates a story from an episode' do
+    importer.podcast = podcast
+    importer.create_series(podcast)
+    importer.create_story(podcast, podcast.episodes.first)
+  end
+
   def feeder_importer_stub_import_requests
     stub_request(:post, 'https://id.prx.org/token').
       to_return(status: 200,
