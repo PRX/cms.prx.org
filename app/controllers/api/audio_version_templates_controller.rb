@@ -8,8 +8,8 @@ class Api::AudioVersionTemplatesController < Api::BaseController
   sort_params default: { label: :asc }, allowed: [:id, :label]
 
   def filtered(arel)
-    if params['distribution_id']
-      distribution_id = params.delete('distribution_id')
+    if params[:distribution_id]
+      distribution_id = params.delete(:distribution_id)
       arel = arel.joins(:distribution_templates)
       arel = arel.where('distribution_templates.distribution_id = ?', distribution_id)
     end

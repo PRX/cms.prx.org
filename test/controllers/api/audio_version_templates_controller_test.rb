@@ -38,4 +38,13 @@ describe Api::AudioVersionTemplatesController do
     ids.must_equal [template2.id]
     assert_response :success
   end
+
+  it 'should list by distribution' do
+    distribution_template.id.wont_be_nil
+    get(:index, api_request_opts(distribution_id: 'anything'))
+    body = JSON.parse(response.body)
+    ids = body['_embedded']['prx:items'].map { |item| item['id'] }
+    ids.must_equal []
+    assert_response :success
+  end
 end
