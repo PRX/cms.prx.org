@@ -3,12 +3,28 @@ require 'hash_serializer'
 
 class Distribution < BaseModel
   belongs_to :distributable, polymorphic: true, touch: true
-  belongs_to :audio_version_template
 
   has_many :story_distributions
   has_many :distribution_templates, dependent: :destroy, autosave: true
   has_many :audio_version_templates, through: :distribution_templates
   serialize :properties, HashSerializer
+
+  def audio_version_template
+    audio_version_templates.first
+  end
+
+  def audio_version_template=(t)
+    audio_version_templates.clear
+    audio_version_templates << t
+  end
+
+  def audio_version_template_id
+    audio_version_template.try(:id)
+  end
+
+  def audio_version_template_id=(tid)
+    self.audio_version_template = AudioVersionTemplate.find_by_id(tid)
+  end
 
   def distribute!
     # no op for the super class
