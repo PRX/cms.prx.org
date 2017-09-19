@@ -7,9 +7,10 @@ class DistributionTemplate < BaseModel
   validate :same_series
 
   def same_series
-    if (distribution.distributable && audio_version_template.series &&
-      distribution.distributable != audio_version_template.series)
-      errors.add(:audio_version_template, "must be in the same series")
+    if distribution.distributable &&
+       audio_version_template.series &&
+       distribution.distributable != audio_version_template.series
+      errors.add(:audio_version_template, 'must be in the same series')
     end
   end
 

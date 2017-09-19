@@ -1,8 +1,6 @@
 require 'test_helper'
 
 describe Api::Distributions::PodcastDistributionRepresenter do
-
-
   let(:series) { create(:series) }
   let(:template) { create(:audio_version_template, series: series) }
   let(:distribution) do
