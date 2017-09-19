@@ -4,9 +4,12 @@ require 'test_helper'
 require 'distribution' if !defined?(Distribution)
 
 describe Api::DistributionRepresenter do
-  let(:audio_version_template) { create(:audio_version_template) }
+  let(:series) { create(:series) }
+  let(:audio_version_template) { create(:audio_version_template, series: series) }
   let(:distribution) do
-    FactoryGirl.create(:distribution, audio_version_template: audio_version_template)
+    create(:distribution, distributable: series).tap do |dist|
+      dist.audio_version_templates << audio_version_template
+    end
   end
   let(:representer)   { Api::DistributionRepresenter.new(distribution) }
   let(:json)          { JSON.parse(representer.to_json) }
