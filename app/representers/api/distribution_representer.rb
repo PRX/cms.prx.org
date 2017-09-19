@@ -5,6 +5,15 @@ class Api::DistributionRepresenter < Api::BaseRepresenter
   property :guid
   property :url
   property :kind
+
+  property :set_audio_version_template_uris,
+           readable: false,
+           reader: ->(doc, _args) do
+             ids = doc['set_audio_version_template_uris']
+             ids = Array(ids).map { |i| id_from_url i }
+             set_template_ids(ids)
+           end
+
   hash :properties
 
   def self_url(represented)
@@ -26,4 +35,15 @@ class Api::DistributionRepresenter < Api::BaseRepresenter
   embed :audio_version_template,
         class: AudioVersionTemplate,
         decorator: Api::AudioVersionTemplateRepresenter
+
+  link :audio_version_templates do
+    {
+      href: api_distribution_audio_version_templates_path(represented),
+      count: represented.audio_version_templates.count
+    } if represented.id
+  end
+  embed :audio_version_templates,
+        paged: true,
+        item_class: AudioVersionTemplate,
+        item_decorator: Api::AudioVersionTemplateRepresenter
 end

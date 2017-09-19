@@ -38,6 +38,10 @@ PRX::Application.routes.draw do
         resources :audio_file_templates, except: [:new, :edit]
       end
 
+      resources :distributions, except: [:new, :edit] do
+        resources :audio_version_templates, except: [:new, :edit]
+      end
+
       resources :accounts, except: [:new, :edit, :destroy] do
         resource :address, except: [:new, :edit]
         resource :account_image, path: 'image', except: [:new, :edit]

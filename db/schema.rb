@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(version: 6) do
   create_table "audio_version_templates", force: :cascade do |t|
     t.integer  "series_id",      limit: 4
     t.string   "label",          limit: 255
+    t.string   "content_type",   limit: 255
     t.boolean  "promos"
     t.integer  "length_minimum", limit: 4
     t.integer  "segment_count",  limit: 4
@@ -171,6 +172,15 @@ ActiveRecord::Schema.define(version: 6) do
   end
 
   add_index "audio_versions", ["piece_id"], name: "audio_versions_piece_id_fk", using: :btree
+
+  create_table "distribution_templates", :force => true do |t|
+    t.integer  "distribution_id"
+    t.integer  "audio_version_template_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "distribution_templates", ["distribution_id", "audio_version_template_id"], name: "index_distribution_templates", using: :btree, unique: true
 
   create_table "distributions", force: :cascade do |t|
     t.string   "type",                      limit: 255
