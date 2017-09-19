@@ -9,7 +9,7 @@ class Api::DistributionsController < Api::BaseController
 
   api_versions :v1
 
-  filter_resources_by :series_id, :distribution_id
+  filter_resources_by :series_id
 
   announce_actions resource: :owner_resource, action: :update
 
