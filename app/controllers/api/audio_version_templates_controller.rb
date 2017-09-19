@@ -10,7 +10,8 @@ class Api::AudioVersionTemplatesController < Api::BaseController
   def filtered(arel)
     if params['distribution_id']
       distribution_id = params.delete('distribution_id')
-      arel = arel.joins(:distribution_templates).where('distribution_templates.distribution_id = ?', distribution_id)
+      arel = arel.joins(:distribution_templates)
+      arel = arel.where('distribution_templates.distribution_id = ?', distribution_id)
     end
     super(arel)
   end
