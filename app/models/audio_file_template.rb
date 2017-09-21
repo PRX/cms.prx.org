@@ -20,7 +20,6 @@ class AudioFileTemplate < BaseModel
 
   validate :max_is_greater_than_min_if_set
 
-
   def set_defaults
     self.label ||= 'segment'
     self.length_minimum ||= 0
@@ -58,5 +57,4 @@ class AudioFileTemplate < BaseModel
       errors.add(:length_mininum, 'must be less than or equal to length maximum')
     end
   end
-
 end
