@@ -19,9 +19,7 @@ describe PodcastImport do
   let(:distribution) do
     create(:podcast_distribution,
            distributable: series,
-           url: 'https://feeder.prx.org/api/v1/podcasts/51').tap do |dist|
-      dist.audio_version_templates << template
-    end
+           url: 'https://feeder.prx.org/api/v1/podcasts/51')
   end
 
   let(:podcast) do
@@ -37,9 +35,8 @@ describe PodcastImport do
 
   it 'retrieves a config' do
     importer.set_config_url('http://test.prx.org/transistor_import_config.json')
-    importer.config[:segments].must_equal 1
     importer.config[:program].must_equal 'transistor_stem'
-    importer.config[:audio]['https://transistor.prx.org/?p=1286'].count.must_equal 1
+    importer.config[:audio]['https://transistor.prx.org/?p=1286'].count.must_equal 2
   end
 
   it 'fails when feed is invalid' do
@@ -61,18 +58,13 @@ describe PodcastImport do
                                            'by radio and podcast powerhouse PRX, with support ' +
                                            'from the Sloan Foundation.'
     importer.series.images.count.must_equal 2
-    importer.series.audio_version_templates.count.must_equal 1
-    template = importer.series.audio_version_templates.first
-    template.audio_file_templates.count.must_equal 1
     importer.distribution.wont_be_nil
     importer.distribution.distributable.must_equal importer.series
-    importer.distribution.audio_version_template.must_equal template
   end
 
   it 'creates a podcast' do
     importer.feed = feed
     importer.series = series
-    importer.template = template
     importer.distribution = distribution.tap { |d| d.url = nil }
     importer.create_podcast
     importer.podcast.wont_be_nil
@@ -83,7 +75,7 @@ describe PodcastImport do
     importer.set_config_url('http://test.prx.org/transistor_import_config.json')
     importer.feed = feed
     importer.series = series
-    importer.template = template
+    series.audio_version_templates.clear
     importer.distribution = distribution
     importer.podcast = podcast
     stories = importer.create_stories
@@ -106,6 +98,10 @@ describe PodcastImport do
     version.explicit.must_be_nil
     l = stories.last
     l.images.count.must_equal 0
+    importer.series.audio_version_templates.count.must_equal 2
+    importer.distribution.audio_version_templates.count.must_equal 2
+    importer.templates[1].audio_file_templates.count.must_equal 1
+    importer.templates[2].audio_file_templates.count.must_equal 2
   end
 
   it 'imports a feed' do
