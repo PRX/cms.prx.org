@@ -19,6 +19,7 @@
 #   - this will make sure we have the files in synch and won't need to be updated/copied
 #   - add the `prx_uri` and `prx_account_uri` to the podcast attributes
 #   - add the `prx_uri` to the episodes
+#   - update the episode page urls (not wordpress or libsyn or whatever anymore)
 
 require 'prx_access'
 require 'addressable/uri'
@@ -54,9 +55,12 @@ class FeederImporter
 
   def create_story(pcast, episode)
     attrs = {
+      app_version: PRX::APP_VERSION,
+      creator_id: user_id,
+      account_id: account_id,
       title: episode.attributes[:title],
-      description_html: episode.attributes[:description],
       short_description: episode.attributes[:subtitle],
+      description_html: episode.attributes[:description],
       tags: episode.attributes[:categories],
       published_at: episode.attributes[:published_at]
     }
@@ -67,30 +71,52 @@ class FeederImporter
       explicit: episode.attributes[:explicit]
     )
 
-    Array(episode.attributes[:media]).each do |media_file|
-      upload_url = copy_file(episode, media_file)
+    Array(episode.attributes[:media]).each_with_index do |media_file, i|
+      upload_url = copy_enclosure(episode, media_file)
       audio = version.audio_files.create!(label: "Segment #{i + 1}", upload: upload_url)
       announce_audio(audio)
     end
 
+    Array(episode.attributes[:images]).each do |image|
+      upload_url = copy_image(episode, image)
+      image = story.images.create!(upload: upload_url)
+      announce_image(image)
+    end
+
+    # create the story distribution
+    episode_url = URI.join(feeder_root, episode.links['self'].href).to_s
+    StoryDistributions::EpisodeDistribution.create!(
+      distribution: distribution,
+      story: story,
+      guid: episode.guid,
+      url: episode_url
+    )
+
     story
   end
 
-  def copy_file(episode, media_file)
-    episode_file_path = URI.parse(media_file['href']).path[1..-1]
-    upload_path = "prod/#{episode.id}/#{URI.parse(episode.links['enclosure'].href).path.split('/').last}"
+  def copy_image(episode, image)
+    from_path = URI.parse(image['url']).path[1..-1]
+    to_path = "prod/#{episode.id}/#{from_path.split('/').last}"
+    copy_file(from_path, to_path)
+  end
 
+  def copy_enclosure(episode, media_file)
+    from_path = URI.parse(media_file['href']).path[1..-1]
+    to_path = "prod/#{episode.id}/#{URI.parse(episode.links['enclosure'].href).path.split('/').last}"
+    copy_file(from_path, to_path)
+  end
+
+  def copy_file(from_path, to_path)
     connection = AudioFileUploader.new.send(:storage).connection
-    # copy_object(source_bucket_name, source_object_name, target_bucket_name, target_object_name, options = {}) ⇒ Object
     copy_options = {
       'x-amz-metadata-directive' => 'COPY',
       'x-amz-acl' => 'public-read'
     }
-
-    puts "copy_object('prx-feed', '#{episode_file_path}', 'prx-up', '#{upload_path}', '#{copy_options.inspect}')"
+    puts "copy_object('prx-feed', '#{from_path}', 'prx-up', '#{to_path}', '#{copy_options.inspect}')"
     connection.copy_object('prx-feed', episode_file_path, 'prx-up', upload_path, copy_options) unless debug
 
-    "https://prx-up.s3.amazonaws.com/#{upload_path}"
+    "https://prx-up.s3.amazonaws.com/#{to_path}"
   end
 
   def create_series(pcast = podcast)
@@ -121,15 +147,16 @@ class FeederImporter
       announce_image(image)
     end
 
-    # Add the template and a single file template
+    # all the imports we plan to do from feeder -> cms have a single segment
+    num_segments = 1
+
     self.template = series.audio_version_templates.create!(
-      label: 'Podcast Audio',
+      label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
       promos: false,
       length_minimum: 0,
       length_maximum: 0
     )
 
-    num_segments = 1
     episode = pcast.episodes.first
     if episode.attributes['media']
       num_segments = [episode.media.count, num_segments].max
@@ -159,6 +186,10 @@ class FeederImporter
 
   def announce_image(image)
     announce('image', 'create', Api::Msg::ImageRepresenter.new(image).to_json)
+  end
+
+  def announce_audio(audio)
+    announce('audio', 'create', Api::Msg::AudioFileRepresenter.new(audio).to_json)
   end
 
   def clean_string(str)
