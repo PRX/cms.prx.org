@@ -120,8 +120,8 @@ module Fixerable
     end
   end
 
-  def fixerable_final_storage_url
-    return unless fixerable_final?
+  def fixerable_final_storage_url(force = false)
+    return unless fixerable_final? || force
     scheme = self.class.fixerable_storage.invert[fixfinal.fog_credentials[:provider]]
     options = {
       scheme: scheme,
