@@ -36,6 +36,8 @@ describe AudioFile do
     s3_file = "s3://#{ENV['AWS_BUCKET']}/public/audio_files/#{audio_file.id}/test.mp2"
     audio_file.fixerable_final_storage_url.must_equal s3_file
     audio_file_uploaded.fixerable_final_storage_url.must_equal nil
+    s3_uploaded = "s3://#{ENV['AWS_BUCKET']}/public/audio_files/#{audio_file_uploaded.id}/test.mp2"
+    audio_file_uploaded.fixerable_final_storage_url(true).must_equal s3_uploaded
   end
 
   it 'updates story and version timestamps' do
