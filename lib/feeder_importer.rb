@@ -24,80 +24,207 @@
 require 'prx_access'
 require 'addressable/uri'
 
+class FeederModel < ActiveRecord::Base
+  self.abstract_class = true
+
+  def self.status_values
+    [ :started, :created, :processing, :complete, :error, :retrying, :cancelled ]
+  end
+
+  def self.feeder_db_connection
+    {
+      adapter: 'postgresql',
+      encoding: 'unicode',
+      pool: ENV['FEEDER_DB_POOL_SIZE'],
+      user: ENV['FEEDER_DB_USER'],
+      password: ENV['FEEDER_DB_PASSWORD'],
+      host: ENV['FEEDER_DB_HOST'],
+      port: ENV['FEEDER_DB_PORT'],
+      database: ENV['FEEDER_DB_DATABASE']
+    }
+  end
+
+  establish_connection(feeder_db_connection)
+end
+
+class Podcast < FeederModel
+  has_many :episodes, -> { order('published_at desc') }
+  has_many :podcast_images
+end
+
+class PodcastImage < FeederModel
+  belongs_to :podcast
+  enum status: status_values
+end
+
+class Episode < FeederModel
+  belongs_to :podcast
+  has_many :episode_images, -> { order('created_at DESC').complete }
+  has_many :media_resources, -> { order('position ASC, created_at DESC').complete }
+  scope :published, -> { where('published_at IS NOT NULL AND published_at <= now()') }
+
+  def item_guid
+    original_guid || "prx_#{podcast_id}_#{guid}"
+  end
+end
+
+class EpisodeImage < FeederModel
+  belongs_to :episode
+  enum status: status_values
+end
+
+class MediaResource < FeederModel
+  belongs_to :episode
+  enum status: status_values
+end
+
 class FeederImporter
   include PRXAccess
   include Announce::Publisher
 
-  attr_accessor :account_id, :user_id, :feeder_podcast_url
-  attr_accessor :podcast, :series, :template, :distribution
+  attr_accessor :account_id, :user_id, :podcast_id
+  attr_accessor :podcast, :series, :template, :distribution, :stories
 
   def debug
     TRUE
   end
 
-  def initialize(account_id, user_id, feeder_podcast_url)
+  def initialize(account_id, user_id, podcast_id)
     self.account_id = account_id
     self.user_id = user_id
-    self.feeder_podcast_url = feeder_podcast_url
+    self.podcast_id = podcast_id
+    self.stories = []
   end
 
   def import
     retrieve_podcast
     create_series
-    create_episodes
+    create_stories
+    update_podcast
   end
 
-  def create_stories(pcast = podcast)
-    pcast.episodes.each do |episode|
-      create_story(pcast, episode)
+  def retrieve_podcast
+    self.podcast = Podcast.find(podcast_id)
+  end
+
+  def create_series
+    attrs = {
+      app_version: PRX::APP_VERSION,
+      account_id: account_id,
+      creator_id: user_id,
+      title: podcast.title,
+      short_description: podcast.subtitle,
+      description_html: podcast.description
+    }
+    self.series = Series.create!(attrs)
+
+    # Add images to the series
+    podcast.podcast_images.each do |podcast_image|
+      upload_url = copy_image(SecureRandom.uuid, image)
+      purpose = image.type == 'FeedImage' ? Image::THUMBNAIL : Image::PROFILE
+      image = series.images.create!(upload: upload_url, purpose: purpose)
+      announce_image(image)
+      podcast_image.update_attribute!(:original_url, image.public_url(version: 'original'))
+    end
+
+    # all the imports we plan to do from feeder -> cms have a single segment
+    num_segments = 1
+
+    self.template = series.audio_version_templates.create!(
+      label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
+      promos: false,
+      length_minimum: 0,
+      length_maximum: 0
+    )
+
+    episode = podcast.episodes.first
+    if episode.media_resources
+      num_segments = [episode.media_resources.count, num_segments].max
+    end
+    num_segments.times do |x|
+      num = x + 1
+      template.audio_file_templates.create!(
+        position: num,
+        label: "Segment #{num}",
+        length_minimum: 0,
+        length_maximum: 0
+      )
+    end
+
+    self.distribution = Distributions::PodcastDistribution.create!(
+      url: podcast_id,
+      distributable: series,
+      audio_version_template: template
+    )
+
+    series
+  end
+
+  def create_stories
+    podcast.episodes.each do |episode|
+      create_story(episode)
     end
   end
 
-  def create_story(pcast, episode)
+  def create_story(episode)
     attrs = {
       app_version: PRX::APP_VERSION,
       creator_id: user_id,
       account_id: account_id,
-      title: episode.attributes[:title],
-      short_description: episode.attributes[:subtitle],
-      description_html: episode.attributes[:description],
-      tags: episode.attributes[:categories],
-      published_at: episode.attributes[:published_at]
+      title: episode.title,
+      short_description: episode.subtitle,
+      description_html: episode.description,
+      tags: episode.categories,
+      published_at: episode.published_at
     }
     story = series.stories.create!(attrs)
 
     version = story.audio_versions.create!(
       audio_version_template: template,
-      explicit: episode.attributes[:explicit]
+      explicit: episode.explicit
     )
 
-    Array(episode.attributes[:media]).each_with_index do |media_file, i|
+    episode.media_files.each_with_index do |media_file, i|
       upload_url = copy_enclosure(episode, media_file)
       audio = version.audio_files.create!(label: "Segment #{i + 1}", upload: upload_url)
       announce_audio(audio)
+      media_file.update_attribute!(:original_url, audio.fixerable_final_storage_url(true))
     end
 
-    Array(episode.attributes[:images]).each do |image|
-      upload_url = copy_image(episode, image)
+    episode.episode_images.each do |episode_image|
+      upload_url = copy_image(episode.guid, episode_image)
       image = story.images.create!(upload: upload_url)
       announce_image(image)
+      episode_image.update_attribute!(:original_url, image.public_url(version: 'original'))
     end
 
     # create the story distribution
-    episode_url = URI.join(feeder_root, episode.links['self'].href).to_s
-    StoryDistributions::EpisodeDistribution.create!(
+    episode_url = "#{feeder_root}/episodes/#{episode.guid}"
+    story.distributions << StoryDistributions::EpisodeDistribution.create!(
       distribution: distribution,
       story: story,
-      guid: episode.guid,
+      guid: episode.item_guid,
       url: episode_url
     )
+
+    episode.update_attribute!(:prx_uri, "/api/v1/stories/#{story.id}")
+
+    self.stories << story
 
     story
   end
 
-  def copy_image(episode, image)
-    from_path = URI.parse(image['url']).path[1..-1]
-    to_path = "prod/#{episode.id}/#{from_path.split('/').last}"
+  def update_podcast
+    podcast.update_attributes(
+      prx_account_uri: "/api/v1/accounts/#{account_id}",
+      prx_uri: "/api/v1/series/#{series.id}",
+      source_url: nil
+    )
+  end
+
+  def copy_image(guid, image)
+    from_path = URI.parse(image.url).path[1..-1]
+    to_path = "prod/#{guid}/#{from_path.split('/').last}"
     copy_file(from_path, to_path)
   end
 
@@ -119,82 +246,11 @@ class FeederImporter
     "https://prx-up.s3.amazonaws.com/#{to_path}"
   end
 
-  def create_series(pcast = podcast)
-    attrs = {
-      app_version: PRX::APP_VERSION,
-      account_id: account_id,
-      creator_id: user_id,
-      title: pcast.title,
-      short_description: pcast.attributes[:subtitle],
-      description_html: pcast.attributes[:description]
-    }
-    self.series = Series.create!(attrs)
-
-    # Add images to the series
-    if pcast.attributes['itunes_image'] && pcast.itunes_image['url']
-      image = series.images.create!(
-        upload: clean_string(pcast.itunes_image['url']),
-        purpose: Image::PROFILE
-      )
-      announce_image(image)
-    end
-
-    if pcast.attributes['feed_image'] && pcast.feed_image['url']
-      image = series.images.create!(
-        upload: clean_string(pcast.feed_image['url']),
-        purpose: Image::THUMBNAIL
-      )
-      announce_image(image)
-    end
-
-    # all the imports we plan to do from feeder -> cms have a single segment
-    num_segments = 1
-
-    self.template = series.audio_version_templates.create!(
-      label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
-      promos: false,
-      length_minimum: 0,
-      length_maximum: 0
-    )
-
-    episode = pcast.episodes.first
-    if episode.attributes['media']
-      num_segments = [episode.media.count, num_segments].max
-    end
-    num_segments.times do |x|
-      num = x + 1
-      template.audio_file_templates.create!(
-        position: num,
-        label: "Segment #{num}",
-        length_minimum: 0,
-        length_maximum: 0
-      )
-    end
-
-    self.distribution = Distributions::PodcastDistribution.create!(
-      url: feeder_podcast_url,
-      distributable: series,
-      audio_version_template: template
-    )
-
-    series
-  end
-
-  def retrieve_podcast(a_id = account_id, p_url = feeder_podcast_url)
-    self.podcast = api(root: feeder_root, account: a_id).tap { |a| a.href = p_url }.get
-  end
-
   def announce_image(image)
     announce('image', 'create', Api::Msg::ImageRepresenter.new(image).to_json)
   end
 
   def announce_audio(audio)
     announce('audio', 'create', Api::Msg::AudioFileRepresenter.new(audio).to_json)
-  end
-
-  def clean_string(str)
-    return nil if str.blank?
-    return str if !str.is_a?(String)
-    str.strip
   end
 end
