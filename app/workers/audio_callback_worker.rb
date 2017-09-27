@@ -10,39 +10,47 @@ class AudioCallbackWorker
   def perform(_sqs_msg, job)
     audio = AudioFile.find(job['id'])
     audio.filename = job['name']
-    audio.length = job['duration']
     audio.size = job['size']
-    audio.bit_rate = (job['bitrate'] || 0) / 1000
-    audio.frequency = (job['frequency'] || 0) / 1000.0
+    audio.content_type = job['mime']
 
-    # decode content type and mpeg layer from basic "format" string
-    mime_types = MIME::Types.type_for(job['format'] || '').map(&:to_s)
-    prefer_type = mime_types.find { |t| t.starts_with?('audio') }
-    audio.content_type = prefer_type || mime_types.first || job['format']
+    # guess which stream we should look at - audio or video
+    meta = job['audio'] || job['video'] || {}
+    if job['video'] && audio.content_type.try(:starts_with?, 'video/')
+      meta = job['video']
+    end
 
-    # get layer from mp2/3/4 format string
-    audio.layer = (job['format'] || '').match(/mp(\d)/).try(:[], 1).to_i
+    # set audio info from meta
+    audio.length = (meta.fetch('duration', 0) / 1000.0).round
+    audio.bit_rate = (meta.fetch('bitrate', 0) / 1000.0).round
+    audio.frequency = meta.fetch('frequency', 0) / 1000.0
+    audio.layer = meta.fetch('format', '').match(/mp(\d)/).try(:[], 1).to_i
 
     # TODO: not quite sure how to get this from ffprobe
     # job['channels'] = ffmpeg.channels
     # job['layout'] = ffmpeg.channel_layout
-    audio.channel_mode = if job['channels'] == 2
+    audio.channel_mode = if meta['channels'] == 2
                            STEREO
-                         elsif job['channels'] == 1
+                         elsif meta['channels'] == 1
                            SINGLE_CHANNEL
                          end
+
+    # set errors but ignore valid/invalid status (will be determined later)
     if !job['downloaded']
       audio.status = NOTFOUND
-    elsif !job['valid'] || !job['processed']
+      audio.status_message = job['error'] || "Audio file for #{audio.label || audio.id} not found"
+    elsif !job['processed']
       audio.status = FAILED
+      audio.status_message = job['error'] || "Unable to process audio file #{audio.label || audio.id}"
     else
       audio.upload_path = nil
       audio.status = TRANSFORMED
+      audio.status_message = nil
     end
 
-    Shoryuken.logger.info("Updating #{job['type']}[#{audio.id}]: status => #{audio.status}")
+    # save and announce the audio changes on its story
+    end_state = audio.status_message ? "#{audio.status} => #{audio}" : audio.status
+    Shoryuken.logger.info("Updating #{job['type']}[#{audio.id}]: status => #{end_state}")
     audio.save!
-    # announce the audio changes on its story.
     announce(:story, :update, Api::Msg::StoryRepresenter.new(audio.story).to_json)
 
   rescue ActiveRecord::RecordNotFound
