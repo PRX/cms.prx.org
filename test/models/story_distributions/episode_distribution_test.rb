@@ -30,8 +30,8 @@ describe StoryDistributions::EpisodeDistribution do
 
   it 'gets the episode attributes' do
     eats = distribution.episode_attributes
-    eats[:episode_identifier].must_equal 123
-    eats[:season_identifier].must_equal 1
+    eats[:episode_number].must_equal 123
+    eats[:season_number].must_equal 1
   end
 
   it 'gets the episode attributes' do
