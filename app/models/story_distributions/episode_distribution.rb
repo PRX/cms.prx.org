@@ -37,6 +37,8 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
       prx_uri: api_story_path(story),
       title: story.title,
       subtitle: story.short_description,
+      episode_number: identifier_to_i(story.episode_identifier),
+      season_number: identifier_to_i(story.season_identifier),
       description: story.description_html,
       content: story.description_html,
       categories: story.tags,
@@ -44,6 +46,16 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
       updated_at: story.updated_at,
       url: default_url(story)
     }
+  end
+
+  def identifier_to_i(i)
+    return nil if i.nil?
+    num = i.gsub(/[^\d]+/, ' ').strip.split.last
+    if num.blank?
+      nil
+    else
+      num.to_i
+    end
   end
 
   def default_url(story)

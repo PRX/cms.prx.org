@@ -10,6 +10,8 @@ FactoryGirl.define do
     point_level 1
     short_description 'Short description'
     description 'Long description'
+    episode_identifier '123'
+    season_identifier '1'
     produced_on 2.weeks.ago
     related_website 'http://prx.org'
     broadcast_history 'Broadcast history'

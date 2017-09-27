@@ -334,6 +334,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "publish_on_valid_at"
     t.datetime "promos_only_at"
     t.string   "episode_identifier",      limit: 255
+    t.string   "season_identifier",       limit: 255
     t.string   "app_version",             limit: 255,   default: "v3", null: false
     t.string   "marketplace_subtitle",    limit: 255
     t.text     "marketplace_information", limit: 65535
