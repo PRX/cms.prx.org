@@ -35,9 +35,9 @@ describe StoryDistributions::EpisodeDistribution do
   end
 
   it 'gets the episode attributes' do
-    distribution.identifier_to_i("season 21").must_equal 21
-    distribution.identifier_to_i("season 123:").must_equal 123
-    distribution.identifier_to_i("season 1 episode 123").must_equal 123
+    distribution.identifier_to_i('season 21').must_equal 21
+    distribution.identifier_to_i('season 123:').must_equal 123
+    distribution.identifier_to_i('season 1 episode 123').must_equal 123
   end
 
   it 'creates the episode on feeder' do
