@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     length 60
     content_type 'audio/mpeg'
-    layer 3
+    layer 2
     frequency 44.1
     bit_rate 128
     channel_mode 'Single Channel'

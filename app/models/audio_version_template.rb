@@ -86,7 +86,7 @@ class AudioVersionTemplate < BaseModel
     if content_type.present?
       tpl_type = content_type.split('/').first
       file_type = audio_file.content_type.try(:split, '/').try(:first)
-      if content_type == 'audio/mpeg' && (audio_file.content_type != 'audio/mpeg' || audio_file.layer != 3)
+      if content_type == 'audio/mpeg' && audio_file.content_type != 'audio/mpeg'
         "Audio file '#{audio_file.label}' is not an mp3" # very specific on these
       elsif tpl_type != file_type
         "Audio file '#{audio_file.label}' is not #{articleize(tpl_type)}"
