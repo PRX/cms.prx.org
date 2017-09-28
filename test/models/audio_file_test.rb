@@ -23,6 +23,16 @@ describe AudioFile do
     audio_file.public_asset_filename.must_equal audio_file.filename
   end
 
+  it 'has an enclosure based on content type' do
+    audio_file.content_type = 'foo/bar'
+    audio_file.enclosure_url.must_match "/web/audio_file/#{audio_file.id}/original/test.mp2"
+    audio_file.enclosure_content_type.must_match 'foo/bar'
+
+    audio_file.content_type = 'audio/foo'
+    audio_file.enclosure_url.must_match "/web/audio_file/#{audio_file.id}/broadcast/test.mp3"
+    audio_file.enclosure_content_type.must_match 'audio/mpeg'
+  end
+
   it 'can update the underlying file' do
     audio_file.update_file!('test2.mp3')
     audio_file.filename.must_equal 'test2.mp3'

@@ -38,6 +38,18 @@ class AudioFile < BaseModel
     [INVALID, VALID, COMPLETE, TRANSFORMING, TRANSFORM_FAILED, TRANSFORMED].include? status
   end
 
+  def enclosure_url
+    is_audio? ? public_url(version: :broadcast, extension: 'mp3') : public_url
+  end
+
+  def enclosure_content_type
+    is_audio? ? 'audio/mpeg' : content_type
+  end
+
+  def is_audio?
+    content_type.present? && content_type.starts_with?('audio/')
+  end
+
   def compliant_with_template?
     status_message.nil?
   end

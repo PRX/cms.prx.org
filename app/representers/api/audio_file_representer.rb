@@ -26,8 +26,8 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
 
   link :enclosure do
     {
-      href: represented.public_url(version: :broadcast, extension: 'mp3'),
-      type: 'audio/mpeg'
+      href: represented.enclosure_url,
+      type: represented.enclosure_content_type
     } if represented.id
   end
 
