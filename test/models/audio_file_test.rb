@@ -23,6 +23,16 @@ describe AudioFile do
     audio_file.public_asset_filename.must_equal audio_file.filename
   end
 
+  it 'has an enclosure based on content type' do
+    audio_file.content_type = 'foo/bar'
+    audio_file.enclosure_url.must_match "/web/audio_file/#{audio_file.id}/original/test.mp2"
+    audio_file.enclosure_content_type.must_match 'foo/bar'
+
+    audio_file.content_type = 'audio/foo'
+    audio_file.enclosure_url.must_match "/web/audio_file/#{audio_file.id}/broadcast/test.mp3"
+    audio_file.enclosure_content_type.must_match 'audio/mpeg'
+  end
+
   it 'can update the underlying file' do
     audio_file.update_file!('test2.mp3')
     audio_file.filename.must_equal 'test2.mp3'
@@ -62,9 +72,16 @@ describe AudioFile do
       ft.length_minimum = 1
       ft.length_maximum = 10
     end
+    audio_version.audio_version_template.update(content_type: 'video/mpeg')
     audio_version.audio_version_template.audio_file_templates = file_templates
 
     audio_file.update_attributes(position: 1, label: 'Main Segment')
+    audio_file.status_message.must_include 'is not in video format'
+    audio_file.wont_be(:compliant_with_template?)
+    audio_file.status.must_equal 'invalid'
+
+    audio_file.update_attributes(position: 1, label: 'Main Segment',
+                                 content_type: 'video/x-mpeg', status: 'mp3s created')
     audio_file.status_message.must_include 'long but must be'
     audio_file.wont_be(:compliant_with_template?)
     audio_file.status.must_equal 'invalid'
@@ -79,11 +96,17 @@ describe AudioFile do
     audio_file.update(status: 'failed')
     audio_file.update_attributes(position: 1, label: 'Main Segment')
     audio_file.status.must_equal 'failed'
-    audio_file.status_message.must_include 'Audio file Main Segment failed to process'
 
     audio_file.update(status: 'not found')
     audio_file.update_attributes(position: 1, label: 'Main Segment2')
     audio_file.status.must_equal 'not found'
-    audio_file.status_message.must_include 'Audio file Main Segment2 not found'
+
+    audio_file.update(status: 'uploaded')
+    audio_file.update_attributes(position: 1, label: 'Main Segment3')
+    audio_file.status.must_equal 'uploaded'
+
+    audio_file.update(status: 'transformed')
+    audio_file.update_attributes(position: 1, label: 'Main Segment4')
+    audio_file.status.must_equal 'complete'
   end
 end

@@ -75,7 +75,8 @@ module PRX
     prx_url_options = { host: ENV['PRX_HOST'], protocol: 'https' }
     config.action_mailer.default_url_options = prx_url_options
 
-    cms_url_options = { host: ENV['CMS_HOST'], protocol: 'https' }
+    proto = (ENV['CMS_HOST'] || '').include?('.docker') ? 'http' : 'https'
+    cms_url_options = { host: ENV['CMS_HOST'], protocol: proto }
     Rails.application.routes.default_url_options = cms_url_options
   end
 end
