@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :audio_version_template do
     series
     label 'Audio Version'
+    content_type 'audio/mpeg'
     length_minimum 10
     length_maximum 100
     factory :audio_version_template_with_file_templates do

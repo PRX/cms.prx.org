@@ -64,8 +64,8 @@ class AudioVersion < BaseModel
       return
     end
 
-    errors = audio_version_template ? audio_version_template.validate_audio_version(self) : []
-    if errors.empty?
+    errors = audio_version_template.try(:validate_audio_version, self)
+    if errors.blank?
       self.status = COMPLETE
       self.status_message = nil
     else

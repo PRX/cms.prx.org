@@ -53,14 +53,11 @@ class AudioFile < BaseModel
     # only do template validations once the audio callback worker has succeeded
     return if [UPLOADED, NOTFOUND, FAILED].include?(status)
 
-    template = audio_version.
-               try(:audio_version_template).
-               try(:audio_file_templates).
-               try(:find) { |aft| aft.position == position }
+    vtpl = audio_version.try(:audio_version_template)
+    ftpl = vtpl.try(:audio_file_templates).try(:find) { |aft| aft.position == position }
+    errors = vtpl.try(:validate_audio_file, self) || ftpl.try(:validate_audio_file,  self)
 
-    errors = template ? template.validate_audio_file(self) : []
-
-    if errors.empty?
+    if errors.blank?
       self.status_message = nil
       self.status = COMPLETE
     else

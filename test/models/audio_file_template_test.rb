@@ -26,12 +26,18 @@ describe AudioFileTemplate do
 
   it 'does not validate anything if all 0s' do
     audio_file_template.update(length_minimum: 0, length_maximum: 0)
-    audio_file_template.validate_audio_file(audio_file).must_equal ''
+    audio_file_template.validate_audio_file(audio_file).must_be(:nil?)
   end
 
   it 'leaves a file alone if file complies with template' do
     audio_file.update(length: 5)
-    audio_file_template.validate_audio_file(audio_file).must_be(:empty?)
+    audio_file_template.validate_audio_file(audio_file).must_be(:nil?)
+  end
+
+  it 'validates content type' do
+    audio_file.update(content_type: 'video/mpeg')
+    msg = audio_file_template.audio_version_template.validate_audio_file(audio_file)
+    msg.must_include 'is not an mp3'
   end
 
   it 'checks template min against max' do
