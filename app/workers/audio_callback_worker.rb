@@ -38,11 +38,11 @@ class AudioCallbackWorker
     if !job['downloaded']
       audio.status = NOTFOUND
       audio.status_message = job['error'] ||
-                             "Audio file for #{audio.label || audio.id} not found"
+                             "Error downloading file for #{audio.label || audio.id}"
     elsif !job['processed']
       audio.status = FAILED
       audio.status_message = job['error'] ||
-                             "Unable to process audio file #{audio.label || audio.id}"
+                             "Error processing file #{audio.label || audio.id}"
     else
       audio.upload_path = nil
       audio.status = TRANSFORMED

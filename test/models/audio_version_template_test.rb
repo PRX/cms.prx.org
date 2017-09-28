@@ -21,7 +21,7 @@ describe AudioVersionTemplate do
   it 'can tell if version doesnt have enough segments' do
     audio_version_template.segment_count = 2
     error_results = audio_version_template.validate_audio_version(audio_version)
-    error_results.must_include 'has 1 audio files but must have 2'
+    error_results.must_include 'has 1 file but must have 2 files'
   end
 
   it 'can tell if version length doesnt match template' do
@@ -69,7 +69,7 @@ describe AudioVersionTemplate do
     audio_version_template.validate_audio_file(audio_file).must_be(:nil?)
 
     audio_version_template.content_type = 'video/mpeg'
-    audio_version_template.validate_audio_file(audio_file).must_include 'is not a video'
+    audio_version_template.validate_audio_file(audio_file).must_include 'is not in video format'
   end
 
 end

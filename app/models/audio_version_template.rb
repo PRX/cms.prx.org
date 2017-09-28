@@ -55,8 +55,9 @@ class AudioVersionTemplate < BaseModel
   def audio_file_count_errors(audio_version)
     num_audio_files = audio_version.audio_files.count
     if !segment_count.nil? && audio_version.audio_files.count != segment_count
-      "Audio version #{audio_version.label} has #{num_audio_files} audio " +
-        "files but must have #{segment_count} segments."
+      "Audio version #{audio_version.label} has #{num_audio_files}" +
+        " #{'file'.pluralize(num_audio_files)} but must have" +
+        " #{segment_count} #{'file'.pluralize(segment_count)}"
     end
   end
 
@@ -68,9 +69,9 @@ class AudioVersionTemplate < BaseModel
                       "#{audio_version.length.to_time_string} long but must be "
       length_errors << if length_maximum != 0
                          "#{length_minimum.to_time_string} - " +
-                         "#{length_maximum.to_time_string} long."
+                         "#{length_maximum.to_time_string} long"
                        else
-                         "more than #{length_minimum.to_time_string} long."
+                         "more than #{length_minimum.to_time_string} long"
                        end
       length_errors
     end
@@ -87,14 +88,10 @@ class AudioVersionTemplate < BaseModel
       tpl_type = content_type.split('/').first
       file_type = audio_file.content_type.try(:split, '/').try(:first)
       if content_type == 'audio/mpeg' && audio_file.content_type != 'audio/mpeg'
-        "Audio file '#{audio_file.label}' is not an mp3" # very specific on these
+        "File '#{audio_file.label}' is not an mp3" # very specific on these
       elsif tpl_type != file_type
-        "Audio file '#{audio_file.label}' is not #{articleize(tpl_type)}"
+        "File '#{audio_file.label}' is not in #{tpl_type} format"
       end
     end
-  end
-
-  def articleize(word)
-    %w(a e i o u).include?(word[0].downcase) ? "an #{word}" : "a #{word}"
   end
 end
