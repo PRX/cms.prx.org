@@ -62,6 +62,10 @@ describe AudioVersionTemplate do
     audio_file.content_type.must_equal 'audio/mpeg'
     audio_version_template.validate_audio_file(audio_file).must_be(:nil?)
 
+    audio_file.layer = 2
+    audio_version_template.validate_audio_file(audio_file).must_include 'is not an mp3'
+
+    audio_file.layer = 3
     audio_file.content_type = 'audio/mp4'
     audio_version_template.validate_audio_file(audio_file).must_include 'is not an mp3'
 

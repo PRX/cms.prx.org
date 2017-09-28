@@ -33,7 +33,7 @@ describe Api::AudioFileRepresenter do
 
   it 'shows the analyzed audio format' do
     json['contentType'].must_equal 'audio/mpeg'
-    json['layer'].must_equal 2
+    json['layer'].must_equal 3
     json['frequency'].must_equal '44.1'
     json['bitRate'].must_equal 128
     json['channelMode'].must_equal 'Single Channel'
