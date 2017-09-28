@@ -32,7 +32,8 @@ describe AudioCallbackWorker do
   end
 
   it 'updates audio file attributes' do
-    meta = {duration: 11800, format: 'mp3', bitrate: 128000, frequency: 44100, channels: 2, layout: 'stereo'}
+    meta = { duration: 11800, format: 'mp3', bitrate: 128000, frequency: 44100,
+             channels: 2, layout: 'stereo' }
     perform(audio: meta)
     audio.filename.must_equal 'test.mp3'
     audio.length.must_equal 12
@@ -45,8 +46,8 @@ describe AudioCallbackWorker do
   end
 
   it 'updates video file attributes' do
-    audio_meta = {duration: 11800, bitrate: 128000}
-    video_meta = {duration: 14040, bitrate: 196000}
+    audio_meta = { duration: 11800, bitrate: 128000 }
+    video_meta = { duration: 14040, bitrate: 196000 }
     perform(audio: audio_meta, video: video_meta)
     audio.length.must_equal 12
     audio.bit_rate.must_equal 128

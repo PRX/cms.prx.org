@@ -80,7 +80,8 @@ describe AudioFile do
     audio_file.wont_be(:compliant_with_template?)
     audio_file.status.must_equal 'invalid'
 
-    audio_file.update_attributes(position: 1, label: 'Main Segment', content_type: 'video/x-mpeg', status: 'mp3s created')
+    audio_file.update_attributes(position: 1, label: 'Main Segment',
+                                 content_type: 'video/x-mpeg', status: 'mp3s created')
     audio_file.status_message.must_include 'long but must be'
     audio_file.wont_be(:compliant_with_template?)
     audio_file.status.must_equal 'invalid'

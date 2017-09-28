@@ -39,14 +39,14 @@ class AudioFile < BaseModel
   end
 
   def enclosure_url
-    is_audio? ? public_url(version: :broadcast, extension: 'mp3') : public_url
+    audio? ? public_url(version: :broadcast, extension: 'mp3') : public_url
   end
 
   def enclosure_content_type
-    is_audio? ? 'audio/mpeg' : content_type
+    audio? ? 'audio/mpeg' : content_type
   end
 
-  def is_audio?
+  def audio?
     content_type.present? && content_type.starts_with?('audio/')
   end
 
@@ -67,7 +67,7 @@ class AudioFile < BaseModel
 
     vtpl = audio_version.try(:audio_version_template)
     ftpl = vtpl.try(:audio_file_templates).try(:find) { |aft| aft.position == position }
-    errors = vtpl.try(:validate_audio_file, self) || ftpl.try(:validate_audio_file,  self)
+    errors = vtpl.try(:validate_audio_file, self) || ftpl.try(:validate_audio_file, self)
 
     if errors.blank?
       self.status_message = nil

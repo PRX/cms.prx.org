@@ -37,10 +37,12 @@ class AudioCallbackWorker
     # set errors but ignore valid/invalid status (will be determined later)
     if !job['downloaded']
       audio.status = NOTFOUND
-      audio.status_message = job['error'] || "Audio file for #{audio.label || audio.id} not found"
+      audio.status_message = job['error'] ||
+                             "Audio file for #{audio.label || audio.id} not found"
     elsif !job['processed']
       audio.status = FAILED
-      audio.status_message = job['error'] || "Unable to process audio file #{audio.label || audio.id}"
+      audio.status_message = job['error'] ||
+                             "Unable to process audio file #{audio.label || audio.id}"
     else
       audio.upload_path = nil
       audio.status = TRANSFORMED
