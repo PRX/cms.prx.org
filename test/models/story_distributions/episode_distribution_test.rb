@@ -32,6 +32,7 @@ describe StoryDistributions::EpisodeDistribution do
     eats = distribution.episode_attributes
     eats[:episode_number].must_equal 123
     eats[:season_number].must_equal 1
+    eats[:clean_title].must_equal 'Clean Title'
   end
 
   it 'gets the episode attributes' do

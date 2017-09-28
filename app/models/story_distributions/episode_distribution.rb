@@ -36,6 +36,7 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
     {
       prx_uri: api_story_path(story),
       title: story.title,
+      clean_title: story.clean_title,
       subtitle: story.short_description,
       episode_number: identifier_to_i(story.episode_identifier),
       season_number: identifier_to_i(story.season_identifier),

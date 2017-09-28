@@ -6,6 +6,7 @@ FactoryGirl.define do
     promos
 
     title 'Story Title'
+    clean_title 'Clean Title'
     length 120
     point_level 1
     short_description 'Short description'
