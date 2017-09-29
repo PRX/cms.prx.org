@@ -3,6 +3,7 @@
 class Api::Min::StoryRepresenter < Api::BaseRepresenter
   property :id, writeable: false
   property :title
+  property :clean_title
   property :short_description
   property :episode_number
   property :episode_identifier

@@ -136,12 +136,13 @@ describe Api::StoryRepresenter do
     end
   end
 
-  describe 'series info' do
+  describe 'story and series info' do
     let(:schedule) { create(:schedule) }
     let(:series) { schedule.series }
     let(:story) do
       create(:story,
              series: series,
+             clean_title: 'soapy clean',
              episode_identifier: '#2',
              season_identifier: 's1')
     end
@@ -150,6 +151,10 @@ describe Api::StoryRepresenter do
 
     it 'links to the series' do
       json['_links']['prx:series']['href'].must_match /#{series.id}/
+    end
+
+    it 'includes clean title' do
+      json['cleanTitle'].must_equal 'soapy clean'
     end
 
     it 'includes episode identifier' do
