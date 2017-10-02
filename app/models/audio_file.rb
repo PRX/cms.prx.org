@@ -38,6 +38,18 @@ class AudioFile < BaseModel
     [INVALID, VALID, COMPLETE, TRANSFORMING, TRANSFORM_FAILED, TRANSFORMED].include? status
   end
 
+  def enclosure_url
+    audio? ? public_url(version: :broadcast, extension: 'mp3') : public_url
+  end
+
+  def enclosure_content_type
+    audio? ? 'audio/mpeg' : content_type
+  end
+
+  def audio?
+    content_type.present? && content_type.starts_with?('audio/')
+  end
+
   def compliant_with_template?
     status_message.nil?
   end
@@ -51,24 +63,13 @@ class AudioFile < BaseModel
 
   def set_status
     # only do template validations once the audio callback worker has succeeded
-    if status == UPLOADED
-      return
-    elsif status == NOTFOUND
-      self.status_message = "Audio file #{label} not found."
-      return
-    elsif status == FAILED
-      self.status_message = "Audio file #{label} failed to process."
-      return
-    end
+    return if [UPLOADED, NOTFOUND, FAILED].include?(status)
 
-    template = audio_version.
-               try(:audio_version_template).
-               try(:audio_file_templates).
-               try(:find) { |aft| aft.position == position }
+    vtpl = audio_version.try(:audio_version_template)
+    ftpl = vtpl.try(:audio_file_templates).try(:find) { |aft| aft.position == position }
+    errors = vtpl.try(:validate_audio_file, self) || ftpl.try(:validate_audio_file, self)
 
-    errors = template ? template.validate_audio_file(self) : []
-
-    if errors.empty?
+    if errors.blank?
       self.status_message = nil
       self.status = COMPLETE
     else

@@ -98,14 +98,14 @@ describe AudioVersion do
     end
 
     it 'shows self as invalid if any audio file is not found or failed' do
-      audio_file.update(status: 'not found')
+      audio_file.update(status: 'not found', status_message: 'Was really not found')
       audio_version_with_template.audio_files << audio_file
       audio_version_with_template.update_attributes(explicit: 'explicit')
       audio_version_with_template.status_message.must_include 'not found'
       audio_version_with_template.status.must_equal 'invalid'
       audio_version_with_template.wont_be(:compliant_with_template?)
 
-      audio_file.update(status: 'failed')
+      audio_file.update(status: 'failed', status_message: 'Well that failed to process')
       audio_version_with_template.audio_files << audio_file
       audio_version_with_template.update_attributes(explicit: 'explicit')
       audio_version_with_template.status_message.must_include 'failed to process'

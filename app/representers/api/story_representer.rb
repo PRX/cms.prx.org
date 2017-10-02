@@ -3,9 +3,11 @@
 class Api::StoryRepresenter < Api::BaseRepresenter
   property :id, writeable: false
   property :title
+  property :clean_title
   property :short_description
   property :episode_number
   property :episode_identifier
+  property :season_identifier
   property :created_at, writeable: false
   property :updated_at, writeable: false
   property :published_at, writeable: false

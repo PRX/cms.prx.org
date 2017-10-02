@@ -300,6 +300,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.integer  "creator_id",              limit: 4
     t.integer  "series_id",               limit: 4
     t.string   "title",                   limit: 255
+    t.string   "clean_title",             limit: 255
     t.text     "short_description",       limit: 65535
     t.text     "description",             limit: 65535
     t.date     "produced_on"
@@ -334,6 +335,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "publish_on_valid_at"
     t.datetime "promos_only_at"
     t.string   "episode_identifier",      limit: 255
+    t.string   "season_identifier",       limit: 255
     t.string   "app_version",             limit: 255,   default: "v3", null: false
     t.string   "marketplace_subtitle",    limit: 255
     t.text     "marketplace_information", limit: 65535
