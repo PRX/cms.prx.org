@@ -136,33 +136,15 @@ describe Api::StoryRepresenter do
     end
   end
 
-  describe 'story and series info' do
+  describe 'series info' do
     let(:schedule) { create(:schedule) }
     let(:series) { schedule.series }
-    let(:story) do
-      create(:story,
-             series: series,
-             clean_title: 'soapy clean',
-             episode_identifier: '#2',
-             season_identifier: 's1')
-    end
+    let(:story) { create(:story, series: series) }
     let(:representer) { Api::StoryRepresenter.new(story) }
     let(:json) { JSON.parse(representer.to_json) }
 
     it 'links to the series' do
       json['_links']['prx:series']['href'].must_match /#{series.id}/
-    end
-
-    it 'includes clean title' do
-      json['cleanTitle'].must_equal 'soapy clean'
-    end
-
-    it 'includes episode identifier' do
-      json['episodeIdentifier'].must_equal '#2'
-    end
-
-    it 'includes season number' do
-      json['seasonIdentifier'].must_equal 's1'
     end
 
     it 'includes episode date' do
@@ -175,6 +157,29 @@ describe Api::StoryRepresenter do
       json['_links'].keys.wont_include('prx:series')
       json.keys.wont_include('episode_number')
       json.keys.wont_include('episode_date')
+    end
+  end
+
+  describe 'story info' do
+    let(:story) do
+      create(:story,
+             clean_title: 'soapy clean',
+             episode_identifier: '#2',
+             season_identifier: 's1')
+    end
+    let(:representer) { Api::StoryRepresenter.new(story) }
+    let(:json) { JSON.parse(representer.to_json) }
+
+    it 'includes clean title' do
+      json['cleanTitle'].must_equal 'soapy clean'
+    end
+
+    it 'includes episode identifier' do
+      json['episodeIdentifier'].must_equal '#2'
+    end
+
+    it 'includes season number' do
+      json['seasonIdentifier'].must_equal 's1'
     end
   end
 
