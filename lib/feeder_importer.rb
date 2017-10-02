@@ -22,6 +22,7 @@
 #   - update the episode page urls (not wordpress or libsyn or whatever anymore)
 
 require 'addressable/uri'
+require 'prx_access'
 
 class FeederModel < ActiveRecord::Base
   self.abstract_class = true
@@ -48,7 +49,8 @@ end
 
 class Podcast < FeederModel
   has_many :episodes, -> { order('published_at desc') }
-  has_many :podcast_images
+  has_many :itunes_images, -> { order('created_at DESC') }
+  has_many :feed_images, -> { order('created_at DESC') }
 end
 
 class PodcastImage < FeederModel
@@ -65,6 +67,9 @@ class Episode < FeederModel
   has_many :media_resources, -> { order('position ASC, created_at DESC').complete }
   scope :published, -> { where('published_at IS NOT NULL AND published_at <= now()') }
 
+  serialize :categories, JSON
+  serialize :keywords, JSON
+
   def item_guid
     original_guid || "prx_#{podcast_id}_#{guid}"
   end
@@ -80,8 +85,12 @@ class MediaResource < FeederModel
   enum status: status_values
 end
 
+class Content < MediaResource; end
+class Enclosure < MediaResource; end
+
 class FeederImporter
   include Announce::Publisher
+  include PRXAccess
 
   attr_accessor :account_id, :user_id, :podcast_id
   attr_accessor :podcast, :series, :template, :distribution, :stories
@@ -119,14 +128,8 @@ class FeederImporter
     }
     self.series = Series.create!(attrs)
 
-    # Add images to the series
-    podcast.podcast_images.each do |podcast_image|
-      upload_url = copy_image(SecureRandom.uuid, podcast_image)
-      purpose = podcast_image.type == 'FeedImage' ? Image::THUMBNAIL : Image::PROFILE
-      image = series.images.create!(upload: upload_url, purpose: purpose)
-      announce_image(image)
-      podcast_image.update_attribute(:original_url, image.public_url(version: 'original'))
-    end
+    podcast.itunes_images.each { |i| create_series_image(i, Image::PROFILE) }
+    podcast.feed_images.each { |i| create_series_image(i, Image::THUMBNAIL) }
 
     # all the imports we plan to do from feeder -> cms have a single segment
     num_segments = 1
@@ -161,6 +164,13 @@ class FeederImporter
     series
   end
 
+  def create_series_image(podcast_image, purpose)
+    upload_url = copy_image(SecureRandom.uuid, podcast_image)
+    image = series.images.create!(upload: upload_url, purpose: purpose)
+    announce_image(image)
+    podcast_image.update_attribute(:original_url, image.public_url(version: 'original'))
+  end
+
   def create_stories
     podcast.episodes.each do |episode|
       create_story(episode)
@@ -168,6 +178,7 @@ class FeederImporter
   end
 
   def create_story(episode)
+    # puts "episode.categories: #{episode.categories.inspect}"
     attrs = {
       app_version: PRX::APP_VERSION,
       creator_id: user_id,
@@ -185,18 +196,18 @@ class FeederImporter
       explicit: episode.explicit
     )
 
-    episode.media_files.each_with_index do |media_file, i|
-      upload_url = copy_enclosure(episode, media_file)
+    episode.media_resources.each_with_index do |media_resource, i|
+      upload_url = copy_media(episode, media_resource)
       audio = version.audio_files.create!(label: "Segment #{i + 1}", upload: upload_url)
       announce_audio(audio)
-      media_file.update_attribute!(:original_url, audio_file_original_url(audio))
+      media_resource.update_attribute(:original_url, audio_file_original_url(audio))
     end
 
     episode.episode_images.each do |episode_image|
       upload_url = copy_image(episode.guid, episode_image)
       image = story.images.create!(upload: upload_url)
       announce_image(image)
-      episode_image.update_attribute!(:original_url, image.public_url(version: 'original'))
+      episode_image.update_attribute(:original_url, image.public_url(version: 'original'))
     end
 
     # create the story distribution
@@ -208,7 +219,7 @@ class FeederImporter
       url: episode_url
     )
 
-    episode.update_attribute!(:prx_uri, "/api/v1/stories/#{story.id}")
+    episode.update_attribute(:prx_uri, "/api/v1/stories/#{story.id}")
 
     self.stories << story
 
@@ -233,9 +244,10 @@ class FeederImporter
     copy_file(from_path, to_path)
   end
 
-  def copy_enclosure(episode, media_file)
-    from_path = URI.parse(media_file['href']).path[1..-1]
-    to_path = "prod/#{episode.id}/#{URI.parse(episode.links['enclosure'].href).path.split('/').last}"
+  def copy_media(episode, media)
+    # puts "\n\nmedia: #{media.inspect}\n\n"
+    from_path = URI.parse(media.url).path[1..-1]
+    to_path = "prod/#{episode.guid}/#{URI.parse(media.original_url).path.split('/').last}"
     copy_file(from_path, to_path)
   end
 
@@ -245,7 +257,7 @@ class FeederImporter
       'x-amz-metadata-directive' => 'COPY',
       'x-amz-acl' => 'public-read'
     }
-    puts "copy_object('prx-feed', '#{from_path}', 'prx-up', '#{to_path}', '#{copy_options.inspect}')"
+    # puts "copy_object('prx-feed', '#{from_path}', 'prx-up', '#{to_path}', '#{copy_options.inspect}')"
     connection.copy_object('prx-feed', episode_file_path, 'prx-up', upload_path, copy_options) unless debug
 
     "https://prx-up.s3.amazonaws.com/#{to_path}"

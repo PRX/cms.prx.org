@@ -17,4 +17,6 @@
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.uncountable('series')
+  inflect.acronym 'ITunes'
+  inflect.acronym 'PRX'
 end
