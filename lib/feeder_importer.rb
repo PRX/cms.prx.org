@@ -21,7 +21,6 @@
 #   - add the `prx_uri` to the episodes
 #   - update the episode page urls (not wordpress or libsyn or whatever anymore)
 
-require 'prx_access'
 require 'addressable/uri'
 
 class FeederModel < ActiveRecord::Base
@@ -57,6 +56,9 @@ class PodcastImage < FeederModel
   enum status: status_values
 end
 
+class ITunesImage < PodcastImage; end
+class FeedImage < PodcastImage; end
+
 class Episode < FeederModel
   belongs_to :podcast
   has_many :episode_images, -> { order('created_at DESC').complete }
@@ -79,7 +81,6 @@ class MediaResource < FeederModel
 end
 
 class FeederImporter
-  include PRXAccess
   include Announce::Publisher
 
   attr_accessor :account_id, :user_id, :podcast_id
@@ -120,11 +121,11 @@ class FeederImporter
 
     # Add images to the series
     podcast.podcast_images.each do |podcast_image|
-      upload_url = copy_image(SecureRandom.uuid, image)
-      purpose = image.type == 'FeedImage' ? Image::THUMBNAIL : Image::PROFILE
+      upload_url = copy_image(SecureRandom.uuid, podcast_image)
+      purpose = podcast_image.type == 'FeedImage' ? Image::THUMBNAIL : Image::PROFILE
       image = series.images.create!(upload: upload_url, purpose: purpose)
       announce_image(image)
-      podcast_image.update_attribute!(:original_url, image.public_url(version: 'original'))
+      podcast_image.update_attribute(:original_url, image.public_url(version: 'original'))
     end
 
     # all the imports we plan to do from feeder -> cms have a single segment
@@ -188,7 +189,7 @@ class FeederImporter
       upload_url = copy_enclosure(episode, media_file)
       audio = version.audio_files.create!(label: "Segment #{i + 1}", upload: upload_url)
       announce_audio(audio)
-      media_file.update_attribute!(:original_url, audio.fixerable_final_storage_url(true))
+      media_file.update_attribute!(:original_url, audio_file_original_url(audio))
     end
 
     episode.episode_images.each do |episode_image|
@@ -212,6 +213,10 @@ class FeederImporter
     self.stories << story
 
     story
+  end
+
+  def audio_file_original_url(af)
+    "s3://#{Rails.env}.mediajoint.prx.org/public/audio_files/#{af.id}/#{File.basename(af.filename)}"
   end
 
   def update_podcast
