@@ -240,14 +240,14 @@ class FeederImporter
 
   def copy_image(guid, image)
     from_path = URI.parse(image.url).path[1..-1]
-    to_path = "prod/#{guid}/#{from_path.split('/').last}"
+    to_path = "#{short_env}/#{guid}/#{from_path.split('/').last}"
     copy_file(from_path, to_path)
   end
 
   def copy_media(episode, media)
     # puts "\n\nmedia: #{media.inspect}\n\n"
     from_path = URI.parse(media.url).path[1..-1]
-    to_path = "prod/#{episode.guid}/#{URI.parse(media.original_url).path.split('/').last}"
+    to_path = "#{short_env}/#{episode.guid}/#{URI.parse(media.original_url).path.split('/').last}"
     copy_file(from_path, to_path)
   end
 
@@ -269,5 +269,14 @@ class FeederImporter
 
   def announce_audio(audio)
     announce('audio', 'create', Api::Msg::AudioFileRepresenter.new(audio).to_json)
+  end
+
+  def short_env
+    {
+      'production' => 'prod',
+      'staging' => 'stag',
+      'development' => 'dev',
+      'test' => 'test'
+    }[Rails.env.to_s]
   end
 end
