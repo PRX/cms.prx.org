@@ -35,12 +35,12 @@ class FeederModel < ActiveRecord::Base
     {
       adapter: 'postgresql',
       encoding: 'unicode',
-      pool: ENV['FEEDER_DB_POOL_SIZE'],
-      user: ENV['FEEDER_DB_USER'],
+      pool: ENV['FEEDER_DB_POOL_SIZE'] || 2,
+      user: ENV['FEEDER_DB_USER'] || 'feeder',
       password: ENV['FEEDER_DB_PASSWORD'],
       host: ENV['FEEDER_DB_HOST'],
-      port: ENV['FEEDER_DB_PORT'],
-      database: ENV['FEEDER_DB_DATABASE']
+      port: ENV['FEEDER_DB_PORT'] || 5432,
+      database: ENV['FEEDER_DB_DATABASE'] || 'feeder'
     }
   end
 
