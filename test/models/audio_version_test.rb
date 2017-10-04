@@ -17,6 +17,17 @@ describe AudioVersion do
     audio_version.length(true).must_equal audio_version.duration
   end
 
+  describe 'checks files are in order' do
+    let(:av) { create(:audio_version, audio_files_count: 4) }
+
+    it 'validates audio files position missing' do
+      av.audio_files.destroy(av.audio_files[1])
+      av.save!
+      av.status.must_equal 'invalid'
+      av.status_message.must_equal 'Audio file missing for position 2'
+    end
+  end
+
   describe 'checks that files match' do
     let(:av) { create(:audio_version, audio_files_count: 4) }
 
