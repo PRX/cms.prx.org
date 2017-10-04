@@ -65,7 +65,7 @@ class AudioVersion < BaseModel
     end
 
     pos = 0
-    if audio_files.detect { |af| pos += 1; af.position != pos }
+    if audio_files.detect { |af| af.position != (pos += 1) }
       self.status = INVALID
       self.status_message = "Audio file missing for position #{pos}"
       return

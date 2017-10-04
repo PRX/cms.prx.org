@@ -18,6 +18,8 @@ describe AudioFile do
     af3.position.must_equal 3
     af1 = av.audio_files.create!(position: 1, status: 'uploaded', upload: 'http://test.com/1.mp3')
     af2 = av.audio_files.create!(position: 2, status: 'uploaded', upload: 'http://test.com/2.mp3')
+    af1.reload.position.must_equal 1
+    af2.reload.position.must_equal 2
     af3.reload.position.must_equal 3
   end
 
@@ -28,6 +30,7 @@ describe AudioFile do
     af2 = av.audio_files.create!(position: 2, status: 'uploaded', upload: 'http://test.com/2.mp3')
     af3 = av.audio_files.create!(position: 3, status: 'uploaded', upload: 'http://test.com/3.mp3')
     af2.destroy!
+    af1.reload.position.must_equal 1
     af3.reload.position.must_equal 3
     av.save
     av.status.must_equal 'invalid'
