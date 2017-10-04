@@ -10,7 +10,6 @@ class AudioFile < BaseModel
 
   has_one :story, through: :audio_version
 
-  acts_as_list scope: :audio_version
   acts_as_paranoid
 
   alias_attribute :upload, :upload_path
@@ -20,7 +19,7 @@ class AudioFile < BaseModel
   skip_callback :commit, :after, :remove_file! # don't remove s3 file
   fixerable_upload :upload, :file
 
-  before_save :set_status, only: [:update, :create]
+  before_save :set_position, :set_status, only: [:update, :create]
   after_commit :update_version_status
   after_destroy :update_version_status
 
@@ -58,6 +57,12 @@ class AudioFile < BaseModel
     return unless audio_version
     audio_version.with_lock do
       audio_version.save!
+    end
+  end
+
+  def set_position
+    if audio_version && position.to_i <= 0
+      self.position = audio_version.audio_files.last.try(:position).to_i + 1
     end
   end
 
