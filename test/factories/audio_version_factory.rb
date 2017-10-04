@@ -13,9 +13,7 @@ FactoryGirl.define do
     end
 
     after(:create) do |audio_version, evaluator|
-      c = evaluator.audio_files_count
-      c = (rand(5) + 1) if (evaluator.audio_files_count == 0)
-      c = 0 if evaluator.audio_files_count < 0
+      c = evaluator.audio_files_count.to_i
       (1..c).each { |i| FactoryGirl.create(:audio_file, audio_version: audio_version, position: i) }
       audio_version.reload
     end

@@ -12,7 +12,7 @@ describe AudioFile do
   let(:audio_file) { create(:audio_file, audio_version: audio_version) }
 
   it 'handles out of order inserts' do
-    av = create(:audio_version, audio_files_count: -1)
+    av = create(:audio_version, audio_files_count: 0)
     av.audio_files.must_be :empty?
     af3 = av.audio_files.create!(position: 3, status: 'uploaded', upload: 'http://test.com/3.mp3')
     af3.position.must_equal 3
@@ -24,7 +24,7 @@ describe AudioFile do
   end
 
   it 'does not reorder on delete' do
-    av = create(:audio_version, audio_files_count: -1)
+    av = create(:audio_version, audio_files_count: 0)
     av.audio_files.must_be :empty?
     af1 = av.audio_files.create!(position: 1, status: 'uploaded', upload: 'http://test.com/1.mp3')
     af2 = av.audio_files.create!(position: 2, status: 'uploaded', upload: 'http://test.com/2.mp3')
