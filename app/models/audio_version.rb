@@ -65,12 +65,10 @@ class AudioVersion < BaseModel
     end
 
     errors = audio_version_template.try(:validate_audio_version, self)
-    if errors.blank?
-      self.status = COMPLETE
-      self.status_message = nil
-    else
+    if !errors.blank?
       self.status = INVALID
       self.status_message = errors
+      return
     end
 
     pos = 0
@@ -79,5 +77,8 @@ class AudioVersion < BaseModel
       self.status_message = "Audio file missing for position #{pos}"
       return
     end
+
+    self.status = COMPLETE
+    self.status_message = nil
   end
 end
