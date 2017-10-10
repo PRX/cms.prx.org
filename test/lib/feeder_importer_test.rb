@@ -103,4 +103,12 @@ describe FeederImporter do
     podcast.prx_uri.must_equal "/api/v1/series/#{series.id}"
     podcast.source_url.must_be_nil
   end
+
+  it 'does a full import' do
+    importer.import
+    importer.series.id.wont_be_nil
+    importer.stories.count.must_equal Episode.count
+    importer.podcast.prx_account_uri.must_equal "/api/v1/accounts/#{account_id}"
+    importer.podcast.prx_uri.must_equal "/api/v1/series/#{importer.series.id}"
+  end
 end
