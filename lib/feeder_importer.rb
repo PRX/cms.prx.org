@@ -24,6 +24,8 @@
 require 'addressable/uri'
 require 'prx_access'
 
+# Feeder models start
+# some pidgin models for feeder db
 class FeederModel < ActiveRecord::Base
   self.abstract_class = true
 
@@ -87,6 +89,7 @@ end
 
 class Content < MediaResource; end
 class Enclosure < MediaResource; end
+# Feeder models end
 
 class FeederImporter
   include Announce::Publisher
@@ -136,6 +139,7 @@ class FeederImporter
 
     self.template = series.audio_version_templates.create!(
       label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
+      segment_count: num_segments,
       promos: false,
       length_minimum: 0,
       length_maximum: 0
