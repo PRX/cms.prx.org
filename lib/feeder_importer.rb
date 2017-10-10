@@ -262,7 +262,7 @@ class FeederImporter
       'x-amz-acl' => 'public-read'
     }
     # puts "copy_object('prx-feed', '#{from_path}', 'prx-up', '#{to_path}', '#{copy_options.inspect}')"
-    connection.copy_object('prx-feed', episode_file_path, 'prx-up', upload_path, copy_options) unless debug
+    connection.copy_object('prx-feed', from_path, 'prx-up', to_path, copy_options) unless debug
 
     "https://prx-up.s3.amazonaws.com/#{to_path}"
   end
