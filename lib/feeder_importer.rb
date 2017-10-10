@@ -1,22 +1,21 @@
 # Stop synching on a podcast
-#   - blank out the source_url on the podcast, this means any updates that do come in will create/affect a different feed
-#   - make crier stop (?) sending messages - probably have to change the url it reads from to a failing url
-#   - when the podcast doesn't have the series id associated with it, no episodes will be created or sync so we can create and modify them in cms w/o messing up feeder
+#   - We could make crier stop sending messages
+#     - probably change the feed url it requests, or delete the record
+#   - When the podcast doesn't have the series id associated with it, no episodes
+#     will be created or sync so we can create and modify them in cms w/o messing up feeder
 #
-# Create the podcast, episodes, and audio in cms
-#   - get the data from feeder api to create the podcast and episodes
-#   - copy the ad free audio from feeder to a new location (to uploads so it will auto cleanup)
-#   - use the filename from the updated feeder api
+# Script will create the podcast, episodes, and audio in cms
+#   - get the data from feeder DB to create the podcast and episodes
+#   - copy the ad free audio from feeder to uploads so it will auto cleanup, and match
+#     - use the original filename from the file in feeder
 #   - cms will use this new audio to copy into the correct story audio file location
 #     s3://prx-up/prod/<guid>/<original-filename>
+#   - copy this cms location back to the feeder original url, so they are in sync
+#   - We need to do the same for the podcast and episode images
 #
-# We need to do the same for the images, keeping the filename.
+# For the distribution, create this right away in the cms db using the feeder episode data
 #
-# For the distribution, we can create this right away in the cms db using the feeder episode api link
-#
-# After all this is setup in cms, we can then update feeder to match
-#   - update the original file urls in feeder to use these new cms urls - do not trigger processing on this (db change?)
-#   - this will make sure we have the files in synch and won't need to be updated/copied
+# After all this is setup in cms, we can then update feeder references to cms
 #   - add the `prx_uri` and `prx_account_uri` to the podcast attributes
 #   - add the `prx_uri` to the episodes
 #   - update the episode page urls (not wordpress or libsyn or whatever anymore)
@@ -95,18 +94,19 @@ class FeederImporter
   include Announce::Publisher
   include PRXAccess
 
-  attr_accessor :account_id, :user_id, :podcast_id
+  attr_accessor :account_id, :user_id, :podcast_id, :set_episode_urls
   attr_accessor :podcast, :series, :template, :distribution, :stories
 
   def debug
     TRUE
   end
 
-  def initialize(account_id, user_id, podcast_id)
+  def initialize(account_id, user_id, podcast_id, set_episode_urls = false)
     self.account_id = account_id
     self.user_id = user_id
     self.podcast_id = podcast_id
     self.stories = []
+    self.set_episode_urls = set_episode_urls
   end
 
   def import
@@ -223,11 +223,20 @@ class FeederImporter
       url: episode_url
     )
 
+    if set_episode_urls
+      new_url = default_url(story)
+      puts "new_url: #{new_url}"
+      episode.update_attribute(:url, new_url)
+    end
     episode.update_attribute(:prx_uri, "/api/v1/stories/#{story.id}")
-
-    self.stories << story
+    stories << story
 
     story
+  end
+
+  def default_url(story)
+    path = "#{story.class.name.underscore.pluralize}/#{story.id}"
+    ENV['PRX_HOST'].nil? ? nil : "https://#{ENV['PRX_HOST']}/#{path}"
   end
 
   def audio_file_original_url(af)
@@ -249,7 +258,6 @@ class FeederImporter
   end
 
   def copy_media(episode, media)
-    # puts "\n\nmedia: #{media.inspect}\n\n"
     from_path = URI.parse(media.url).path[1..-1]
     to_path = "#{short_env}/#{episode.guid}/#{URI.parse(media.original_url).path.split('/').last}"
     copy_file(from_path, to_path)
@@ -257,12 +265,16 @@ class FeederImporter
 
   def copy_file(from_path, to_path)
     connection = AudioFileUploader.new.send(:storage).connection
-    copy_options = {
+    options = {
       'x-amz-metadata-directive' => 'COPY',
       'x-amz-acl' => 'public-read'
     }
-    # puts "copy_object('prx-feed', '#{from_path}', 'prx-up', '#{to_path}', '#{copy_options.inspect}')"
-    connection.copy_object('prx-feed', from_path, 'prx-up', to_path, copy_options) unless debug
+    if debug
+      # Leaving this - useful for debugging when not wanting to actually update s3
+      # puts "copy_object('prx-feed', #{from_path}', 'prx-up', '#{to_path}', '#{options.inspect}')"
+    else
+      connection.copy_object('prx-feed', from_path, 'prx-up', to_path, options)
+    end
 
     "https://prx-up.s3.amazonaws.com/#{to_path}"
   end

@@ -6,7 +6,7 @@ describe FeederImporter do
   let(:account_id) { 8 }
   let(:user_id) { 8 }
   let(:podcast_id) { 40 }
-  let(:importer) { FeederImporter.new(account_id, user_id, podcast_id) }
+  let(:importer) { FeederImporter.new(account_id, user_id, podcast_id, true) }
 
   it 'makes a new importer' do
     importer.wont_be_nil
@@ -50,16 +50,20 @@ describe FeederImporter do
   it 'creates a story from an episode' do
     importer.retrieve_podcast
     podcast = importer.podcast
+    podcast.wont_be_nil
     series = importer.create_series
+    series.wont_be_nil
     episode = podcast.episodes.first
+    episode.wont_be_nil
     story = importer.create_story(episode)
+    story.wont_be_nil
 
     story.app_version.must_equal PRX::APP_VERSION
     story.creator_id.must_equal user_id
     story.account_id.must_equal account_id
     story.title.must_equal 'No Inoculation without Representation!'
     story.short_description.must_equal 'A tale of vaccinations and the American Revolution'
-    story.description_html.must_equal '<p>Vaccinations, in one form or another, have been around longer than the United States. In fact, during the Revolutionary War in 1776, future first lady Abigail Adams pursued the controversial scientific technique to protect her 5 children against a threat more dangerous than an army of Redcoats. Here’s Luke Quinton with the story.</p>'
+    story.description_html.must_match /Vaccinations, in one form or another/
     story.tags.must_equal ['Adams', 'American Revolution', 'inoculation', 'transistor', 'vaccine']
     story.published_at.must_equal nil
 
@@ -72,8 +76,8 @@ describe FeederImporter do
     file = 'No_Inoculation_Without_Represenation_Transistor.mp3'
     audio = version.audio_files.first
     audio.upload.must_equal "https://prx-up.s3.amazonaws.com/test/#{episode.guid}/#{file}"
-    enclosure = episode.media_resources.first
-    enclosure.original_url.must_equal "s3://test.mediajoint.prx.org/public/audio_files/#{audio.id}/#{file}"
+    original_url = episode.media_resources.first.original_url
+    original_url.must_equal "s3://test.mediajoint.prx.org/public/audio_files/#{audio.id}/#{file}"
 
     story.images.count.must_equal 1
     image = story.images.first
@@ -89,6 +93,7 @@ describe FeederImporter do
     distro.url.must_match /feeder.prx.org\/api\/v1\/episodes\/#{episode.guid}/
 
     episode.prx_uri.must_equal "/api/v1/stories/#{story.id}"
+    episode.url.must_equal "https://beta.prx.org/stories/#{story.id}"
   end
 
   it 'updates the podcast to synch with the series' do
