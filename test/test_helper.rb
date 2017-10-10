@@ -4,7 +4,7 @@ ENV['CMS_HOST'] = 'cms.prx.org'
 ENV['FEEDER_HOST'] = 'feeder.prx.org'
 ENV['ID_HOST'] = 'id.prx.org'
 ENV['META_HOST'] = 'meta.prx.org'
-ENV['PRX_HOST'] = 'www.prx.org'
+ENV['PRX_HOST'] = 'beta.prx.org'
 ENV['PRX_CLIENT_ID'] = '0123456789abcdefghijklmnopqrstuvwxyzABCD'
 ENV['PRX_SECRET'] = '0123456789abcdefghijklmnopqrstuvwxyzABCD'
 
