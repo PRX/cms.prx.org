@@ -98,22 +98,18 @@ describe FeederImporter do
 
   it 'updates the podcast to synch with the series' do
     importer.retrieve_podcast
-    podcast = importer.podcast
-    series = importer.create_series
+    importer.create_series
     importer.podcast.prx_account_uri.must_be_nil
 
     importer.update_podcast
-    podcast = importer.podcast
-    podcast.prx_account_uri.must_equal "/api/v1/accounts/#{account_id}"
-    podcast.prx_uri.must_equal "/api/v1/series/#{series.id}"
-    podcast.source_url.must_be_nil
+    importer.podcast.prx_account_uri.must_equal "/api/v1/accounts/#{account_id}"
+    importer.podcast.prx_uri.must_equal "/api/v1/series/#{importer.series.id}"
+    importer.podcast.source_url.must_be_nil
   end
 
   it 'does a full import' do
     importer.import
     importer.series.id.wont_be_nil
     importer.stories.count.must_equal Episode.count
-    importer.podcast.prx_account_uri.must_equal "/api/v1/accounts/#{account_id}"
-    importer.podcast.prx_uri.must_equal "/api/v1/series/#{importer.series.id}"
   end
 end
