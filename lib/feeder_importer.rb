@@ -225,7 +225,6 @@ class FeederImporter
 
     if set_episode_urls
       new_url = default_url(story)
-      puts "new_url: #{new_url}"
       episode.update_attribute(:url, new_url)
     end
     episode.update_attribute(:prx_uri, "/api/v1/stories/#{story.id}")
