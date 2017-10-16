@@ -97,10 +97,6 @@ class FeederImporter
   attr_accessor :account_id, :user_id, :podcast_id, :set_episode_urls
   attr_accessor :podcast, :series, :template, :distribution, :stories
 
-  def debug
-    TRUE
-  end
-
   def initialize(account_id, user_id, podcast_id, set_episode_urls = false)
     self.account_id = account_id
     self.user_id = user_id
@@ -137,6 +133,11 @@ class FeederImporter
     # all the imports we plan to do from feeder -> cms have a single segment
     num_segments = 1
 
+    episode = podcast.episodes.first
+    if episode.media_resources
+      num_segments = [episode.media_resources.count, num_segments].max
+    end
+
     self.template = series.audio_version_templates.create!(
       label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
       segment_count: num_segments,
@@ -145,10 +146,6 @@ class FeederImporter
       length_maximum: 0
     )
 
-    episode = podcast.episodes.first
-    if episode.media_resources
-      num_segments = [episode.media_resources.count, num_segments].max
-    end
     num_segments.times do |x|
       num = x + 1
       template.audio_file_templates.create!(
@@ -160,7 +157,7 @@ class FeederImporter
     end
 
     self.distribution = Distributions::PodcastDistribution.create!(
-      url: podcast_id,
+      url: "#{feeder_root}/podcasts/#{podcast_id}",
       distributable: series,
       audio_version_template: template
     )
@@ -197,6 +194,7 @@ class FeederImporter
 
     version = story.audio_versions.create!(
       audio_version_template: template,
+      label: 'Podcast Audio',
       explicit: episode.explicit
     )
 
@@ -268,10 +266,8 @@ class FeederImporter
       'x-amz-metadata-directive' => 'COPY',
       'x-amz-acl' => 'public-read'
     }
-    if debug
-      # Leaving this - useful for debugging when not wanting to actually update s3
-      # puts "copy_object('prx-feed', #{from_path}', 'prx-up', '#{to_path}', '#{options.inspect}')"
-    else
+
+    if ['production', 'staging'].include?(ENV['RAILS_ENV'])
       connection.copy_object('prx-feed', from_path, 'prx-up', to_path, options)
     end
 
