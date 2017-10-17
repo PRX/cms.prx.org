@@ -11,7 +11,7 @@ class Api::BaseRepresenter < HalApi::Representer
   end
 
   def self.alternate_host
-    ENV['PRX_HOST'] || 'www.prx.org'
+    ENV['PRX_HOST'] || 'beta.prx.org'
   end
 
   def self.profile_host

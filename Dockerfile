@@ -5,8 +5,8 @@ LABEL org.prx.app="yes"
 
 RUN apk --no-cache add ca-certificates ruby ruby-irb ruby-json ruby-rake \
     ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev mysql-client \
-    linux-headers libc-dev zlib libxml2 libxslt libffi less git groff python \
-    py-pip py-setuptools && \
+    linux-headers libc-dev zlib libxml2 libxslt libffi less git groff postgresql-client \
+    python py-pip py-setuptools && \
     pip --no-cache-dir install awscli
 
 RUN git clone -o github https://github.com/PRX/aws-secrets && \
@@ -24,7 +24,7 @@ ADD Gemfile ./
 ADD Gemfile.lock ./
 
 RUN apk --update add --virtual build-dependencies build-base curl-dev openssl-dev \
-    zlib-dev libxml2-dev libxslt-dev libffi-dev libgcrypt-dev && \
+    zlib-dev libxml2-dev libxslt-dev libffi-dev libgcrypt-dev postgresql-dev && \
     bundle config --global build.nokogiri  "--use-system-libraries" && \
     bundle config --global build.nokogumbo "--use-system-libraries" && \
     bundle config --global build.ffi  "--use-system-libraries" && \

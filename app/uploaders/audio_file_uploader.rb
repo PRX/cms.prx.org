@@ -54,5 +54,4 @@ class AudioFileUploader < CarrierWave::Uploader::Base
       )
     end
   end
-
 end

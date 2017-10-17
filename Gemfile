@@ -10,6 +10,7 @@ gem 'rack-prx_auth', '~> 0.0.8'
 ## Model
 # Use mysql as the database for Active Record
 gem 'mysql2'
+gem 'pg'
 
 # ActiveRecord model additions
 gem 'paranoia',' ~> 2.0'

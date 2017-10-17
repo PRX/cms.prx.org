@@ -349,6 +349,7 @@ GEM
     oj_mimic_json (1.0.1)
     paranoia (2.2.0)
       activerecord (>= 4.0, < 5.1)
+    pg (0.21.0)
     prx_auth-rails (0.0.4)
       rack-prx_auth (~> 0.0.6)
     pry (0.10.4)
@@ -531,6 +532,7 @@ DEPENDENCIES
   oj
   oj_mimic_json
   paranoia (~> 2.0)
+  pg
   prx_auth-rails (~> 0.0.4)
   pry-byebug
   puma
