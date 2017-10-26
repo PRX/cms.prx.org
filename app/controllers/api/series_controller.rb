@@ -32,6 +32,14 @@ class Api::SeriesController < Api::BaseController
     end
   end
 
+  def included(relation)
+    relation.includes(
+      { account: [:image, :address, { opener: [:image] }] },
+      :images,
+      :distributions
+    )
+  end
+
   def account
     @account ||= Account.find(params[:account_id]) if params[:account_id]
   end
