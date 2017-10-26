@@ -89,7 +89,11 @@ class Api::StoriesController < Api::BaseController
       { account: [:image, :address, { opener: [:image] }] },
       { series: [:images, :account] },
       :images,
-      :license
+      :license,
+      :topics,
+      :tones,
+      :formats,
+      :user_tags
     )
   end
 
