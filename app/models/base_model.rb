@@ -3,7 +3,7 @@
 class BaseModel < ActiveRecord::Base
   self.abstract_class = true
 
-  include RepresentedModel
+  include HalApi::RepresentedModel
 
   def update_file!(name)
     filename_will_change!
