@@ -3,11 +3,7 @@
 class BaseModel < ActiveRecord::Base
   self.abstract_class = true
 
-  include RepresentedModel
-
-  def id_from_url(url)
-    Rails.application.routes.recognize_path(url)[:id]
-  end
+  include HalApi::RepresentedModel
 
   def update_file!(name)
     filename_will_change!

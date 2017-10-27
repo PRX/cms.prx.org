@@ -2,7 +2,7 @@
 
 class Authorization
   extend ActiveModel::Naming
-  include RepresentedModel
+  include HalApi::RepresentedModel
 
   attr_accessor :token
   attr_reader :token_auth_accounts

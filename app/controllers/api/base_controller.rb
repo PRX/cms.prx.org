@@ -67,6 +67,17 @@ class Api::BaseController < ApplicationController
     Authorization.new(prx_auth_token) if prx_auth_token
   end
 
+  def filtered(arel)
+    keys = self.class.resources_params || []
+    where_hash = params.slice(*keys)
+    if where_hash.key?('story_id')
+      where_hash['piece_id'] = where_hash.delete('story_id')
+    end
+    where_hash = where_hash.permit(where_hash.keys)
+    arel = arel.where(where_hash) unless where_hash.blank?
+    arel
+  end
+
   private
 
   def user_not_authorized(exception = nil)
