@@ -38,7 +38,7 @@ gem 'sanitize'
 
 ## Controller
 gem 'responders', '~> 2.0'
-gem 'hal_api-rails', ' ~> 0.3.0'
+gem 'hal_api-rails', ' ~> 0.3.1'
 
 # auth
 gem 'rack-cors', require: 'rack/cors'
