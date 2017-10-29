@@ -23,7 +23,8 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         as: :stories,
         paged: true,
         item_class: Story,
-        item_decorator: Api::Min::StoryRepresenter
+        item_decorator: Api::Min::StoryRepresenter,
+        zoom: false
 
   link :image do
     {
@@ -31,7 +32,10 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
       title: represented.default_image.try(:filename)
     } if represented && represented.default_image
   end
-  embed :default_image, as: :image, class: SeriesImage, decorator: Api::ImageRepresenter
+  embed :default_image,
+        as: :image,
+        class: SeriesImage,
+        decorator: Api::ImageRepresenter
 
   link :images do
     {
@@ -39,7 +43,11 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
       count: represented.images.count
     } if represented.id
   end
-  embed :images, paged: true, item_class: SeriesImage, item_decorator: Api::ImageRepresenter
+  embed :images,
+        paged: true,
+        item_class: SeriesImage,
+        item_decorator: Api::ImageRepresenter,
+        zoom: false
 
   link rel: :account, writeable: true do
     {
@@ -71,5 +79,6 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   embed :distributions,
         paged: true,
         item_class: Distribution,
-        item_decorator: Api::DistributionRepresenter
+        item_decorator: Api::DistributionRepresenter,
+        per: :all
 end

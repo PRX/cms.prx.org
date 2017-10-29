@@ -28,7 +28,10 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
       title: represented.opener.login
     } if represented.opener
   end
-  embed :opener, class: User, decorator: Api::Min::UserRepresenter, zoom: false
+  embed :opener,
+        class: User,
+        decorator: Api::Min::UserRepresenter,
+        zoom: false
 
   link :stories do
     {
@@ -50,7 +53,11 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
       templated: true
     }
   end
-  embed :series, paged: true, item_class: Series, item_decorator: Api::Min::SeriesRepresenter, zoom: false
+  embed :series,
+        paged: true,
+        item_class: Series,
+        item_decorator: Api::Min::SeriesRepresenter,
+        zoom: false
 
   link :audio_files do
     {
