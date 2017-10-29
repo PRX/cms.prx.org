@@ -61,5 +61,5 @@ class Api::Min::StoryRepresenter < Api::BaseRepresenter
       count: represented.promos_audio.count
     } if represented.id
   end
-  embed :promos_audio, as: :promos, paged: true, item_class: AudioFile
+  embed :promos_audio, as: :promos, paged: true, item_class: AudioFile, per: :all
 end
