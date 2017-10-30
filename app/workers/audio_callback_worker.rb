@@ -9,6 +9,17 @@ class AudioCallbackWorker
 
   def perform(_sqs_msg, job)
     audio = AudioFile.find(job['id'])
+    update_audio(audio, job)
+    story = audio.story
+    story.with_lock do
+      announce(:story, :update, Api::Msg::StoryRepresenter.new(story).to_json)
+    end
+
+  rescue ActiveRecord::RecordNotFound
+    Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
+  end
+
+  def update_audio(audio, job)
     audio.filename = job['name']
     audio.size = job['size']
     audio.content_type = job['mime']
@@ -53,9 +64,5 @@ class AudioCallbackWorker
     end_state = audio.status_message ? "#{audio.status} => #{audio}" : audio.status
     Shoryuken.logger.info("Updating #{job['type']}[#{audio.id}]: status => #{end_state}")
     audio.save!
-    announce(:story, :update, Api::Msg::StoryRepresenter.new(audio.story).to_json)
-
-  rescue ActiveRecord::RecordNotFound
-    Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
   end
 end

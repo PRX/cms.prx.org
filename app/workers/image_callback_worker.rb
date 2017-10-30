@@ -34,9 +34,15 @@ class ImageCallbackWorker
 
     # announce the image changes on its story or series
     if image.is_a?(StoryImage)
-      announce(:story, :update, Api::Msg::StoryRepresenter.new(image.story).to_json)
+      story = image.story
+      story.with_lock do
+        announce(:story, :update, Api::Msg::StoryRepresenter.new(story).to_json)
+      end
     elsif image.is_a?(SeriesImage)
-      announce(:series, :update, Api::Msg::SeriesRepresenter.new(image.series).to_json)
+      series = image.series
+      series.with_lock do
+        announce(:series, :update, Api::Msg::SeriesRepresenter.new(series).to_json)
+      end
     end
 
   rescue ActiveRecord::RecordNotFound
