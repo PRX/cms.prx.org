@@ -89,13 +89,13 @@ class Api::StoriesController < Api::BaseController
       { promos: [:audio_files] },
       { account: [:image, :address, { opener: [:image] }] },
       { series: [:images, :account, :audio_version_templates] },
-      { distributions: [:audio_version_templates]},
       :creator,
       :images,
       :license,
       :topics,
       :tones,
       :formats,
+      :distributions,
       :user_tags
     )
   end
