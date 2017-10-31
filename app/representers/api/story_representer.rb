@@ -84,7 +84,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
       count: represented.promos_audio.count
     } if represented.id
   end
-  embed :promos_audio, as: :promos, paged: true, item_class: AudioFile
+  embed :promos_audio, as: :promos, paged: true, item_class: AudioFile, per: :all
 
   link :audio_versions do
     {
@@ -92,7 +92,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
       count: represented.audio_versions.count
     } if represented.id
   end
-  embed :audio_versions, paged: true, item_class: AudioVersion
+  embed :audio_versions, paged: true, item_class: AudioVersion, per: :all
 
   link :images do
     {
@@ -124,7 +124,8 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   embed :distributions,
         paged: true,
         item_class: StoryDistribution,
-        item_decorator: Api::StoryDistributionRepresenter
+        item_decorator: Api::StoryDistributionRepresenter,
+        per: :all
 end
 
 # TODO:
