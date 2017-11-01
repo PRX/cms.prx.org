@@ -86,13 +86,16 @@ class Api::StoriesController < Api::BaseController
   def included(relation)
     relation.includes(
       { audio_versions: [:audio_files] },
+      { promos: [:audio_files] },
       { account: [:image, :address, { opener: [:image] }] },
-      { series: [:images, :account] },
+      { series: [:images, :account, :audio_version_templates] },
+      :creator,
       :images,
       :license,
       :topics,
       :tones,
       :formats,
+      :distributions,
       :user_tags
     )
   end
