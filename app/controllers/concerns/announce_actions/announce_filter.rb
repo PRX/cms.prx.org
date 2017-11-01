@@ -19,7 +19,11 @@ module AnnounceActions
       model = announce_resource(action, controller)
       subject = announce_subject(model)
       message = announce_message(model)
-      model.with_lock do
+      if model.respond_to?(:with_lock)
+        model.with_lock do
+          announce(subject, announce_action, message)
+        end
+      else
         announce(subject, announce_action, message)
       end
     rescue Aws::SNS::Errors::NotFound => e
