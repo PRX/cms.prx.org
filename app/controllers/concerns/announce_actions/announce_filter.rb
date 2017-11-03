@@ -19,7 +19,13 @@ module AnnounceActions
       model = announce_resource(action, controller)
       subject = announce_subject(model)
       message = announce_message(model)
-      announce(subject, announce_action, message)
+      if model.respond_to?(:with_lock)
+        model.with_lock do
+          announce(subject, announce_action, message)
+        end
+      else
+        announce(subject, announce_action, message)
+      end
     rescue Aws::SNS::Errors::NotFound => e
       Rails.logger.error("Non-existent SNS topic: #{Rails.env.downcase}_announce_#{subject}_#{action}")
       raise e
