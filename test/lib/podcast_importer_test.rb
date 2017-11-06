@@ -128,7 +128,7 @@ def stub_import_requests
     to_return(status: 200, body: json_file('transistor_podcast_basic'), headers: {})
 
   stub_request(:put, 'https://feeder.prx.tech/api/v1/podcasts/51').
-    with(body: '{"id":51,"title":"Transistor","copyright":"Copyright 2016 PRX",' +
+    with(body: '{"id":51,"title":"Transistor","serialOrder":false,"copyright":"Copyright 2016 PRX",' +
                '"language":"en-US","updateFrequency":"1","updatePeriod":"hourly",' +
                '"link":"https://transistor.prx.org","explicit":"clean",' +
                '"newFeedUrl":"http://feeds.prx.org/transistor_stem","path":"transistor_stem",' +
