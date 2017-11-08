@@ -12,4 +12,11 @@ class Api::Msg::SeriesRepresenter < Api::SeriesRepresenter
         item_class: Story,
         item_decorator: Api::Min::StoryRepresenter,
         zoom: false
+
+  embed :images,
+        paged: true,
+        item_class: SeriesImage,
+        item_decorator: Api::ImageRepresenter,
+        per: :all,
+        zoom: true
 end

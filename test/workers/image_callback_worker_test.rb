@@ -43,14 +43,14 @@ describe ImageCallbackWorker do
   end
 
   it 'decodes image mime-types' do
-    perform(format: 'gif')
+    perform(name: 'foo.gif', format: 'gif')
     image.content_type.must_equal 'image/gif'
   end
 
   it 'rescues from unknown image types' do
-    perform(format: 'foobar')
+    perform(name: 'foo.foobar', format: 'foobar')
     image.content_type.must_equal 'foobar'
-    perform(format: 'image/jpg')
+    perform(name: 'foo.jpg', format: 'image/jpg')
     image.content_type.must_equal 'image/jpg'
   end
 

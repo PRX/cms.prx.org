@@ -18,4 +18,11 @@ class Api::Msg::StoryRepresenter < Api::StoryRepresenter
         item_class: AudioFile,
         item_decorator: Api::Auth::AudioFileRepresenter,
         per: :all
+
+  embed :images,
+        paged: true,
+        item_class: StoryImage,
+        item_decorator: Api::ImageRepresenter,
+        per: :all,
+        zoom: true
 end

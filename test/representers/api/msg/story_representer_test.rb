@@ -24,4 +24,8 @@ describe Api::Msg::StoryRepresenter do
     json = JSON.parse(Api::Msg::StoryRepresenter.new(story).to_json)
     json['_links']['self']['href'].must_match /api\/v1\/stories\/\d+/
   end
+
+  it 'does embed images' do
+    json['_embedded']['prx:images'].wont_be_nil
+  end
 end
