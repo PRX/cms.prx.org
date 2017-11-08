@@ -16,4 +16,8 @@ describe Api::Msg::SeriesRepresenter do
   it 'does not embed stories' do
     json['_embedded']['prx:stories'].must_be_nil
   end
+
+  it 'does embed images' do
+    json['_embedded']['prx:images'].wont_be_nil
+  end
 end
