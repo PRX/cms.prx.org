@@ -7,16 +7,21 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
 
   def distribute!
     super
-    add_episode_to_feeder
+    create_or_update_episode
   end
 
-  def add_episode_to_feeder(create_attributes = {})
-    return unless url.blank?
-    podcast = distribution.get_podcast
-    episode = podcast.episodes.post(episode_attributes.merge(create_attributes))
-    episode_url = URI.join(feeder_root, episode.links['self'].href).to_s
-    raise 'Failed to get episode url on create' if episode_url.blank?
-    update_attributes!(url: episode_url) if episode_url
+  def create_or_update_episode(attrs = {})
+    episode = nil
+    if url.blank?
+      podcast = distribution.get_podcast
+      episode = podcast.episodes.post(episode_attributes.merge(attrs))
+      episode_url = URI.join(feeder_root, episode.links['self'].href).to_s
+      raise 'Failed to get episode url on create' if episode_url.blank?
+      update_attributes!(url: episode_url) if episode_url
+    else
+      episode = get_episode
+      episode = episode.put(attrs)
+    end
     episode
   end
 
