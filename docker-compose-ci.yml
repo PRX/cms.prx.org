@@ -29,7 +29,7 @@ db:
 pg:
   image: postgres
   env_file:
-    - .env
+    - env-example
   environment:
     POSTGRES_USER: feeder
     POSTGRES_PASSWORD: password
