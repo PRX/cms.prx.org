@@ -37,7 +37,7 @@ describe ImageCallbackWorker do
   it 'sets the status to point at the final image' do
     perform(name: 'foo.bar')
     image.filename.must_equal 'foo.bar'
-    image.upload_path.must_be_nil
+    image.upload_path.wont_be_nil
     image.status.must_equal Image::COMPLETE
     image.fixerable_final?.must_equal true
   end
