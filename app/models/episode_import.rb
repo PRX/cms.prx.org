@@ -8,7 +8,7 @@ require 'itunes_category_validator'
 require 'loofah'
 require 'hash_serializer'
 
-class PodcastEpisodeImport < BaseModel
+class EpisodeImport < BaseModel
   include ImportUtils
 
   serialize :entry, HashSerializer
@@ -22,13 +22,19 @@ class PodcastEpisodeImport < BaseModel
 
   validates :entry, :guid, presence: true
 
+  def retry!
+    update_attributes(status: 'retrying')
+    import_later
+  end
+
   def set_defaults
     self.status ||= 'created'
     self.audio ||= { files: [] }
   end
 
   def import_later
-    PodcastEpisodeImportJob.perform_later self
+    EpisodeImportJob.perform_later self
+    self
   end
 
   def import

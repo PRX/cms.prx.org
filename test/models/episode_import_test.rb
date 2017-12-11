@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'prx_access'
 
-describe PodcastEpisodeImport do
+describe EpisodeImport do
   include PRXAccess
 
   let(:user) { create(:user) }
@@ -16,7 +16,7 @@ describe PodcastEpisodeImport do
 
   let(:podcast_url) { 'http://feeds.prx.org/transistor_stem' }
   let(:importer) { PodcastImport.create(user: user, account: account, url: podcast_url, series: series) }
-  let(:episode_import) { PodcastEpisodeImport.create!(
+  let(:episode_import) { EpisodeImport.create!(
                                                       podcast_import: importer,
                                                       audio: { files: ['https://cdn-transistor.prx.org/wp-content/uploads/Smithsonian3_Transistor.mp3'] },
                                                       entry: entry.to_h,

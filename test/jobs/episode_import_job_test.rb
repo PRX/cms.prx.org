@@ -1,9 +1,9 @@
 require 'test_helper'
 require 'minitest/mock'
 
-describe PodcastEpisodeImportJob do
+describe EpisodeImportJob do
 
-  let(:job) { PodcastEpisodeImportJob.new }
+  let(:job) { EpisodeImportJob.new }
 
   it 'import that episode' do
     episode_import = MiniTest::Mock.new
