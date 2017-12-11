@@ -214,7 +214,7 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "updated_at"
   end
 
-  create_table "podcast_episode_imports", force: :cascade do |t|
+  create_table "episode_imports", force: :cascade do |t|
     t.integer  "podcast_import_id", limit: 4
     t.integer  "piece_id",          limit: 4
     t.string   "guid",              limit: 255
