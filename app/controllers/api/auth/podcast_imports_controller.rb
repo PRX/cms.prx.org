@@ -9,9 +9,20 @@ class Api::Auth::PodcastImportsController < Api::BaseController
 
   filter_params :url
 
+  represent_with Api::PodcastImportRepresenter
+
+  def retry
+    update_resource.tap do |res|
+      authorize res
+      res.retry!
+      respond_with root_resource(res), update_resource
+    end
+  end
+
   def create_resource
     super.tap do |podcast_import|
       podcast_import.user_id ||= current_user.id
+      podcast_import.account_id ||= (params[:account_id] || current_user.account_id)
     end
   end
 

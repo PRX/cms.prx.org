@@ -6,9 +6,16 @@ describe Api::Auth::PodcastImportsController do
   let (:token) { StubToken.new(account.id, ['member'], user.id) }
   let (:account) { user.individual_account }
   let (:podcast_url) { 'http://feeds.prx.org/transistor_stem' }
+  let (:podcast_import) { create(:podcast_import, account: account) }
 
   around do |test|
     @controller.stub(:prx_auth_token, token) { test.call }
+  end
+
+  it 'should show' do
+    podcast_import.id.wont_be_nil
+    get :show, api_request_opts(id: podcast_import.id)
+    assert_response :success
   end
 
   it 'creates an import' do
