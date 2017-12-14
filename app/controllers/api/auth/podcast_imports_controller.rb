@@ -22,7 +22,7 @@ class Api::Auth::PodcastImportsController < Api::BaseController
   def create_resource
     super.tap do |podcast_import|
       podcast_import.user_id ||= current_user.id
-      podcast_import.account_id ||= (params[:account_id] || current_user.account_id)
+      podcast_import.account_id ||= (params[:account_id] || params[:accountId] || current_user.account_id)
     end
   end
 
