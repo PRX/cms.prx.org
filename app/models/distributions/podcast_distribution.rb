@@ -8,14 +8,14 @@ class Distributions::PodcastDistribution < Distribution
 
   def distribute!
     super
-    create_or_update_podcast
+    create_or_update_podcast!
   end
 
   def story_distribution_class
     StoryDistributions::EpisodeDistribution
   end
 
-  def create_or_update_podcast(attrs = {})
+  def create_or_update_podcast!(attrs = {})
     podcast = nil
     if url.blank?
       client = api(root: feeder_root, account: account.id)
