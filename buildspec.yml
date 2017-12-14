@@ -1,34 +1,20 @@
-version: 0.1
-environment_variables:
-  plaintext:
-    BUILD_PHASE_MARKER: build_phase_complete
+version: 0.2
+env:
+  variables:
+    PRX_ECR_REGION: "us-east-1"
+    PRX_ECR_REPOSITORY: "cms.prx.org"
+    PRX_ECR_CONFIG_PARAMETERS: "CmsEcrImageTag"
 phases:
-  pre_build:
+  install:
     commands:
-      - apt-get update -y
-      - apt-get install -y jq
-      - echo Logging in to Amazon ECR...
-      - $(aws ecr get-login --region $ECR_REGION)
+      - 'echo "Installing docker-compose..."'
+      - 'COMPOSE="https://github.com/docker/compose/releases/download/1.11.2/docker-compose-$(uname -s)-$(uname -m)" && curl -sL $COMPOSE -o /usr/local/bin/docker-compose'
+      - "chmod +x /usr/local/bin/docker-compose"
   build:
     commands:
-      - docker build -t $ECR_REPOSITORY_NAME:$((ECR_IMAGE_TAG+1)) .
-      - docker tag $ECR_REPOSITORY_NAME:$((ECR_IMAGE_TAG+1)) $AWS_ACCOUNT_ID.dkr.ecr.$ECR_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$((ECR_IMAGE_TAG+1))
-      - docker-compose run cms testsetup
-      - docker-compose run cms test
-      - touch $BUILD_PHASE_MARKER
+      - "cd $(ls -d */|head -n 1)"
+      - "docker-compose -f docker-compose-ci.yml build"
+      - "docker-compose -f docker-compose-ci.yml run cms"
   post_build:
     commands:
-      - test -e $BUILD_PHASE_MARKER
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$ECR_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$((ECR_IMAGE_TAG+1))
-      - aws s3 cp s3://$TEMPLATE_CONFIG_BUCKET/$TEMPLATE_CONFIG_ARTIFACT $TEMPLATE_CONFIG_ARTIFACT
-      - unzip $TEMPLATE_CONFIG_ARTIFACT
-      - jq --arg tag $((ECR_IMAGE_TAG+1)) '.Parameters.CmsECRImageTag = $tag' staging.json > staging2.json
-      - rm staging.json && mv staging2.json staging.json
-      - zip $TEMPLATE_CONFIG_ARTIFACT staging.json
-      - aws s3 cp $TEMPLATE_CONFIG_ARTIFACT s3://$TEMPLATE_CONFIG_BUCKET/
-      # that will trigger a Root Stack CodePipeline execution
-artifacts:
-  # It seems like CodePipeline and CodeBuild expect an artifact here. Currently
-  # we don't need any, so this is essentially a no-op.
-  files:
-    - README.md
+      - 'curl -sO "https://raw.githubusercontent.com/PRX/Infrastructure/master/ci/utility/post_build.sh" && chmod +x post_build.sh && bash ./post_build.sh'
