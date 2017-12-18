@@ -19,7 +19,7 @@ class Api::EpisodeImportRepresenter < Api::BaseRepresenter
       title: represented.podcast_import.series.title
     } if represented.podcast_import_id
   end
-  embed :series, class: Series, decorator: Api::Min::SeriesRepresenter
+  embed :series, class: Series, decorator: Api::Min::SeriesRepresenter, zoom: false
 
   link :story do
     {
@@ -28,5 +28,5 @@ class Api::EpisodeImportRepresenter < Api::BaseRepresenter
       profile: model_uri(represented.story)
     } if represented.story
   end
-  embed :story, as: :story, item_class: Story, decorator: Api::Min::StoryRepresenter
+  embed :story, as: :story, item_class: Story, decorator: Api::Min::StoryRepresenter, zoom: false
 end
