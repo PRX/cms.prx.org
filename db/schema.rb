@@ -305,7 +305,7 @@ ActiveRecord::Schema.define(version: 6) do
 
   add_index "piece_images", ["piece_id"], name: "piece_images_piece_id_fk", using: :btree
 
-  create_table "pieces", force: :cascade do |t|
+  create_table "pieces", force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
     t.integer  "position",                limit: 4
     t.integer  "account_id",              limit: 4
     t.integer  "creator_id",              limit: 4
