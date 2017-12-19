@@ -3,7 +3,9 @@
 class Api::PodcastImportRepresenter < Api::BaseRepresenter
   property :id, writeable: false
   property :url
-  property :status
+  property :config
+  property :config_url, readable: false
+  property :status, writeable: false
   property :created_at, writeable: false
   property :updated_at, writeable: false
 
