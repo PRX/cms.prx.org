@@ -5,7 +5,7 @@ class Api::EpisodeImportRepresenter < Api::BaseRepresenter
   property :guid
   property :audio
   property :entry
-  property :status
+  property :status, writeable: false
   property :created_at, writeable: false
   property :updated_at, writeable: false
 
