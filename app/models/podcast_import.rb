@@ -9,23 +9,23 @@ require 'loofah'
 require 'hash_serializer'
 
 class PodcastImport < BaseModel
-  include Announce::Publisher
-  include PRXAccess
-  include Rails.application.routes.url_helpers
+  include ImportUtils
 
   serialize :config, HashSerializer
 
-  attr_accessor :feed, :templates, :stories, :podcast, :distribution
+  attr_accessor :feed, :templates, :podcast, :distribution
 
   belongs_to :user, -> { with_deleted }
   belongs_to :account, -> { with_deleted }
   belongs_to :series, -> { with_deleted }
 
+  has_many :episode_imports, dependent: :destroy
+
   before_validation :set_defaults, on: :create
 
   validates :user_id, :account_id, :url, presence: true
 
-  def set_config_url(config_url)
+  def config_url=(config_url)
     c_url = Addressable::URI.parse(config_url)
     response = connection(c_url).get(c_url.path, c_url.query_values)
     self.config = ActiveSupport::JSON.decode(response.body).try(:with_indifferent_access)
@@ -36,31 +36,76 @@ class PodcastImport < BaseModel
     self.config ||= {}
   end
 
+  def update_status!
+    return unless episode_imports.count > 0
+    if episode_imports.all? { |e| e.status == 'complete' }
+      update_attributes!(status: 'complete')
+    elsif episode_imports.any? { |e| e.status == 'failed' }
+      update_attributes!(status: 'failed')
+    end
+  end
+
+  def retry!
+    update_attributes(status: 'retrying')
+    import_later
+  end
+
   def import_later
     PodcastImportJob.perform_later self
   end
 
   def import
-    update_attributes(status: 'started')
+    update_attributes!(status: 'started')
 
     # Request the RSS feed
     get_feed
-    update_attributes(status: 'feed retrieved')
+    update_attributes!(status: 'feed retrieved')
 
     # Create the series
-    create_series_from_podcast
-    update_attributes(status: 'series created')
+    create_or_update_series!
+    update_attributes!(status: 'series created')
 
     # Update podcast attributes
-    create_podcast
-    update_attributes(status: 'podcast created')
+    create_or_update_podcast!
+    update_attributes!(status: 'podcast created')
 
     # Create the episodes
-    create_stories
-    update_attributes(status: 'complete')
+    update_attributes!(status: 'importing')
+    create_or_update_episode_imports!
   rescue StandardError => err
     update_attributes(status: 'failed')
     raise err
+  end
+
+  def entry_audio_files(entry)
+    if config[:audio] && config[:audio][entry[:entry_id]]
+      { files: (config[:audio][entry[:entry_id]] || []) }
+    elsif enclosure = enclosure_url(entry)
+      { files: [enclosure] }
+    end
+  end
+
+  def create_or_update_episode_imports!
+    feed.entries.map do |entry|
+      entry_hash = entry.to_h.with_indifferent_access
+      audio_files = entry_audio_files(entry_hash)
+      get_or_create_template(audio_files[:files].count)
+      episode_import = create_or_update_episode_import!(entry_hash, audio_files)
+      episode_import.import_later
+    end
+  end
+
+  def create_or_update_episode_import!(entry, audio_files)
+    if ei = episode_imports.where(guid: entry[:entry_id]).first
+      ei.update_attributes!(entry: entry, audio: audio_files)
+    else
+      ei = episode_imports.create(
+        guid: entry[:entry_id],
+        entry: entry,
+        audio: audio_files
+      )
+    end
+    ei
   end
 
   def get_feed
@@ -82,42 +127,70 @@ class PodcastImport < BaseModel
     clean_text(result)
   end
 
-  def create_series_from_podcast(feed = self.feed)
-    # create the series
-    self.series = create_series!(
+  def create_or_update_series!(feed = self.feed)
+    series_attributes = {
       app_version: PRX::APP_VERSION,
       account: account,
       title: clean_string(feed.title),
-      short_description: clean_string(short_desc(feed)),
+      short_description: clean_string(podcast_short_desc(feed)),
       description_html: feed_description(feed)
-    )
-    save!
+    }
 
-    # Add images to the series
-    if !feed.itunes_image.blank?
-      image = series.images.create!(
-        upload: clean_string(feed.itunes_image),
-        purpose: Image::PROFILE
-      )
-      announce_image(image)
+    if series
+      series.update_attributes!(series_attributes)
+    else
+      self.series = create_series!(series_attributes)
+      save!
     end
 
-    if feed.image && feed.image.url
-      image = series.images.create!(
-        upload: clean_string(feed.image.url),
-        purpose: Image::THUMBNAIL
-      )
-      announce_image(image)
+    if !podcast_distribution
+      self.distribution = Distributions::PodcastDistribution.create!(distributable: series)
     end
 
-    self.distribution = Distributions::PodcastDistribution.create!(
-      distributable: series
-    )
+    new_images = update_images(feed)
+
+    series.save!
+
+    new_images.each { |i| announce_image(i) }
 
     series
   end
 
-  def create_podcast
+  def update_images(feed)
+    [[Image::PROFILE, feed.itunes_image], [Image::THUMBNAIL, feed.image.try(:url)]].map do |p, u|
+      update_image(p, u)
+    end.flatten
+  end
+
+  def update_image(purpose, image_url)
+    if image_url.blank?
+      series.images.where(purpose: purpose).destroy_all
+      return []
+    end
+
+    to_destroy = []
+    to_insert = []
+
+    existing_image = series.images.send(purpose)
+    if existing_image && !files_match?(existing_image, image_url)
+      to_destroy << existing_image
+      existing_image = nil
+    end
+
+    if !existing_image
+      to_insert << series.images.build(upload: clean_string(image_url), purpose: purpose)
+    end
+
+    story.images.destroy(to_destroy) if to_destroy.size > 0
+
+    to_insert
+  end
+
+  def podcast_distribution
+    self.distribution ||= series.distributions.where(type: 'Distributions::PodcastDistribution').first
+  end
+
+  def create_or_update_podcast!
     podcast_attributes = {}
     %w(copyright language update_frequency update_period).each do |atr|
       podcast_attributes[atr.to_sym] = clean_string(feed.send(atr))
@@ -146,7 +219,7 @@ class PodcastImport < BaseModel
     podcast_attributes[:keywords] = parse_keywords(feed)
     podcast_attributes[:serial_order] = feed.itunes_type && !!feed.itunes_type.match(/serial/i)
 
-    self.podcast = distribution.add_podcast_to_feeder(podcast_attributes)
+    self.podcast = podcast_distribution.create_or_update_podcast!(podcast_attributes)
     podcast
   end
 
@@ -179,26 +252,6 @@ class PodcastImport < BaseModel
     end
   end
 
-  def person(arg)
-    return nil if arg.blank?
-
-    email = name = nil
-    if arg.is_a?(Hash)
-      email = clean_string(arg[:email])
-      name = clean_string(arg[:name])
-    else
-      s = clean_string(arg)
-      if match = s.match(/(.+) \((.+)\)/)
-        email = match[1]
-        name = match[2]
-      else
-        name = s
-      end
-    end
-
-    { name: name, email: email }
-  end
-
   def parse_itunes_categories(feed)
     itunes_cats = {}
     Array(feed.itunes_categories).map(&:strip).select { |c| !c.blank? }.each do |cat|
@@ -225,181 +278,45 @@ class PodcastImport < BaseModel
     (ikey + mkey).compact.uniq
   end
 
-  def create_stories
-    self.templates ||= []
-    feed.entries.map do |entry|
-      story = create_story(entry, series)
-      create_episode(story, entry)
-      story
-    end
-  end
-
-  def entry_description(entry)
-    atr = entry_description_attribute(entry)
-    clean_text(entry[atr])
-  end
-
-  def entry_description_attribute(entry)
-    [:content, :itunes_summary, :description, :title].find { |d| !entry[d].blank? }
-  end
-
-  def create_story(entry, series)
-    story = series.stories.create!(
-      app_version: PRX::APP_VERSION,
-      creator_id: user_id,
-      account_id: series.account_id,
-      title: clean_string(entry[:title]),
-      short_description: clean_string(short_desc(entry)),
-      description_html: entry_description(entry),
-      tags: Array(entry[:categories]).map(&:strip).reject(&:blank?),
-      published_at: entry[:published],
-      season_identifier: entry[:itunes_season],
-      episode_identifier: entry[:itunes_episode],
-      clean_title: entry[:itunes_title]
-    )
-
-    audio_files = []
-    if config[:audio] && config[:audio][entry.entry_id]
-      audio_files = config[:audio][entry.entry_id]
-    elsif enclosure = enclosure_url(entry)
-      audio_files = [enclosure]
-    end
-
-    # add the audio version
-    template = get_or_create_template(audio_files.size)
-    version = story.audio_versions.create!(
-      audio_version_template: template,
-      label: 'Podcast Audio',
-      explicit: explicit(entry[:itunes_explicit])
-    )
-
-    audio_files.each_with_index do |af, i|
-      af = af.gsub(' ', '%20')
-      audio = version.audio_files.create!(label: "Segment #{i + 1}", upload: af)
-      announce_audio(audio)
-    end
-
-    # add the image if it is different from the channel itunes_image
-    if entry.itunes_image && feed.itunes_image != entry.itunes_image
-      image = story.images.create!(upload: entry.itunes_image)
-      announce_image(image)
-    end
-
-    story
-  end
-
   def get_or_create_template(segments)
     num_segments = [segments.to_i, 1].max
-    if !templates[num_segments]
-      template = series.audio_version_templates.create!(
-        label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
-        segment_count: num_segments,
-        promos: false,
-        length_minimum: 0,
-        length_maximum: 0
-      )
+    template = nil
 
-      num_segments.times do |x|
-        num = x + 1
-        template.audio_file_templates.create!(
-          position: num,
-          label: "Segment #{num}",
+    self.series.with_lock do
+      template = series.audio_version_templates.where(segment_count: num_segments).first
+      if !template
+        template = series.audio_version_templates.create!(
+          label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
+          segment_count: num_segments,
+          promos: false,
           length_minimum: 0,
           length_maximum: 0
         )
+
+        num_segments.times do |x|
+          num = x + 1
+          template.audio_file_templates.create!(
+            position: num,
+            label: "Segment #{num}",
+            length_minimum: 0,
+            length_maximum: 0
+          )
+        end
+
+        podcast_distribution.distribution_templates.create!(
+          distribution: podcast_distribution,
+          audio_version_template: template
+        )
       end
-
-      distribution.distribution_templates.create!(
-        distribution: distribution,
-        audio_version_template: template
-      )
-      self.templates[num_segments] = template
     end
-    templates[num_segments]
+
+    template
   end
 
-  def enclosure_url(entry)
-    url = entry[:feedburner_orig_enclosure_link] || entry[:enclosure].try(:url)
-    clean_string(url)
-  end
-
-  def create_episode(story, entry)
-    # create the distro from the story
-    distro = StoryDistributions::EpisodeDistribution.create(
-      distribution: distribution,
-      story: story,
-      guid: entry.entry_id
-    )
-
-    create_attributes = {}
-    if entry[:itunes_summary] && :itunes_summary != entry_description_attribute(entry)
-      create_attributes[:summary] = clean_text(entry[:itunes_summary])
-    end
-    create_attributes[:author] = person(entry[:itunes_author] || entry[:author] || entry[:creator])
-    create_attributes[:block] = (clean_string(entry[:itunes_block]) == 'yes')
-    create_attributes[:explicit] = explicit(entry[:itunes_explicit])
-    create_attributes[:guid] = clean_string(entry.entry_id)
-    create_attributes[:is_closed_captioned] = closed_captioned?(entry)
-    create_attributes[:is_perma_link] = entry[:is_perma_link]
-    create_attributes[:keywords] = (entry[:itunes_keywords] || '').split(',').map(&:strip)
-    create_attributes[:position] = entry[:itunes_order]
-    create_attributes[:url] = episode_url(entry) || distro.default_url(story)
-    create_attributes[:itunes_type] = entry[:itunes_episode_type] unless entry[:itunes_episode_type].blank?
-
-    distro.add_episode_to_feeder(create_attributes)
-  end
-
-  def episode_url(entry)
-    url = clean_string(entry[:feedburner_orig_link] || entry[:url] || entry[:link])
-    if url =~ /libsyn\.com/
-      url = nil
-    end
-    url
-  end
-
-  def closed_captioned?(entry)
-    (clean_string(entry[:itunes_is_closed_captioned]) == 'yes')
-  end
-
-  def explicit(str)
-    return nil if str.blank?
-    explicit = clean_string(str).downcase
-    if %w(true yes).include?(explicit)
-      explicit = 'explicit'
-    elsif %w(no false).include?(explicit)
-      explicit = 'clean'
-    end
-    explicit
-  end
-
-  def short_desc(item)
+  def podcast_short_desc(item)
     [item.itunes_subtitle, item.description, item.title].find do |field|
       !field.blank? && field.split.length < 50
     end
-  end
-
-  def clean_string(str)
-    return nil if str.blank?
-    return str if !str.is_a?(String)
-    str.strip
-  end
-
-  def clean_text(text)
-    return nil if text.blank?
-    result = remove_feedburner_tracker(text)
-    sanitize_html(result)
-  end
-
-  def remove_feedburner_tracker(str)
-    return nil if str.blank?
-    regex = /<img src="http:\/\/feeds\.feedburner\.com.+" height="1" width="1" alt=""\/>/
-    str.sub(regex, '').strip
-  end
-
-  def sanitize_html(text)
-    return nil if text.blank?
-    sanitizer = Rails::Html::WhiteListSanitizer.new
-    sanitizer.sanitize(Loofah.fragment(text).scrub!(:prune).to_s).strip
   end
 
   def uri
@@ -415,13 +332,5 @@ class PodcastImport < BaseModel
 
   def self.policy_class
     AccountablePolicy
-  end
-
-  def announce_image(image)
-    announce('image', 'create', Api::Msg::ImageRepresenter.new(image).to_json)
-  end
-
-  def announce_audio(audio)
-    announce('audio', 'create', Api::Msg::AudioFileRepresenter.new(audio).to_json)
   end
 end

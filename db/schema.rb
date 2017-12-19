@@ -214,6 +214,17 @@ ActiveRecord::Schema.define(version: 6) do
     t.datetime "updated_at"
   end
 
+  create_table "episode_imports", force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
+    t.integer  "podcast_import_id", limit: 4
+    t.integer  "piece_id",          limit: 4
+    t.string   "guid",              limit: 255
+    t.text     "entry",             limit: 65535
+    t.text     "audio",             limit: 65535
+    t.string   "status",            limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "licenses", force: :cascade do |t|
     t.integer  "piece_id",         limit: 4
     t.string   "website_usage",    limit: 255
@@ -294,7 +305,7 @@ ActiveRecord::Schema.define(version: 6) do
 
   add_index "piece_images", ["piece_id"], name: "piece_images_piece_id_fk", using: :btree
 
-  create_table "pieces", force: :cascade do |t|
+  create_table "pieces", force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
     t.integer  "position",                limit: 4
     t.integer  "account_id",              limit: 4
     t.integer  "creator_id",              limit: 4

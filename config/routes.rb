@@ -70,12 +70,19 @@ PRX::Application.routes.draw do
       end
 
       resource :authorization, only: [:show] do
+        resources :audio_files, except: [:new, :edit]
+
         resources :accounts, only: [:index, :show], module: :auth do
           resources :stories, only: [:index, :create, :update]
-          resources :podcast_imports, except: [:new, :edit]
         end
 
-        resources :audio_files, except: [:new, :edit]
+        resources :podcast_imports, except: [:new, :edit], module: :auth do
+          post 'retry', on: :member
+
+          resources :episode_imports, except: [:new, :edit] do
+            post 'retry', on: :member
+          end
+        end
 
         resources :series, except: [:new, :edit, :create], module: :auth do
           resources :stories, only: [:index, :create]

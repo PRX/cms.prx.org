@@ -25,7 +25,6 @@ class ImageCallbackWorker
     elsif !job['resized']
       image.status = FAILED
     else
-      image.upload_path = nil
       image.status = COMPLETE
     end
 

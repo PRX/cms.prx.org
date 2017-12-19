@@ -8,20 +8,25 @@ class Distributions::PodcastDistribution < Distribution
 
   def distribute!
     super
-    add_podcast_to_feeder
+    create_or_update_podcast!
   end
 
   def story_distribution_class
     StoryDistributions::EpisodeDistribution
   end
 
-  def add_podcast_to_feeder(create_attributes = {})
-    return unless url.blank?
-    client = api(root: feeder_root, account: account.id)
-    podcast = client.podcasts.first.post(podcast_attributes.merge(create_attributes))
-    podcast_url = URI.join(feeder_root, podcast.links['self'].href).to_s
-    raise 'Failed to get podcast url on create' if podcast_url.blank?
-    update_attributes!(url: podcast_url)
+  def create_or_update_podcast!(attrs = {})
+    podcast = nil
+    if url.blank?
+      client = api(root: feeder_root, account: account.id)
+      podcast = client.podcasts.first.post(podcast_attributes.merge(attrs))
+      podcast_url = URI.join(feeder_root, podcast.links['self'].href).to_s
+      raise 'Failed to get podcast url on create' if podcast_url.blank?
+      update_attributes!(url: podcast_url)
+    else
+      podcast = get_podcast
+      podcast = podcast.put(attrs)
+    end
     podcast
   end
 

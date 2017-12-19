@@ -58,6 +58,21 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
     }
   end
 
+  link :podcast_imports do
+    {
+      href: "#{api_authorization_podcast_imports_path}#{index_url_params}",
+      templated: true,
+      count: represented.podcast_imports.count
+    }
+  end
+
+  link :podcast_import do
+    {
+      href: "#{api_authorization_podcast_import_path_template(id: '{id}')}#{show_url_params}",
+      templated: true
+    }
+  end
+
   def self_url(_r)
     api_authorization_path
   end

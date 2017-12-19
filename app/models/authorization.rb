@@ -32,6 +32,10 @@ class Authorization
     Series.where(account_id: token_auth_accounts.try(:ids)) unless token_auth_accounts.nil?
   end
 
+  def podcast_imports
+    PodcastImport.where(account_id: token_auth_accounts.try(:ids)) unless token_auth_accounts.nil?
+  end
+
   def authorized?(account)
     token_auth_accounts.include?(account)
   end

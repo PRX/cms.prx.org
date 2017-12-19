@@ -55,7 +55,6 @@ class AudioCallbackWorker
       audio.status_message = job['error'] ||
                              "Error processing file #{audio.label || audio.id}"
     else
-      audio.upload_path = nil
       audio.status = TRANSFORMED
       audio.status_message = nil
     end
