@@ -263,13 +263,13 @@ class Story < BaseModel
     self.deleted_at = DateTime.now
   end
 
-  # This is only if the story is published
-  # and the user wants to update the published_at value
-  # does not set the story published_at if it is not currently set to something
-  # will update the datetime when it is published_at
+  # If story is published and user wants to update the published_at value
+  # OR if story is published for future release and user wants to undo that
   def update_published_to_released
-    if published_at && !released_at.nil? && released_at_changed?
-      self.published_at = released_at
+    canceling_future_release = released_at.nil? && published_at && published_at > DateTime.now
+    updating_release = !released_at.nil?
+    if published_at && released_at_changed? && (canceling_future_release || updating_release)
+        self.published_at = released_at
     end
   end
 

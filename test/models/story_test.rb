@@ -255,6 +255,13 @@ describe Story do
       story.published_at.must_equal release_date
     end
 
+    it 'removes future publish date when release date is removed' do
+      story.update_attributes(published_at: 1.week.from_now, released_at: 1.week.from_now)
+      story.published_at.wont_be_nil
+      story.update_attributes(released_at: nil)
+      story.published_at.must_be_nil
+    end
+
     it 'wont publish when already published' do
       lambda do
         story.publish!
