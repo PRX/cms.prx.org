@@ -4,6 +4,16 @@ describe PublicAssetsController do
 
   let(:audio_file) { FactoryGirl.create(:audio_file) }
 
+  it 'should recognize an asset path' do
+    path = "https://cms.prx.org/pub/key/0/web/audio_file/123/original/stream.mp3"
+    options = Rails.application.routes.recognize_path path
+    options[:name].must_equal 'stream.mp3'
+
+    path = "https://cms.prx.org/pub/key/0/web/audio_file/123/original/stream"
+    options = Rails.application.routes.recognize_path path
+    options[:name].must_equal 'stream'
+  end
+
   it 'should get unauthorized for invalid request' do
     get(:show,
       {

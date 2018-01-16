@@ -24,6 +24,11 @@ module PublicAsset
     n = o[:name]
     x = o[:extension]
 
+    if x.blank? && n.include?('.')
+      n = get_basename(o[:name])
+      x = get_extension(o[:name])
+    end
+
     str = [t,e,u,c,i,v,n,x].join("|")
 
     OpenSSL::Digest::MD5.hexdigest(str)
@@ -78,12 +83,18 @@ module PublicAsset
   end
 
   def filename_base
-    fn = public_asset_filename || 'asset'
+    get_basename(public_asset_filename || 'asset')
+  end
+
+  def get_basename(fn)
     File.basename(fn, File.extname(fn))
   end
 
   def filename_extension
-    fn = public_asset_filename || ''
+    get_extension(public_asset_filename || '')
+  end
+
+  def get_extension(fn)
     ext = File.extname(fn)
     (!ext.blank? && (ext.first == '.')) ? ext[1..-1] : ''
   end

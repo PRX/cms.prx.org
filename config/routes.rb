@@ -103,11 +103,10 @@ PRX::Application.routes.draw do
   match '/api', via: [:get], to: redirect("/api/v1")
   match '/', via: [:get], to: redirect("/api/v1")
 
-  public_asset = 'pub/:token/:expires/:use/:class/:id/:version/:name.:extension'
+  public_asset = 'pub/:token/:expires/:use/:class/:id/:version/:name(.:extension)'
   public_name = { name: /[^\/]+/ }
   match public_asset, to: 'public_assets#show_head', via: :head, constraints: public_name
   match public_asset, to: 'public_assets#show_options', via: :options, constraints: public_name
   match public_asset, to: 'public_assets#show', via: :get, constraints: public_name,
                       as: :public_asset
-
 end
