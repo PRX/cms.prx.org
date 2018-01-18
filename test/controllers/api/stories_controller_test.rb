@@ -122,6 +122,38 @@ describe Api::StoriesController do
       JSON.parse(response.body)['title'].must_equal('this')
     end
 
+    it 'creates a distribution when updating a story that shares a template with a series distribution' do
+      series = create(:series, templates_count: 1, dist_count: 1)
+      story = create(:story, title: 'not this', account: account, series: series)
+      story.distributions.must_be_empty
+
+      template_id = series.audio_version_templates.first.id
+      series.distributions.first.update_attributes(audio_version_template_id: template_id)
+      story.audio_versions.first.update_attributes(audio_version_template_id: template_id)
+
+      put :update,
+          { title: 'this' }.to_json,
+          api_version: 'v1',
+          format: 'json',
+          id: story.id
+      assert_response :success
+      res = JSON.parse(response.body)
+      res['title'].must_equal('this')
+      Story.find(res['id']).distributions.count.must_equal 1
+    end
+
+    it 'won\'t create a distribution when updating a story by default' do
+      story = create(:story, title: 'not this', account: account)
+      put :update,
+          { title: 'this' }.to_json,
+          api_version: 'v1',
+          format: 'json',
+          id: story.id
+      assert_response :success
+      res = JSON.parse(response.body)
+      Story.find(res['id']).distributions.count.must_equal 0
+    end
+
     it 'can publish a story' do
       story = create(:story,
                      title: 'not this',

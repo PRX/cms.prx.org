@@ -17,6 +17,22 @@ class Api::StoriesController < Api::BaseController
     res.create_story_distributions
   end
 
+  def after_update_resource(res)
+    dist_tmpl = res
+      .try(:series)
+      .try(:distributions)
+      .try(:find) { |d| d.kind == "podcast" }
+      .try(:audio_version_template_id)
+
+    version_tmpl = res.try(:audio_versions)
+      .try(:find) { |av| !av.audio_version_template_id.nil? }
+      .try(:audio_version_template_id)
+
+    if dist_tmpl && version_tmpl && dist_tmpl == version_tmpl && res.distributions.empty?
+      res.create_story_distributions
+    end
+  end
+
   def publish
     publish_resource.tap do |res|
       authorize res
