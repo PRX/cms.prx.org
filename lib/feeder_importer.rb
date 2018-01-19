@@ -50,8 +50,8 @@ end
 
 class Podcast < FeederModel
   has_many :episodes, -> { order('published_at desc') }
-  has_many :itunes_images, -> { order('created_at DESC') }
-  has_many :feed_images, -> { order('created_at DESC') }
+  has_one :itunes_image
+  has_one :feed_image
 end
 
 class PodcastImage < FeederModel
@@ -93,6 +93,7 @@ class Enclosure < MediaResource; end
 class FeederImporter
   include Announce::Publisher
   include PRXAccess
+  include ImportUtils
 
   attr_accessor :account_id, :user_id, :podcast_id, :set_episode_urls
   attr_accessor :podcast, :series, :template, :distribution, :stories
@@ -127,8 +128,8 @@ class FeederImporter
     }
     self.series = Series.create!(attrs)
 
-    podcast.itunes_images.each { |i| create_series_image(i, Image::PROFILE) }
-    podcast.feed_images.each { |i| create_series_image(i, Image::THUMBNAIL) }
+    create_series_image(podcast.itunes_image, Image::PROFILE)
+    create_series_image(podcast.feed_image, Image::THUMBNAIL)
 
     # all the imports we plan to do from feeder -> cms have a single segment
     num_segments = 1
@@ -244,7 +245,8 @@ class FeederImporter
     podcast.update_attributes(
       prx_account_uri: "/api/v1/accounts/#{account_id}",
       prx_uri: "/api/v1/series/#{series.id}",
-      source_url: nil
+      source_url: nil,
+      explicit: explicit(podcast.explicit)
     )
   end
 
