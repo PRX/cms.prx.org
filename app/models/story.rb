@@ -237,13 +237,16 @@ class Story < BaseModel
   # for each distribution, create a story distribution
   def create_story_distributions
     return unless series
-    series.distributions.each do |distro|
-      begin
-        distro.create_story_distribution(self)
-      rescue StandardError => err
-        logger.error(err)
-        NewRelic::Agent.notice_error(err)
-      end
+    series.distributions.each { |distro| create_single_story_distribution(distro) }
+  end
+
+  def create_single_story_distribution(distro)
+    return unless distro
+    begin
+      distro.create_story_distribution(self)
+    rescue StandardError => err
+      logger.error(err)
+      NewRelic::Agent.notice_error(err)
     end
   end
 
