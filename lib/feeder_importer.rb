@@ -93,6 +93,7 @@ class Enclosure < MediaResource; end
 class FeederImporter
   include Announce::Publisher
   include PRXAccess
+  include ImportUtils
 
   attr_accessor :account_id, :user_id, :podcast_id, :set_episode_urls
   attr_accessor :podcast, :series, :template, :distribution, :stories
@@ -244,7 +245,8 @@ class FeederImporter
     podcast.update_attributes(
       prx_account_uri: "/api/v1/accounts/#{account_id}",
       prx_uri: "/api/v1/series/#{series.id}",
-      source_url: nil
+      source_url: nil,
+      explicit: explicit(podcast.explicit)
     )
   end
 

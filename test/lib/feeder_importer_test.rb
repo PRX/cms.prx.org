@@ -100,11 +100,13 @@ describe FeederImporter do
     importer.retrieve_podcast
     importer.create_series
     importer.podcast.prx_account_uri.must_be_nil
+    importer.podcast.explicit = 'no'
 
     importer.update_podcast
     importer.podcast.prx_account_uri.must_equal "/api/v1/accounts/#{account_id}"
     importer.podcast.prx_uri.must_equal "/api/v1/series/#{importer.series.id}"
     importer.podcast.source_url.must_be_nil
+    importer.podcast.explicit.must_equal 'clean'
   end
 
   it 'does a full import' do
