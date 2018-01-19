@@ -32,12 +32,12 @@ describe FeederImporter do
     series.images.profile.wont_be_nil
     series.images.profile.upload.must_match /prx-up.s3.amazonaws.com\/test\/.+\/transistor1400.jpg/
     orig_re = /pub\/.+\/0\/web\/series_image\/\d+\/original\/transistor1400.jpg/
-    podcast.itunes_images.first['original_url'].must_match orig_re
+    podcast.itunes_image['original_url'].must_match orig_re
 
     series.images.thumbnail.wont_be_nil
     series.images.thumbnail.upload.must_match /prx-up.s3.amazonaws.com\/test\/.+\/transistor300.png/
     orig_re = /pub\/.+\/0\/web\/series_image\/\d+\/original\/transistor300.png/
-    podcast.feed_images.first['original_url'].must_match orig_re
+    podcast.feed_image['original_url'].must_match orig_re
 
     series.audio_version_templates.size.must_equal 1
     series.audio_version_templates.first.audio_file_templates.size.must_equal 1
