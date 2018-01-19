@@ -18,19 +18,22 @@ class Api::StoriesController < Api::BaseController
   end
 
   def after_update_resource(res)
-    dist_tmpl = res
-      .try(:series)
-      .try(:distributions)
-      .try(:find) { |d| d.kind == "podcast" }
-      .try(:audio_version_template_id)
+    series_dists = res.try(:series).try(:distributions)
 
-    version_tmpl = res.try(:audio_versions)
-      .try(:find) { |av| !av.audio_version_template_id.nil? }
-      .try(:audio_version_template_id)
+    story_template_ids = res
+      .try(:audio_versions)
+      .try(:map) { |av| av.audio_version_template_id }
+      .try(:compact)
 
-    if dist_tmpl && version_tmpl && dist_tmpl == version_tmpl && res.distributions.empty?
-      res.create_story_distributions
+    if series_dists && story_template_ids
+      missing_dists = series_dists.select do |series_dist|
+        # story has version with series dist template, but has no matching story dist
+        story_template_ids.include?(series_dist.audio_version_template_id) &&
+        res.distributions.none? { |story_dist| story_dist.distribution == series_dist }
+      end
     end
+
+    missing_dists.try(:each) { |series_dist| res.create_single_story_distribution(series_dist) }
   end
 
   def publish
