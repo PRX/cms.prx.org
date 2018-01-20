@@ -12,8 +12,8 @@ module PublicAsset
   end
 
   # validates token with or without expires option
-  def public_url_token(options={})
-    o = set_asset_option_defaults(options)
+  def public_url_token(options)
+    o = options || {}
 
     t = token_secret
     e = o[:expires]
@@ -24,7 +24,7 @@ module PublicAsset
     n = o[:name]
     x = o[:extension]
 
-    if x.blank? && n.include?('.')
+    if x.blank? && n && n.include?('.')
       n = get_basename(o[:name])
       x = get_extension(o[:name])
     end

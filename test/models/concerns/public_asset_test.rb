@@ -31,7 +31,8 @@ describe PublicAsset do
   let(:bare_public_asset) { BasePublicAsset.new }
 
   it 'generates a token using defaults' do
-    public_asset.public_url_token.must_equal "5033d06991dc5b69e38275253bfb3b24"
+    defaults = public_asset.set_asset_option_defaults
+    public_asset.public_url_token(defaults).must_equal "5033d06991dc5b69e38275253bfb3b24"
   end
 
   it 'generates a public url' do
