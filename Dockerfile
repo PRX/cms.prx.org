@@ -22,6 +22,7 @@ RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 ADD Gemfile ./
 ADD Gemfile.lock ./
+RUN gem install bundler
 
 RUN apk --update add --virtual build-dependencies build-base curl-dev openssl-dev \
     zlib-dev libxml2-dev libxslt-dev libffi-dev libgcrypt-dev postgresql-dev && \
