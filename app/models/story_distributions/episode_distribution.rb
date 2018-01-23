@@ -1,13 +1,37 @@
 # encoding: utf-8
 require 'prx_access'
+require 'announce'
 
 class StoryDistributions::EpisodeDistribution < StoryDistribution
   include PRXAccess
   include Rails.application.routes.url_helpers
+  include Announce::Publisher
 
   def distribute!
     super
     create_or_update_episode
+  end
+
+  def distributed?
+    !url.blank?
+  end
+
+  def publish!
+    super
+    if story.published
+      announce(:story, :publish, Api::Msg::StoryRepresenter.new(story).to_json)
+    end
+  end
+
+  def published?
+    published = false
+    episode = get_episode
+
+    if published_at_s = episode.attributes['published_at']
+      published_at = DateTime.parse(published_at_s)
+      published = published_at <= DateTime.now
+    end
+    published
   end
 
   def create_or_update_episode(attrs = {})

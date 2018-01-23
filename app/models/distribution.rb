@@ -9,6 +9,27 @@ class Distribution < BaseModel
   has_many :audio_version_templates, through: :distribution_templates
   serialize :properties, HashSerializer
 
+  def self.check_published!(data = nil)
+    data ||= {}
+    from_secs = (data[:from_secs] || '60').to_i
+    to_secs = (data[:to_secs] || '3600').to_i
+
+    recently_published_stories(from_secs, to_secs).each do |story|
+      story.distributions.each do |dist|
+        dist.distribute! if !dist.distributed?
+        dist.publish! if !dist.published?
+      end
+    end
+  end
+
+  def self.recently_published_stories(from_secs, to_secs)
+    Story.where(
+      '`published_at` <= ? AND `published_at` >= ?',
+      from_secs.seconds.ago,
+      to_secs.seconds.ago
+    ).joins(:distributions).distinct
+  end
+
   def set_template_ids(ids)
     keep = []
     Array(ids).map(&:to_i).uniq.each do |avt_id|

@@ -10,6 +10,18 @@ class StoryDistribution < BaseModel
     # no op for the super class
   end
 
+  def distributed?
+    true
+  end
+
+  def publish!
+    # no op for the super class
+  end
+
+  def published?
+    true
+  end
+
   def kind
     (type || 'StoryDistribution').safe_constantize.model_name.element.sub(/_distribution$/, '')
   end
