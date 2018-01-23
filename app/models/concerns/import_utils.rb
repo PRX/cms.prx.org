@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'active_support/concern'
+require 'prx_access'
 
 # an uploaded file is moved from temp location to final dest via fixer
 module ImportUtils
@@ -60,7 +61,8 @@ module ImportUtils
   def clean_text(text)
     return nil if text.blank?
     result = remove_feedburner_tracker(text)
-    sanitize_html(result)
+    result = sanitize_html(result)
+    result.each_char.select { |char| char.bytesize < 4 }.join('')
   end
 
   def remove_feedburner_tracker(str)
