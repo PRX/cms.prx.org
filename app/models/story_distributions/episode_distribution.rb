@@ -7,6 +7,11 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
   include Rails.application.routes.url_helpers
   include Announce::Publisher
 
+  def self.default_story_url(story)
+    path = "#{story.class.name.underscore.pluralize}/#{story.id}"
+    ENV['PRX_HOST'].nil? ? nil : "https://#{ENV['PRX_HOST']}/#{path}"
+  end
+
   def distribute!
     super
     create_or_update_episode
@@ -74,7 +79,7 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
       categories: story.tags,
       published_at: story.published_at,
       updated_at: story.updated_at,
-      url: default_url(story)
+      url: self.class.default_story_url(story)
     }
   end
 
@@ -86,10 +91,5 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
     else
       num.to_i
     end
-  end
-
-  def default_url(story)
-    path = "#{story.class.name.underscore.pluralize}/#{story.id}"
-    ENV['PRX_HOST'].nil? ? nil : "https://#{ENV['PRX_HOST']}/#{path}"
   end
 end
