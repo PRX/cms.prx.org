@@ -1,10 +1,12 @@
 # encoding: utf-8
 
 require 'prx_access'
+require 'announce'
 
 class Distributions::PodcastDistribution < Distribution
   include PRXAccess
   include Rails.application.routes.url_helpers
+  include Announce::Publisher
 
   def distribute!
     super
@@ -15,6 +17,13 @@ class Distributions::PodcastDistribution < Distribution
     !url.blank?
   end
 
+  def publish!
+    super
+    if distributable && distributable.is_a?(Series)
+      announce(:series, :update, Api::Msg::SeriesRepresenter.new(distributable).to_json)
+    end
+  end
+
   def published?
     published = false
     podcast = get_podcast
@@ -23,7 +32,7 @@ class Distributions::PodcastDistribution < Distribution
       published_at = DateTime.parse(published_at_s)
       published = published_at <= DateTime.now
     end
-    published
+    published && stories_published?
   end
 
   def stories_published?
