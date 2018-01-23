@@ -11,6 +11,25 @@ class Distributions::PodcastDistribution < Distribution
     create_or_update_podcast!
   end
 
+  def distributed?
+    !url.blank?
+  end
+
+  def published?
+    published = false
+    podcast = get_podcast
+
+    if published_at_s = podcast.attributes['published_at']
+      published_at = DateTime.parse(published_at_s)
+      published = published_at <= DateTime.now
+    end
+    published
+  end
+
+  def stories_published?
+    story_distributions.all? { |sd| sd.distributed? && (!sd.story.published? || sd.published?) }
+  end
+
   def story_distribution_class
     StoryDistributions::EpisodeDistribution
   end
