@@ -49,7 +49,7 @@ class FeederModel < ActiveRecord::Base
 end
 
 class Podcast < FeederModel
-  has_many :episodes, -> { order('published_at desc') }
+  has_many :episodes, -> { where('deleted_at IS NULL').order('published_at desc') }
   has_one :itunes_image
   has_one :feed_image
 end
