@@ -1,4 +1,4 @@
-# encoding: utf-8
+require 'newrelic_rpm'
 require 'hash_serializer'
 
 class Distribution < BaseModel
@@ -13,13 +13,31 @@ class Distribution < BaseModel
     data ||= {}
     from_secs = (data[:from_secs] || '60').to_i
     to_secs = (data[:to_secs] || '3600').to_i
+    story_id = nil
+    dist_id = nil
 
     recently_published_stories(from_secs, to_secs).each do |story|
+      story_id = story.id
+      dist_id = nil
       story.distributions.each do |dist|
-        dist.distribute! if !dist.distributed?
-        dist.publish! if !dist.published?
+        dist_id = dist.id
+        if !dist.distributed?
+          notice_message("Story #{story_id} not distributed: #{dist.distribution.url}")
+          dist.distribute!
+        end
+
+        if !dist.published?
+          notice_message("Story #{story_id} distribution not published: #{dist.url}")
+          dist.publish!
+        end
       end
     end
+  rescue StandardError => e
+    NewRelic::Agent.notice_error(e, custom_params: { story: story_id, distribution: dist_id })
+  end
+
+  def self.notice_message(msg)
+    NewRelic::Agent.notice_error(RuntimeError.new(msg))
   end
 
   def self.recently_published_stories(from_secs, to_secs)
