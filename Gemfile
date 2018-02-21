@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.1'
+gem 'rails', '~> 4.2.10'
 
 # JWS
 gem 'prx_auth-rails', '~> 0.0.4'
@@ -32,6 +32,7 @@ gem 'addressable'
 gem 'faraday'
 gem 'excon'
 gem 'loofah'
+gem 'nokogiri', '>= 1.8.1'
 
 # Use Sanitize for HTML and CSS whitelisting
 gem 'sanitize'
