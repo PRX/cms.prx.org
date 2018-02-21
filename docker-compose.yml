@@ -42,8 +42,8 @@ db:
   environment:
     MYSQL_DATABASE: cms_development
     MYSQL_ROOT_PASSWORD: password
-  ports:
-    - "3306:3306"
+  expose:
+    - "3306"
   command: mysqld --log_error_verbosity=1
 pg:
   image: postgres
@@ -53,7 +53,7 @@ pg:
     POSTGRES_USER: feeder
     POSTGRES_PASSWORD: password
     POSTGRES_DB: feeder
-  ports:
-    - "5432:5432"
+  expose:
+    - "5432"
   volumes:
     - ./test/db/:/docker-entrypoint-initdb.d/
