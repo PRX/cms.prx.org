@@ -4,8 +4,10 @@ describe Distributions::PodcastDistribution do
 
   let(:series) { create(:series) }
   let(:template) { create(:audio_version_template, series: series) }
-  let(:distribution) { build(:podcast_distribution, distributable: series) }
+  let(:distribution) { create(:podcast_distribution, distributable: series) }
   let(:podcast_url) { URI.join(distribution.feeder_root, '/api/v1/podcasts/23').to_s }
+  let(:episode_distribution) { create(:episode_distribution, url: nil, distribution: distribution) }
+  let(:episode_url) { URI.join(distribution.feeder_root, '/api/v1/episodes/aguid').to_s }
 
   before do
     clear_messages
@@ -25,6 +27,10 @@ describe Distributions::PodcastDistribution do
     stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/23').
       with(headers: { 'Authorization' => 'Bearer token', 'Content-Type' => 'application/json' }).
       to_return(status: 200, body: json_file('podcast'), headers: {})
+
+    stub_request(:get, "https://feeder.prx.org/api/v1/authorization/episodes/aguid").
+      with(:headers => {'Authorization'=>'Bearer token', 'Content-Type'=>'application/json'}).
+      to_return(status: 200, body: json_file('episode'), headers: {})
   end
 
   it 'returns episode distribution class' do
@@ -90,6 +96,23 @@ describe Distributions::PodcastDistribution do
       announcement = published_messages.first
       announcement['subject'].must_equal :series
       announcement['action'].must_equal :update
+    end
+  end
+
+  it 'checks stories_published' do
+    episode_distribution.stub(:get_account_token, 'token') do
+      episode_distribution.wont_be_nil
+      episode_distribution.wont_be :distributed?
+      episode_distribution.wont_be :published?
+
+      distribution.story_distributions.count.must_equal 1
+      distribution.wont_be :stories_published?
+
+      episode_distribution.update_attributes(url: episode_url)
+      episode_distribution.must_be :distributed?
+      episode_distribution.must_be :published?
+      distribution.story_distributions = [episode_distribution]
+      distribution.must_be :stories_published?
     end
   end
 end

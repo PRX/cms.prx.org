@@ -70,7 +70,6 @@ describe StoryDistributions::EpisodeDistribution do
     end
   end
 
-
   it 'checks if the episode is published' do
     distro = build(:episode_distribution, distribution: podcast_distribution, url: episode_url)
     podcast_distribution.stub(:get_account_token, 'token') do
@@ -79,5 +78,4 @@ describe StoryDistributions::EpisodeDistribution do
       end
     end
   end
-
 end
