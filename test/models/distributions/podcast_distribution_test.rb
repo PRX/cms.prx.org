@@ -69,4 +69,21 @@ describe Distributions::PodcastDistribution do
     attrs = distribution.podcast_attributes
     attrs.keys.each { |key| key.to_s.wont_match /image/ }
   end
+
+  it 'returns if distributed' do
+    distribution.url.wont_be_nil
+    distribution.must_be :distributed?
+  end
+
+  it 'returns if published' do
+    distribution.stub(:get_account_token, 'token') do
+      distribution.must_be :published?
+    end
+  end
+
+  it 'can publish' do
+    distribution.stub(:get_account_token, 'token') do
+      distribution.publish!
+    end
+  end
 end
