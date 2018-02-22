@@ -82,6 +82,18 @@ class Distribution < BaseModel
     # no op for the super class
   end
 
+  def distributed?
+    true
+  end
+
+  def publish!
+    # no op for the super class
+  end
+
+  def published?
+    true
+  end
+
   # default to the generic distro, override in subclass
   def story_distribution_class
     StoryDistribution
