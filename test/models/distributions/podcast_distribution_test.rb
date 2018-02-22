@@ -4,10 +4,12 @@ describe Distributions::PodcastDistribution do
 
   let(:series) { create(:series) }
   let(:template) { create(:audio_version_template, series: series) }
-  let(:distribution) { build(:podcast_distribution) }
+  let(:distribution) { build(:podcast_distribution, distributable: series) }
   let(:podcast_url) { URI.join(distribution.feeder_root, '/api/v1/podcasts/23').to_s }
 
   before do
+    clear_messages
+
     stub_request(:get, 'https://feeder.prx.org/api/v1').
       with(headers: { 'Content-Type' => 'application/json' }).
       to_return(status: 200, body: json_file('feeder_root'))
@@ -83,7 +85,11 @@ describe Distributions::PodcastDistribution do
 
   it 'can publish' do
     distribution.stub(:get_account_token, 'token') do
+      distribution.distributable.must_equal series
       distribution.publish!
+      announcement = published_messages.first
+      announcement['subject'].must_equal :series
+      announcement['action'].must_equal :update
     end
   end
 end
