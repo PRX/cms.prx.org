@@ -11,12 +11,12 @@ class Distribution < BaseModel
 
   def self.check_published!(data = nil)
     data ||= {}
-    from_secs = (data[:from_secs] || '60').to_i
-    to_secs = (data[:to_secs] || '3600').to_i
+    start_secs = (data[:start_secs] || '60').to_i
+    end_secs = (data[:end_secs] || '3600').to_i
     story_id = nil
     dist_id = nil
 
-    recently_published_stories(from_secs, to_secs).each do |story|
+    recently_published_stories(start_secs, end_secs).each do |story|
       story_id = story.id
       dist_id = nil
       story.distributions.each do |dist|
@@ -40,11 +40,11 @@ class Distribution < BaseModel
     NewRelic::Agent.notice_error(RuntimeError.new(msg))
   end
 
-  def self.recently_published_stories(from_secs, to_secs)
+  def self.recently_published_stories(start_secs, end_secs)
     Story.where(
       '`published_at` <= ? AND `published_at` >= ?',
-      from_secs.seconds.ago,
-      to_secs.seconds.ago
+      start_secs.seconds.ago,
+      end_secs.seconds.ago
     ).joins(:distributions).distinct
   end
 
