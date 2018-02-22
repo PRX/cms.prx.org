@@ -36,6 +36,8 @@ class Distributions::PodcastDistribution < Distribution
   end
 
   def stories_published?
+    # if the story isn't published, then no need to check the distro.
+    # if the story is published, then the distro needs to be published to.
     story_distributions.all? { |sd| sd.distributed? && (!sd.story.published? || sd.published?) }
   end
 
