@@ -53,7 +53,7 @@ describe Api::Auth::StoriesController do
     end
 
     it 'indexes stories with coalesced published, released dates' do
-      get(:index, api_request_opts(account_id: account.id, sorts: 'coalesced:desc'))
+      get(:index, api_request_opts(account_id: account.id, sorts: 'published_released_at:desc'))
       assert_response :success
       JSON.parse(response.body)['count'].must_equal account.stories.count
       assigns[:stories][0].wont_be :published?

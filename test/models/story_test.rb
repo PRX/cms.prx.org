@@ -270,8 +270,8 @@ describe Story do
       create(:story, title: title, short_description: '2', published_at: now - 1)
       create(:unpublished_story, title: title, short_description: '3', released_at: now + 1)
 
-      Story.where(title: title).coalesce_published_released.pluck(:short_description).to_a.
-        must_equal ['0', '3', '1', '2']
+      stories = Story.where(title: title).coalesce_published_released('desc').all.to_a
+      stories.map(&:short_description).must_equal ['0', '3', '1', '2']
     end
 
     it 'wont publish when already published' do
