@@ -94,8 +94,8 @@ class Story < BaseModel
   scope :network_visible, -> { where('`network_only_at` IS NULL') }
   scope :coalesce_published_released, ->(dir) {
     select('`pieces`.*, COALESCE(published_at, released_at) AS pieces_published_released_at').
-    order("ISNULL(pieces_published_released_at) #{dir}").
-    order("pieces_published_released_at #{dir}")
+      order("ISNULL(pieces_published_released_at) #{dir}").
+      order("pieces_published_released_at #{dir}")
   }
 
   scope :series_visible, -> {
