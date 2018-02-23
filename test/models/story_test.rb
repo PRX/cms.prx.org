@@ -262,6 +262,18 @@ describe Story do
       story.published_at.must_be_nil
     end
 
+    it 'orders coalesce publish and release dates' do
+      now = Time.now
+      title = 'coalesced story'
+      create(:unpublished_story, title: title, short_description: '0')
+      create(:unpublished_story, title: title, short_description: '1', released_at: now)
+      create(:story, title: title, short_description: '2', published_at: now - 1)
+      create(:unpublished_story, title: title, short_description: '3', released_at: now + 1)
+
+      Story.where(title: title).coalesce_published_released.pluck(:short_description).to_a.
+        must_equal ['0', '3', '1', '2']
+    end
+
     it 'wont publish when already published' do
       lambda do
         story.publish!

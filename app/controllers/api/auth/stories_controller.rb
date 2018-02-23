@@ -11,7 +11,7 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   sort_params default: { updated_at: :desc },
               allowed: [:id, :created_at, :updated_at, :published_at, :title,
-                        :episode_number, :position]
+                        :episode_number, :position, :coalesced]
 
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
@@ -20,6 +20,10 @@ class Api::Auth::StoriesController < Api::StoriesController
   before_filter :check_user_network, only: [:index], if: -> { params[:network_id] }
 
   def sorted(arel)
+    if coalesce_sort = (sorts || []).find_index { |s| s.keys.first == 'coalesced' }
+      sorts.delete_at(coalesce_sort)
+      arel = arel.coalesce_published_released
+    end
     if pub_sort = (sorts || []).find_index { |s| s.keys.first == 'published_at' }
       sorts.insert(pub_sort, 'ISNULL(`pieces`.`published_at`) DESC')
     end

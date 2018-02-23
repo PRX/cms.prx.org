@@ -12,12 +12,14 @@ describe Api::Auth::StoriesController do
   let (:network) { create(:network, account: user.individual_account) }
   let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now) }
   let (:v3_story) { create(:story_v3, account: account) }
+  let (:released_story) { create(:story, account: account, released_at: Time.now + 1.day) }
 
   before do
     account.stories.each { |s| s }
     unpublished_story.update!(published_at: nil)
     published_story.update_attributes!(published_at: 2.days.ago)
     latest_story.update_attributes!(published_at: 1.day.ago)
+    released_story.update!(published_at: nil)
   end
 
   describe 'with a valid token' do
@@ -37,7 +39,8 @@ describe Api::Auth::StoriesController do
       get(:index, api_request_opts(account_id: account.id, sorts: 'published_at:desc'))
       assert_response :success
       assigns[:stories][0].wont_be :published?
-      assigns[:stories][1].published_at.must_be :>, assigns[:stories][2].published_at
+      assigns[:stories][1].wont_be :published?
+      assigns[:stories][2].published_at.must_be :>, assigns[:stories][3].published_at
     end
 
     it 'indexes stories with unpublished first, oldest published after' do
@@ -45,7 +48,19 @@ describe Api::Auth::StoriesController do
       get(:index, api_request_opts(account_id: account.id, sorts: 'published_at:asc'))
       assert_response :success
       assigns[:stories][0].wont_be :published?
-      assigns[:stories][1].published_at.must_be :<, assigns[:stories][2].published_at
+      assigns[:stories][1].wont_be :published?
+      assigns[:stories][2].published_at.must_be :<, assigns[:stories][3].published_at
+    end
+
+    it 'indexes stories with coalesced published, released dates' do
+      get(:index, api_request_opts(account_id: account.id, sorts: 'coalesced:desc'))
+      assert_response :success
+      JSON.parse(response.body)['count'].must_equal account.stories.count
+      assigns[:stories][0].wont_be :published?
+      assigns[:stories][1].wont_be :published?
+      assigns[:stories][1].released_at.wont_equal nil
+      assigns[:stories][1].released_at.must_be :>, assigns[:stories][2].published_at
+      assigns[:stories][2].published_at.must_be :>, assigns[:stories][3].published_at
     end
 
     it 'indexes stories in a network' do
