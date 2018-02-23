@@ -4,7 +4,7 @@ AllCops:
   Exclude:
     - db/schema.rb
 
-AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
 
 ActionFilter:
@@ -95,7 +95,7 @@ Encoding:
 EvenOdd:
   Enabled: false
 
-FileName:
+Naming/FileName:
   Enabled: false
 
 FlipFlop:
@@ -158,7 +158,7 @@ NumericLiterals:
 OneLineConditional:
   Enabled: false
 
-OpMethod:
+Naming/BinaryOperatorParameterName:
   Enabled: false
 
 ParameterLists:
@@ -170,7 +170,7 @@ PercentLiteralDelimiters:
 PerlBackrefs:
   Enabled: false
 
-PredicateName:
+Naming/PredicateName:
   NamePrefixBlacklist:
     - is_
 
@@ -246,12 +246,6 @@ ElseLayout:
   Enabled: false
 
 HandleExceptions:
-  Enabled: false
-
-InvalidCharacterLiteral:
-  Enabled: false
-
-LiteralInCondition:
   Enabled: false
 
 LiteralInInterpolation:
