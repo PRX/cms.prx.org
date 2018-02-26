@@ -107,8 +107,8 @@ def stub_import_requests
     to_return(status: 200, body: json_file('image'), headers: {})
 
   stub_request(:post, 'https://cms.prx.org/api/v1/series/12345/audio_version_templates').
-    with(body: '{"label":"Podcast Audio","explicit":"clean","promos":false,' +
-               '"lengthMinimum":0,"lengthMaximum":0}',
+    with(body: '{"label":"Podcast Audio","contentType":"audio/mpeg","explicit":"clean",' +
+               '"promos":false,"lengthMinimum":0,"lengthMaximum":0}',
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_template'), headers: {})
 

@@ -141,6 +141,7 @@ class FeederImporter
 
     self.template = series.audio_version_templates.create!(
       label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
+      content_type: AudioFile::MP3_CONTENT_TYPE,
       segment_count: num_segments,
       promos: false,
       length_minimum: 0,

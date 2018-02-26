@@ -73,6 +73,7 @@ class PodcastImporter
     # Add the template and a single file template
     self.template = series.audio_version_templates.post(
       label: 'Podcast Audio',
+      content_type: AudioFile::MP3_CONTENT_TYPE,
       explicit: podcast.itunes_explicit,
       promos: false,
       length_minimum: 0,
