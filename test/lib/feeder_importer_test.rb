@@ -55,6 +55,12 @@ describe FeederImporter do
     series.wont_be_nil
     episode = podcast.episodes.first
     episode.wont_be_nil
+
+    # manually alter dates to test they are set correctly
+    # since test fixture data lacks published_at value
+    now = Time.now
+    episode.published_at = now
+
     story = importer.create_story(episode)
     story.wont_be_nil
 
@@ -65,7 +71,8 @@ describe FeederImporter do
     story.short_description.must_equal 'A tale of vaccinations and the American Revolution'
     story.description_html.must_match /Vaccinations, in one form or another/
     story.tags.must_equal ['Adams', 'American Revolution', 'inoculation', 'transistor', 'vaccine']
-    story.published_at.must_equal nil
+    story.published_at.must_equal now
+    story.released_at.must_equal now
 
     version = story.audio_versions.first
     version.wont_be_nil

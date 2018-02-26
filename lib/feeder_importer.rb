@@ -189,7 +189,8 @@ class FeederImporter
       short_description: episode.subtitle,
       description_html: episode.description,
       tags: episode.categories,
-      published_at: episode.published_at
+      published_at: episode.published_at,
+      released_at: episode.published_at,
     }
     story = series.stories.create!(attrs)
 
