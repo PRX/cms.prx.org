@@ -143,7 +143,7 @@ class FeederImporter
       num_segments = [episode.media_resources.count, num_segments].max
     end
 
-    contains_video = podcast.episodes.any? { |e| e.contains_video? }
+    contains_video = podcast.episodes.any?(&:contains_video?)
 
     self.template = series.audio_version_templates.create!(
       label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
