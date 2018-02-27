@@ -24,6 +24,7 @@ class AudioFile < BaseModel
   after_destroy :update_version_status
 
   MP3_CONTENT_TYPE = 'audio/mpeg'.freeze
+  VIDEO_CONTENT_TYPE = 'video/mpeg'.freeze
 
   before_validation do
     if upload

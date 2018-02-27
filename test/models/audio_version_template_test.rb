@@ -58,8 +58,8 @@ describe AudioVersionTemplate do
   end
 
   it 'strictly validates audio/mpeg type' do
-    audio_version_template.content_type.must_equal 'audio/mpeg'
-    audio_file.content_type.must_equal 'audio/mpeg'
+    audio_version_template.content_type.must_equal AudioFile::MP3_CONTENT_TYPE
+    audio_file.content_type.must_equal AudioFile::MP3_CONTENT_TYPE
     audio_version_template.validate_audio_file(audio_file).must_be(:nil?)
 
     audio_file.content_type = 'audio/mp4'
@@ -68,7 +68,7 @@ describe AudioVersionTemplate do
     audio_version_template.content_type = 'audio/foobar'
     audio_version_template.validate_audio_file(audio_file).must_be(:nil?)
 
-    audio_version_template.content_type = 'video/mpeg'
+    audio_version_template.content_type = AudioFile::VIDEO_CONTENT_TYPE
     audio_version_template.validate_audio_file(audio_file).must_include 'is not in video format'
   end
 

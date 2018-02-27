@@ -35,7 +35,7 @@ describe AudioFileTemplate do
   end
 
   it 'validates content type' do
-    audio_file.update(content_type: 'video/mpeg')
+    audio_file.update(content_type: AudioFile::VIDEO_CONTENT_TYPE)
     msg = audio_file_template.audio_version_template.validate_audio_file(audio_file)
     msg.must_include 'is not an mp3'
   end
