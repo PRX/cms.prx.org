@@ -92,6 +92,11 @@ class Story < BaseModel
   scope :unseries, -> { where('`series_id` IS NULL') }
   scope :v4, -> { where(app_version: PRX::APP_VERSION) }
   scope :network_visible, -> { where('`network_only_at` IS NULL') }
+  scope :coalesce_published_released, ->(dir) {
+    select('`pieces`.*, COALESCE(published_at, released_at) AS pieces_published_released_at').
+      order("ISNULL(pieces_published_released_at) #{dir}").
+      order("pieces_published_released_at #{dir}")
+  }
 
   scope :series_visible, -> {
     joins('LEFT OUTER JOIN `series` ON `pieces`.`series_id` = `series`.`id`').
