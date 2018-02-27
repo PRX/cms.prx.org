@@ -1,9 +1,19 @@
 require 'test_helper'
 require 'minitest/mock'
 
+class TestStoryDistribution < StoryDistribution
+  attr_accessor :distributed, :published
+
+  def distributed?; self.distributed; end
+  def published?; self.published; end
+  def distribute!; self.distributed = true; end
+  def publish!; self.published = true; end
+end
+
 describe Distribution do
-  let(:distribution) { create(:distribution) }
-  let(:story) { create(:story) }
+  let(:story_distribution) { create(:story_distribution, url: nil) }
+  let(:distribution) { story_distribution.distribution }
+  let(:story) { story_distribution.story }
 
   it 'has a table defined' do
     Distribution.table_name.must_equal 'distributions'
@@ -54,5 +64,30 @@ describe Distribution do
     distribution.set_template_ids([avt2.id, avt3.id, 0])
     distribution.save
     distribution.audio_version_template_ids.sort.must_equal [avt2.id]
+  end
+
+  describe 'checks if distributions published' do
+    before {
+      story.update_attribute(:published_at, 2.minutes.ago)
+    }
+
+    it 'finds recently published stories' do
+      stories = Distribution.recently_published_stories(60, 3600)
+      stories.count.must_equal 1
+    end
+
+    it 'attempts to distribute stories' do
+      tsd = TestStoryDistribution.new(story: story, distribution: distribution)
+      tsd.wont_be :published?
+      tsd.wont_be :distributed?
+      story.distributions = [tsd]
+
+      Distribution.stub(:recently_published_stories, [story]) do
+        Distribution.check_published!
+      end
+
+      tsd.must_be :published?
+      tsd.must_be :distributed?
+    end
   end
 end

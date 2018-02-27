@@ -1,6 +1,15 @@
 require 'shoryuken'
 require 'shoryuken/extensions/active_job_adapter'
 
+# for older shoryuken, < 3.x, where celluloid is still used
+require 'celluloid'
+require 'say_when/processor/active_job_strategy'
+require 'say_when/poller/celluloid_poller'
+
+Shoryuken.on_start do
+  SayWhen::Poller::CelluloidPoller.supervise_as(:say_when, 5)
+end
+
 Shoryuken.default_worker_options = {
   'queue'                   => "#{Rails.env}_cms_default",
   'auto_delete'             => true,

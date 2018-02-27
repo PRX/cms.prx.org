@@ -1,14 +1,44 @@
 # encoding: utf-8
 
 require 'prx_access'
+require 'announce'
 
 class Distributions::PodcastDistribution < Distribution
   include PRXAccess
   include Rails.application.routes.url_helpers
+  include Announce::Publisher
 
   def distribute!
     super
     create_or_update_podcast!
+  end
+
+  def distributed?
+    !url.blank?
+  end
+
+  def publish!
+    super
+    if distributable && distributable.is_a?(Series)
+      announce(:series, :update, Api::Msg::SeriesRepresenter.new(distributable).to_json)
+    end
+  end
+
+  def published?
+    published = false
+    podcast = get_podcast
+
+    if published_at_s = podcast.attributes['published_at']
+      published_at = DateTime.parse(published_at_s)
+      published = published_at <= DateTime.now
+    end
+    published && stories_published?
+  end
+
+  def stories_published?
+    # if the story isn't published, then no need to check the distro.
+    # if the story is published, then the distro needs to be published to.
+    story_distributions.all? { |sd| sd.distributed? && (!sd.story.published? || sd.published?) }
   end
 
   def story_distribution_class

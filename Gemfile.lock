@@ -47,10 +47,10 @@ GEM
     announce (0.2.3)
     ansi (1.5.0)
     arel (6.0.4)
-    aws-sdk-core (2.6.32)
+    aws-sdk-core (2.10.122)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sigv4 (1.0.0)
+    aws-sigv4 (1.0.2)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -278,7 +278,7 @@ GEM
       roar-rails (~> 1.0.1)
     hashdiff (0.3.1)
     highline (1.7.8)
-    hitimes (1.2.4)
+    hitimes (1.2.6)
     hyperresource (0.9.4)
       faraday (>= 0.8.6)
       fuzzyurl (= 0.2.2)
@@ -437,6 +437,8 @@ GEM
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4.1)
     sax-machine (1.3.2)
+    say_when (2.1.1)
+      activesupport
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -505,7 +507,7 @@ DEPENDENCIES
   capistrano (~> 3.2)
   capistrano-newrelic
   capistrano-rails (~> 1.1)
-  carrierwave
+  carrierwave (~> 0.11)
   codeclimate-test-reporter
   codecov
   dalli
@@ -535,9 +537,9 @@ DEPENDENCIES
   oj
   oj_mimic_json
   paranoia (~> 2.0)
-  pg
+  pg (~> 0.19)
   prx_auth-rails (~> 0.0.4)
-  pry-byebug
+  pry-byebug (~> 3.4.1)
   puma
   pundit
   quiet_assets
@@ -552,8 +554,9 @@ DEPENDENCIES
   roar
   roar-rails
   sanitize
+  say_when (~> 2.x)
   sdoc
-  shoryuken
+  shoryuken (~> 2.0.11)
   simplecov
   slackistrano
   spring
