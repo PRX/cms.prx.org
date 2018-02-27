@@ -87,7 +87,7 @@ class AudioVersionTemplate < BaseModel
     if content_type.present?
       tpl_type = content_type.split('/').first
       file_type = audio_file.content_type.try(:split, '/').try(:first)
-      if content_type == AudioFile::MP3_CONTENT_TYPE && \
+      if content_type == AudioFile::MP3_CONTENT_TYPE &&
          audio_file.content_type != AudioFile::MP3_CONTENT_TYPE
         "File '#{audio_file.label}' is not an mp3" # very specific on these
       elsif tpl_type != file_type

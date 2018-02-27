@@ -74,6 +74,10 @@ class Episode < FeederModel
   def item_guid
     original_guid || "prx_#{podcast_id}_#{guid}"
   end
+
+  def contains_video?
+    media_resources.any? { |mr| mr.mime_type.starts_with?('video/') }
+  end
 end
 
 class EpisodeImage < FeederModel
@@ -139,6 +143,8 @@ class FeederImporter
       num_segments = [episode.media_resources.count, num_segments].max
     end
 
+    contains_video = podcast.episodes.any? { |e| e.contains_video? }
+
     self.template = series.audio_version_templates.create!(
       label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
       content_type: AudioFile::MP3_CONTENT_TYPE,
@@ -147,6 +153,17 @@ class FeederImporter
       length_minimum: 0,
       length_maximum: 0
     )
+
+    if contains_video
+      series.audio_version_templates.create!(
+        label: "Podcast Video #{num_segments} #{'segment'.pluralize(num_segments)}",
+        content_type: AudioFile::VIDEO_CONTENT_TYPE,
+        segment_count: num_segments,
+        promos: false,
+        length_minimum: 0,
+        length_maximum: 0
+      )
+    end
 
     num_segments.times do |x|
       num = x + 1
@@ -190,7 +207,8 @@ class FeederImporter
       short_description: episode.subtitle,
       description_html: episode.description,
       tags: episode.categories,
-      published_at: episode.published_at
+      published_at: episode.published_at,
+      released_at: episode.published_at,
     }
     story = series.stories.create!(attrs)
 

@@ -52,6 +52,10 @@ class AudioFile < BaseModel
     content_type.present? && content_type.starts_with?('audio/')
   end
 
+  def video?
+    content_type.present? && content_type.starts_with?('video/')
+  end
+
   def compliant_with_template?
     status_message.nil?
   end

@@ -173,6 +173,38 @@ ActiveRecord::Schema.define(version: 6) do
 
   add_index "audio_versions", ["piece_id"], name: "audio_versions_piece_id_fk", using: :btree
 
+  create_table "cms_say_when_job_executions", :force => true do |t|
+    t.integer  "job_id"
+    t.string   "status"
+    t.text     "result"
+    t.datetime "start_at"
+    t.datetime "end_at"
+  end
+
+  add_index "cms_say_when_job_executions", ["job_id"], :name => "index_cms_say_when_job_executions_on_job_id"
+
+  create_table "cms_say_when_jobs", :force => true do |t|
+    t.string   "group"
+    t.string   "name"
+    t.string   "status"
+    t.string   "trigger_strategy"
+    t.text     "trigger_options"
+    t.datetime "last_fire_at"
+    t.datetime "next_fire_at"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.string   "job_class"
+    t.string   "job_method"
+    t.text     "data"
+    t.string   "scheduled_type"
+    t.integer  "scheduled_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cms_say_when_jobs", ["next_fire_at", "status"], :name => "index_cms_say_when_jobs_on_next_fire_at_and_status"
+  add_index "cms_say_when_jobs", ["scheduled_type", "scheduled_id"], :name => "index_cms_say_when_jobs_on_scheduled_type_and_scheduled_id"
+
   create_table "distribution_templates", :force => true do |t|
     t.integer  "distribution_id"
     t.integer  "audio_version_template_id"

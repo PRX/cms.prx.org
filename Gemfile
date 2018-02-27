@@ -10,7 +10,7 @@ gem 'rack-prx_auth', '~> 0.0.8'
 ## Model
 # Use mysql as the database for Active Record
 gem 'mysql2'
-gem 'pg'
+gem 'pg', '~> 0.19'
 
 # ActiveRecord model additions
 gem 'paranoia',' ~> 2.0'
@@ -18,7 +18,7 @@ gem 'acts_as_list'
 gem 'event_attribute'
 
 # file uploads
-gem 'carrierwave'
+gem 'carrierwave', '~> 0.11'
 gem 'fog'
 gem 'unf'
 
@@ -63,8 +63,9 @@ gem 'redcarpet'
 gem 'reverse_markdown'
 
 ## Messaging
-gem 'shoryuken'
+gem 'shoryuken', '~> 2.0.11'
 gem 'announce'
+gem 'say_when', '~> 2.x'
 
 ## Deployment
 # configuration
@@ -105,7 +106,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'pry-byebug'
+  gem 'pry-byebug', '~> 3.4.1'
   gem 'minitest', '~> 5.9.1'
 end
 

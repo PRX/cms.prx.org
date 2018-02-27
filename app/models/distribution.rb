@@ -1,4 +1,4 @@
-# encoding: utf-8
+require 'newrelic_rpm'
 require 'hash_serializer'
 
 class Distribution < BaseModel
@@ -8,6 +8,45 @@ class Distribution < BaseModel
   has_many :distribution_templates, dependent: :destroy, autosave: true
   has_many :audio_version_templates, through: :distribution_templates
   serialize :properties, HashSerializer
+
+  def self.check_published!(data = nil)
+    data ||= {}
+    start_secs = (data[:start_secs] || '60').to_i
+    end_secs = (data[:end_secs] || '3600').to_i
+    story_id = nil
+    dist_id = nil
+
+    recently_published_stories(start_secs, end_secs).each do |story|
+      story_id = story.id
+      dist_id = nil
+      story.distributions.each do |dist|
+        dist_id = dist.id
+        if !dist.distributed?
+          notice_message("Story #{story_id} not distributed: #{dist.distribution.url}")
+          dist.distribute!
+        end
+
+        if !dist.published?
+          notice_message("Story #{story_id} distribution not published: #{dist.url}")
+          dist.publish!
+        end
+      end
+    end
+  rescue StandardError => e
+    NewRelic::Agent.notice_error(e, custom_params: { story: story_id, distribution: dist_id })
+  end
+
+  def self.notice_message(msg)
+    NewRelic::Agent.notice_error(RuntimeError.new(msg))
+  end
+
+  def self.recently_published_stories(start_secs, end_secs)
+    Story.where(
+      '`published_at` <= ? AND `published_at` >= ?',
+      start_secs.seconds.ago,
+      end_secs.seconds.ago
+    ).joins(:distributions).distinct
+  end
 
   def set_template_ids(ids)
     keep = []
@@ -41,6 +80,18 @@ class Distribution < BaseModel
 
   def distribute!
     # no op for the super class
+  end
+
+  def distributed?
+    true
+  end
+
+  def publish!
+    # no op for the super class
+  end
+
+  def published?
+    true
   end
 
   # default to the generic distro, override in subclass

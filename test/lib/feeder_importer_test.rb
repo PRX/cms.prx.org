@@ -39,7 +39,7 @@ describe FeederImporter do
     orig_re = /pub\/.+\/0\/web\/series_image\/\d+\/original\/transistor300.png/
     podcast.feed_image['original_url'].must_match orig_re
 
-    series.audio_version_templates.size.must_equal 1
+    series.audio_version_templates.size.must_equal 2
     series.audio_version_templates.first.audio_file_templates.size.must_equal 1
     series.audio_version_templates.first.segment_count.must_equal 1
     series.audio_version_templates.first.must_equal importer.template
@@ -55,17 +55,24 @@ describe FeederImporter do
     series.wont_be_nil
     episode = podcast.episodes.first
     episode.wont_be_nil
+
+    # manually alter dates to test they are set correctly
+    # since test fixture data lacks published_at value
+    now = Time.now
+    episode.published_at = now
+
     story = importer.create_story(episode)
     story.wont_be_nil
 
     story.app_version.must_equal PRX::APP_VERSION
     story.creator_id.must_equal user_id
     story.account_id.must_equal account_id
-    story.title.must_equal 'No Inoculation without Representation!'
-    story.short_description.must_equal 'A tale of vaccinations and the American Revolution'
-    story.description_html.must_match /Vaccinations, in one form or another/
-    story.tags.must_equal ['Adams', 'American Revolution', 'inoculation', 'transistor', 'vaccine']
-    story.published_at.must_equal nil
+    story.title.must_equal episode.title
+    story.short_description.must_equal episode.subtitle
+    story.description_html[0..32].must_equal episode.description[0..32]
+    story.tags.must_equal episode.categories
+    story.published_at.must_equal now
+    story.released_at.must_equal now
 
     version = story.audio_versions.first
     version.wont_be_nil
@@ -73,7 +80,7 @@ describe FeederImporter do
     version.explicit.must_equal episode.explicit
     version.audio_files.count.must_equal 1
 
-    file = 'No_Inoculation_Without_Represenation_Transistor.mp3'
+    file = episode.media_resources.first.original_url.sub(/.+\//, '')
     audio = version.audio_files.first
     audio.upload.must_equal "https://prx-up.s3.amazonaws.com/test/#{episode.guid}/#{file}"
     original_url = episode.media_resources.first.original_url
