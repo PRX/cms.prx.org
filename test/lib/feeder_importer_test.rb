@@ -67,6 +67,7 @@ describe FeederImporter do
     story.app_version.must_equal PRX::APP_VERSION
     story.creator_id.must_equal user_id
     story.account_id.must_equal account_id
+
     story.title.must_equal episode.title
     story.short_description.must_equal episode.subtitle
     story.description_html[0..32].must_equal episode.description[0..32]
