@@ -29,7 +29,7 @@ class FeederModel < ActiveRecord::Base
   self.abstract_class = true
 
   def self.status_values
-    [ :started, :created, :processing, :complete, :error, :retrying, :cancelled ]
+    %i[started created processing complete error retrying cancelled]
   end
 
   def self.feeder_db_connection

@@ -8,7 +8,7 @@ class Api::SeriesController < Api::BaseController
   filter_params :v4, :text
 
   sort_params default: { updated_at: :desc },
-              allowed: [:id, :created_at, :updated_at, :title]
+              allowed: %i[id created_at updated_at title]
 
   announce_actions
 

@@ -11,10 +11,12 @@ class Api::AudioVersionTemplateRepresenter < Api::BaseRepresenter
   set_link_property(rel: :series, writeable: true)
 
   link :audio_file_templates do
-    {
-      href: api_audio_version_template_audio_file_templates_path(represented),
-      count: represented.audio_file_templates.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_audio_version_template_audio_file_templates_path(represented),
+        count: represented.audio_file_templates.count
+      }
+    end
   end
   embed :audio_file_templates,
         paged: true,

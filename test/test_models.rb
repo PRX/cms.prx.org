@@ -42,7 +42,7 @@ TestParent = Struct.new(:id, :is_root_resource) do
   end
 
   def to_param
-    "#{id}"
+    id.to_s
   end
 end
 

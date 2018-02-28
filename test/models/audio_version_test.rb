@@ -9,7 +9,7 @@ describe AudioVersion do
   end
 
   it 'has a length from audio files' do
-    audio_version.audio_files.inject(0){|sum, af| sum += af.length}.must_equal 60
+    audio_version.audio_files.inject(0) { |sum, af| sum += af.length }.must_equal 60
     audio_version.length(true).must_equal 60
   end
 

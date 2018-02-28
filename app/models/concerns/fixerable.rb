@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'active_support/concern'
 
 # an uploaded file is moved from temp location to final dest via fixer

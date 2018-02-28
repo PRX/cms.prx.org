@@ -55,9 +55,9 @@ module AnnounceActions
 
     def announce_decorator(resource)
       result = if options[:decorator]
-        options[:decorator]
-      else
-        decorator_for_model(resource)
+                 options[:decorator]
+               else
+                 decorator_for_model(resource)
       end
 
       raise "No decorator specified: #{resource.inspect}" unless result
@@ -66,7 +66,7 @@ module AnnounceActions
 
     def decorator_for_model(model)
       decorator_class(model.class.model_name.name) ||
-      decorator_class(model.class.base_class.model_name.name)
+        decorator_class(model.class.base_class.model_name.name)
     end
 
     def decorator_class(name)

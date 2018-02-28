@@ -40,8 +40,7 @@ class Mammal
     1
   end
 
-  def save!
-  end
+  def save!; end
 end
 
 class Dog < Mammal

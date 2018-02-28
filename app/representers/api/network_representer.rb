@@ -12,20 +12,24 @@ class Api::NetworkRepresenter < Api::BaseRepresenter
   alternate_link
 
   link rel: :account, writeable: true do
-    {
-      href: api_account_path(represented.account),
-      title: represented.account.name,
-      profile: model_uri(represented.account)
-    } if represented.account
+    if represented.account
+      {
+        href: api_account_path(represented.account),
+        title: represented.account.name,
+        profile: model_uri(represented.account)
+      }
+    end
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
 
   link :stories do
-    {
-      href: "#{api_network_stories_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.public_stories.count
-    } if represented.id
+    if represented.id
+      {
+        href: "#{api_network_stories_path(represented)}#{index_url_params}",
+        templated: true,
+        count: represented.public_stories.count
+      }
+    end
   end
   embed :public_stories,
         as: :stories,

@@ -158,7 +158,7 @@ describe Story do
 
   describe '#default_image' do
     it 'returns the first image when one is present' do
-      story.stub(:images, [:image, :second_image]) do
+      story.stub(:images, %i[image second_image]) do
         story.default_image.must_equal :image
       end
     end

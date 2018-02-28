@@ -38,7 +38,7 @@ class User < BaseModel
 
   def networks
     Network.joins('LEFT OUTER JOIN `network_memberships` on `network_memberships`.`network_id` = `networks`.`id`').
-    where(['`networks`.`account_id` in (?) OR `network_memberships`.`account_id` in (?)', accounts.ids, accounts.ids])
+      where(['`networks`.`account_id` in (?) OR `network_memberships`.`account_id` in (?)', accounts.ids, accounts.ids])
   end
 
   def name

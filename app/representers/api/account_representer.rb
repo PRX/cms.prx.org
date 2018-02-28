@@ -16,34 +16,42 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   embed :address, class: Address, decorator: Api::AddressRepresenter
 
   link :image do
-    {
-      href: api_account_account_image_path(represented),
-      title: represented.image.filename
-    } if represented.id && represented.image
+    if represented.id && represented.image
+      {
+        href: api_account_account_image_path(represented),
+        title: represented.image.filename
+      }
+    end
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter
 
   link 'create-image' do
-    {
-      href: api_account_account_image_path(represented),
-      title: 'Create an image'
-    } if represented.id && !represented.image
+    if represented.id && !represented.image
+      {
+        href: api_account_account_image_path(represented),
+        title: 'Create an image'
+      }
+    end
   end
 
   link rel: :opener, writeable: true do
-    {
-      href: api_user_path(represented.opener),
-      title: represented.opener.login
-    } if represented.opener && represented.opener.id
+    if represented.opener && represented.opener.id
+      {
+        href: api_user_path(represented.opener),
+        title: represented.opener.login
+      }
+    end
   end
   embed :opener, class: User, decorator: Api::Min::UserRepresenter, zoom: false
 
   link :stories do
-    {
-      href: "#{api_account_stories_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.public_stories.count
-    } if represented.id
+    if represented.id
+      {
+        href: "#{api_account_stories_path(represented)}#{index_url_params}",
+        templated: true,
+        count: represented.public_stories.count
+      }
+    end
   end
   embed :public_stories,
         as: :stories,
@@ -52,18 +60,22 @@ class Api::AccountRepresenter < Api::BaseRepresenter
         item_decorator: Api::Min::StoryRepresenter
 
   link :series do
-    {
-      href: "#{api_account_series_index_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.series.count
-    } if represented.id
+    if represented.id
+      {
+        href: "#{api_account_series_index_path(represented)}#{index_url_params}",
+        templated: true,
+        count: represented.series.count
+      }
+    end
   end
   embed :series, paged: true, item_class: Series, item_decorator: Api::Min::SeriesRepresenter
 
   link :audio_files do
-    {
-      href: api_account_audio_files_path(represented)
-    } if represented.id
+    if represented.id
+      {
+        href: api_account_audio_files_path(represented)
+      }
+    end
   end
 
   links :external do

@@ -2,8 +2,8 @@ require 'fileutils'
 
 namespace :db do
 
-  PROD_SSH = 'deploy@cms.prx.org'
-  PROD_ENV = '/var/www/domains/prx.org/hal/current/.env'
+  PROD_SSH = 'deploy@cms.prx.org'.freeze
+  PROD_ENV = '/var/www/domains/prx.org/hal/current/.env'.freeze
   IGNORE_TABLES = %w(
     audio_file_listenings
     feed_items
@@ -23,7 +23,7 @@ namespace :db do
     audio_file_deliveries
     alerts
     client_applications
-  )
+  ).freeze
 
   desc 'Dump production data to backup files'
   task :proddump do
@@ -33,7 +33,7 @@ namespace :db do
     out_struct = "#{stamp}_${DB_ENV_MYSQL_DATABASE}_structure.sql.gz"
     out_data = "#{stamp}_${DB_ENV_MYSQL_DATABASE}_data.sql.gz"
     parms = '--user=$DB_ENV_MYSQL_USER --password=$DB_ENV_MYSQL_PASSWORD $DB_ENV_MYSQL_DATABASE'
-    ignores = IGNORE_TABLES.map {|tbl| "--ignore-table=${DB_ENV_MYSQL_DATABASE}.#{tbl}"}.join(' ')
+    ignores = IGNORE_TABLES.map { |tbl| "--ignore-table=${DB_ENV_MYSQL_DATABASE}.#{tbl}" }.join(' ')
 
     puts "  dumping structure #{stamp}..."
     out = `ssh #{PROD_SSH} 'source #{PROD_ENV} && mysqldump #{parms} --no-data | gzip > #{out_struct}'`
@@ -53,7 +53,7 @@ namespace :db do
     out = `ssh #{PROD_SSH} 'ls'`
     exit $?.exitstatus unless $?.success?
 
-    backups = out.split("\n").select{|name| name =~ /mediajoint_production(_data|_structure).sql.gz/}.sort
+    backups = out.split("\n").select { |name| name =~ /mediajoint_production(_data|_structure).sql.gz/ }.sort
     backups.each do |name|
       puts "  #{name}"
     end
@@ -86,7 +86,7 @@ namespace :db do
     out = `ls tmp/dbbootstrap`
     exit $?.exitstatus unless $?.success?
 
-    backups = out.split("\n").select{|name| name =~ /mediajoint_production(_data|_structure).sql.gz/}.sort
+    backups = out.split("\n").select { |name| name =~ /mediajoint_production(_data|_structure).sql.gz/ }.sort
     latest_structure = backups[-1]
     latest_data = backups[-2]
     abort 'No backups found! Run rake db:prodcopy first.' if backups.empty?
@@ -103,11 +103,11 @@ namespace :db do
     db_pass = ENV['DB_ENV_MYSQL_PASSWORD']
 
     parms = "--host=#{db_host} #{db_name}"
-    if db_host == 'db'
-      parms = "--user=root #{parms}"
-    else
-      parms = "--user=#{db_user} --password=#{db_pass} #{parms}"
-    end
+    parms = if db_host == 'db'
+              "--user=root #{parms}"
+            else
+              "--user=#{db_user} --password=#{db_pass} #{parms}"
+            end
 
     puts 'Restoring from backup'
     puts '  overwriting structure...'

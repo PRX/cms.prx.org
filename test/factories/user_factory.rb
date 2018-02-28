@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user, aliases: [:opener, :creator] do
+  factory :user, aliases: %i[opener creator] do
 
     address
 

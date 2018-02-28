@@ -18,8 +18,8 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
     }
   end
   embed :token_auth_accounts, as: :accounts, paged: true, per: :all, item_class: Account,
-                                   item_decorator: Api::Auth::AccountMinRepresenter,
-                                   url: ->(_r) { api_authorization_accounts_path }
+                              item_decorator: Api::Auth::AccountMinRepresenter,
+                              url: ->(_r) { api_authorization_accounts_path }
 
   links :series do
     [

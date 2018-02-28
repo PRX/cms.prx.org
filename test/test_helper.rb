@@ -18,7 +18,7 @@ if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
   SimpleCov.formatters = formatters
 end
 
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path('../../config/environment', __FILE__)
 
 require 'rails/test_help'
 require 'factory_girl'
@@ -43,7 +43,7 @@ class ActiveSupport::TestCase
   include FactoryGirl::Syntax::Methods
   include Announce::Testing
 
-  def api_request_opts(opts={})
+  def api_request_opts(opts = {})
     { format: 'json', api_version: 'v1' }.merge(opts)
   end
 end
@@ -89,5 +89,5 @@ def json_file(name)
 end
 
 def test_file(path)
-  File.read( File.dirname(__FILE__) + path)
+  File.read(File.dirname(__FILE__) + path)
 end

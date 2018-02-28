@@ -99,10 +99,10 @@ class PodcastImport < BaseModel
   end
 
   def feed_entry_to_hash(entry)
-    entry
-      .to_h
-      .with_indifferent_access
-      .transform_values { |x| x.is_a?(String) ? remove_utf8_4byte(x) : x }
+    entry.
+      to_h.
+      with_indifferent_access.
+      transform_values { |x| x.is_a?(String) ? remove_utf8_4byte(x) : x }
   end
 
   def create_or_update_episode_import!(entry, audio_files)
@@ -127,7 +127,11 @@ class PodcastImport < BaseModel
 
   def validate_feed(podcast_feed)
     if !podcast_feed.is_a?(Feedjira::Parser::Podcast)
-      parser = podcast_feed.class.name.demodulize.underscore.humanize rescue ''
+      parser = begin
+                 podcast_feed.class.name.demodulize.underscore.humanize
+               rescue StandardError
+                 ''
+               end
       raise "Failed to retrieve #{url}, not a podcast feed: #{parser}"
     end
   end
@@ -139,7 +143,7 @@ class PodcastImport < BaseModel
 
   def create_or_update_series!(feed = self.feed)
     if config[:episodes_only]
-      raise "No series for import of episodes only" if !series
+      raise 'No series for import of episodes only' if !series
       return series
     end
 
@@ -196,7 +200,7 @@ class PodcastImport < BaseModel
       to_insert << series.images.build(upload: clean_string(image_url), purpose: purpose)
     end
 
-    story.images.destroy(to_destroy) if to_destroy.size > 0
+    story.images.destroy(to_destroy) if !to_destroy.empty?
 
     to_insert
   end
@@ -207,10 +211,10 @@ class PodcastImport < BaseModel
 
   def create_or_update_podcast!
     if config[:episodes_only]
-      raise "No podcast distribution for import of episodes only" if !podcast_distribution
-      raise "No podcast distribution url for import of episodes only" if !podcast_distribution.url
+      raise 'No podcast distribution for import of episodes only' if !podcast_distribution
+      raise 'No podcast distribution url for import of episodes only' if !podcast_distribution.url
       self.podcast = podcast_distribution.get_podcast
-      raise "No podcast for import of episodes only" if !podcast
+      raise 'No podcast for import of episodes only' if !podcast
       return podcast
     end
 
@@ -273,7 +277,7 @@ class PodcastImport < BaseModel
 
   def parse_itunes_categories(feed)
     itunes_cats = {}
-    Array(feed.itunes_categories).map(&:strip).select { |c| !c.blank? }.each do |cat|
+    Array(feed.itunes_categories).map(&:strip).reject(&:blank?).each do |cat|
       if ITunesCategoryValidator.category?(cat)
         itunes_cats[cat] ||= []
       elsif parent_cat = ITunesCategoryValidator.subcategory?(cat)
@@ -301,7 +305,7 @@ class PodcastImport < BaseModel
     num_segments = [segments.to_i, 1].max
     template = nil
 
-    self.series.with_lock do
+    series.with_lock do
       template = series.audio_version_templates.where(segment_count: num_segments).first
       if !template
         template = series.audio_version_templates.create!(

@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'hal_api/representer'
 
 class Api::BaseRepresenter < HalApi::Representer

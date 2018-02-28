@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'hal_api/rails'
 
 class Api::BaseController < ApplicationController
@@ -19,10 +20,10 @@ class Api::BaseController < ApplicationController
 
   protect_from_forgery with: :null_session
 
-  allow_params :show, [:api_version, :format, :zoom]
-  allow_params :index, [:api_version, :format, :page, :per, :zoom, :filters, :sorts]
+  allow_params :show, %i[api_version format zoom]
+  allow_params :index, %i[api_version format page per zoom filters sorts]
 
-  sort_params default: { updated_at: :desc }, allowed: [:id, :created_at, :updated_at]
+  sort_params default: { updated_at: :desc }, allowed: %i[id created_at updated_at]
 
   cache_api_action :show, if: :cache_show?
   cache_api_action :index, if: :cache_index?
@@ -53,7 +54,7 @@ class Api::BaseController < ApplicationController
 
   def current_user
     @current_user ||= if prx_auth_token
-      User.find(prx_auth_token.user_id)
+                        User.find(prx_auth_token.user_id)
     end
   rescue ActiveRecord::RecordNotFound
     nil

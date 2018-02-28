@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'render_markdown'
 require 'newrelic_rpm'
 
@@ -73,7 +74,7 @@ class Story < BaseModel
   before_validation :set_app_version, on: :create
   before_validation :update_published_to_released
 
-  before_save :set_status, only: [:update, :create]
+  before_save :set_status, only: %i[update create]
 
   # indicates piece is published with promos only - not full audio
   event_attribute :promos_only_at
@@ -100,13 +101,13 @@ class Story < BaseModel
 
   scope :series_visible, -> {
     joins('LEFT OUTER JOIN `series` ON `pieces`.`series_id` = `series`.`id`').
-    where(['`series`.`subscription_approval_status` != ? OR `series`.`subscriber_only_at` IS NULL',
-           Series::SUBSCRIPTION_PRX_APPROVED])
+      where(['`series`.`subscription_approval_status` != ? OR `series`.`subscriber_only_at` IS NULL',
+             Series::SUBSCRIPTION_PRX_APPROVED])
   }
 
   scope :purchased, -> {
     joins(:purchases).
-    select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
+      select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
   }
 
   scope :match_text, ->(text) {
@@ -117,8 +118,8 @@ class Story < BaseModel
 
   scope :public_stories, -> { published.network_visible.series_visible }
 
-  def points(level=point_level)
-    has_custom_points? ? self.custom_points : Economy.points(level, self.length)
+  def points(level = point_level)
+    has_custom_points? ? custom_points : Economy.points(level, length)
   end
 
   def default_image
@@ -179,7 +180,7 @@ class Story < BaseModel
 
   def episode_date
     @episode_date || if subscription_episode? && episode_number
-      series.get_datetime_for_episode_number(episode_number)
+                       series.get_datetime_for_episode_number(episode_number)
     end
   end
 
@@ -258,7 +259,7 @@ class Story < BaseModel
   private
 
   def longest_single_file_version
-    audio_versions.reject { |av| av.audio_files.size != 1 }.sort_by(&:length).last
+    audio_versions.select { |av| av.audio_files.size == 1 }.sort_by(&:length).last
   end
 
   def longest_version
@@ -277,7 +278,7 @@ class Story < BaseModel
     canceling_future_release = released_at.nil? && published_at && published_at > DateTime.now
     updating_release = !released_at.nil?
     if published_at && released_at_changed? && (canceling_future_release || updating_release)
-        self.published_at = released_at
+      self.published_at = released_at
     end
   end
 

@@ -3,11 +3,13 @@
 class Api::Auth::SeriesRepresenter < Api::SeriesRepresenter
   # point to authorized stories (including unpublished)
   link :stories do
-    {
-      href: "#{api_authorization_series_stories_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.stories.count
-    } if represented.id
+    if represented.id
+      {
+        href: "#{api_authorization_series_stories_path(represented)}#{index_url_params}",
+        templated: true,
+        count: represented.stories.count
+      }
+    end
   end
   embed :stories,
         paged: true,

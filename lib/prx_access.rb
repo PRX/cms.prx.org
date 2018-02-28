@@ -12,7 +12,7 @@ module PRXAccess
     class Link < HyperResource::Link
       attr_accessor :type, :profile
 
-      def initialize(resource, link_spec={})
+      def initialize(resource, link_spec = {})
         super
         self.type = link_spec['type']
         self.profile = link_spec['profile']
@@ -20,55 +20,55 @@ module PRXAccess
 
       def where(params)
         super.tap do |res|
-          res.type = self.type
-          res.profile = self.profile
+          res.type = type
+          res.profile = profile
         end
       end
 
       def headers(*args)
         super.tap do |res|
           if args.count > 0
-            res.type = self.type
-            res.profile = self.profile
+            res.type = type
+            res.profile = profile
           end
         end
       end
 
-      def post_response(attrs=nil)
-        attrs ||= self.resource.attributes
-        attrs = (self.resource.default_attributes || {}).merge(attrs)
+      def post_response(attrs = nil)
+        attrs ||= resource.attributes
+        attrs = (resource.default_attributes || {}).merge(attrs)
 
         # adding this line to call outgoing_body_filter
         attrs = resource.outgoing_body_filter(attrs)
 
         response = faraday_connection.post do |req|
-          req.body = self.resource.adapter.serialize(attrs)
+          req.body = resource.adapter.serialize(attrs)
         end
         response
       end
 
-      def put_response(attrs=nil)
-        attrs ||= self.resource.attributes
-        attrs = (self.resource.default_attributes || {}).merge(attrs)
+      def put_response(attrs = nil)
+        attrs ||= resource.attributes
+        attrs = (resource.default_attributes || {}).merge(attrs)
 
         # adding this line to call outgoing_body_filter
         attrs = resource.outgoing_body_filter(attrs)
 
         response = faraday_connection.put do |req|
-          req.body = self.resource.adapter.serialize(attrs)
+          req.body = resource.adapter.serialize(attrs)
         end
         response
       end
 
-      def patch_response(attrs=nil)
-        attrs ||= self.resource.attributes.changed_attributes
-        attrs = (self.resource.default_attributes || {}).merge(attrs)
+      def patch_response(attrs = nil)
+        attrs ||= resource.attributes.changed_attributes
+        attrs = (resource.default_attributes || {}).merge(attrs)
 
         # adding this line to call outgoing_body_filter
         attrs = resource.outgoing_body_filter(attrs)
 
         response = faraday_connection.patch do |req|
-          req.body = self.resource.adapter.serialize(attrs)
+          req.body = resource.adapter.serialize(attrs)
         end
         response
       end

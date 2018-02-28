@@ -14,7 +14,6 @@ class AudioCallbackWorker
     story.with_lock do
       announce(:story, :update, Api::Msg::StoryRepresenter.new(story).to_json)
     end
-
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
   end

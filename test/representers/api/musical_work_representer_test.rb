@@ -27,5 +27,5 @@ describe Api::MusicalWorkRepresenter do
       json['duration'].must_equal 123
     end
   end
-  
+
 end

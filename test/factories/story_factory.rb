@@ -46,7 +46,7 @@ FactoryGirl.define do
       published_at nil
       promos_only_at 1.week.ago
 
-      after(:create, :stub) do |story, evaluator|
+      after(:create, :stub) do |story, _evaluator|
         create(:promos, story: story)
       end
     end

@@ -22,7 +22,6 @@ PRX::Application.configure do
   # Disable Rails's static asset server (Apache or nginx will already do this).
   config.serve_static_files = false
 
-
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx

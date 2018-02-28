@@ -208,7 +208,7 @@ describe Api::StoriesController do
   end
 
   it 'should show' do
-    get(:show, { api_version: 'v1', format: 'json', id: story.id } )
+    get(:show, api_version: 'v1', format: 'json', id: story.id)
     assert_response :success
   end
 
@@ -217,7 +217,7 @@ describe Api::StoriesController do
     story2 = create(:story, published_at: nil)
     story3 = create(:story_v3, published_at: 1.day.ago)
 
-    get(:index, { api_version: 'v1', format: 'json' } )
+    get(:index, api_version: 'v1', format: 'json')
     assert_response :success
     assigns[:stories].must_include story1
     assigns[:stories].wont_include story2
@@ -278,7 +278,7 @@ describe Api::StoriesController do
   end
 
   it 'should error on bad version' do
-    get(:index, { api_version: 'v2', format: 'json' } )
+    get(:index, api_version: 'v2', format: 'json')
     assert_response :not_acceptable
   end
 

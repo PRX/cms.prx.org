@@ -12,10 +12,12 @@ class Api::AudioVersionRepresenter < Api::BaseRepresenter
   set_link_property(rel: :story, writeable: true)
 
   link :audio do
-    {
-      href: api_audio_version_audio_files_path(represented),
-      count: represented.audio_files.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_audio_version_audio_files_path(represented),
+        count: represented.audio_files.count
+      }
+    end
   end
   embeds :audio_files, as: :audio, class: AudioFile, decorator: Api::AudioFileRepresenter
   # after www.prx.org is fixed, update this to embed a paged representer
@@ -26,9 +28,11 @@ class Api::AudioVersionRepresenter < Api::BaseRepresenter
   #       item_decorator: Api::AudioFileRepresenter
 
   link rel: :audio_version_template, writeable: true do
-    {
-      href: api_audio_version_template_path(represented.audio_version_template)
-    } if represented.audio_version_template_id
+    if represented.audio_version_template_id
+      {
+        href: api_audio_version_template_path(represented.audio_version_template)
+      }
+    end
   end
   embed :audio_version_template,
         class: AudioVersionTemplate,

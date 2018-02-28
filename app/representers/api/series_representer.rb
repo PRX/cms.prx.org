@@ -13,11 +13,13 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   alternate_link
 
   link :stories do
-    {
-      href: "#{api_series_stories_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.public_stories.count
-    } if represented.id
+    if represented.id
+      {
+        href: "#{api_series_stories_path(represented)}#{index_url_params}",
+        templated: true,
+        count: represented.public_stories.count
+      }
+    end
   end
   embed :public_stories,
         as: :stories,
@@ -27,10 +29,12 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         zoom: false
 
   link :image do
-    {
-      href: api_series_series_image_path(represented, represented.default_image),
-      title: represented.default_image.try(:filename)
-    } if represented && represented.default_image
+    if represented && represented.default_image
+      {
+        href: api_series_series_image_path(represented, represented.default_image),
+        title: represented.default_image.try(:filename)
+      }
+    end
   end
   embed :default_image,
         as: :image,
@@ -38,10 +42,12 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         decorator: Api::ImageRepresenter
 
   link :images do
-    {
-      href: api_series_series_images_path(represented),
-      count: represented.images.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_series_series_images_path(represented),
+        count: represented.images.count
+      }
+    end
   end
   embed :images,
         paged: true,
@@ -50,19 +56,23 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         zoom: false
 
   link rel: :account, writeable: true do
-    {
-      href: api_account_path(represented.account),
-      title: represented.account.name,
-      profile: model_uri(represented.account)
-    } if represented.id && represented.account
+    if represented.id && represented.account
+      {
+        href: api_account_path(represented.account),
+        title: represented.account.name,
+        profile: model_uri(represented.account)
+      }
+    end
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
 
   link :audio_version_templates do
-    {
-      href: api_series_audio_version_templates_path(represented),
-      count: represented.audio_version_templates.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_series_audio_version_templates_path(represented),
+        count: represented.audio_version_templates.count
+      }
+    end
   end
   embed :audio_version_templates,
         paged: true,
@@ -71,10 +81,12 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         zoom: false
 
   link :distributions do
-    {
-      href: api_series_distributions_path(represented),
-      count: represented.distributions.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_series_distributions_path(represented),
+        count: represented.distributions.count
+      }
+    end
   end
   embed :distributions,
         paged: true,

@@ -15,18 +15,22 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
   embed :address, class: Address, decorator: Api::AddressRepresenter
 
   link :image do
-    {
-      href: api_account_account_image_path(represented),
-      title: represented.image.try(:filename)
-    } if represented.id
+    if represented.id
+      {
+        href: api_account_account_image_path(represented),
+        title: represented.image.try(:filename)
+      }
+    end
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter
 
   link :opener do
-    {
-      href: api_user_path(represented.opener),
-      title: represented.opener.login
-    } if represented.opener
+    if represented.opener
+      {
+        href: api_user_path(represented.opener),
+        title: represented.opener.login
+      }
+    end
   end
   embed :opener,
         class: User,

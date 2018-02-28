@@ -78,7 +78,7 @@ describe Api::TestObjectsController do
     end
 
     it 'defaults to create, update, and destroy' do
-      default_actions = [:create, :destroy, :update]
+      default_actions = %i[create destroy update]
       controller_class.announce_actions
       controller_class.announced_actions.keys.sort.must_equal default_actions
     end

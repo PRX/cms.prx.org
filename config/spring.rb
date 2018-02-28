@@ -1,1 +1,1 @@
-Spring.watch ".env"
+Spring.watch '.env'

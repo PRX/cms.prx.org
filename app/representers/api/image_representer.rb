@@ -21,16 +21,20 @@ class Api::ImageRepresenter < Api::BaseRepresenter
   property :upload, readable: false
 
   link :enclosure do
-    {
-      href: represented.public_url(version: 'medium'),
-      type: represented.content_type || 'image'
-    } if represented.id
+    if represented.id
+      {
+        href: represented.public_url(version: 'medium'),
+        type: represented.content_type || 'image'
+      }
+    end
   end
 
   link :original do
-    {
-      href: represented.public_url(version: 'original'),
-      type: represented.content_type || 'image'
-    } if represented.id
+    if represented.id
+      {
+        href: represented.public_url(version: 'original'),
+        type: represented.content_type || 'image'
+      }
+    end
   end
 end

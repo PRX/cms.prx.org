@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'roar/json/hal'
 require 'hal_api/representer/caches'
 

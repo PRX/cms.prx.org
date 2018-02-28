@@ -6,20 +6,24 @@ class Api::PickRepresenter < Api::BaseRepresenter
   property :editors_title
 
   link :account do
-    {
-      href: api_account_path(represented.playlist.account),
-      title: represented.playlist.account.name,
-      profile: model_uri(represented.playlist.account)
-    } if represented.playlist && represented.playlist.account
+    if represented.playlist && represented.playlist.account
+      {
+        href: api_account_path(represented.playlist.account),
+        title: represented.playlist.account.name,
+        profile: model_uri(represented.playlist.account)
+      }
+    end
   end
   embed :account, as: :account, item_class: Account, decorator: Api::Min::AccountRepresenter
 
   link :story do
-    {
-      href: api_story_path(represented.story),
-      title: represented.story.title,
-      profile: model_uri(represented.story)
-    } if represented.story
+    if represented.story
+      {
+        href: api_story_path(represented.story),
+        title: represented.story.title,
+        profile: model_uri(represented.story)
+      }
+    end
   end
   embed :story, as: :story, item_class: Story, decorator: Api::Min::StoryRepresenter
 end

@@ -34,71 +34,89 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   alternate_link
 
   link rel: :publish, writeable: false do
-    {
-      href: publish_api_story_path(represented)
-    } if represented.published_at.nil?
+    if represented.published_at.nil?
+      {
+        href: publish_api_story_path(represented)
+      }
+    end
   end
 
   link rel: :unpublish, writeable: false do
-    {
-      href: unpublish_api_story_path(represented)
-    } if !represented.published_at.nil?
+    if !represented.published_at.nil?
+      {
+        href: unpublish_api_story_path(represented)
+      }
+    end
   end
 
   link rel: :account, writeable: true do
-    {
-      href: api_account_path(represented.account),
-      title: represented.account.name,
-      profile: model_uri(represented.account)
-    } if represented.account
+    if represented.account
+      {
+        href: api_account_path(represented.account),
+        title: represented.account.name,
+        profile: model_uri(represented.account)
+      }
+    end
   end
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter
 
   link rel: :series, writeable: true do
-    {
-      href: api_series_path(represented.series),
-      title: represented.series.title
-    } if represented.series_id
+    if represented.series_id
+      {
+        href: api_series_path(represented.series),
+        title: represented.series.title
+      }
+    end
   end
   embed :series, class: Series, decorator: Api::Min::SeriesRepresenter
 
   link :image do
-    {
-      href: api_story_story_image_path(represented, represented.default_image),
-      title: represented.default_image.try(:filename)
-    } if represented.default_image
+    if represented.default_image
+      {
+        href: api_story_story_image_path(represented, represented.default_image),
+        title: represented.default_image.try(:filename)
+      }
+    end
   end
   embed :default_image, as: :image, decorator: Api::ImageRepresenter
 
   link :audio do
-    {
-      href: api_story_audio_files_path(represented.id),
-      count: represented.default_audio.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_story_audio_files_path(represented.id),
+        count: represented.default_audio.count
+      }
+    end
   end
   embed :default_audio, as: :audio, paged: true, item_class: AudioFile, per: :all
 
   link :promos do
-    {
-      href: api_story_promos_path(represented.id),
-      count: represented.promos_audio.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_story_promos_path(represented.id),
+        count: represented.promos_audio.count
+      }
+    end
   end
   embed :promos_audio, as: :promos, paged: true, item_class: AudioFile, per: :all
 
   link :audio_versions do
-    {
-      href: api_story_audio_versions_path(represented.id),
-      count: represented.audio_versions.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_story_audio_versions_path(represented.id),
+        count: represented.audio_versions.count
+      }
+    end
   end
   embed :audio_versions, paged: true, item_class: AudioVersion, per: :all
 
   link :images do
-    {
-      href: api_story_story_images_path(represented),
-      count: represented.images.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_story_story_images_path(represented),
+        count: represented.images.count
+      }
+    end
   end
   embed :images,
         paged: true,
@@ -107,19 +125,23 @@ class Api::StoryRepresenter < Api::BaseRepresenter
         zoom: false
 
   link :musical_works do
-    {
-      href: "#{api_story_musical_works_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.musical_works.count
-    } if represented.id
+    if represented.id
+      {
+        href: "#{api_story_musical_works_path(represented)}#{index_url_params}",
+        templated: true,
+        count: represented.musical_works.count
+      }
+    end
   end
   embed :musical_works, paged: true, item_class: MusicalWork, zoom: false
 
   link :distributions do
-    {
-      href: api_story_story_distributions_path(represented),
-      count: represented.distributions.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_story_story_distributions_path(represented),
+        count: represented.distributions.count
+      }
+    end
   end
   embed :distributions,
         paged: true,

@@ -19,7 +19,7 @@ class AudioFile < BaseModel
   skip_callback :commit, :after, :remove_file! # don't remove s3 file
   fixerable_upload :upload, :file
 
-  before_save :set_position, :set_status, only: [:update, :create]
+  before_save :set_position, :set_status, only: %i[update create]
   after_commit :update_version_status
   after_destroy :update_version_status
 

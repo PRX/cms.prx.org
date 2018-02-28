@@ -12,7 +12,7 @@ class Tone < BaseModel
 
   belongs_to :story, class_name: 'Story', foreign_key: 'piece_id', touch: true
 
-  validates_inclusion_of :name, :in => TONE_NAMES
+  validates_inclusion_of :name, in: TONE_NAMES
   validates_uniqueness_of :name, scope: :story
 
   def to_tag

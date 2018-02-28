@@ -16,9 +16,9 @@ class Format < BaseModel
   validates_uniqueness_of :name, scope: :story
 
   def to_tag
-    if name.match(/\AFundraising/)
+    if name =~ /\AFundraising/
       'Fundraising'
-    elsif name.match(/\ADebut/)
+    elsif name =~ /\ADebut/
       'Debut'
     else
       name

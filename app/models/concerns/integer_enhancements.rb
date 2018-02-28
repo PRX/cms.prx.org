@@ -21,7 +21,7 @@ module IntegerEnhancements
   def time_duration_in_words(seconds = 0)
     return '0 seconds' if seconds <= 0
     time_values = time_duration(seconds)
-    [:hour, :minute, :second].inject([]) do |words, unit|
+    %i[hour minute second].inject([]) do |words, unit|
       if (time_values[unit]).positive?
         units_text = time_values[unit] == 1 ? unit.to_s : unit.to_s.pluralize
         words << "#{time_values[unit]} #{units_text}"
@@ -34,7 +34,7 @@ module IntegerEnhancements
     return ':00' if seconds <= 0
     time_values = time_duration(seconds)
     last_zero = true
-    nums = [:hour, :minute, :second].collect do |unit|
+    nums = %i[hour minute second].collect do |unit|
       if last_zero && (time_values[unit]).zero?
         nil
       else
@@ -54,7 +54,7 @@ module IntegerEnhancements
     secs = seconds
     [[:hour, 3600], [:minute, 60], [:second, 1]].inject({}) do |values, each|
       unit, size = each
-      values[unit] = (secs <= 0) ? 0 : (secs / size)
+      values[unit] = secs <= 0 ? 0 : (secs / size)
       secs = secs <= 0 ? 0 : (secs % size)
       values
     end
