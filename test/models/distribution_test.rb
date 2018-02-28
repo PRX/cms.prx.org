@@ -4,9 +4,12 @@ require 'minitest/mock'
 class TestStoryDistribution < StoryDistribution
   attr_accessor :distributed, :published
 
-  def distributed?; self.distributed; end
-  def published?; self.published; end
+  def distributed?; distributed; end
+
+  def published?; published; end
+
   def distribute!; self.distributed = true; end
+
   def publish!; self.published = true; end
 end
 
@@ -30,7 +33,7 @@ describe Distribution do
 
   it 'has properties' do
     distribution.properties.wont_be_nil
-    distribution.properties["explicit"].must_equal "clean"
+    distribution.properties['explicit'].must_equal 'clean'
   end
 
   it 'can be created with valid attributes' do
@@ -67,9 +70,9 @@ describe Distribution do
   end
 
   describe 'checks if distributions published' do
-    before {
+    before do
       story.update_attribute(:published_at, 2.minutes.ago)
-    }
+    end
 
     it 'finds recently published stories' do
       stories = Distribution.recently_published_stories(60, 3600)

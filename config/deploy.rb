@@ -26,13 +26,13 @@ set :deploy_to, '/var/www/domains/prx.org/hal'
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{ .env }
+set :linked_files, %w{.env}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{ log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for default_env is {}
-set :default_env, { path: "/opt/ruby/ruby-2.1.1/bin:$PATH" }
+set :default_env, path: '/opt/ruby/ruby-2.1.1/bin:$PATH'
 
 # Default value for keep_releases is 5
 set :keep_releases, 5
@@ -68,7 +68,7 @@ namespace :deploy do
   after :publishing, :restart
   after :restart, :worker
 
-  desc "Flushes cache"
+  desc 'Flushes cache'
   task :flush_cache do
     on roles(:app) do
       within release_path do

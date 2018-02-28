@@ -28,8 +28,8 @@ describe Distributions::PodcastDistribution do
       with(headers: { 'Authorization' => 'Bearer token', 'Content-Type' => 'application/json' }).
       to_return(status: 200, body: json_file('podcast'), headers: {})
 
-    stub_request(:get, "https://feeder.prx.org/api/v1/authorization/episodes/aguid").
-      with(:headers => {'Authorization'=>'Bearer token', 'Content-Type'=>'application/json'}).
+    stub_request(:get, 'https://feeder.prx.org/api/v1/authorization/episodes/aguid').
+      with(headers: { 'Authorization' => 'Bearer token', 'Content-Type' => 'application/json' }).
       to_return(status: 200, body: json_file('episode'), headers: {})
   end
 

@@ -8,22 +8,28 @@ class Api::Auth::StoryRepresenter < Api::StoryRepresenter
   end
 
   link rel: :publish, writeable: false do
-    {
-      href: publish_api_authorization_story_path(represented)
-    } if represented.published_at.nil?
+    if represented.published_at.nil?
+      {
+        href: publish_api_authorization_story_path(represented)
+      }
+    end
   end
 
   link rel: :unpublish, writeable: false do
-    {
-      href: unpublish_api_authorization_story_path(represented)
-    } if !represented.published_at.nil?
+    if !represented.published_at.nil?
+      {
+        href: unpublish_api_authorization_story_path(represented)
+      }
+    end
   end
 
   link :audio do
-    {
-      href: api_authorization_audio_files_path(represented.id),
-      count: represented.default_audio.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_authorization_audio_files_path(represented.id),
+        count: represented.default_audio.count
+      }
+    end
   end
   embed :default_audio,
         as: :audio,

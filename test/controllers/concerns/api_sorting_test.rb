@@ -5,7 +5,7 @@ describe ApiSorting do
   class ApiSortingTestController < ActionController::Base
     include ApiSorting
 
-    sort_params default: { one: :desc }, allowed: [:one, :two, :three, :four, :five]
+    sort_params default: { one: :desc }, allowed: %i[one two three four five]
 
     attr_accessor :sort_string
 

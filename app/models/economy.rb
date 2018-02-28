@@ -18,7 +18,7 @@ class Economy
   DEFAULT_PACKAGE_GRACE_PERIOD = 3.months unless defined?(DEFAULT_PACKAGE_GRACE_PERIOD)
   DEFAULT_PRX_PERCENTAGE       = 20 unless defined?(DEFAULT_PRX_PERCENTAGE)
 
-  LICENSE_FREE_PIECES_PRICE    = BigDecimal.new("250.00") unless defined?(LICENSE_FREE_PIECES_PRICE)
+  LICENSE_FREE_PIECES_PRICE    = BigDecimal.new('250.00') unless defined?(LICENSE_FREE_PIECES_PRICE)
 
   # how long a piece is licensed for when purchased
   DEFAULT_PIECE_EXPIRATION     = 1.year unless defined?(DEFAULT_PIECE_EXPIRATION)
@@ -70,9 +70,9 @@ class Economy
 
     def points(level, seconds)
       lvl = level || 0
-      return 0 if (lvl == 0 || seconds == 0)
+      return 0 if lvl == 0 || seconds == 0
       rt = seconds || 0
-      [(((rt <= 0) ? 0 : rt.to_f/60.00) * (Economy.points_per_minute * lvl)).round, Economy.minimum_piece_point_value].max
+      [((rt <= 0 ? 0 : rt.to_f / 60.00) * (Economy.points_per_minute * lvl)).round, Economy.minimum_piece_point_value].max
     end
 
     # def price(tsr, hours)

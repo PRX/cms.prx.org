@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'announce_actions'
 
 describe AnnounceActions::AnnounceFilter do

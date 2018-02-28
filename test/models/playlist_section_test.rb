@@ -13,4 +13,3 @@ describe PlaylistSection do
   end
 
 end
-

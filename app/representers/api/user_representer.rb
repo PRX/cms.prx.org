@@ -7,11 +7,13 @@ class Api::UserRepresenter < Api::BaseRepresenter
   property :login
 
   link :accounts do
-    {
-      href: "#{api_user_accounts_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.accounts.count
-    } if represented.id
+    if represented.id
+      {
+        href: "#{api_user_accounts_path(represented)}#{index_url_params}",
+        templated: true,
+        count: represented.accounts.count
+      }
+    end
   end
   embed :accounts,
         paged: true,
@@ -20,17 +22,21 @@ class Api::UserRepresenter < Api::BaseRepresenter
         zoom: false
 
   link :image do
-    {
-      href:  api_user_user_image_path(represented),
-      title: represented.image.filename
-    } if represented.id && represented.image
+    if represented.id && represented.image
+      {
+        href:  api_user_user_image_path(represented),
+        title: represented.image.filename
+      }
+    end
   end
   embed :image, class: Image, decorator: Api::ImageRepresenter
 
   link 'create-image' do
-    {
-      href: api_user_user_image_path(represented),
-      title: 'Create an image'
-    } if represented.id && !represented.image
+    if represented.id && !represented.image
+      {
+        href: api_user_user_image_path(represented),
+        title: 'Create an image'
+      }
+    end
   end
 end

@@ -16,7 +16,7 @@ describe Api::Auth::NetworksController do
       get(:show, api_version: 'v1', format: 'json', id: network.id)
       assert_response :success
       resource = JSON.parse(@response.body)
-      resource["id"].must_equal network.id
+      resource['id'].must_equal network.id
     end
 
     it 'should list' do
@@ -24,7 +24,7 @@ describe Api::Auth::NetworksController do
       get(:index, api_version: 'v1', format: 'json')
       assert_response :success
       list = JSON.parse(@response.body)
-      list["total"].must_equal 1
+      list['total'].must_equal 1
     end
 
   end

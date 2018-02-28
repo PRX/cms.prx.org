@@ -1,10 +1,10 @@
 require File.expand_path('../boot', __FILE__)
 
 # Pick the frameworks you want:
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "rails/test_unit/railtie"
+require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -30,8 +30,8 @@ module PRX
     config.i18n.enforce_available_locales = true
     config.i18n.default_locale = :en
 
-    config.autoload_paths += %W( #{config.root}/app/representers/concerns )
-    config.autoload_paths += %W( #{config.root}/app/workers )
+    config.autoload_paths += %W(#{config.root}/app/representers/concerns)
+    config.autoload_paths += %W(#{config.root}/app/workers)
 
     # Disable the asset pipeline.
     config.assets.enabled = false
@@ -43,7 +43,7 @@ module PRX
     config.middleware.insert_after Rails::Rack::Logger, Rack::Cors do
       allow do
         origins /.*\.prx\.(?:org|dev|tech|docker)$/
-        resource '/api/*', methods: [:get, :put, :post, :delete, :options], headers: :any
+        resource '/api/*', methods: %i[get put post delete options], headers: :any
       end
 
       allow do
@@ -53,7 +53,7 @@ module PRX
 
       allow do
         origins '*'
-        resource '/pub/*', methods: [:get, :head, :options], headers: :any
+        resource '/pub/*', methods: %i[get head options], headers: :any
       end
     end
 

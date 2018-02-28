@@ -3,7 +3,7 @@ FactoryGirl.define do
 
     account
 
-    after(:create, :stub) do |playlist, evaluator|
+    after(:create, :stub) do |playlist, _evaluator|
       create_list(:playlist_section, 2, playlist: playlist)
     end
 

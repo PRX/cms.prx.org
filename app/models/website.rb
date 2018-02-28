@@ -4,7 +4,7 @@ class Website < BaseModel
   belongs_to :browsable, polymorphic: true, touch: true
 
   SEARCH  = /^(?!http)./
-  REPLACE = 'http://\\0'
+  REPLACE = 'http://\\0'.freeze
 
   def url
     super.sub(SEARCH, REPLACE)

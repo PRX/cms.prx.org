@@ -29,22 +29,22 @@ module PublicAsset
       x = get_extension(o[:name])
     end
 
-    str = [t,e,u,c,i,v,n,x].join("|")
+    str = [t, e, u, c, i, v, n, x].join('|')
 
     OpenSSL::Digest::MD5.hexdigest(str)
   end
 
   # assumes a route like the following
   # get 'pub/:token/:expires/:use/:class/:id/:version/:name.:extension' => 'public_assets#show', as: :public_asset
-  def public_url(options={})
+  def public_url(options = {})
     options = set_asset_option_defaults(options)
     options[:token] = public_url_token(options)
     public_asset_url(options)
   end
 
-  def asset_url(options={})
+  def asset_url(options = {})
     v = options[:version]
-    v = nil if (v.blank? || v.to_s == 'original')
+    v = nil if v.blank? || v.to_s == 'original'
     file.try(:url, *v)
   end
 
@@ -52,14 +52,14 @@ module PublicAsset
     File.basename(file.path)
   end
 
-  def public_url_valid?(options={})
+  def public_url_valid?(options = {})
     token_valid?(options) && !url_expired?(options)
   end
 
   def url_expired?(options)
     expires = options[:expires].to_i
-    return false if (expires == 0)
-    now     = DateTime.now.to_i
+    return false if expires == 0
+    now = DateTime.now.to_i
     (expires < now)
   end
 
@@ -69,7 +69,7 @@ module PublicAsset
     (token == check)
   end
 
-  def set_asset_option_defaults(options={})
+  def set_asset_option_defaults(options = {})
     o = {
       use:       'web',
       class:     self.class.name.demodulize.underscore,
@@ -96,7 +96,7 @@ module PublicAsset
 
   def get_extension(fn)
     ext = File.extname(fn)
-    (!ext.blank? && (ext.first == '.')) ? ext[1..-1] : ''
+    !ext.blank? && (ext.first == '.') ? ext[1..-1] : ''
   end
 
   def token_secret

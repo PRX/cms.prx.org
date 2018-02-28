@@ -13,19 +13,16 @@ describe IndividualAccount do
   end
 
   it 'uses openers attributes' do
-    [:name, :image, :address ].each do |attr|
+    %i[name image address].each do |attr|
       account.send(attr).must_equal account.opener.send(attr)
     end
     account.path.must_equal account.opener.login
   end
 
   it 'has first name as short name' do
-    user = build_stubbed(:user, {:first_name => 'sigil'})
-    individual = build_stubbed(:individual_account, {:opener => user})
+    user = build_stubbed(:user, first_name: 'sigil')
+    individual = build_stubbed(:individual_account, opener: user)
     individual.short_name.must_equal 'sigil'
   end
 
 end
-
-
-

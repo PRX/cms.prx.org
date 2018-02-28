@@ -9,11 +9,13 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
   alternate_link
 
   link :stories do
-    {
-      href: "#{api_series_stories_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.public_stories.count
-    } if represented.id
+    if represented.id
+      {
+        href: "#{api_series_stories_path(represented)}#{index_url_params}",
+        templated: true,
+        count: represented.public_stories.count
+      }
+    end
   end
   embed :public_stories,
         as: :stories,
@@ -23,10 +25,12 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
         zoom: false
 
   link :image do
-    {
-      href: api_series_series_image_path(represented, represented.default_image),
-      title: represented.default_image.try(:filename)
-    } if represented && represented.default_image
+    if represented && represented.default_image
+      {
+        href: api_series_series_image_path(represented, represented.default_image),
+        title: represented.default_image.try(:filename)
+      }
+    end
   end
   embed :default_image, as: :image, class: SeriesImage, decorator: Api::ImageRepresenter
 
@@ -40,16 +44,20 @@ class Api::Min::SeriesRepresenter < Api::BaseRepresenter
   embed :account, class: Account, decorator: Api::Min::AccountRepresenter, zoom: false
 
   link :distributions do
-    {
-      href: api_series_distributions_path(represented),
-      count: represented.distributions.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_series_distributions_path(represented),
+        count: represented.distributions.count
+      }
+    end
   end
 
   link :audio_version_templates do
-    {
-      href: api_series_audio_version_templates_path(represented),
-      count: represented.audio_version_templates.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_series_audio_version_templates_path(represented),
+        count: represented.audio_version_templates.count
+      }
+    end
   end
 end

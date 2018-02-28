@@ -21,26 +21,32 @@ class Api::DistributionRepresenter < Api::BaseRepresenter
   end
 
   link :owner do
-    {
-      href: polymorphic_path([:api, represented.owner]),
-      profile: model_uri(represented.owner)
-    } if represented.id && represented.owner
+    if represented.id && represented.owner
+      {
+        href: polymorphic_path([:api, represented.owner]),
+        profile: model_uri(represented.owner)
+      }
+    end
   end
 
   link rel: :audio_version_template, writeable: true do
-    {
-      href: api_audio_version_template_path(represented.audio_version_template)
-    } if represented.audio_version_template_id
+    if represented.audio_version_template_id
+      {
+        href: api_audio_version_template_path(represented.audio_version_template)
+      }
+    end
   end
   embed :audio_version_template,
         class: AudioVersionTemplate,
         decorator: Api::AudioVersionTemplateRepresenter
 
   link :audio_version_templates do
-    {
-      href: api_distribution_audio_version_templates_path(represented),
-      count: represented.audio_version_templates.count
-    } if represented.id
+    if represented.id
+      {
+        href: api_distribution_audio_version_templates_path(represented),
+        count: represented.audio_version_templates.count
+      }
+    end
   end
   embed :audio_version_templates,
         paged: true,

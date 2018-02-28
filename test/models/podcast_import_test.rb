@@ -93,9 +93,9 @@ describe PodcastImport do
 
   describe 'episodes only' do
 
-    before {
+    before do
       importer.config[:episodes_only] = true
-    }
+    end
 
     it 'must have series set' do
       exception = -> { importer.import }.must_raise(RuntimeError)
@@ -207,11 +207,11 @@ def stub_requests
          headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_episode'), headers: {})
 
-  stub_request(:get, "https://feeder.prx.org/api/v1/authorization/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03").
-    with(headers: { 'Authorization'=>'Bearer thisisnotatoken' }).
+  stub_request(:get, 'https://feeder.prx.org/api/v1/authorization/episodes/153e6ea8-6485-4d53-9c22-bd996d0b3b03').
+    with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_episode'), headers: {})
 
-  stub_request(:get, "https://feeder.prx.org/api/v1/podcasts/23").
+  stub_request(:get, 'https://feeder.prx.org/api/v1/podcasts/23').
     with(headers: { 'Authorization' => 'Bearer thisisnotatoken' }).
     to_return(status: 200, body: json_file('transistor_podcast_basic'), headers: {})
 end

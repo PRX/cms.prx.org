@@ -25,17 +25,21 @@ class Api::AudioFileRepresenter < Api::BaseRepresenter
   set_link_property(rel: :account, writeable: true)
 
   link :enclosure do
-    {
-      href: represented.enclosure_url,
-      type: represented.enclosure_content_type
-    } if represented.id
+    if represented.id
+      {
+        href: represented.enclosure_url,
+        type: represented.enclosure_content_type
+      }
+    end
   end
 
   link :original do
-    {
-      href: "#{original_api_audio_file_path(represented)}{?expiration}",
-      templated: true,
-      type: represented.content_type
-    } if represented.id
+    if represented.id
+      {
+        href: "#{original_api_audio_file_path(represented)}{?expiration}",
+        templated: true,
+        type: represented.content_type
+      }
+    end
   end
 end

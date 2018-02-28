@@ -7,7 +7,7 @@ class ApplicationJob < ActiveJob::Base
     NewRelic::Agent.notice_error(e)
   end
 
-  def use_db_pool(job)
+  def use_db_pool(_job)
     ActiveRecord::Base.connection_pool.with_connection do
       yield
     end

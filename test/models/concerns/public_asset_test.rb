@@ -16,8 +16,11 @@ class TestPublicAsset
 
   attr_accessor :name
   def initialize(n); @name = n; end
+
   def id; 1; end
+
   def public_asset_filename; name; end
+
   def token_secret; 'secret'; end
 
   def file
@@ -32,7 +35,7 @@ describe PublicAsset do
 
   it 'generates a token using defaults' do
     defaults = public_asset.set_asset_option_defaults
-    public_asset.public_url_token(defaults).must_equal "5033d06991dc5b69e38275253bfb3b24"
+    public_asset.public_url_token(defaults).must_equal '5033d06991dc5b69e38275253bfb3b24'
   end
 
   it 'generates a public url' do
@@ -67,6 +70,6 @@ describe PublicAsset do
   end
 
   it 'tests if expired' do
-    public_asset.url_expired?({expires: 1.week.ago.to_i}).must_equal true
+    public_asset.url_expired?(expires: 1.week.ago.to_i).must_equal true
   end
 end

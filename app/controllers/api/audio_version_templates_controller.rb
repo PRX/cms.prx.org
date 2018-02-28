@@ -5,7 +5,7 @@ class Api::AudioVersionTemplatesController < Api::BaseController
 
   filter_resources_by :series_id, :distribution_id
 
-  sort_params default: { label: :asc }, allowed: [:id, :label]
+  sort_params default: { label: :asc }, allowed: %i[id label]
 
   attr_accessor :distribution_id
 

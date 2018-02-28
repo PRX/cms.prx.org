@@ -61,7 +61,7 @@ class ImageUploader < CarrierWave::Uploader::Base
     image_filename(super)
   end
 
-  def image_filename(for_file, version=version_name)
+  def image_filename(for_file, version = version_name)
     return for_file unless version
     ext = File.extname(for_file)
     base = File.basename(for_file, ext)

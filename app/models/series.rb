@@ -1,13 +1,14 @@
 # encoding: utf-8
+
 require 'render_markdown'
 
 class Series < BaseModel
   SUBSCRIPTION_STATES = [
-    SUBSCRIPTION_NEW           = 'New',
-    SUBSCRIPTION_STARTED       = 'Started',
-    SUBSCRIPTION_USER_APPROVED = 'User Approved',
-    SUBSCRIPTION_PRX_APPROVED  = 'PRX Approved'
-  ]
+    SUBSCRIPTION_NEW           = 'New'.freeze,
+    SUBSCRIPTION_STARTED       = 'Started'.freeze,
+    SUBSCRIPTION_USER_APPROVED = 'User Approved'.freeze,
+    SUBSCRIPTION_PRX_APPROVED  = 'PRX Approved'.freeze
+  ].freeze
 
   include Storied
   include RenderMarkdown
@@ -107,9 +108,9 @@ class Series < BaseModel
     start_schedule = 0
     value = start_time.hour + (start_time.wday * 24)
     schedules.each_with_index do |s, i|
-      if (((s.day * 24) + s.hour) >= value)
-          start_schedule = i
-          break
+      if ((s.day * 24) + s.hour) >= value
+        start_schedule = i
+        break
       end
     end
 

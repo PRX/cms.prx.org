@@ -10,9 +10,11 @@ class Api::ProducerRepresenter < Api::BaseRepresenter
   end
 
   link :user do
-    {
-      href: api_user_path(represented.user),
-      title: represented.user.login
-    } if represented.user
+    if represented.user
+      {
+        href: api_user_path(represented.user),
+        title: represented.user.login
+      }
+    end
   end
 end

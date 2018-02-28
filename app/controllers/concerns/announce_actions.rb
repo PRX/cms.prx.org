@@ -16,7 +16,7 @@ module AnnounceActions
       options = args.extract_options!
 
       actions = args.map(&:to_s).uniq
-      actions = [:create, :update, :destroy] if actions.empty?
+      actions = %i[create update destroy] if actions.empty?
 
       actions.each do |action|
         next if announced_actions[action].include?(options)
@@ -33,7 +33,7 @@ module AnnounceActions
       announce_filter = new_announce_filter(action, options)
 
       # default callback options for only this action, and only on success
-      default_options = { only: [action], if: ->() { response.successful? } }
+      default_options = { only: [action], if: -> { response.successful? } }
       callback_options = options.slice(:only, :except, :if, :unless)
 
       after_action announce_filter, default_options.merge(callback_options)

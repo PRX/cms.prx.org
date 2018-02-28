@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'hash_serializer'
 
 class StoryDistribution < BaseModel

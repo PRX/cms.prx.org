@@ -8,8 +8,8 @@ class Api::StoriesController < Api::BaseController
   filter_params :highlighted, :purchased, :v4, :text
 
   sort_params default: { published_at: :desc, updated_at: :desc },
-              allowed: [:id, :created_at, :updated_at, :published_at, :title,
-                        :episode_number, :position]
+              allowed: %i[id created_at updated_at published_at title
+                          episode_number position]
 
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
@@ -20,16 +20,16 @@ class Api::StoriesController < Api::BaseController
   def after_update_resource(res)
     series_dists = res.try(:series).try(:distributions)
 
-    story_template_ids = res
-      .try(:audio_versions)
-      .try(:map) { |av| av.audio_version_template_id }
-      .try(:compact)
+    story_template_ids = res.
+                         try(:audio_versions).
+                         try(:map, &:audio_version_template_id).
+                         try(:compact)
 
     if series_dists && story_template_ids
       missing_dists = series_dists.select do |series_dist|
         # story has version with series dist template, but has no matching story dist
         story_template_ids.include?(series_dist.audio_version_template_id) &&
-        res.distributions.none? { |story_dist| story_dist.distribution == series_dist }
+          res.distributions.none? { |story_dist| story_dist.distribution == series_dist }
       end
     end
 
@@ -107,7 +107,7 @@ class Api::StoriesController < Api::BaseController
       { audio_versions: [:audio_files] },
       { promos: [:audio_files] },
       { account: [:image, :address, { opener: [:image] }] },
-      { series: [:images, :account, :audio_version_templates] },
+      { series: %i[images account audio_version_templates] },
       :creator,
       :images,
       :license,

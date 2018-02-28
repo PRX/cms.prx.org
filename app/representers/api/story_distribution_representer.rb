@@ -12,11 +12,13 @@ class Api::StoryDistributionRepresenter < Api::BaseRepresenter
   end
 
   link :story do
-    {
-      href: api_story_path(represented.story),
-      title: represented.story.title,
-      profile: model_uri(represented.story)
-    } if represented.story
+    if represented.story
+      {
+        href: api_story_path(represented.story),
+        title: represented.story.title,
+        profile: model_uri(represented.story)
+      }
+    end
   end
   embed :story,
         as: :story,

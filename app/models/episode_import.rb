@@ -115,7 +115,7 @@ class EpisodeImport < BaseModel
       to_insert << new_image
     end
 
-    story.images.destroy(to_destroy) if to_destroy.size > 0
+    story.images.destroy(to_destroy) if !to_destroy.empty?
 
     to_insert
   end
@@ -163,7 +163,7 @@ class EpisodeImport < BaseModel
       end
     end
 
-    version.audio_files.destroy(to_destroy) if to_destroy.size > 0
+    version.audio_files.destroy(to_destroy) if !to_destroy.empty?
 
     to_insert.each { |af| version.audio_files << af }
 
@@ -176,7 +176,7 @@ class EpisodeImport < BaseModel
   end
 
   def entry_description_attribute(entry)
-    [:content, :itunes_summary, :description, :title].find { |d| !entry[d].blank? }
+    %i[content itunes_summary description title].find { |d| !entry[d].blank? }
   end
 
   def get_or_create_template(segments)
@@ -190,7 +190,7 @@ class EpisodeImport < BaseModel
 
   def create_or_update_episode!
     episode_attributes = {}
-    if entry[:itunes_summary] && :itunes_summary != entry_description_attribute(entry)
+    if entry[:itunes_summary] && entry_description_attribute(entry) != :itunes_summary
       episode_attributes[:summary] = clean_text(entry[:itunes_summary])
     end
     episode_attributes[:author] = person(entry[:itunes_author] || entry[:author] || entry[:creator])

@@ -14,19 +14,23 @@ class Api::EpisodeImportRepresenter < Api::BaseRepresenter
   end
 
   link :podcast_import do
-    {
-      href: api_authorization_podcast_import_path(represented.podcast_import),
-      title: represented.podcast_import.series.title
-    } if represented.podcast_import_id
+    if represented.podcast_import_id
+      {
+        href: api_authorization_podcast_import_path(represented.podcast_import),
+        title: represented.podcast_import.series.title
+      }
+    end
   end
   embed :series, class: Series, decorator: Api::Min::SeriesRepresenter, zoom: false
 
   link :story do
-    {
-      href: api_story_path(represented.story),
-      title: represented.story.title,
-      profile: model_uri(represented.story)
-    } if represented.story
+    if represented.story
+      {
+        href: api_story_path(represented.story),
+        title: represented.story.title,
+        profile: model_uri(represented.story)
+      }
+    end
   end
   embed :story, as: :story, item_class: Story, decorator: Api::Min::StoryRepresenter, zoom: false
 end

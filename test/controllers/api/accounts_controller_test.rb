@@ -5,13 +5,13 @@ describe Api::AccountsController do
   let(:membership) { create(:membership, account: account) }
 
   it 'should show' do
-    get(:show, { api_version: 'v1', format: 'json', id: account.id } )
+    get(:show, api_version: 'v1', format: 'json', id: account.id)
     assert_response :success
   end
 
   it 'should list' do
     account.id.wont_be_nil
-    get(:index, { api_version: 'v1', format: 'json' } )
+    get(:index, api_version: 'v1', format: 'json')
     assert_response :success
   end
 
@@ -19,7 +19,7 @@ describe Api::AccountsController do
     membership.user.wont_be_nil
     membership.account.wont_be_nil
 
-    get(:index, { api_version: 'v1', format: 'json', user_id: membership.user.id } )
+    get(:index, api_version: 'v1', format: 'json', user_id: membership.user.id)
     assert_response :success
   end
 end

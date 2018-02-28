@@ -10,8 +10,8 @@ class Api::Auth::StoriesController < Api::StoriesController
   filter_params :highlighted, :purchased, :v4, :text, :noseries
 
   sort_params default: { updated_at: :desc },
-              allowed: [:id, :created_at, :updated_at, :published_at, :title,
-                        :episode_number, :position, :published_released_at]
+              allowed: %i[id created_at updated_at published_at title
+                          episode_number position published_released_at]
 
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
@@ -47,9 +47,9 @@ class Api::Auth::StoriesController < Api::StoriesController
   def resources_base
     # If there is a network_id specified, use that network
     @stories ||= if params[:network_id]
-      super.published
-    else
-      authorization.token_auth_stories
+                   super.published
+                 else
+                   authorization.token_auth_stories
     end
   end
 end

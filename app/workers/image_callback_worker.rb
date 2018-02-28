@@ -18,15 +18,15 @@ class ImageCallbackWorker
     mime_type = MIME::Types.type_for(job['format'] || '').first.try(:content_type)
     image.content_type = mime_type || job['format']
 
-    if !job['downloaded']
-      image.status = NOTFOUND
-    elsif !job['valid']
-      image.status = INVALID
-    elsif !job['resized']
-      image.status = FAILED
-    else
-      image.status = COMPLETE
-    end
+    image.status = if !job['downloaded']
+                     NOTFOUND
+                   elsif !job['valid']
+                     INVALID
+                   elsif !job['resized']
+                     FAILED
+                   else
+                     COMPLETE
+                   end
 
     Shoryuken.logger.info("Updating #{job['type']}[#{image.id}]: status => #{image.status}")
     image.save!
@@ -43,7 +43,6 @@ class ImageCallbackWorker
         announce(:series, :update, Api::Msg::SeriesRepresenter.new(series).to_json)
       end
     end
-
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
   rescue UnknownImageTypeError

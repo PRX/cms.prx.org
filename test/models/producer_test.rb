@@ -3,7 +3,7 @@ require 'test_helper'
 describe Producer do
 
   let(:producer) { FactoryGirl.create(:producer) }
-  let(:producer_with_user)  { FactoryGirl.create(:producer_with_user) }
+  let(:producer_with_user) { FactoryGirl.create(:producer_with_user) }
 
   it 'has a table defined' do
     Producer.table_name.must_equal 'producers'

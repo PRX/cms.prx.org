@@ -6,9 +6,11 @@ class Api::Auth::AudioFileRepresenter < Api::AudioFileRepresenter
   end
 
   link :storage do
-    {
-      href: represented.fixerable_final_storage_url,
-      type: represented.content_type
-    } if represented.id
+    if represented.id
+      {
+        href: represented.fixerable_final_storage_url,
+        type: represented.content_type
+      }
+    end
   end
 end

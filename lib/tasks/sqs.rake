@@ -3,16 +3,16 @@ require 'aws-sdk-core'
 namespace :sqs do
 
   desc 'Create required SQS queues'
-  task :create, [:env] do |t, args|
+  task :create, [:env] do |_t, args|
 
     env = args[:env] || Rails.env
 
     default_options = {
-      'DelaySeconds' => "0",
-      'MaximumMessageSize' => "#{(256 * 1024)}",
-      'VisibilityTimeout' => "60",
-      'ReceiveMessageWaitTimeSeconds' => "0",
-      'MessageRetentionPeriod' => "#{1.week.seconds.to_i}"
+      'DelaySeconds' => '0',
+      'MaximumMessageSize' => ((256 * 1024)).to_s,
+      'VisibilityTimeout' => '60',
+      'ReceiveMessageWaitTimeSeconds' => '0',
+      'MessageRetentionPeriod' => 1.week.seconds.to_i.to_s
     }
 
     # create the queues and DLQs
@@ -23,9 +23,9 @@ namespace :sqs do
     end
   end
 
-  def create_queue(queue, dlq_arn, options={})
+  def create_queue(queue, dlq_arn, options = {})
     sqs = Aws::SQS::Client.new
-    options = options.merge('RedrivePolicy' => %Q{{"maxReceiveCount":"10", "deadLetterTargetArn":"#{dlq_arn}"}"})
+    options = options.merge('RedrivePolicy' => %{{"maxReceiveCount":"10", "deadLetterTargetArn":"#{dlq_arn}"}"})
     q = sqs.create_queue(queue_name: queue, attributes: options)
     puts "created queue: #{q.inspect}"
     q
@@ -36,7 +36,11 @@ namespace :sqs do
     dlq_name = "#{queue}_failures"
     dlq = sqs.create_queue(queue_name: dlq_name, attributes: options)
     puts "created DLQ: #{dlq.inspect}"
-    attrs = sqs.get_queue_attributes(queue_url: dlq.queue_url, attribute_names: ['QueueArn']) rescue nil
+    attrs = begin
+              sqs.get_queue_attributes(queue_url: dlq.queue_url, attribute_names: ['QueueArn'])
+            rescue StandardError
+              nil
+            end
     attrs.attributes['QueueArn']
   end
 end

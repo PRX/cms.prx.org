@@ -8,9 +8,9 @@ class AudioFileUploader < CarrierWave::Uploader::Base
   # Create different versions of your uploaded files:
   def self.version_formats
     {
-      'broadcast' => {'format' => 'mp3', 'bit_rate' => 128, 'sample_rate' => 44100},
-      'download'  => {'format' => 'mp3', 'bit_rate' => 64,  'sample_rate' => 44100},
-      'preview'   => {'format' => 'mp3', 'bit_rate' => 64,  'sample_rate' => 44100, 'cut' => {'length' => 30}}
+      'broadcast' => { 'format' => 'mp3', 'bit_rate' => 128, 'sample_rate' => 44100 },
+      'download'  => { 'format' => 'mp3', 'bit_rate' => 64,  'sample_rate' => 44100 },
+      'preview'   => { 'format' => 'mp3', 'bit_rate' => 64,  'sample_rate' => 44100, 'cut' => { 'length' => 30 } }
     }
   end
 
@@ -34,7 +34,7 @@ class AudioFileUploader < CarrierWave::Uploader::Base
     audio_file_version_filename(super)
   end
 
-  def audio_file_version_filename(for_file, version=version_name)
+  def audio_file_version_filename(for_file, version = version_name)
     return for_file unless version
     base = File.basename(for_file, File.extname(for_file))
     "#{base}_#{version}.#{version_ext(version)}"

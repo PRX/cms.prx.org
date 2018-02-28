@@ -11,13 +11,13 @@ class AudioVersion < BaseModel
   belongs_to :audio_version_template
   has_many :audio_files, -> { order :position }, dependent: :destroy
 
-  before_save :set_status, only: [:update, :create]
+  before_save :set_status, only: %i[update create]
   after_commit :update_story_status
   after_destroy :update_story_status
 
   acts_as_paranoid
 
-  def length(reload=false)
+  def length(reload = false)
     @_length = nil if reload
     @_length ||= audio_files.inject(0) { |sum, f| sum + f.length.to_i }
   end
