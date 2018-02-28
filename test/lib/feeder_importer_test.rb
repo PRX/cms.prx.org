@@ -42,7 +42,7 @@ describe FeederImporter do
     series.audio_version_templates.size.must_equal 2
     series.audio_version_templates.first.audio_file_templates.size.must_equal 1
     series.audio_version_templates.first.segment_count.must_equal 1
-    series.audio_version_templates.first.must_equal importer.template
+    series.audio_version_templates.first.must_equal importer.audio_template
 
     series.distributions.size.must_equal 1
   end
@@ -77,7 +77,7 @@ describe FeederImporter do
 
     version = story.audio_versions.first
     version.wont_be_nil
-    version.audio_version_template.must_equal importer.template
+    version.audio_version_template.must_equal importer.audio_template
     version.explicit.must_equal episode.explicit
     version.audio_files.count.must_equal 1
 
