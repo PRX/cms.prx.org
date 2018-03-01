@@ -5,7 +5,7 @@ require 'dotenv'
 Dotenv.load
 
 set :application, 'cms.prx.org'
-set :repo_url, 'git://github.com/PRX/cms.prx.org'
+set :repo_url, 'ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/replica-cms.prx.org'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
