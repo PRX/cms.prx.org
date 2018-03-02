@@ -116,6 +116,12 @@ describe FeederImporter do
     importer.podcast.explicit.must_equal 'clean'
   end
 
+  it 'locks the podcast to prevent publishing mid-import' do
+    importer.retrieve_podcast
+    importer.lock_podcast!
+    importer.podcast.must_be :locked?
+  end
+
   it 'does a full import' do
     importer.import
     importer.series.id.wont_be_nil

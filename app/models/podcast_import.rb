@@ -43,6 +43,7 @@ class PodcastImport < BaseModel
     return unless episode_imports.count > 0
     if episode_imports.all? { |e| e.status == 'complete' }
       update_attributes!(status: 'complete')
+      remind_to_unlock(series.title)
     elsif episode_imports.any? { |e| e.status == 'failed' }
       update_attributes!(status: 'failed')
     end
@@ -237,6 +238,7 @@ class PodcastImport < BaseModel
     podcast_attributes[:copyright] ||= clean_string(feed.media_copyright)
     podcast_attributes[:keywords] = parse_keywords(feed)
     podcast_attributes[:serial_order] = feed.itunes_type && !!feed.itunes_type.match(/serial/i)
+    podcast_attributes[:locked] = true # won't publish feed until this is set to false
 
     self.podcast = podcast_distribution.create_or_update_podcast!(podcast_attributes)
     podcast

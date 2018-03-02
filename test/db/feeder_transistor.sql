@@ -415,7 +415,8 @@ CREATE TABLE podcasts (
     prx_account_uri character varying,
     published_at timestamp without time zone,
     enclosure_prefix character varying,
-    source_updated_at timestamp without time zone
+    source_updated_at timestamp without time zone,
+    locked boolean
 );
 
 
@@ -741,8 +742,8 @@ SELECT pg_catalog.setval('podcast_images_id_seq', 339, true);
 -- Data for Name: podcasts; Type: TABLE DATA; Schema: public; Owner: feeder
 --
 
-COPY podcasts (id, created_at, updated_at, title, link, description, language, managing_editor_name, categories, subtitle, summary, keywords, update_period, update_frequency, update_base, copyright, author_name, owner_name, owner_email, url, path, max_episodes, prx_uri, author_email, source_url, complete, feedburner_url, enclosure_template, deleted_at, managing_editor_email, duration_padding, display_episodes_count, display_full_episodes_count, explicit, new_feed_url, prx_account_uri, published_at, enclosure_prefix, source_updated_at) FROM stdin;
-40	2017-03-14 14:55:39.394466	2017-09-19 15:26:06.393865	Transistor	https://transistor.prx.org	<p>Transistor is podcast of scientific curiosities and current events, featuring guest hosts, scientists, and story-driven reporters. Presented by radio and podcast powerhouse PRX, with support from the Sloan Foundation. </p>	en-US	PRX	[]	A podcast of scientific questions and stories featuring guest hosts and reporters.	Transistor is podcast of scientific curiosities and current events, featuring guest hosts, scientists, and story-driven reporters. Presented by radio and podcast powerhouse PRX, with support from the Sloan Foundation.	[]	\N	\N	\N	Copyright 2016 PRX	PRX	PRX	prxwpadmin@prx.org	http://feeds.feedburner.com/transistor_stem	\N	\N	/api/v1/series/37677	\N	\N	f	http://feeds.feedburner.com/transistor_stem	https://dovetail.prxu.org/{slug}/{guid}/{original_filename}	\N	prxwpadmin@prx.org	\N	\N	\N	clean	http://feeds.prx.org/transistor_stem	\N	2017-09-18 04:00:00	https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/	2017-03-14 19:00:11.03
+COPY podcasts (id, created_at, updated_at, title, link, description, language, managing_editor_name, categories, subtitle, summary, keywords, update_period, update_frequency, update_base, copyright, author_name, owner_name, owner_email, url, path, max_episodes, prx_uri, author_email, source_url, complete, feedburner_url, enclosure_template, deleted_at, managing_editor_email, duration_padding, display_episodes_count, display_full_episodes_count, explicit, new_feed_url, prx_account_uri, published_at, enclosure_prefix, source_updated_at, locked) FROM stdin;
+40	2017-03-14 14:55:39.394466	2017-09-19 15:26:06.393865	Transistor	https://transistor.prx.org	<p>Transistor is podcast of scientific curiosities and current events, featuring guest hosts, scientists, and story-driven reporters. Presented by radio and podcast powerhouse PRX, with support from the Sloan Foundation. </p>	en-US	PRX	[]	A podcast of scientific questions and stories featuring guest hosts and reporters.	Transistor is podcast of scientific curiosities and current events, featuring guest hosts, scientists, and story-driven reporters. Presented by radio and podcast powerhouse PRX, with support from the Sloan Foundation.	[]	\N	\N	\N	Copyright 2016 PRX	PRX	PRX	prxwpadmin@prx.org	http://feeds.feedburner.com/transistor_stem	\N	\N	/api/v1/series/37677	\N	\N	f	http://feeds.feedburner.com/transistor_stem	https://dovetail.prxu.org/{slug}/{guid}/{original_filename}	\N	prxwpadmin@prx.org	\N	\N	\N	clean	http://feeds.prx.org/transistor_stem	\N	2017-09-18 04:00:00	https://dts.podtrac.com/redirect.mp3/media.blubrry.com/transistor/	2017-03-14 19:00:11.03	false
 \.
 
 

@@ -108,13 +108,19 @@ class FeederImporter
 
   def import
     retrieve_podcast
+    lock_podcast!
     create_series
     create_stories
     update_podcast
+    remind_to_unlock(podcast.title)
   end
 
   def retrieve_podcast
     self.podcast = Podcast.find(podcast_id)
+  end
+
+  def lock_podcast!
+    podcast.update!(locked: true)
   end
 
   def create_series

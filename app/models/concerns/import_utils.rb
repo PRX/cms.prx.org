@@ -97,4 +97,13 @@ module ImportUtils
   def announce_audio(audio)
     announce('audio', 'create', Api::Msg::AudioFileRepresenter.new(audio).to_json)
   end
+
+  def remind_to_unlock(title)
+    unless Rails.env.test?
+      puts '################################'
+      puts "Reminder: #{title} is LOCKED. Unlock in Feeder to publish feed."
+      puts '################################'
+    end
+  end
+
 end
