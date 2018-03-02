@@ -212,6 +212,11 @@ class FeederImporter
     episode.contains_video? ? video_template : audio_template
   end
 
+  def episode_description(episode)
+    attr = [:content, :summary, :description, :subtitle, :title].find { |d| !episode[d].blank? }
+    episode[attr]
+  end
+
   def create_story(episode)
     # puts "episode.categories: #{episode.categories.inspect}"
     attrs = {
@@ -220,7 +225,7 @@ class FeederImporter
       account_id: account_id,
       title: episode.title,
       short_description: episode.subtitle,
-      description_html: episode.description,
+      description_html: episode_description(episode),
       tags: episode.categories,
       published_at: episode.published_at,
       released_at: episode.published_at,
