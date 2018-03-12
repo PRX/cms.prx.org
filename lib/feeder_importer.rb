@@ -166,7 +166,7 @@ class FeederImporter
     end
 
     templates = [video_template, audio_template].compact
-
+    distro_templates = []
     templates.each do |t|
       num_segments.times do |x|
         num = x + 1
@@ -177,16 +177,14 @@ class FeederImporter
           length_maximum: 0
         )
       end
+      distro_templates << DistributionTemplate.new(audio_version_template: t)
     end
 
     self.distribution = Distributions::PodcastDistribution.create!(
       url: "#{feeder_root}/podcasts/#{podcast_id}",
       distributable: series,
-      audio_version_template: audio_template
+      distribution_templates: distro_templates,
     )
-    if contains_video
-      DistributionTemplate.create(distribution: distribution, audio_version_template: video_template)
-    end
 
     series
   end
