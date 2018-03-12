@@ -74,6 +74,10 @@ class Episode < FeederModel
   def item_guid
     original_guid || "prx_#{podcast_id}_#{guid}"
   end
+
+  def contains_video?
+    media_resources.any? { |mr| mr.mime_type.starts_with?('video/') }
+  end
 end
 
 class EpisodeImage < FeederModel
@@ -96,7 +100,7 @@ class FeederImporter
   include ImportUtils
 
   attr_accessor :account_id, :user_id, :podcast_id, :set_episode_urls
-  attr_accessor :podcast, :series, :template, :distribution, :stories
+  attr_accessor :podcast, :series, :audio_template, :distribution, :stories, :video_template
 
   def initialize(account_id, user_id, podcast_id, set_episode_urls = false)
     self.account_id = account_id
@@ -145,28 +149,47 @@ class FeederImporter
       num_segments = [episode.media_resources.count, num_segments].max
     end
 
-    self.template = series.audio_version_templates.create!(
+    contains_video = podcast.episodes.any?(&:contains_video?)
+
+    self.audio_template = series.audio_version_templates.create!(
       label: "Podcast Audio #{num_segments} #{'segment'.pluralize(num_segments)}",
+      content_type: AudioFile::MP3_CONTENT_TYPE,
       segment_count: num_segments,
       promos: false,
       length_minimum: 0,
       length_maximum: 0
     )
 
-    num_segments.times do |x|
-      num = x + 1
-      template.audio_file_templates.create!(
-        position: num,
-        label: "Segment #{num}",
+    if contains_video
+      self.video_template = series.audio_version_templates.create!(
+        label: "Podcast Video #{num_segments} #{'segment'.pluralize(num_segments)}",
+        content_type: AudioFile::VIDEO_CONTENT_TYPE,
+        segment_count: num_segments,
+        promos: false,
         length_minimum: 0,
         length_maximum: 0
       )
     end
 
+    templates = [video_template, audio_template].compact
+    distro_templates = []
+    templates.each do |t|
+      num_segments.times do |x|
+        num = x + 1
+        t.audio_file_templates.create!(
+          position: num,
+          label: "Segment #{num}",
+          length_minimum: 0,
+          length_maximum: 0
+        )
+      end
+      distro_templates << DistributionTemplate.new(audio_version_template: t)
+    end
+
     self.distribution = Distributions::PodcastDistribution.create!(
       url: "#{feeder_root}/podcasts/#{podcast_id}",
       distributable: series,
-      audio_version_template: template
+      distribution_templates: distro_templates,
     )
 
     series
@@ -185,6 +208,10 @@ class FeederImporter
     end
   end
 
+  def template_for_episode(episode)
+    episode.contains_video? ? video_template : audio_template
+  end
+
   def create_story(episode)
     # puts "episode.categories: #{episode.categories.inspect}"
     attrs = {
@@ -201,7 +228,7 @@ class FeederImporter
     story = series.stories.create!(attrs)
 
     version = story.audio_versions.create!(
-      audio_version_template: template,
+      audio_version_template: template_for_episode(episode),
       label: 'Podcast Audio',
       explicit: episode.explicit
     )

@@ -98,7 +98,7 @@ describe AudioFile do
       ft.length_minimum = 1
       ft.length_maximum = 10
     end
-    audio_version.audio_version_template.update(content_type: 'video/mpeg')
+    audio_version.audio_version_template.update(content_type: AudioFile::VIDEO_CONTENT_TYPE)
     audio_version.audio_version_template.audio_file_templates = file_templates
 
     audio_file.update_attributes(position: 1, label: 'Main Segment')

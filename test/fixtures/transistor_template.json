@@ -1,6 +1,7 @@
 {
   "id": 172,
   "label": "Podcast Audio",
+  "contentType": "audio/mpeg",
   "lengthMinimum": 0,
   "lengthMaximum": 0,
   "_links": {

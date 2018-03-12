@@ -23,6 +23,9 @@ class AudioFile < BaseModel
   after_commit :update_version_status
   after_destroy :update_version_status
 
+  MP3_CONTENT_TYPE = 'audio/mpeg'.freeze
+  VIDEO_CONTENT_TYPE = 'video/mpeg'.freeze
+
   before_validation do
     if upload
       self.status ||= UPLOADED
@@ -42,11 +45,15 @@ class AudioFile < BaseModel
   end
 
   def enclosure_content_type
-    audio? ? 'audio/mpeg' : content_type
+    audio? ? MP3_CONTENT_TYPE : content_type
   end
 
   def audio?
     content_type.present? && content_type.starts_with?('audio/')
+  end
+
+  def video?
+    content_type.present? && content_type.starts_with?('video/')
   end
 
   def compliant_with_template?

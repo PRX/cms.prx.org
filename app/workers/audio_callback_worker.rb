@@ -26,7 +26,7 @@ class AudioCallbackWorker
 
     # guess which stream we should look at - audio or video
     meta = job['audio'] || job['video'] || {}
-    if job['video'] && audio.content_type.try(:starts_with?, 'video/')
+    if job['video'] && audio.video?
       meta = job['video']
     end
 
