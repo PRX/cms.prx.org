@@ -213,7 +213,7 @@ class FeederImporter
   end
 
   def episode_description(episode)
-    attrname = %i(:content :summary :description :subtitle :title).find { |d| !episode[d].blank? }
+    attrname = %i(content summary description subtitle title).find { |d| !episode[d].blank? }
     episode[attrname]
   end
 
