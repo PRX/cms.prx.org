@@ -61,7 +61,7 @@ describe FeederImporter do
     now = Time.now
     episode.published_at = now
 
-    # tweek description so we verify we get content
+    # tweak description so we verify we get content
     episode.description = 'this is the description'
 
     story = importer.create_story(episode)
