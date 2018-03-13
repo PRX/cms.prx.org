@@ -61,6 +61,9 @@ describe FeederImporter do
     now = Time.now
     episode.published_at = now
 
+    # tweak description so we verify we get content
+    episode.description = 'this is the description'
+
     story = importer.create_story(episode)
     story.wont_be_nil
 
@@ -70,7 +73,8 @@ describe FeederImporter do
 
     story.title.must_equal episode.title
     story.short_description.must_equal episode.subtitle
-    story.description_html[0..32].must_equal episode.description[0..32]
+    story.description_html[0..32].must_equal episode.content[0..32]
+    story.description_html[0..32].wont_equal episode.description[0..32]
     story.tags.must_equal episode.categories
     story.published_at.must_equal now
     story.released_at.must_equal now
