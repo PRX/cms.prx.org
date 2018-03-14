@@ -23,12 +23,14 @@ class Distribution < BaseModel
         dist_id = dist.id
         if !dist.distributed?
           notice_message("Story #{story_id} not distributed: #{dist.distribution.url}")
-          dist.distribute!
+          story.touch
+          dist.reload.distribute!
         end
 
         if !dist.published?
           notice_message("Story #{story_id} distribution not published: #{dist.url}")
-          dist.publish!
+          story.touch
+          dist.reload.publish!
         end
       end
     end
