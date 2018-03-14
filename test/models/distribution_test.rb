@@ -81,10 +81,13 @@ describe Distribution do
       tsd.wont_be :published?
       tsd.wont_be :distributed?
       story.distributions = [tsd]
+      before_touch_at = story.updated_at
 
       Distribution.stub(:recently_published_stories, [story]) do
         Distribution.check_published!
       end
+
+      story.updated_at.must_be :>, before_touch_at
 
       tsd.must_be :published?
       tsd.must_be :distributed?
