@@ -6,6 +6,13 @@ class Api::UserRepresenter < Api::BaseRepresenter
   property :last_name
   property :login
 
+  link :default_account do
+    {
+      href: api_account_path(represented.default_account)
+    }
+  end
+  embed :default_account, decorator: Api::Min::AccountRepresenter, zoom: false
+
   link :accounts do
     {
       href: "#{api_user_accounts_path(represented)}#{index_url_params}",

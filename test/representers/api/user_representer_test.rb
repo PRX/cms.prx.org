@@ -18,4 +18,8 @@ describe Api::UserRepresenter do
     json['id'].must_equal user.id
   end
 
+  it 'includes the default account' do
+    json['_links']['prx:default-account']['href'].must_match /accounts\/#{user.default_account.id}/
+  end
+
 end
