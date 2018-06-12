@@ -36,7 +36,7 @@ worker:
     - db
   command: worker
 db:
-  image: mysql
+  image: mysql:8.0.2
   env_file:
     - .env
   environment:
@@ -44,7 +44,7 @@ db:
     MYSQL_ROOT_PASSWORD: password
   expose:
     - "3306"
-  command: mysqld --log_error_verbosity=1
+  command: mysqld --log_error_verbosity=1 --default-authentication-plugin=mysql_native_password
 pg:
   image: postgres
   env_file:
