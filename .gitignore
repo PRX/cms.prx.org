@@ -28,3 +28,6 @@ pickle-email-*.html
 
 # Ignore .capistrano config
 .capistrano
+
+# local docker compose config
+my-docker-compose.yml
