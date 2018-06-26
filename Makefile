@@ -26,6 +26,10 @@ test: clean
 check:
 	rubocop
 
+index:
+	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake environment elasticsearch:ha:import CLASS=Series FORCE=1
+	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake environment elasticsearch:ha:import CLASS=Story FORCE=1 SCOPE=published
+
 clean:
 	sudo rm -rf log/*log && chmod 777 log
 	sudo rm -rf tmp/ && mkdir tmp && chmod -R 777 tmp
