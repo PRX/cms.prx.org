@@ -3,6 +3,7 @@ cms:
   links:
     - db
     - pg
+    - elasticsearch
   ports:
     - 3000:3000
   command: test
@@ -38,3 +39,18 @@ pg:
     - "5432:5432"
   volumes:
     - ./test/db/:/docker-entrypoint-initdb.d/
+elasticsearch:
+  image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
+  container_name: elasticsearch
+  environment:
+    - cluster.name=docker-cluster
+    - bootstrap.memory_lock=true
+    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  ulimits:
+    memlock:
+      soft: -1
+      hard: -1
+  volumes:
+    - esdata1:/usr/share/elasticsearch/data
+  ports:
+    - 9200:9200

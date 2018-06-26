@@ -83,6 +83,9 @@ gem 'slackistrano', require: false
 gem 'newrelic_rpm'
 gem 'capistrano-newrelic'
 
+# elasticsearch
+gem 'elasticsearch-rails-ha'
+
 # dev-only
 group :development do
   gem 'web-console', '~> 2.0'

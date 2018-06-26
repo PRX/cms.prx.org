@@ -2,6 +2,9 @@ DOCKER_COMPOSE_FILE := my-docker-compose.yml
 
 all: build startdb setup
 
+sh:
+	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- sh
+
 run:
 	docker-compose -f ${DOCKER_COMPOSE_FILE} up
 

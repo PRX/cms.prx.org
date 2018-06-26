@@ -22,3 +22,4 @@ PRX_HOST=beta.prx.org
 PUBLIC_ASSET_SECRET=
 RAILS_ENV=development
 RAILS_SECRET_KEY=seeecrets
+ELASTICSEARCH_URL=http://elasticsearch:9200
