@@ -1,12 +1,16 @@
 # encoding: utf-8
 require 'render_markdown'
 require 'newrelic_rpm'
+require 'elasticsearch/model'
 
 class Story < BaseModel
   self.table_name = 'pieces'
 
   include RenderMarkdown
   include ValidityFlag
+
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   def description_html=(html)
     self.description = v4? ? html_to_markdown(html) : html

@@ -1,7 +1,11 @@
 # encoding: utf-8
+require 'elasticsearch/model'
 
 class Playlist < BaseModel
   include Storied
+
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   acts_as_paranoid
 

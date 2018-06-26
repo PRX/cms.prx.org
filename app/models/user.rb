@@ -1,6 +1,10 @@
 # encoding: utf-8
+require 'elasticsearch/model'
 
 class User < BaseModel
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   acts_as_paranoid
 
   # DON'T touch the account, as you'll create an infinite loop
