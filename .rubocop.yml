@@ -204,7 +204,10 @@ StringLiterals:
 VariableInterpolation:
   Enabled: false
 
-TrailingCommaInLiteral:
+TrailingCommaInArrayLiteral:
+  Enabled: false
+
+TrailingCommaInHashLiteral:
   Enabled: false
 
 TrailingCommaInArguments:
