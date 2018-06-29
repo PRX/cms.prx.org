@@ -297,7 +297,7 @@ describe Api::StoriesController do
     get(:index, api_version: 'v1', format: 'json', filters: 'text=weirdos')
     assert_response :success
     assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story
-    assigns[:stories].wont_include story2
+    assigns[:stories].to_a.must_include story
+    assigns[:stories].to_a.wont_include story2
   end
 end

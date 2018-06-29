@@ -9,6 +9,7 @@ class Story < BaseModel
   include ValidityFlag
 
   include Searchable
+  MAX_SEARCH_RESULTS = 10
 
   def description_html=(html)
     self.description = v4? ? html_to_markdown(html) : html
@@ -111,13 +112,18 @@ class Story < BaseModel
     select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
   }
 
-  scope :match_text, ->(text) {
-    where("`pieces`.`title` like '%#{text}%' OR " +
-          "`pieces`.`short_description` like '%#{text}%' OR " +
-          "`pieces`.`description` like '%#{text}%'")
+  scope :match_text, ->(text, params=nil, current_user=nil) {
+    search(build_query_dsl(text, params, current_user)).records
+    #where("`pieces`.`title` like '%#{text}%' OR " +
+    #      "`pieces`.`short_description` like '%#{text}%' OR " +
+    #      "`pieces`.`description` like '%#{text}%'")
   }
 
   scope :public_stories, -> { published.network_visible.series_visible }
+
+  def self.build_query_dsl(query_text, params, current_user)
+    StoryQueryBuilder.new(query: query_text, params: params, current_user: current_user).as_dsl
+  end
 
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)
