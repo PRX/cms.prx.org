@@ -34,6 +34,9 @@ def use_webmock?
   ENV['USE_WEBMOCK'].nil? || (ENV['USE_WEBMOCK'] == 'true')
 end
 WebMock.allow_net_connect! unless use_webmock?
+WebMock.disable_net_connect!(allow: /elasticsearch/) if use_webmock?
+
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 
 # To add Capybara feature tests add `gem "minitest-rails-capybara"`
 # to the test group in the Gemfile and uncomment the following:
