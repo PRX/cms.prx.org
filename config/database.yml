@@ -30,7 +30,7 @@ makara: &makara
 
 development:
   <<: *default
-  database: exchange_development
+  database: cms_development
 
 test:
   <<: *default
