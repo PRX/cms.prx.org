@@ -115,8 +115,8 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-# TODO: will eventually want these in production too
-group :staging do
-  gem 'rails_12factor'
+group :production, :staging do
+  gem 'makara'
   gem 'puma'
+  gem 'rails_12factor'
 end
