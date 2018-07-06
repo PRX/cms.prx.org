@@ -1,6 +1,5 @@
 # encoding: utf-8
 require 'render_markdown'
-require 'elasticsearch/model'
 
 class Series < BaseModel
   SUBSCRIPTION_STATES = [
@@ -13,8 +12,7 @@ class Series < BaseModel
   include Storied
   include RenderMarkdown
 
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
+  include Searchable
 
   def description_html=(html)
     self.description = v4? ? html_to_markdown(html) : html

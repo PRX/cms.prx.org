@@ -292,8 +292,8 @@ describe Api::StoriesController do
   end
 
   it 'should list matching stories for text' do
-    story = create(:story, title: 'You are all Weirdos')
-    story2 = create(:story, title: 'We are all Freakazoids')
+    story = create(:story, title: 'You are all Weirdos').reindex
+    story2 = create(:story, title: 'We are all Freakazoids').reindex
     get(:index, api_version: 'v1', format: 'json', filters: 'text=weirdos')
     assert_response :success
     assert_not_nil assigns[:stories]

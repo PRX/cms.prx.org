@@ -103,10 +103,10 @@ class StoryQueryBuilder
     searchdsl = self
     @dsl.query = Query.new
     @dsl.query do
-      multi_match do
+      query_string do
         query searchdsl.composite_query_string
-        operator searchdsl.default_operator
-        type 'cross_fields'
+        default_operator searchdsl.default_operator
+        lenient true
         fields searchdsl.fields
       end
     end

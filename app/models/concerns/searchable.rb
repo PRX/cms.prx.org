@@ -8,7 +8,7 @@ module Searchable
 
     after_commit on: [:create] do
       if Rails.env.test?
-        reindex
+        #reindex # call manually in tests if needed, for performance reasons
       else
         # TODO put on async queue for indexing
       end
@@ -16,7 +16,7 @@ module Searchable
 
     after_commit on: [:update] do
       if Rails.env.test?
-        reindex
+        #reindex # call manually in tests if needed, for performance reasons
       else
         # TODO put on async queue for indexing
       end
@@ -24,7 +24,7 @@ module Searchable
 
     after_commit on: [:destroy] do
       if Rails.env.test?
-        remove_from_index
+        #remove_from_index # call manually in tests if needed, for performance reasons
       else
         # TODO put on async queue to remove_from_index
       end
@@ -32,10 +32,17 @@ module Searchable
 
     def reindex
       __elasticsearch__.index_document
+      refresh_index
+      self
     end
 
     def remove_from_index
       __elasticsearch__.destroy_document
+      refresh_index
+    end
+
+    def refresh_index
+      self.class.__elasticsearch__.refresh_index!
     end
 
     def self.rebuild_index

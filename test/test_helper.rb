@@ -58,6 +58,8 @@ class MiniTest::Spec
   def extract_filename(uri)
     URI.parse(uri).path.split('?')[0].split('/').last
   end
+
+  ElasticsearchHelper.es_setup
 end
 
 Minitest::Expectations.infect_an_assertion :assert_operator, :must_allow, :reverse

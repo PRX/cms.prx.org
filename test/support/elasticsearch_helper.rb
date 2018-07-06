@@ -1,4 +1,4 @@
-module ElasticsearchHelper
+class ElasticsearchHelper
   def create_es_index(klass)
     debug { "Rebuilding index for #{klass}..." }
     search = klass.__elasticsearch__
@@ -35,6 +35,16 @@ module ElasticsearchHelper
   def debug
     if ENV["ES_DEBUG"]
       puts yield
+    end
+  end
+
+  # create test indices.
+  # we use the same 9200 server docker instance, but with "-test" suffix on each index name.
+  def self.es_setup
+    helper = new
+    [User, Series, Story, StationAccount, GroupAccount, Playlist].each do |klass|
+      klass.index_name klass.index_name + '-test'
+      helper.create_es_index(klass)
     end
   end
 end
