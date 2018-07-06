@@ -153,6 +153,8 @@ class StoryQueryBuilder
   def add_sort
     if params && params[:sort]
       @dsl.sort(params[:sort].map { |pair| [pair.split(":")].to_h })
+    else
+      @dsl.sort([published_at: :desc, updated_at: :desc])
     end
   end
 
