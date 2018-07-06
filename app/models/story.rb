@@ -114,9 +114,6 @@ class Story < BaseModel
 
   scope :match_text, ->(text, params=nil, current_user=nil) {
     search(build_query_dsl(text, params, current_user)).records
-    #where("`pieces`.`title` like '%#{text}%' OR " +
-    #      "`pieces`.`short_description` like '%#{text}%' OR " +
-    #      "`pieces`.`description` like '%#{text}%'")
   }
 
   scope :public_stories, -> { published.network_visible.series_visible }

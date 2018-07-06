@@ -16,6 +16,7 @@ PRX::Application.routes.draw do
 
       resources :stories, except: [:new, :edit] do
         get 'random', on: :collection
+        get 'search', on: :collection
         post 'publish', on: :member
         post 'unpublish', on: :member
         resources :promos, except: [:new, :edit]

@@ -13,6 +13,11 @@ class Api::StoriesController < Api::BaseController
 
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
+  def search
+    @stories = Story.match_text(params[:q], params, current_user)
+    index
+  end
+
   def after_create_resource(res)
     res.create_story_distributions
   end
