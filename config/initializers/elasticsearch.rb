@@ -1,4 +1,4 @@
-require "elasticsearch/model"
+require 'elasticsearch/model'
 
 # defaults
 es_client_args = {
@@ -9,7 +9,7 @@ es_client_args = {
     }
   },
   retry_on_failure: 5,
-  url: ENV["ELASTICSEARCH_URL"] || "http://elasticsearch:9200"
+  url: ENV.fetch('ELASTICSEARCH_URL', 'http://elasticsearch:9200')
 }
 
 if Rails.env.test?
@@ -18,7 +18,7 @@ if Rails.env.test?
 end
 
 # optional verbose logging based on env var, regardless of environment.
-if ENV["ES_DEBUG"]
+if ENV['ES_DEBUG']
   logger = Logger.new(STDOUT)
   logger.level = Logger::DEBUG
   tracer = Logger.new(STDERR)
@@ -31,6 +31,6 @@ end
 
 Elasticsearch::Model.client = Elasticsearch::Client.new(es_client_args)
 
-if ENV["ES_DEBUG"]
+if ENV['ES_DEBUG']
   es_client_args[:logger].debug "[#{Time.now.utc.iso8601}] Using Elasticsearch server #{es_client_args[:url]}"
 end

@@ -84,8 +84,8 @@ gem 'newrelic_rpm'
 gem 'capistrano-newrelic'
 
 # elasticsearch
-gem 'elasticsearch-rails-ha'
 gem 'elasticsearch-dsl'
+gem 'elasticsearch-rails-ha'
 
 # dev-only
 group :development do
