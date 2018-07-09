@@ -19,6 +19,7 @@ cms:
     FEEDER_DB_HOST: pg
     FEEDER_DB_DATABASE: feeder
     FEEDER_DB_PASSWORD: password
+    ELASTICSEARCH_URL: http://elasticsearch:9200
 db:
   image: mysql:8.0.2
   environment:
