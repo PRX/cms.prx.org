@@ -38,7 +38,7 @@ WaitForElasticsearch () {
     es_tries=$((es_tries+1))
     if [ "$es_tries" -gt "10" ]; then
       echo "No response from $ELASTICSEARCH_URL -- giving up"
-      exit
+      exit 2
     fi
   done
 }
