@@ -30,7 +30,8 @@ WaitForMysql () {
 }
 
 WaitForElasticsearch () {
-  until curl $ELASTICSEARCH_URL &> /dev/null; do
+  curl -s $ELASTICSEARCH_URL
+  until curl -s $ELASTICSEARCH_URL &> /dev/null; do
     >&2 echo 'Elasticsearch not available'
     sleep 3;
   done
