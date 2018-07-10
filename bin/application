@@ -31,9 +31,15 @@ WaitForMysql () {
 
 WaitForElasticsearch () {
   echo "Waiting for $ELASTICSEARCH_URL ..."
+  es_tries=0
   until curl -s $ELASTICSEARCH_URL &> /dev/null; do
     >&2 echo 'Elasticsearch not available'
     sleep 3;
+    es_tries=$((es_tries+1))
+    if [ "$es_tries" -gt "10" ]; then
+      echo "No response from $ELASTICSEARCH_URL -- giving up"
+      exit
+    fi
   done
 }
 
