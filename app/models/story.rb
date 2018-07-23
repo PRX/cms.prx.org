@@ -130,11 +130,11 @@ class Story < BaseModel
   end
 
   def promos_audio
-    @promos_audio ||= promos.try(:audio_files) || Kaminari.paginate_array([])
+    @promos_audio ||= promos.try(:audio_files) || AudioFile.none
   end
 
   def default_audio
-    @default_audio ||= default_audio_version.try(:audio_files) || Kaminari.paginate_array([])
+    @default_audio ||= default_audio_version.try(:audio_files) || AudioFile.none
   end
 
   def duration
