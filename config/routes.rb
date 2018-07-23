@@ -2,7 +2,7 @@ PRX::Application.routes.draw do
 
   namespace :api do
     # TODO: https://github.com/PRX/hal_api-rails/issues/12
-    scope ':api_version', constraints: {api_version: /v1|_API_VERSION_REPLACE_/}, defaults: {api_version: 'v1'} do
+    scope ':api_version', api_version: 'v1' do
 
       root to: 'base#entrypoint'
       match '*any', via: [:options], to: 'base#options'
