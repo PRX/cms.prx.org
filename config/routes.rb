@@ -1,6 +1,7 @@
 PRX::Application.routes.draw do
 
   namespace :api do
+    # TODO: https://github.com/PRX/hal_api-rails/issues/12
     scope ':api_version', api_version: 'v1' do
 
       root to: 'base#entrypoint'

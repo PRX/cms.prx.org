@@ -30,7 +30,7 @@ class Account < BaseModel
   end
 
   def portfolio_stories
-    portfolio ? portfolio.stories.order(published_at: :desc) : Kaminari.paginate_array([])
+    portfolio ? portfolio.stories.order(published_at: :desc) : Story.none
   end
 
   def self.policy_class
