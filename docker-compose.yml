@@ -1,59 +1,61 @@
-cms:
-  build: .
-  volumes:
-    - .:/app
-  env_file:
-    - .env
-  links:
-    - db
-    - pg
-  ports:
-    - "3000:3000"
-  command: web
-  environment:
-    VIRTUAL_HOST: cms.prx.docker
-    LOCAL_ENV: "true"
-    DB_ENV_MYSQL_USER: root
-    DB_ENV_MYSQL_PASSWORD: password
-    DB_PORT_3306_TCP_ADDR: db
-    DB_PORT_3306_TCP_PORT: "3306"
-    FEEDER_DB_HOST: pg
-    FEEDER_DB_DATABASE: feeder
-    FEEDER_DB_PASSWORD: password
-worker:
-  image: cmsprxorg_cms
-  volumes:
-    - .:/app
-  env_file:
-    - .env
-  environment:
-    LOCAL_ENV: "true"
-    DB_ENV_MYSQL_USER: root
-    DB_ENV_MYSQL_PASSWORD: password
-    DB_PORT_3306_TCP_ADDR: db
-    DB_PORT_3306_TCP_PORT: "3306"
-  links:
-    - db
-  command: worker
-db:
-  image: mysql:8.0.2
-  env_file:
-    - .env
-  environment:
-    MYSQL_DATABASE: cms_development
-    MYSQL_ROOT_PASSWORD: password
-  expose:
-    - "3306"
-  command: mysqld --log_error_verbosity=1 --default-authentication-plugin=mysql_native_password
-pg:
-  image: postgres
-  env_file:
-    - .env
-  environment:
-    POSTGRES_USER: feeder
-    POSTGRES_PASSWORD: password
-    POSTGRES_DB: feeder
-  expose:
-    - "5432"
-  volumes:
-    - ./test/db/:/docker-entrypoint-initdb.d/
+version: '2'
+services:
+  cms:
+    build: .
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    links:
+      - db
+      - pg
+    ports:
+      - "3000:3000"
+    command: web
+    environment:
+      VIRTUAL_HOST: cms.prx.docker
+      LOCAL_ENV: "true"
+      DB_ENV_MYSQL_USER: root
+      DB_ENV_MYSQL_PASSWORD: password
+      DB_PORT_3306_TCP_ADDR: db
+      DB_PORT_3306_TCP_PORT: "3306"
+      FEEDER_DB_HOST: pg
+      FEEDER_DB_DATABASE: feeder
+      FEEDER_DB_PASSWORD: password
+  worker:
+    image: cmsprxorg_cms
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      LOCAL_ENV: "true"
+      DB_ENV_MYSQL_USER: root
+      DB_ENV_MYSQL_PASSWORD: password
+      DB_PORT_3306_TCP_ADDR: db
+      DB_PORT_3306_TCP_PORT: "3306"
+    links:
+      - db
+    command: worker
+  db:
+    image: mysql:8.0.2
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: cms_development
+      MYSQL_ROOT_PASSWORD: password
+    expose:
+      - "3306"
+    command: mysqld --log_error_verbosity=1 --default-authentication-plugin=mysql_native_password
+  pg:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: feeder
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: feeder
+    expose:
+      - "5432"
+    volumes:
+      - ./test/db/:/docker-entrypoint-initdb.d/
