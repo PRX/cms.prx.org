@@ -10,7 +10,7 @@ services:
       - db
       - pg
     ports:
-      - "3000:3000"
+      - "3001:3000"
     command: web
     environment:
       VIRTUAL_HOST: cms.prx.docker
