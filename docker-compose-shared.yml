@@ -1,0 +1,25 @@
+version: '2'
+services:
+  worker:
+    networks:
+      - shared-mysql-dbnet
+    environment:
+      DB_PORT_3306_TCP_ADDR: shared-mysql
+      DB_PORT_3306_TCP_PORT: 3306
+      DB_ENV_MYSQL_DATABASE: shared_exchange_db
+      DB_ENV_MYSQL_USER: root
+      DB_ENV_MYSQL_PASSWORD: password
+  cms:
+    networks:
+      - shared-mysql-dbnet
+    environment:
+      DB_PORT_3306_TCP_ADDR: shared-mysql
+      DB_PORT_3306_TCP_PORT: 3306
+      DB_ENV_MYSQL_DATABASE: shared_exchange_db
+      DB_ENV_MYSQL_USER: root
+      DB_ENV_MYSQL_PASSWORD: password
+
+networks:
+  shared-mysql-dbnet:
+    external:
+      name: shared-mysql-dbnet

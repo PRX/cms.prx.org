@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker network create shared-mysql-dbnet
+docker run --name shared-mysql --env MYSQL_DATABASE=shared_exchange_db --env MYSQL_ROOT_PASSWORD=password --env-file .env  -p 3306:3306 -v /var/lib/mysql:/var/lib/mysql -d mysql:8.0.2
+docker network connect shared-mysql-dbnet shared-mysql
+
+echo "you can now run 'docker-compose -f docker-compose.yml -f docker-compose-shared.yml run <command>'"
