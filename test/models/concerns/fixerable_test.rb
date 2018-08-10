@@ -110,4 +110,9 @@ describe Fixerable do
     signed_url.must_match /X-Amz-Expires=3600/
   end
 
+  it 'defaults to the ENV bucket for relative paths' do
+    model.the_temp_field = 'public/uploads/piece_audio_files/123456'
+    model.asset_url.must_include 'https://s3.amazonaws.com/'
+  end
+
 end

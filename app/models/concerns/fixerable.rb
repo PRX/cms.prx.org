@@ -137,13 +137,14 @@ module Fixerable
 
   # temporary location
   def fixerable_temp_url(options = {})
-    uri = URI.parse(fixtemp)
+    value = fixtemp.include?('://') ? fixtemp : "s3://#{ENV['AWS_BUCKET']}/#{value}"
+    uri = URI.parse(value)
     if uri.scheme.starts_with?('http')
-      fixtemp
+      value
     elsif uri.scheme.starts_with?('ftp')
       nil
     elsif self.class.fixerable_storage[uri.scheme.to_s]
-      self.class.fixerable_signed_url(fixtemp, fixfinal.class, options)
+      self.class.fixerable_signed_url(value, fixfinal.class, options)
     end
   end
 end
