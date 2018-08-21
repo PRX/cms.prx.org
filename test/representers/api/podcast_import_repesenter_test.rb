@@ -11,6 +11,12 @@ describe Api::PodcastImportRepresenter do
     json['_links'][name] ? json['_links'][name]['href'] : nil
   end
 
+  it 'handles a deleted series' do
+    podcast_import.series.destroy
+    podcast_import.reload
+    get_link_href('prx:series').must_equal nil
+  end
+
   it 'create representer' do
     representer.wont_be_nil
   end
