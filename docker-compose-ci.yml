@@ -37,7 +37,7 @@ pg:
     POSTGRES_PASSWORD: password
     POSTGRES_DB: feeder
   ports:
-    - "5432:5432"
+    - 5432:5432
   volumes:
     - ./test/db/:/docker-entrypoint-initdb.d/
 elasticsearch:
@@ -53,4 +53,4 @@ elasticsearch:
   volumes:
     - esdata1:/usr/share/elasticsearch/data
   ports:
-    - "9200:9200"
+    - 9200:9200
