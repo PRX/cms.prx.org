@@ -24,7 +24,7 @@ class Api::PodcastImportRepresenter < Api::BaseRepresenter
     {
       href: api_series_path(represented.series),
       title: represented.series.title
-    } if represented.series_id
+    } if represented.series
   end
   embed :series, class: Series, decorator: Api::Min::SeriesRepresenter
 

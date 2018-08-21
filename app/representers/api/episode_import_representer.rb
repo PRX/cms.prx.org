@@ -13,10 +13,16 @@ class Api::EpisodeImportRepresenter < Api::BaseRepresenter
     api_authorization_podcast_import_episode_import_path(represented.podcast_import, represented)
   end
 
+  def series_title(represented)
+    return nil unless represented.podcast_import.series.present?
+
+    represented.podcast_import.series.title
+  end
+
   link :podcast_import do
     {
       href: api_authorization_podcast_import_path(represented.podcast_import),
-      title: represented.podcast_import.series.title
+      title: series_title(represented)
     } if represented.podcast_import_id
   end
   embed :series, class: Series, decorator: Api::Min::SeriesRepresenter, zoom: false
