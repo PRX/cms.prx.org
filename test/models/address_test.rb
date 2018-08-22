@@ -18,6 +18,12 @@ describe Address do
     address.account.must_equal account
   end
 
+  it 'provides access to a deleted account' do
+    user.update_attribute(:deleted_at, Time.now)
+    account.update_attribute(:deleted_at, Time.now)
+    address.reload.account.must_equal account
+  end
+
   it 'can set an account' do
     address.account = user.address.account
     address.account.must_equal user.address.account

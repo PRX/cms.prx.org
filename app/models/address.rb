@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Address < BaseModel
-  belongs_to :addressable, polymorphic: true, touch: true
+  belongs_to :addressable, -> { with_deleted }, polymorphic: true, touch: true
 
   def account
     if addressable.is_a?(Account)
