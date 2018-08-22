@@ -34,4 +34,8 @@ class Api::Auth::PodcastImportsController < Api::BaseController
     resources = resources.find_by_url(filters.url) if filters.url?
     super
   end
+
+  def resources_base
+    authorization.podcast_imports
+  end
 end
