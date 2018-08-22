@@ -60,6 +60,8 @@ class StoryQueryBuilder
   end
 
   def munge_fielded_params(fielded)
+    # the convert_created_at_to_range and date logic is all preliminary.
+    # Not used at all, but here as an example.
     if fielded[:created_at].present? && fielded[:created_within].present?
       convert_created_at_to_range(fielded)
     elsif fielded[:created_within].present?
@@ -69,6 +71,7 @@ class StoryQueryBuilder
     fielded.delete(:created_within)
   end
 
+  # Not yet used
   def convert_created_at_to_range(fielded, relative_to_now = false)
     ranges = get_date_ranges(fielded[:created_at], fielded[:created_within])
     return unless ranges
@@ -79,6 +82,7 @@ class StoryQueryBuilder
     end
   end
 
+  # Not yet used
   def get_date_ranges(created_at, created_within)
     high_end_range = Time.zone.parse(created_at.to_s) || Time.current
     within_parsed = created_within.match(/^(\d+) (\w+)/)
@@ -112,6 +116,7 @@ class StoryQueryBuilder
     end
   end
 
+  # ES filters allow you to trim a result set w/o impacting scoring.
   def add_filter
     bools = build_filters
     if bools.any?

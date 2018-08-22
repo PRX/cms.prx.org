@@ -6,15 +6,7 @@ module Searchable
   included do
     include Elasticsearch::Model
 
-    after_commit on: [:create] do
-      if Rails.env.test?
-        #reindex # call manually in tests if needed, for performance reasons
-      else
-        # TODO put on async queue for indexing
-      end
-    end
-
-    after_commit on: [:update] do
+    after_commit on: [:create, :update] do
       if Rails.env.test?
         #reindex # call manually in tests if needed, for performance reasons
       else
@@ -30,6 +22,7 @@ module Searchable
       end
     end
 
+    # shorthand methods
     def reindex
       __elasticsearch__.index_document
       refresh_index
@@ -45,6 +38,7 @@ module Searchable
       self.class.__elasticsearch__.refresh_index!
     end
 
+    # class method shorthand, useful for triggering via rake task or console
     def self.rebuild_index
       stager = index_stager
       indexer(stager).run
