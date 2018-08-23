@@ -157,13 +157,13 @@ class ESQueryBuilder
     elsif params && params[:size]
       @dsl.size = params[:size].to_i
     else
-      @dsl.size = MAX_SEARCH_RESULTS
+      @dsl.size = default_max_search_results
     end
   end
 
   def calculate_from_size
     page = params[:page].to_i
-    @size ||= (params[:size] || MAX_SEARCH_RESULTS).to_i
+    @size ||= (params[:size] || default_max_search_results).to_i
     @from = (page - 1) * @size.to_i
   end
 end

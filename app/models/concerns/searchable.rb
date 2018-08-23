@@ -38,7 +38,7 @@ module Searchable
       self.class.__elasticsearch__.refresh_index!
     end
 
-    # class method shorthand, useful for triggering via rake task or console
+    # class method shorthand, useful for triggering via rake task or console or tests
     def self.rebuild_index
       stager = index_stager
       indexer(stager).run

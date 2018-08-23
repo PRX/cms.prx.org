@@ -124,6 +124,10 @@ class Story < BaseModel
     StoryQueryBuilder.new(query: query_text, params: params, current_user: current_user).as_dsl
   end
 
+  def self.text_search(text, params=nil, current_user=nil)
+    search(build_query_dsl(text, params, current_user)).records
+  end
+
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)
   end

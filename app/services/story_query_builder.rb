@@ -1,9 +1,15 @@
 class StoryQueryBuilder < ESQueryBuilder
 
-  MAX_SEARCH_RESULTS = Story::MAX_SEARCH_RESULTS
+  def default_max_search_results
+    Story::MAX_SEARCH_RESULTS
+  end
 
   def default_fields
     ['title', 'short_description', 'description']
+  end
+
+  def default_sort_params
+    [published_at: :desc, updated_at: :desc]
   end
 
   def apply_authz?
@@ -39,9 +45,5 @@ class StoryQueryBuilder < ESQueryBuilder
     Filter.new do
       term account_id: searchdsl.current_user.account_ids
     end
-  end
-
-  def default_sort_params
-    [published_at: :desc, updated_at: :desc]
   end
 end

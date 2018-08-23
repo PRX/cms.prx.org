@@ -14,7 +14,7 @@ class Api::StoriesController < Api::BaseController
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
   def search
-    @stories = Story.match_text(params[:q], params, current_user)
+    @stories = Story.text_search(params[:q], params, current_user)
     index
   end
 
@@ -99,7 +99,7 @@ class Api::StoriesController < Api::BaseController
 
   def filtered(resources)
     resources = resources.v4 if filters.v4?
-    resources = resources.match_text(filters.text, params, current_user) if filters.text?
+    resources = resources.match_text(filters.text) if filters.text?
     if highlighted?
       resources
     else
