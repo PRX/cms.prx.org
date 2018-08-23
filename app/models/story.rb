@@ -112,8 +112,10 @@ class Story < BaseModel
     select('`pieces`.*', 'COUNT(`purchases`.`id`) AS `purchase_count`').group('`pieces`.`id`')
   }
 
-  scope :match_text, ->(text, params=nil, current_user=nil) {
-    search(build_query_dsl(text, params, current_user)).records
+  scope :match_text, ->(text) {
+    where("`pieces`.`title` like '%#{text}%' OR " +
+          "`pieces`.`short_description` like '%#{text}%' OR " +
+          "`pieces`.`description` like '%#{text}%'")
   }
 
   scope :public_stories, -> { published.network_visible.series_visible }

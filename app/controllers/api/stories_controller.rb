@@ -99,9 +99,7 @@ class Api::StoriesController < Api::BaseController
 
   def filtered(resources)
     resources = resources.v4 if filters.v4?
-    Rails.logger.debug("before: #{resources}")
     resources = resources.match_text(filters.text, params, current_user) if filters.text?
-    Rails.logger.debug("after: #{resources}")
     if highlighted?
       resources
     else
