@@ -30,6 +30,8 @@ PRX::Application.configure do
   # Just allow all docker-compose requests
   config.web_console.whitelisted_ips = '0.0.0.0/0'
 
-  # Better logging for docker-compose
-  config.logger = Logger.new(STDOUT)
+  # Better logging for docker-compose, except when re-indexing ES via rake.
+  unless ENV['CLASS']
+    config.logger = Logger.new(STDOUT)
+  end
 end

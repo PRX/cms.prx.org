@@ -29,17 +29,18 @@ check:
 index: index_series index_stories
 mindex: mindex_series mindex_stories
 
+NPROCS := 2
 index_series:
 	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake environment elasticsearch:ha:import CLASS=Series FORCE=1
 
 mindex_series:
-	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake environment elasticsearch:ha:import CLASS=Series FORCE=1 NPROCS=2
+	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake environment elasticsearch:ha:import CLASS=Series FORCE=1 NPROCS=${NPROCS}
 
 index_stories:
 	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake environment elasticsearch:ha:import CLASS=Story FORCE=1
 
 mindex_stories:
-	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake environment elasticsearch:ha:import CLASS=Story FORCE=1 NPROCS=2
+	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake environment elasticsearch:ha:import CLASS=Story FORCE=1 NPROCS=${NPROCS}
 
 clean:
 	sudo rm -rf log/*log && chmod 777 log

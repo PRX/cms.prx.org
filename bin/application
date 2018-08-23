@@ -85,6 +85,7 @@ ApplicationRun () {
 
   UpdateEnvironment
   WaitForMysql
+  WaitForElasticsearch
 
   if [ \( "$PROCESS" = "web" \) -o \( "$PROCESS" = "worker" \) ] ; then
     ApplicationUpdate
