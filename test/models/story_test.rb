@@ -363,11 +363,11 @@ describe Story do
                      title: 'Some Weirdo',
                      description: 'Unique thing',
                      short_description: 'Lacking sense')
-      story.reindex
-      Story.match_text('weirdo').to_a.must_include story
-      Story.match_text('unique').to_a.must_include story
-      Story.match_text('lack*').to_a.must_include story
-      Story.match_text('random').to_a.wont_include story
+
+      Story.match_text('weirdo').must_include story
+      Story.match_text('unique').must_include story
+      Story.match_text('lack').must_include story
+      Story.match_text('random').wont_include story
     end
 
     it 'returns public only stories' do
