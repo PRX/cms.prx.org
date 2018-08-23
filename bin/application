@@ -29,6 +29,7 @@ WaitForMysql () {
   done
 }
 
+# currently not used, but keeping here as an example of how to do it.
 WaitForElasticsearch () {
   echo "Waiting for $ELASTICSEARCH_URL ..."
   es_tries=0
@@ -84,7 +85,6 @@ ApplicationRun () {
 
   UpdateEnvironment
   WaitForMysql
-  WaitForElasticsearch
 
   if [ \( "$PROCESS" = "web" \) -o \( "$PROCESS" = "worker" \) ] ; then
     ApplicationUpdate
