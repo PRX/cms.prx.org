@@ -370,6 +370,20 @@ describe Story do
       Story.match_text('random').wont_include story
     end
 
+    it 'searches text for title and description with Elasticsearch' do
+      # always start clean
+      ElasticsearchHelper.new.create_es_index(Story)
+      story = create(:story,
+                     title: 'Some Weirdo',
+                     description: 'Unique thing',
+                     short_description: 'Lacking sense').reindex
+
+      Story.text_search('weirdo').to_a.must_include story
+      Story.text_search('unique').to_a.must_include story
+      Story.text_search('lack*').to_a.must_include story
+      Story.text_search('random').to_a.wont_include story
+    end
+
     it 'returns public only stories' do
       story = create(:story)
       story_n = create(:story, network_only_at: Time.now)

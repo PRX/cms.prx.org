@@ -302,6 +302,8 @@ describe Api::StoriesController do
   end
 
   it 'should search text with Elasticsearch' do
+    # always start clean
+    ElasticsearchHelper.new.create_es_index(Story)
     story = create(:story, title: 'You are all Weirdos').reindex
     story2 = create(:story, title: 'We are all Freakazoids').reindex
     get(:search, api_version: 'v1', format: 'json', q: 'weirdos')
