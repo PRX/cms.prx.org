@@ -12,7 +12,7 @@ class ElasticsearchHelper
   end
 
   def _create(search, name: nil)
-    debug { "  Creating index..." }
+    debug { '  Creating index...' }
     search.create_index!(
       # Req'd by https://github.com/elastic/elasticsearch-rails/issues/571
       force: search.index_exists?(index: name),
@@ -21,7 +21,7 @@ class ElasticsearchHelper
   end
 
   def _import(search)
-    debug { "  Importing data..." }
+    debug { '  Importing data...' }
     search.import(return: "errors", batch_size: 200) do |resp|
       errors    = resp["items"].select { |k, _v| k.values.first["error"] }
       completed = resp["items"].size
@@ -32,12 +32,12 @@ class ElasticsearchHelper
   end
 
   def _refresh(search)
-    debug { "  Refreshing index..." }
+    debug { '  Refreshing index...' }
     search.refresh_index!
   end
 
   def debug
-    if ENV["ES_DEBUG"]
+    if ENV['ES_DEBUG']
       puts yield
     end
   end
