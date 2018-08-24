@@ -17,7 +17,7 @@ class StoryQueryBuilder < ESQueryBuilder
   end
 
   def apply_published_filter?
-    apply_authz?
+    !apply_authz? # TODO what else should trigger this?
   end
 
   private
@@ -36,7 +36,7 @@ class StoryQueryBuilder < ESQueryBuilder
   def published_filter
     searchdsl = self
     Filter.new do
-      term published: true
+      range published_at: { lte: 'now' }
     end
   end
 

@@ -155,11 +155,20 @@ class Story < BaseModel
   scope :public_stories, -> { published.network_visible.series_visible }
 
   def self.build_query_dsl(query_text, params, current_user)
-    StoryQueryBuilder.new(query: query_text, params: params, current_user: current_user).as_dsl
+    StoryQueryBuilder.new(
+      query: query_text,
+      params: params,
+      current_user: current_user,
+      fielded_query: params ? params['fq'] : nil,
+    ).as_dsl
   end
 
   def self.text_search(text, params=nil, current_user=nil)
     search(build_query_dsl(text, params, current_user)).records
+  end
+
+  def self.searchable_fields
+    [:title, :short_description, :description]
   end
 
   def points(level=point_level)

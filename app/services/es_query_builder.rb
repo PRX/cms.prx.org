@@ -3,13 +3,14 @@ require 'elasticsearch/dsl'
 class ESQueryBuilder
   include Elasticsearch::DSL
 
-  attr_reader :current_user, :params, :query_str, :fields
+  attr_reader :current_user, :params, :query_str, :fields, :fielded_query
 
   def initialize(args)
     @query_str = args[:query]
     @fields = args[:fields] || default_fields
     @current_user = args[:current_user]
     @params = args[:params]
+    @fielded_query = args[:fielded_query]
 
     build_dsl
   end
@@ -32,14 +33,23 @@ class ESQueryBuilder
   end
 
   def composite_query_string
-    stringify_clauses [query_str].select(&:present?)
+    stringify_clauses [query_str, structured_query].select(&:present?)
   end
 
   def humanized_query_string
-    stringify_clauses [query_str].select(&:present?)
+    stringify_clauses [query_str, structured_query_humanized].select(&:present?)
+  end
+
+  def structured_query
+    munge_fielded_query if fielded_query
+    FieldedSearchQuery.new(fielded_query)
   end
 
   private
+
+  def structured_query_humanized
+    structured_query.humanized
+  end
 
   def stringify_clauses(clauses)
     if clauses.length == 2
@@ -51,30 +61,29 @@ class ESQueryBuilder
     end
   end
 
-  def munge_fielded_params(fielded)
+  # TODO these created_at/within queries are not yet used but here as an example
+  # of doing ES date math
+  def munge_fielded_query
     # the convert_created_at_to_range and date logic is all preliminary.
-    # Not used at all, but here as an example.
-    if fielded[:created_at].present? && fielded[:created_within].present?
-      convert_created_at_to_range(fielded)
-    elsif fielded[:created_within].present?
-      convert_created_at_to_range(fielded, true)
+    if fielded_query[:created_at].present? && fielded_query[:created_within].present?
+      convert_created_at_to_range
+    elsif fielded_query[:created_within].present?
+      convert_created_at_to_range(true)
     end
     # do not calculate more than once
-    fielded.delete(:created_within)
+    fielded_query.delete(:created_within)
   end
 
-  # Not yet used
-  def convert_created_at_to_range(fielded, relative_to_now = false)
-    ranges = get_date_ranges(fielded[:created_at], fielded[:created_within])
+  def convert_created_at_to_range(relative_to_now = false)
+    ranges = get_date_ranges(fielded_query[:created_at], fielded_query[:created_within])
     return unless ranges
     if relative_to_now
-      fielded[:created_at] = "[#{ranges[0].iso8601} TO now]"
+      fielded_query[:created_at] = "[#{ranges[0].iso8601} TO now]"
     else
-      fielded[:created_at] = "[#{ranges[0].iso8601} TO #{ranges[1].utc.iso8601}]"
+      fielded_query[:created_at] = "[#{ranges[0].iso8601} TO #{ranges[1].utc.iso8601}]"
     end
   end
 
-  # Not yet used
   def get_date_ranges(created_at, created_within)
     high_end_range = Time.zone.parse(created_at.to_s) || Time.current
     within_parsed = created_within.match(/^(\d+) (\w+)/)
@@ -84,47 +93,45 @@ class ESQueryBuilder
       false
     end
   end
+  # end TODO example date code
 
   def build_dsl
     @dsl = Elasticsearch::DSL::Search::Search.new
     # we only need primary key. this cuts down response time by ~70%.
     @dsl.source(["id"])
     add_query
-    add_filter
     add_sort
     add_pagination
   end
 
   def add_query
     searchdsl = self
+    bools = build_filters
     @dsl.query = Query.new
     @dsl.query do
-      query_string do
-        query searchdsl.composite_query_string
-        default_operator searchdsl.default_operator
-        lenient true
-        fields searchdsl.fields
-      end
-    end
-  end
-
-  # ES filters allow you to trim a result set w/o impacting scoring.
-  def add_filter
-    bools = build_filters
-    if bools.any?
-      @dsl.filter = Filter.new
-      @dsl.filter.bool do
-        bools.each do |must_filter|
-          filter_block = must_filter.instance_variable_get(:@block)
-          must(&filter_block)
+      bool do
+        must do
+          query_string do
+            query searchdsl.composite_query_string
+            default_operator searchdsl.default_operator
+            lenient true
+            fields searchdsl.fields
+          end
+        end
+        if bools.any?
+          bools.each do |must_filter|
+            # this block magic is to make it easy for subclasses to define Filters
+            filter_block = must_filter.instance_variable_get(:@block)
+            filter(&filter_block)
+          end
         end
       end
     end
   end
 
+  # default is no filters. subclasses may add them.
   def build_filters
-    bools = []
-    bools
+    []
   end
 
   def add_sort

@@ -312,4 +312,15 @@ describe Api::StoriesController do
     assigns[:stories].must_include story
     assigns[:stories].wont_include story2
   end
+
+  it 'should allow fielded search' do 
+    ElasticsearchHelper.new.create_es_index(Story)
+    story = create(:story, title: 'You are all Weirdos').reindex
+    story2 = create(:story, title: 'We are all Freakazoids').reindex
+    get(:search, api_version: 'v1', format: 'json', fq: { title: 'weirdos' })
+    assert_response :success
+    assert_not_nil assigns[:stories]
+    assigns[:stories].must_include story
+    assigns[:stories].wont_include story2
+  end
 end

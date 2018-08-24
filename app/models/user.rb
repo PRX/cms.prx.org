@@ -47,8 +47,7 @@ class User < BaseModel
     "#{first_name} #{last_name}"
   end
 
-  # TODO return array of all the account ids associated with the user. Used for ES authz.
   def account_ids
-    []
+    accounts.pluck(:id)
   end
 end
