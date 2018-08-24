@@ -27,7 +27,9 @@ class Api::Auth::PodcastImportsController < Api::BaseController
   end
 
   def after_create_resource(res)
-    res.try(:import_later)
+    return unless res && res.persisted?
+
+    res.import_later
   end
 
   def filtered(resources)
