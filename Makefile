@@ -47,9 +47,8 @@ clean:
 	sudo rm -rf tmp/ && mkdir tmp && chmod -R 777 tmp
 	sudo rm -rf coverage/ && mkdir coverage && chmod 777 coverage
 
-LOCAL_POSTGRES_USER := ${USER}
 onetest: clean
-	FEEDER_DB_DATABASE=feeder_test FEEDER_DB_USER=${LOCAL_POSTGRES_USER} FEEDER_DB_HOST=/var/run/postgresql bundle exec rake test RAILS_ENV=test TESTOPTS='--name /${TESTNAME}/'
+	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake test RAILS_ENV=test TEST=${TEST} TESTOPTS='--name /${TESTNAME}/'
 
 stop:
 	docker-compose -f ${DOCKER_COMPOSE_FILE} stop
