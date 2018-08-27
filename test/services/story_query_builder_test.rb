@@ -1,13 +1,17 @@
 require 'test_helper'
 
 describe StoryQueryBuilder do
-  it "#to_hash with current_user" do
-    user = create(:user)
+  let(:account) { create(:account) }
+  let(:token) { StubToken.new(account.id, ['member'], 456) }
+  let(:authorization) { Authorization.new(token) }
+  let(:unauth_account) { create(:account) }
+
+  it "#to_hash with authorization" do
     dsl = described_class.new(
       params: { from: 1, size: 5, },
       query: 'foo OR Bar',
       fielded_query: { something: '123' },
-      current_user: user,
+      authorization: authorization
     )
     dsl.to_hash.must_equal({
       _source: ["id"],
@@ -24,7 +28,7 @@ describe StoryQueryBuilder do
             },
           ],
           filter: [
-            { term: { account_id: user.account_ids } }
+            { terms: { account_id: [account.id] } }
           ],
         },
       },
@@ -34,7 +38,7 @@ describe StoryQueryBuilder do
     })
   end
 
-  it "#to_hash without current_user" do
+  it "#to_hash without authorization" do
     dsl = described_class.new(
       params: { from: 1, size: 5, },
       query: 'foo OR Bar',
