@@ -154,17 +154,17 @@ class Story < BaseModel
 
   scope :public_stories, -> { published.network_visible.series_visible }
 
-  def self.build_query_dsl(query_text, params, current_user)
+  def self.build_query_dsl(query_text, params, authorization)
     StoryQueryBuilder.new(
       query: query_text,
       params: params,
-      current_user: current_user,
+      authorization: authorization,
       fielded_query: params ? params['fq'] : nil,
     ).as_dsl
   end
 
-  def self.text_search(text, params=nil, current_user=nil)
-    search(build_query_dsl(text, params, current_user)).records
+  def self.text_search(text, params=nil, authorization=nil)
+    search(build_query_dsl(text, params, authorization)).records
   end
 
   def self.searchable_fields

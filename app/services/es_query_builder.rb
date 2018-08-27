@@ -3,12 +3,12 @@ require 'elasticsearch/dsl'
 class ESQueryBuilder
   include Elasticsearch::DSL
 
-  attr_reader :current_user, :params, :query_str, :fields, :fielded_query
+  attr_reader :authorization, :params, :query_str, :fields, :fielded_query
 
   def initialize(args)
     @query_str = args[:query]
     @fields = args[:fields] || default_fields
-    @current_user = args[:current_user]
+    @authorization = args[:authorization]
     @params = args[:params]
     @fielded_query = args[:fielded_query]
 

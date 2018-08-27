@@ -2,6 +2,7 @@
 
 class Api::Auth::StoriesController < Api::StoriesController
   include ApiAuthenticated
+  include ApiSearchable
 
   api_versions :v1
 
@@ -51,5 +52,25 @@ class Api::Auth::StoriesController < Api::StoriesController
     else
       authorization.token_auth_stories
     end
+  end
+
+  def search
+    @stories = Story.text_search(search_query, search_params, authorization)
+    index
+  end
+
+  def search_params
+    sparams = super
+    sparams['fq'] ||= {}
+    [:network_id, :series_id].each do |p|
+      if params[p]
+        sparams['fq'][p.to_s] = params[p]
+      end
+    end
+    sparams
+  end
+
+  def searchable_fields
+    Story.searchable_fields
   end
 end
