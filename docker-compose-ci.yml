@@ -3,6 +3,7 @@ cms:
   links:
     - db
     - pg
+    - elasticsearch
   ports:
     - 3000:3000
   command: test
@@ -18,6 +19,7 @@ cms:
     FEEDER_DB_HOST: pg
     FEEDER_DB_DATABASE: feeder
     FEEDER_DB_PASSWORD: password
+    ELASTICSEARCH_URL: http://elasticsearch:9200
 db:
   image: mysql:8.0.12
   environment:
@@ -35,6 +37,21 @@ pg:
     POSTGRES_PASSWORD: password
     POSTGRES_DB: feeder
   ports:
-    - "5432:5432"
+    - 5432:5432
   volumes:
     - ./test/db/:/docker-entrypoint-initdb.d/
+elasticsearch:
+  image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
+  environment:
+    - cluster.name=docker-cluster
+    - bootstrap.memory_lock=true
+    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    - discovery.type=single-node
+  ulimits:
+    memlock:
+      soft: -1
+      hard: -1
+  volumes:
+    - esdata1:/usr/share/elasticsearch/data
+  ports:
+    - 9200:9200

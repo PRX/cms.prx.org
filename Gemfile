@@ -83,6 +83,10 @@ gem 'slackistrano', require: false
 gem 'newrelic_rpm'
 gem 'capistrano-newrelic'
 
+# elasticsearch
+gem 'elasticsearch-dsl'
+gem 'elasticsearch-rails-ha'
+
 # dev-only
 group :development do
   gem 'web-console', '~> 2.0'
@@ -102,6 +106,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'codeclimate-test-reporter', require: false
   gem 'simplecov', require: false
+  gem 'timecop'
   gem 'codecov', require: false
   gem 'webmock'
 end

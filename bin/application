@@ -29,6 +29,21 @@ WaitForMysql () {
   done
 }
 
+# currently not used, but keeping here as an example of how to do it.
+WaitForElasticsearch () {
+  echo "Waiting for $ELASTICSEARCH_URL ..."
+  es_tries=0
+  until curl -s $ELASTICSEARCH_URL &> /dev/null; do
+    >&2 echo 'Elasticsearch not available'
+    sleep 3;
+    es_tries=$((es_tries+1))
+    if [ "$es_tries" -gt "10" ]; then
+      echo "No response from $ELASTICSEARCH_URL -- giving up"
+      exit 2
+    fi
+  done
+}
+
 ApplicationParseOpts () {
   PROCESS=$1
   shift
@@ -70,6 +85,9 @@ ApplicationRun () {
 
   UpdateEnvironment
   WaitForMysql
+  if [ "$WAIT_FOR_ES" == "true" ]; then
+    WaitForElasticsearch
+  fi
 
   if [ \( "$PROCESS" = "web" \) -o \( "$PROCESS" = "worker" \) ] ; then
     ApplicationUpdate

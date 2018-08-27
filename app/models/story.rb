@@ -8,6 +8,43 @@ class Story < BaseModel
   include RenderMarkdown
   include ValidityFlag
 
+  include Searchable
+  MAX_SEARCH_RESULTS = 10
+
+  # ES index definition
+  settings index: {
+    number_of_shards: 1, # increase this if we ever get more than N records
+    number_of_replicas: 1
+  } do
+    # with dynamic mapping==true, we only need to explicitly define overrides.
+    # https://www.elastic.co/guide/en/elasticsearch/guide/current/dynamic-mapping.html
+    # e.g. if a field's value might be ambiguous (Float vs Integer)
+    # then best to declare it explicitly here.
+    # Any boosts or other index trickery also required here.
+    mappings dynamic: "true" do
+      indexes :series do
+        indexes :subscription_approval_status, type: 'keyword' # keyword == do not analyze
+      end
+
+    end
+  end
+
+  def to_indexed_json(params = {})
+    as_indexed_json(params).to_json
+  end
+
+  def as_indexed_json(params = {})
+    as_json(params.reverse_merge({
+      include: {
+        series: {
+          only: [:subscription_approval_status, :subscriber_only_at]
+        }
+      }
+    })).tap do |json|
+      # any custom index-time munging here
+    end
+  end
+
   def description_html=(html)
     self.description = v4? ? html_to_markdown(html) : html
   end
@@ -116,6 +153,23 @@ class Story < BaseModel
   }
 
   scope :public_stories, -> { published.network_visible.series_visible }
+
+  def self.build_query_dsl(query_text, params, current_user)
+    StoryQueryBuilder.new(
+      query: query_text,
+      params: params,
+      current_user: current_user,
+      fielded_query: params ? params['fq'] : nil,
+    ).as_dsl
+  end
+
+  def self.text_search(text, params=nil, current_user=nil)
+    search(build_query_dsl(text, params, current_user)).records
+  end
+
+  def self.searchable_fields
+    [:title, :short_description, :description]
+  end
 
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)

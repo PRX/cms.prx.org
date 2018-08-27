@@ -13,6 +13,13 @@ class Api::StoriesController < Api::BaseController
 
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
+  def search
+    query = params.permit(:q)[:q]
+    search_params = params.permit(:page, :size, :sort, fields: {}, fq: Story.searchable_fields).to_h
+    @stories = Story.text_search(query, search_params, current_user)
+    index
+  end
+
   def after_create_resource(res)
     res.create_story_distributions
   end
