@@ -42,6 +42,7 @@ class Story < BaseModel
       }
     })).tap do |json|
       # any custom index-time munging here
+      json[:published_released_at] = published_at || released_at
     end
   end
 
@@ -159,12 +160,12 @@ class Story < BaseModel
       query: query_text,
       params: params,
       authorization: authorization,
-      fielded_query: params ? params['fq'] : nil,
+      fielded_query: params[:fq],
     ).as_dsl
   end
 
-  def self.text_search(text, params=nil, authorization=nil)
-    search(build_query_dsl(text, params, authorization)).records
+  def self.text_search(text, params={}, authorization=nil)
+    search(build_query_dsl(text, params.with_indifferent_access, authorization)).records
   end
 
   def self.searchable_fields

@@ -62,7 +62,7 @@ class Api::Auth::StoriesController < Api::StoriesController
   def search_params
     sparams = super
     sparams['fq'] ||= {}
-    [:network_id, :series_id].each do |p|
+    [:network_id, :series_id, :account_id].each do |p|
       if params[p]
         sparams['fq'][p.to_s] = params[p]
       end
