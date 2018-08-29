@@ -3,12 +3,12 @@ require 'elasticsearch/dsl'
 class ESQueryBuilder
   include Elasticsearch::DSL
 
-  attr_reader :current_user, :params, :query_str, :fields, :fielded_query
+  attr_reader :authorization, :params, :query_str, :fields, :fielded_query
 
   def initialize(args)
     @query_str = args[:query]
     @fields = args[:fields] || default_fields
-    @current_user = args[:current_user]
+    @authorization = args[:authorization]
     @params = args[:params]
     @fielded_query = args[:fielded_query]
 
@@ -107,6 +107,7 @@ class ESQueryBuilder
   def add_query
     searchdsl = self
     bools = build_filters
+    nils = structured_query.fields_with_nil_values
     @dsl.query = Query.new
     @dsl.query do
       bool do
@@ -125,6 +126,13 @@ class ESQueryBuilder
             filter(&filter_block)
           end
         end
+        if nils.any?
+          nils.each do |field_name|
+            must_not do
+              exists field: field_name
+            end
+          end
+        end
       end
     end
   end
@@ -136,9 +144,10 @@ class ESQueryBuilder
 
   def add_sort
     if params && params[:sort]
-      @dsl.sort(params[:sort].map { |pair| [pair.split(":")].to_h })
+      sarray = params[:sort].is_a?(Array) ? params[:sort] : [params[:sort]]
+      @dsl.sort(coerce_sort_params(sarray.map { |pair| [pair.split(":")].to_h }))
     else
-      @dsl.sort(default_sort_params)
+      @dsl.sort(coerce_sort_params(default_sort_params))
     end
   end
 
@@ -172,5 +181,19 @@ class ESQueryBuilder
     page = params[:page].to_i
     @size ||= (params[:size] || default_max_search_results).to_i
     @from = (page - 1) * @size.to_i
+  end
+
+  def coerce_sort_params(p)
+    # to make sorting work like NULL in SQL, we must append the magic ES 'missing' operator.
+    # p is an array of hashes
+    p.each do |clause|
+      clause.each do |field, dir|
+        next if dir.is_a?(Hash)
+        if field.to_s =~ /_at$/
+          clause[field] = { order: dir, missing: dir == :desc ? '_last' : '_first' }
+        end
+      end
+    end
+    p
   end
 end

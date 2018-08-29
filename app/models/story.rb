@@ -42,6 +42,7 @@ class Story < BaseModel
       }
     })).tap do |json|
       # any custom index-time munging here
+      json[:published_released_at] = published_at || released_at
     end
   end
 
@@ -154,17 +155,17 @@ class Story < BaseModel
 
   scope :public_stories, -> { published.network_visible.series_visible }
 
-  def self.build_query_dsl(query_text, params, current_user)
+  def self.build_query_dsl(query_text, params, authorization)
     StoryQueryBuilder.new(
       query: query_text,
       params: params,
-      current_user: current_user,
-      fielded_query: params ? params['fq'] : nil,
+      authorization: authorization,
+      fielded_query: params[:fq],
     ).as_dsl
   end
 
-  def self.text_search(text, params=nil, current_user=nil)
-    search(build_query_dsl(text, params, current_user)).records
+  def self.text_search(text, params={}, authorization=nil)
+    search(build_query_dsl(text, params.with_indifferent_access, authorization)).records
   end
 
   def self.searchable_fields

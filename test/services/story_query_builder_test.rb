@@ -1,13 +1,17 @@
 require 'test_helper'
 
 describe StoryQueryBuilder do
-  it "#to_hash with current_user" do
-    user = create(:user)
+  let(:account) { create(:account) }
+  let(:token) { StubToken.new(account.id, ['member'], 456) }
+  let(:authorization) { Authorization.new(token) }
+  let(:unauth_account) { create(:account) }
+
+  it "#to_hash with authorization" do
     dsl = described_class.new(
       params: { from: 1, size: 5, },
       query: 'foo OR Bar',
-      fielded_query: { something: '123' },
-      current_user: user,
+      fielded_query: { something: '123', maybe: 'NULL', other: nil },
+      authorization: authorization
     )
     dsl.to_hash.must_equal({
       _source: ["id"],
@@ -24,17 +28,26 @@ describe StoryQueryBuilder do
             },
           ],
           filter: [
-            { term: { account_id: user.account_ids } }
+            { terms: { account_id: [account.id] } }
+          ],
+          must_not: [
+            { exists: { field: :maybe } },
+            { exists: { field: :other } },
           ],
         },
       },
-      sort: [ { published_at: :desc, updated_at: :desc } ],
+      sort: [
+        {
+          published_at: {order: :desc, missing: '_last'},
+          updated_at: {order: :desc, missing: '_last'}
+        }
+      ],
       size: 5,
       from: 1
     })
   end
 
-  it "#to_hash without current_user" do
+  it "#to_hash without authorization" do
     dsl = described_class.new(
       params: { from: 1, size: 5, },
       query: 'foo OR Bar',
@@ -59,7 +72,12 @@ describe StoryQueryBuilder do
           ],
         },
       },
-      sort: [ { published_at: :desc, updated_at: :desc } ],
+      sort: [
+        {
+          published_at: {order: :desc, missing: '_last'},
+          updated_at: {order: :desc, missing: '_last'}
+        }
+      ],
       size: 5,
       from: 1
     })
@@ -115,7 +133,7 @@ describe StoryQueryBuilder do
 
   it "#structured_query" do
     dsl = described_class.new(
-      fielded_query: { something: "123" },
+      fielded_query: { something: "123", maybe: 'NULL' },
       query: "foo OR Bar",
     )
     dsl.structured_query.must_be_instance_of FieldedSearchQuery
@@ -124,7 +142,7 @@ describe StoryQueryBuilder do
 
   it "#composite_query_string" do
     dsl = described_class.new(
-      fielded_query: { something: "123" },
+      fielded_query: { something: "123", maybe: 'NULL' },
       query: "foo OR Bar",
     )
     dsl.composite_query_string.must_equal "(foo OR Bar) AND (something:(123))"
@@ -132,7 +150,7 @@ describe StoryQueryBuilder do
 
   it "#humanized_query_string" do
     dsl = described_class.new(
-      fielded_query: { something: "123" },
+      fielded_query: { something: "123", maybe: 'NULL' },
       query: "foo OR Bar",
     )
     dsl.humanized_query_string.must_equal "(foo OR Bar) AND (Something:(123))"

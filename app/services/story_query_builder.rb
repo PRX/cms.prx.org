@@ -13,11 +13,11 @@ class StoryQueryBuilder < ESQueryBuilder
   end
 
   def apply_authz?
-    current_user
+    authorization.present?
   end
 
   def apply_published_filter?
-    !apply_authz? # TODO what else should trigger this?
+    !apply_authz?
   end
 
   private
@@ -43,7 +43,7 @@ class StoryQueryBuilder < ESQueryBuilder
   def authz_filter
     searchdsl = self
     Filter.new do
-      term account_id: searchdsl.current_user.account_ids
+      terms account_id: searchdsl.authorization.token_auth_accounts.try(:ids)
     end
   end
 end
