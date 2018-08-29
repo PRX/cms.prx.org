@@ -155,7 +155,7 @@ describe Api::Auth::StoriesController do
       it 'filters v4 stories' do
         unpublished_story.must_be :v4?
         v3_story.wont_be :v4?
-        get(:search, api_version: 'v1', format: 'json', fq: { app_version: 'v4' }, q: search_term)
+        get(:search, api_version: 'v1', format: 'json', app_version: 'v4', q: search_term)
         assert_response :success
         assert_not_nil assigns[:stories]
         stories.must_include unpublished_story
@@ -163,7 +163,6 @@ describe Api::Auth::StoriesController do
       end
   
       it 'applies multiple filters, including field:NULL' do
-        puts 'applies multiple filters'
         create(:series, stories: [unpublished_story])
         unpublished_story.series.wont_be_nil
         v3_story.wont_be :v4?
@@ -172,7 +171,7 @@ describe Api::Auth::StoriesController do
         # must re-index because we just updated unpublished_story
         unpublished_story.reindex
   
-        get(:search, api_version: 'v1', fq: { app_version: 'v4', series_id: 'NULL' }, q: search_term)
+        get(:search, api_version: 'v1', app_version: 'v4', series_id: 'NULL', q: search_term)
         assert_response :success
         assert_not_nil assigns[:stories]
         stories.wont_include unpublished_story
