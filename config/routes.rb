@@ -75,7 +75,9 @@ PRX::Application.routes.draw do
         resources :audio_files, except: [:new, :edit]
 
         resources :accounts, only: [:index, :show], module: :auth do
-          resources :stories, only: [:index, :create, :update]
+          resources :stories, only: [:index, :create, :update] do
+            get 'search', on: :collection
+          end
         end
 
         resources :podcast_imports, except: [:new, :edit], module: :auth do
