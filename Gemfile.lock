@@ -392,7 +392,7 @@ GEM
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.10)
-    rack-cors (0.4.0)
+    rack-cors (1.0.2)
     rack-prx_auth (0.0.8)
       json (~> 1.8, >= 1.8.1)
       json-jwt (~> 1.0, >= 1.0.1)
