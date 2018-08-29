@@ -10,7 +10,7 @@ describe StoryQueryBuilder do
     dsl = described_class.new(
       params: { from: 1, size: 5, },
       query: 'foo OR Bar',
-      fielded_query: { something: '123' },
+      fielded_query: { something: '123', maybe: 'NULL', other: nil },
       authorization: authorization
     )
     dsl.to_hash.must_equal({
@@ -30,9 +30,18 @@ describe StoryQueryBuilder do
           filter: [
             { terms: { account_id: [account.id] } }
           ],
+          must_not: [
+            { exists: { field: :maybe } },
+            { exists: { field: :other } },
+          ],
         },
       },
-      sort: [ { published_at: :desc, updated_at: :desc } ],
+      sort: [
+        {
+          published_at: {order: :desc, missing: '_last'},
+          updated_at: {order: :desc, missing: '_last'}
+        }
+      ],
       size: 5,
       from: 1
     })
@@ -63,7 +72,12 @@ describe StoryQueryBuilder do
           ],
         },
       },
-      sort: [ { published_at: :desc, updated_at: :desc } ],
+      sort: [
+        {
+          published_at: {order: :desc, missing: '_last'},
+          updated_at: {order: :desc, missing: '_last'}
+        }
+      ],
       size: 5,
       from: 1
     })
@@ -119,7 +133,7 @@ describe StoryQueryBuilder do
 
   it "#structured_query" do
     dsl = described_class.new(
-      fielded_query: { something: "123" },
+      fielded_query: { something: "123", maybe: 'NULL' },
       query: "foo OR Bar",
     )
     dsl.structured_query.must_be_instance_of FieldedSearchQuery
@@ -128,7 +142,7 @@ describe StoryQueryBuilder do
 
   it "#composite_query_string" do
     dsl = described_class.new(
-      fielded_query: { something: "123" },
+      fielded_query: { something: "123", maybe: 'NULL' },
       query: "foo OR Bar",
     )
     dsl.composite_query_string.must_equal "(foo OR Bar) AND (something:(123))"
@@ -136,7 +150,7 @@ describe StoryQueryBuilder do
 
   it "#humanized_query_string" do
     dsl = described_class.new(
-      fielded_query: { something: "123" },
+      fielded_query: { something: "123", maybe: 'NULL' },
       query: "foo OR Bar",
     )
     dsl.humanized_query_string.must_equal "(foo OR Bar) AND (Something:(123))"
