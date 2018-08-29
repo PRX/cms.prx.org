@@ -244,7 +244,7 @@ describe Api::Auth::StoriesController do
     end
 
     it 'will not search anything' do
-      get(:search, api_version: 'v1', account_id: account.id, q: 'test')
+      get(:search, api_version: 'v1', account_id: account.id, q: search_term)
       assert_response :unauthorized
     end
   end
