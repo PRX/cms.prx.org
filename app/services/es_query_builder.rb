@@ -107,6 +107,7 @@ class ESQueryBuilder
   def add_query
     searchdsl = self
     bools = build_filters
+    nils = structured_query.fields_with_nil_values
     @dsl.query = Query.new
     @dsl.query do
       bool do
@@ -123,6 +124,13 @@ class ESQueryBuilder
             # this block magic is to make it easy for subclasses to define Filters
             filter_block = must_filter.instance_variable_get(:@block)
             filter(&filter_block)
+          end
+        end
+        if nils.any?
+          nils.each do |field_name|
+            must_not do
+              exists field: field_name
+            end
           end
         end
       end

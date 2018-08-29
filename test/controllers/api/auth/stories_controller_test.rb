@@ -5,7 +5,6 @@ describe Api::Auth::StoriesController do
   let (:user) { create(:user) }
   let (:token) { StubToken.new(account.id, ['member'], user.id) }
   let (:account) { user.individual_account }
-  let (:unpublished_story) { account.stories.first }
   let (:published_story) { account.stories.last }
   let (:latest_story) { create(:story, account: account, description: 'latest') }
   let (:unpublished_story) { account.stories.first }
@@ -19,6 +18,7 @@ describe Api::Auth::StoriesController do
     account.stories.each { |s| s }
     network.stories.each { |s| s.update!(short_description:"network #{s.id}") }
     network_story.update!(short_description: "network")
+    v3_story.update!(short_description: "v3 story")
     unpublished_story.update!(published_at: nil, short_description: 'unpublished')
     published_story.update_attributes!(published_at: 2.days.ago, short_description: 'published')
     latest_story.update_attributes!(published_at: 1.day.ago, short_description: 'latest')
@@ -162,16 +162,17 @@ describe Api::Auth::StoriesController do
         stories.wont_include v3_story
       end
   
-      it 'applies multiple filters' do
+      it 'applies multiple filters, including field:NULL' do
         puts 'applies multiple filters'
         create(:series, stories: [unpublished_story])
         unpublished_story.series.wont_be_nil
         v3_story.wont_be :v4?
         v3_story.series.must_be_nil
 
-        ElasticsearchHelper.new.create_es_index(Story)
+        # must re-index because we just updated unpublished_story
+        unpublished_story.reindex
   
-        get(:search, api_version: 'v1', fq: { app_version: 'v4', series_id: nil }, q: search_term)
+        get(:search, api_version: 'v1', fq: { app_version: 'v4', series_id: 'NULL' }, q: search_term)
         assert_response :success
         assert_not_nil assigns[:stories]
         stories.wont_include unpublished_story

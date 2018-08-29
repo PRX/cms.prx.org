@@ -1,6 +1,8 @@
 class FieldedSearchQuery
   attr_reader :field_pairs
 
+  NULL_STRING = 'NULL'
+
   def initialize(field_pairs)
     @field_pairs = field_pairs
   end
@@ -16,13 +18,25 @@ class FieldedSearchQuery
     end
   end
 
+  def fields_with_nil_values
+    nils = []
+    if field_pairs
+      field_pairs.each do |k, v|
+        nils << k if v.nil?
+        nils << k if v == NULL_STRING
+      end
+    end
+    nils
+  end
+
   def to_s
     clauses = []
     if field_pairs
       field_pairs.each do |k, v|
         next if v.nil?
         next if v.blank?
-        next if v == "*"
+        next if v == '*' 
+        next if v == NULL_STRING
         clauses << clause_to_s(k, v)
       end
     end
@@ -35,7 +49,8 @@ class FieldedSearchQuery
       field_pairs.each do |k, v|
         next if v.nil?
         next if v.blank?
-        next if v == "*"
+        next if v == '*'
+        next if v == NULL_STRING
         hash[k] = v
       end
     end
