@@ -46,7 +46,8 @@ class Api::Auth::StoriesController < Api::StoriesController
   end
 
   def resources_base
-    # If there is a network_id specified, use that network
+    # If there is a network_id specified, use that network.
+    # The authz is performed in check_user_network().
     @stories ||= if params[:network_id]
       super.published
     else
@@ -55,7 +56,12 @@ class Api::Auth::StoriesController < Api::StoriesController
   end
 
   def search
-    @stories = Story.text_search(search_query, search_params, authorization)
+    # same logic as resources_base above
+    @stories ||= if params[:network_id]
+      Story.text_search(search_query, search_params)
+    else
+      Story.text_search(search_query, search_params, authorization)
+    end
     index
   end
 

@@ -13,7 +13,7 @@ class StoryQueryBuilder < ESQueryBuilder
   end
 
   def apply_authz?
-    authorization
+    authorization.present?
   end
 
   def apply_published_filter?

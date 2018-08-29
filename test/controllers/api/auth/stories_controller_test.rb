@@ -1,25 +1,28 @@
 require 'test_helper'
 
 describe Api::Auth::StoriesController do
+  let (:search_term) { 'title' } # factory value
   let (:user) { create(:user) }
   let (:token) { StubToken.new(account.id, ['member'], user.id) }
   let (:account) { user.individual_account }
   let (:unpublished_story) { account.stories.first }
   let (:published_story) { account.stories.last }
-  let (:latest_story) { create(:story, account: user.individual_account) }
+  let (:latest_story) { create(:story, account: account, description: 'latest') }
   let (:unpublished_story) { account.stories.first }
-  let (:random_story) { create(:story, published_at: nil) }
-  let (:network) { create(:network, account: user.individual_account) }
-  let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now) }
-  let (:v3_story) { create(:story_v3, account: account) }
+  let (:random_story) { create(:story, published_at: nil, description: 'random') }
+  let (:network) { create(:network, account: account) }
+  let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now, description: 'network') }
+  let (:v3_story) { create(:story_v3, account: account, description: 'v3_story') }
   let (:released_story) { create(:story, account: account, released_at: Time.now + 1.day) }
 
   before do
     account.stories.each { |s| s }
-    unpublished_story.update!(published_at: nil)
-    published_story.update_attributes!(published_at: 2.days.ago)
-    latest_story.update_attributes!(published_at: 1.day.ago)
-    released_story.update!(published_at: nil)
+    network.stories.each { |s| s.update!(short_description:"network #{s.id}") }
+    network_story.update!(short_description: "network")
+    unpublished_story.update!(published_at: nil, short_description: 'unpublished')
+    published_story.update_attributes!(published_at: 2.days.ago, short_description: 'published')
+    latest_story.update_attributes!(published_at: 1.day.ago, short_description: 'latest')
+    released_story.update!(published_at: nil, short_description: 'released')
   end
 
   describe 'with a valid token' do
@@ -108,7 +111,7 @@ describe Api::Auth::StoriesController do
       end
 
       it 'searches stories under their account' do
-        get(:search, q: 'long', api_version: 'v1', account_id: account.id)
+        get(:search, q: search_term, api_version: 'v1', account_id: account.id)
         assert_response :success
         JSON.parse(response.body)['count'].must_equal account.stories.count
         account.stories.count.must_be :>, account.public_stories.count
@@ -116,7 +119,7 @@ describe Api::Auth::StoriesController do
   
       it 'searches stories with unpublished first, recently published after' do
         published_story.published_at.must_be :<, latest_story.published_at
-        get(:search, api_request_opts(q: 'long', account_id: account.id, sort: 'published_at:desc'))
+        get(:search, api_request_opts(q: search_term, account_id: account.id, sort: 'published_at:desc'))
         assert_response :success
         stories[0].wont_be :published?
         stories[1].wont_be :published?
@@ -125,7 +128,7 @@ describe Api::Auth::StoriesController do
   
       it 'searches stories with unpublished first, oldest published after' do
         published_story.published_at.must_be :<, latest_story.published_at
-        get(:search, api_request_opts(q: 'long', account_id: account.id, sort: 'published_at:asc'))
+        get(:search, api_request_opts(q: search_term, account_id: account.id, sort: 'published_at:asc'))
         assert_response :success
         stories[0].wont_be :published?
         stories[1].wont_be :published?
@@ -133,7 +136,7 @@ describe Api::Auth::StoriesController do
       end
   
       it 'searches stories with coalesced published, released dates' do
-        get(:search, api_request_opts(q: 'long', account_id: account.id, sort: 'published_released_at:desc'))
+        get(:search, api_request_opts(q: search_term, account_id: account.id, sort: 'published_released_at:desc'))
         assert_response :success
         JSON.parse(response.body)['count'].must_equal account.stories.count
         stories[0].wont_be :published?
@@ -144,10 +147,7 @@ describe Api::Auth::StoriesController do
       end
   
       it 'searches stories in a network' do
-        puts 'searches stories in a network'
-        puts "network_story=#{network_story.id} network.id=#{network.id}"
-        ElasticsearchHelper.new.create_es_index(Story)
-        get(:search, api_version: 'v1', q: 'long', network_id: network.id)
+        get(:search, api_version: 'v1', q: search_term, network_id: network.id)
         assert_response :success
         JSON.parse(response.body)['count'].must_equal network.stories.count
       end
@@ -155,7 +155,7 @@ describe Api::Auth::StoriesController do
       it 'filters v4 stories' do
         unpublished_story.must_be :v4?
         v3_story.wont_be :v4?
-        get(:search, api_version: 'v1', format: 'json', fq: { app_version: 'v4' }, q: 'long')
+        get(:search, api_version: 'v1', format: 'json', fq: { app_version: 'v4' }, q: search_term)
         assert_response :success
         assert_not_nil assigns[:stories]
         stories.must_include unpublished_story
@@ -171,7 +171,7 @@ describe Api::Auth::StoriesController do
 
         ElasticsearchHelper.new.create_es_index(Story)
   
-        get(:search, api_version: 'v1', fq: { app_version: 'v4', series_id: nil }, q: 'long')
+        get(:search, api_version: 'v1', fq: { app_version: 'v4', series_id: nil }, q: search_term)
         assert_response :success
         assert_not_nil assigns[:stories]
         stories.wont_include unpublished_story
@@ -180,7 +180,7 @@ describe Api::Auth::StoriesController do
   
       it 'searches zero hits for network user access' do
         other_network = create(:network)
-        get(:search, api_version: 'v1', network_id: other_network.id, q: 'long')
+        get(:search, api_version: 'v1', network_id: other_network.id, q: search_term)
         assert_response :success
         JSON.parse(response.body)['count'].must_equal 0
       end
