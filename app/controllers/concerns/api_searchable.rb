@@ -10,7 +10,7 @@ module ApiSearchable
   end
 
   def search_params
-    params.permit(:page, :size, :sort, fields: {}, fq: searchable_fields).to_h
+    params.permit(:page, :size, :sort, fq: searchable_fields).to_h
   end
 
   def searchable_fields
