@@ -28,7 +28,7 @@ describe StoryQueryBuilder do
             },
           ],
           filter: [
-            { terms: { account_id: [account.id] } }
+            { terms: { account_id: { value: [account.id], _name: :authz } } }
           ],
           must_not: [
             { exists: { field: :maybe } },
@@ -68,7 +68,84 @@ describe StoryQueryBuilder do
             },
           ],
           filter: [
-            { range: { published_at: { lte: 'now' } } },
+            {
+              range: {
+                published_at: {
+                  lte: 'now',
+                  _name: :published
+                }
+              }
+            },
+            {
+              bool: {
+                should: [
+                  {
+                    bool: {
+                      must_not: [
+                        {
+                          exists: {
+                            field: :deleted_at,
+                            _name: :deleted_at_null
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    term: {
+                      app_version: {
+                        value: 'v4',
+                        _name: :app_version_v4
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              bool: {
+                must_not: [
+                  {
+                    exists: {
+                      field: :network_only_at,
+                      _name: :network_visible
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              bool: {
+                should: [
+                  {
+                    bool: {
+                      must_not: [
+                        {
+                          term: {
+                            'series.subscription_approval_status' => {
+                              value: 'PRX Approved',
+                              _name: :prx_series_approved
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    bool: {
+                      must_not: [
+                        {
+                          exists: {
+                            field: 'series.subscriber_only_at',
+                            _name: :series_subscriber_only_at
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
           ],
         },
       },
