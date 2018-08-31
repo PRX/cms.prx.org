@@ -6,23 +6,22 @@ describe Api::Auth::StoriesController do
   let (:token) { StubToken.new(account.id, ['member'], user.id) }
   let (:account) { user.individual_account }
   let (:published_story) { account.stories.last }
-  let (:latest_story) { create(:story, account: account, description: 'latest') }
+  let (:latest_story) { create(:story, account: account) }
   let (:unpublished_story) { account.stories.first }
-  let (:random_story) { create(:story, published_at: nil, description: 'random') }
+  let (:random_story) { create(:story, published_at: nil) }
   let (:network) { create(:network, account: account) }
-  let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now, description: 'network') }
-  let (:v3_story) { create(:story_v3, account: account, description: 'v3_story') }
+  let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now) }
+  let (:v3_story) { create(:story_v3, account: account) }
   let (:released_story) { create(:story, account: account, released_at: Time.now + 1.day) }
 
   before do
     account.stories.each { |s| s }
-    network.stories.each { |s| s.update!(short_description:"network #{s.id}") }
-    network_story.update!(short_description: "network")
-    v3_story.update!(short_description: "v3 story")
-    unpublished_story.update!(published_at: nil, short_description: 'unpublished')
-    published_story.update_attributes!(published_at: 2.days.ago, short_description: 'published')
-    latest_story.update_attributes!(published_at: 1.day.ago, short_description: 'latest')
-    released_story.update!(published_at: nil, short_description: 'released')
+    network_story.update!(short_description: "network") # to trigger creation/indexing
+    v3_story.update!(short_description: "v3 story") # to trigger creation/indexing
+    unpublished_story.update!(published_at: nil)
+    published_story.update_attributes!(published_at: 2.days.ago)
+    latest_story.update_attributes!(published_at: 1.day.ago)
+    released_story.update!(published_at: nil)
   end
 
   describe 'with a valid token' do
