@@ -17,11 +17,15 @@ class StoryQueryBuilder < ESQueryBuilder
   end
 
   def apply_published_filter?
-    false # TODO
+    !apply_authz? && has_network_query?
+  end
+
+  def has_network_query?
+    structured_query.present? && structured_query.value_for(:network_id)
   end
 
   def apply_public_filter?
-    !apply_authz?
+    !apply_authz? && !has_network_query?
   end
 
   private
@@ -53,7 +57,7 @@ class StoryQueryBuilder < ESQueryBuilder
   def authz_filter
     searchdsl = self
     Filter.new do
-      terms account_id: { value: searchdsl.authorization.token_auth_accounts.try(:ids), _name: :authz }
+      terms account_id: searchdsl.authorization.token_auth_accounts.try(:ids), _name: :authz
     end
   end
 

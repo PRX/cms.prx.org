@@ -28,7 +28,7 @@ describe StoryQueryBuilder do
             },
           ],
           filter: [
-            { terms: { account_id: { value: [account.id], _name: :authz } } }
+            { terms: { account_id: [account.id], _name: :authz } }
           ],
           must_not: [
             { exists: { field: :maybe } },
