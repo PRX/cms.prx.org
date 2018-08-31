@@ -2,6 +2,7 @@
 
 class Api::Auth::StoriesController < Api::StoriesController
   include ApiAuthenticated
+  include ApiSearchable
 
   api_versions :v1
 
@@ -45,11 +46,37 @@ class Api::Auth::StoriesController < Api::StoriesController
   end
 
   def resources_base
-    # If there is a network_id specified, use that network
+    # If there is a network_id specified, use that network.
+    # The authz is performed in check_user_network().
     @stories ||= if params[:network_id]
       super.published
     else
       authorization.token_auth_stories
     end
+  end
+
+  def search
+    # same logic as resources_base above
+    @stories ||= if params[:network_id]
+      Story.text_search(search_query, search_params)
+    else
+      Story.text_search(search_query, search_params, authorization)
+    end
+    index
+  end
+
+  def search_params
+    sparams = super
+    sparams[:fq] ||= {}
+    [:network_id, :series_id, :account_id, :app_version].each do |p|
+      if params[p]
+        sparams[:fq][p.to_s] = params[p]
+      end
+    end
+    sparams
+  end
+
+  def searchable_fields
+    Story.searchable_fields
   end
 end

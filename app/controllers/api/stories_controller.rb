@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Api::StoriesController < Api::BaseController
+  include ApiSearchable
+
   api_versions :v1
 
   filter_resources_by :series_id, :account_id, :network_id
@@ -14,10 +16,12 @@ class Api::StoriesController < Api::BaseController
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
   def search
-    query = params.permit(:q)[:q]
-    search_params = params.permit(:page, :size, :sort, fields: {}, fq: Story.searchable_fields).to_h
-    @stories = Story.text_search(query, search_params, current_user)
+    @stories = Story.text_search(search_query, search_params)
     index
+  end
+
+  def searchable_fields
+    Story.searchable_fields
   end
 
   def after_create_resource(res)

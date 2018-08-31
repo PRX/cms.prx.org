@@ -48,7 +48,7 @@ clean:
 	sudo rm -rf coverage/ && mkdir coverage && chmod 777 coverage
 
 onetest: clean
-	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake test RAILS_ENV=test TEST=${TEST} TESTOPTS='--name /${TESTNAME}/'
+	docker-compose -f ${DOCKER_COMPOSE_FILE} run cms -- bundle exec rake test RAILS_ENV=test TEST=${TEST}
 
 stop:
 	docker-compose -f ${DOCKER_COMPOSE_FILE} stop
