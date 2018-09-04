@@ -56,6 +56,8 @@ class Series < BaseModel
 
   has_many :images, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
 
+  has_many :podcast_imports
+
   before_validation :set_app_version, on: :create
   after_save :update_account_for_stories, on: :update
 

@@ -89,4 +89,16 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         item_class: Distribution,
         item_decorator: Api::DistributionRepresenter,
         per: :all
+
+  link :podcast_imports do
+    {
+      href: api_authorization_podcast_imports_path,
+      count: represented.podcast_imports.count
+    } if represented.id
+  end
+  embed :podcast_imports,
+        paged: true,
+        item_class: PodcastImport,
+        item_decorator: Api::PodcastImportRepresenter,
+        per: :all
 end
