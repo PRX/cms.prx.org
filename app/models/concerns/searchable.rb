@@ -10,7 +10,7 @@ module Searchable
       if Rails.env.test?
         #reindex # call manually in tests if needed, for performance reasons
       else
-        # TODO put on async queue for indexing
+        SearchIndexerJob.perform_later self
       end
     end
 
@@ -18,7 +18,7 @@ module Searchable
       if Rails.env.test?
         #remove_from_index # call manually in tests if needed, for performance reasons
       else
-        # TODO put on async queue to remove_from_index
+        SearchDeindexerJob.perform_later self.class.name, self.id
       end
     end
 
