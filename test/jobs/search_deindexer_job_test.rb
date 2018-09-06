@@ -2,10 +2,12 @@ require 'test_helper'
 
 class MockDeindexerModel
   attr_accessor :id, :removed
+
   def initialize(args)
     @id = args[:id]
     @removed = false
   end
+
   def remove_from_index
     @removed = true
     self
