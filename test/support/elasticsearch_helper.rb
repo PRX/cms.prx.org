@@ -48,5 +48,7 @@ class ElasticsearchHelper
     [User, Series, Story, StationAccount, GroupAccount, Playlist].each do |klass|
       helper.create_es_index(klass)
     end
+  rescue Faraday::ConnectionFailed => e
+    puts "WARN: No elasticsearch connection"
   end
 end
