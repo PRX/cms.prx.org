@@ -39,7 +39,7 @@ module Searchable
     end
 
     # class method shorthand, useful for triggering via rake task or console or tests
-    def self.rebuild_index
+    def self.rebuild_index(opts = {})
       stager = index_stager
       indexer(stager).run
       stager.alias_stage_to_tmp_index && stager.promote

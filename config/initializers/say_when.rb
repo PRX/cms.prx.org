@@ -27,6 +27,32 @@ rescue ActiveRecord::StatementInvalid => ex
   puts "Failed to init say_when job: #{ex.inspect}"
 end
 
+begin
+  SayWhen.schedule(
+    group: 'application',
+    name: 'reindex_stories',
+    trigger_strategy: 'cron',
+    trigger_options: { expression: '0 0 8 * * ? *', time_zone: 'UTC' },
+    job_class: 'Story',
+    job_method: 'rebuild_index'
+  )
+rescue ActiveRecord::StatementInvalid => ex
+  puts "Failed to init say_when job: #{ex.inspect}"
+end
+
+begin
+  SayWhen.schedule(
+    group: 'application',
+    name: 'reindex_series',
+    trigger_strategy: 'cron',
+    trigger_options: { expression: '0 0 7 * * ? *', time_zone: 'UTC' },
+    job_class: 'Story',
+    job_method: 'rebuild_index'
+  )
+rescue ActiveRecord::StatementInvalid => ex
+  puts "Failed to init say_when job: #{ex.inspect}"
+end
+
 # # for use with Shoryuken >= 3.x
 # require 'say_when/poller/concurrent_poller'
 # poller = SayWhen::Poller::ConcurrentPoller.new(5)
