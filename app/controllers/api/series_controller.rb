@@ -47,6 +47,27 @@ class Api::SeriesController < Api::BaseController
     end
   end
 
+  def create
+    # XXX this method is copied from the ResourceCallbacks concern
+    json_body_params = JSON.parse(request.body)
+
+    create_resource.tap do |res|
+      consume! res, create_options
+      hal_authorize res
+      res = if json_body_params.has_key?("import_url")
+              Series.create_from_feed(json_body_params["import_url"],
+                                     current_user,
+                                     account)
+            else
+              res.save!
+              res
+            end
+      after_create_resource(res)
+      respond_with root_resource(res), create_options
+    end
+
+  end
+
   def included(relation)
     relation.includes(
       { account: [:image, :address, { opener: [:image] }] },

@@ -130,4 +130,24 @@ describe Series do
     end
   end
 
+  describe '.create_from_feed' do
+    let(:user) { create(:user) }
+    let(:account) { create(:account, id: 8, opener: user) }
+    let(:series) { create(:series, account: account) }
+    let(:podcast_url) { 'http://feeds.prx.org/transistor_stem' }
+    let(:importer) { PodcastImport.create!(user: user, account: account, url: podcast_url) }
+
+    it 'creates a series import and schedules an import for later' do
+      stub_request(:get, 'http://feeds.prx.org/transistor_stem').
+        to_return(status: 200, body: test_file('/fixtures/transistor_two.xml'), headers: {})
+      assert_send([importer, :import_series!])
+      assert_send([importer, :import_later, [{import_series: false}]])
+
+      PodcastImport.stub(:create!, importer) do
+        # note that we are mocking ^ so these args are unused
+        Series.create_from_feed("http://feeds.prx.org/transistor_stem", user, account)
+      end
+    end
+  end
+
 end
