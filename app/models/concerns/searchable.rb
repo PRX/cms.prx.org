@@ -30,7 +30,7 @@ module Searchable
     end
 
     def remove_from_index
-      __elasticsearch__.destroy_document
+      __elasticsearch__.delete_document
       refresh_index
     end
 
