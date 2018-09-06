@@ -18,7 +18,7 @@ module Searchable
       if Rails.env.test?
         #remove_from_index # call manually in tests if needed, for performance reasons
       else
-        SearchDeindexerJob.perform_later class.name, id
+        SearchDeindexerJob.perform_later self.class.name, id
       end
     end
 
