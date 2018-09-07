@@ -46,7 +46,7 @@ begin
     name: 'reindex_series',
     trigger_strategy: 'cron',
     trigger_options: { expression: '0 0 7 * * ? *', time_zone: 'UTC' },
-    job_class: 'Story',
+    job_class: 'Series',
     job_method: 'rebuild_index'
   )
 rescue ActiveRecord::StatementInvalid => ex
