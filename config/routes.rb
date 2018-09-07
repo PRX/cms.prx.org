@@ -83,6 +83,7 @@ PRX::Application.routes.draw do
 
         resources :podcast_imports, except: [:new, :edit], module: :auth do
           post 'retry', on: :member
+          get 'verify_rss', on: :collection
 
           resources :episode_imports, except: [:new, :edit] do
             post 'retry', on: :member

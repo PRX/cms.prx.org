@@ -56,8 +56,8 @@ class Api::SeriesController < Api::BaseController
       hal_authorize res
       res = if json_body_params.has_key?("import_url")
               Series.create_from_feed(json_body_params["import_url"],
-                                     current_user,
-                                     account)
+                                      current_user,
+                                      account)
             else
               res.save!
               res

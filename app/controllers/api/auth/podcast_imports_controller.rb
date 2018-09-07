@@ -40,4 +40,25 @@ class Api::Auth::PodcastImportsController < Api::BaseController
   def resources_base
     authorization.podcast_imports
   end
+
+  def verify_rss
+    verify_rss_resource.tap do |podcast_import|
+
+      status = begin
+                 podcast_import.get_feed
+                 :ok
+               rescue StandardError
+                 :bad_request
+               end
+
+      authorize podcast_import
+      respond_with root_resource(podcast_import), create_options.merge(status: status)
+    end
+  end
+
+  def verify_rss_resource
+    return @podcast_import if @podcast_import.present?
+    @podcast_import = PodcastImport.new(url: params['url'])
+  end
+
 end

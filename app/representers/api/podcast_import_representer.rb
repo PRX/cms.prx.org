@@ -10,7 +10,11 @@ class Api::PodcastImportRepresenter < Api::BaseRepresenter
   property :updated_at, writeable: false
 
   def self_url(represented)
-    api_authorization_podcast_import_path(represented)
+    if represented.persisted?
+      api_authorization_podcast_import_path(represented)
+    else
+      api_authorization_podcast_imports_path
+    end
   end
 
   link rel: :user, writeable: true do
