@@ -1,4 +1,4 @@
-FROM ruby:2.1.9-alpine
+FROM ruby:2.3.7-alpine
 
 MAINTAINER PRX <sysadmin@prx.org>
 LABEL org.prx.app="yes"
@@ -24,7 +24,7 @@ ADD Gemfile ./
 ADD Gemfile.lock ./
 RUN gem install bundler
 
-RUN apk --update add --virtual build-dependencies build-base curl-dev openssl-dev \
+RUN apk --update add --virtual build-dependencies build-base curl-dev libressl-dev \
     zlib-dev libxml2-dev libxslt-dev libffi-dev libgcrypt-dev postgresql-dev && \
     bundle config --global build.nokogiri  "--use-system-libraries" && \
     bundle config --global build.nokogumbo "--use-system-libraries" && \
