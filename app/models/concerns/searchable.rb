@@ -41,7 +41,10 @@ module Searchable
     # class method shorthand, useful for triggering via rake task or console or tests
     def self.rebuild_index(_opts = {})
       __elasticsearch__.create_index! unless __elasticsearch__.index_exists?
-      errs = import(refresh: true, return: 'errors', batch_size: 100)
+
+      indexer_scope = respond_to?(:for_indexer) ? :for_indexer : nil
+      errs = import(refresh: true, return: 'errors', scope: indexer_scope)
+
       errs.each do |err|
         logger.error(err)
         NewRelic::Agent.notice_error(err)
