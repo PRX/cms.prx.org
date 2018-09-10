@@ -23,9 +23,9 @@ module Searchable
     end
 
     # shorthand methods
-    def reindex
+    def reindex(refresh = false)
       __elasticsearch__.index_document
-      refresh_index
+      refresh_index if refresh
       self
     end
 
@@ -40,27 +40,12 @@ module Searchable
 
     # class method shorthand, useful for triggering via rake task or console or tests
     def self.rebuild_index(_opts = {})
-      stager = index_stager
-      indexer(stager).run
-      stager.alias_stage_to_tmp_index && stager.promote
-      __elasticsearch__.refresh_index!
-    end
-
-    private
-
-    def self.index_stager
-      Elasticsearch::Rails::HA::IndexStager.new(self.to_s)
-    end
-
-    def self.indexer(stager)
-      Elasticsearch::Rails::HA::ParallelIndexer.new(
-        klass: self.to_s,
-        idx_name: stager.tmp_index_name,
-        nprocs: ENV.fetch('NPROCS', 1),
-        batch_size: ENV.fetch('BATCH', 100),
-        force: true,
-        verbose: ENV.fetch('ES_DEBUG', false)
-      )
+      __elasticsearch__.create_index! unless __elasticsearch__.index_exists?
+      errs = import(refresh: true, return: 'errors', batch_size: 100)
+      errs.each do |err|
+        logger.error(err)
+        NewRelic::Agent.notice_error(err)
+      end
     end
   end
 end
