@@ -376,7 +376,7 @@ describe Story do
       story = create(:story,
                      title: 'Some Weirdo',
                      description: 'Unique thing',
-                     short_description: 'Lacking sense').reindex
+                     short_description: 'Lacking sense').reindex(true)
 
       Story.text_search('weirdo').to_a.must_include story
       Story.text_search('unique').to_a.must_include story

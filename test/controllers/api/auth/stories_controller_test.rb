@@ -115,7 +115,7 @@ describe Api::Auth::StoriesController do
         JSON.parse(response.body)['count'].must_equal account.stories.count
         account.stories.count.must_be :>, account.public_stories.count
       end
-  
+
       it 'searches stories with unpublished first, recently published after' do
         published_story.published_at.must_be :<, latest_story.published_at
         get(:search, api_request_opts(q: search_term, account_id: account.id, sort: 'published_at:desc'))
@@ -124,7 +124,7 @@ describe Api::Auth::StoriesController do
         stories[1].wont_be :published?
         stories[2].published_at.must_be :>, assigns[:stories][3].published_at
       end
-  
+
       it 'searches stories with unpublished first, oldest published after' do
         published_story.published_at.must_be :<, latest_story.published_at
         get(:search, api_request_opts(q: search_term, account_id: account.id, sort: 'published_at:asc'))
@@ -133,7 +133,7 @@ describe Api::Auth::StoriesController do
         stories[1].wont_be :published?
         stories[2].published_at.must_be :<, stories[3].published_at
       end
-  
+
       it 'searches stories with coalesced published, released dates' do
         get(:search, api_request_opts(q: search_term, account_id: account.id, sort: 'published_released_at:desc'))
         assert_response :success
@@ -144,13 +144,13 @@ describe Api::Auth::StoriesController do
         stories[1].released_at.must_be :>, assigns[:stories][2].published_at
         stories[2].published_at.must_be :>, assigns[:stories][3].published_at
       end
-  
+
       it 'searches stories in a network' do
         get(:search, api_version: 'v1', q: search_term, network_id: network.id)
         assert_response :success
         JSON.parse(response.body)['count'].must_equal network.stories.count
       end
-  
+
       it 'filters v4 stories' do
         unpublished_story.must_be :v4?
         v3_story.wont_be :v4?
@@ -160,7 +160,7 @@ describe Api::Auth::StoriesController do
         stories.must_include unpublished_story
         stories.wont_include v3_story
       end
-  
+
       it 'applies multiple filters, including field:NULL' do
         create(:series, stories: [unpublished_story])
         unpublished_story.series.wont_be_nil
@@ -168,15 +168,15 @@ describe Api::Auth::StoriesController do
         v3_story.series.must_be_nil
 
         # must re-index because we just updated unpublished_story
-        unpublished_story.reindex
-  
+        unpublished_story.reindex(true)
+
         get(:search, api_version: 'v1', app_version: 'v4', series_id: 'NULL', q: search_term)
         assert_response :success
         assert_not_nil assigns[:stories]
         stories.wont_include unpublished_story
         stories.wont_include v3_story
       end
-  
+
       it 'searches zero hits for network user access' do
         other_network = create(:network)
         get(:search, api_version: 'v1', network_id: other_network.id, q: search_term)
