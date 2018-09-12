@@ -2,52 +2,39 @@ require 'test_helper'
 
 describe ESQueryBuilder do
 
-  let(:account) { create(:account) }
-  let(:token) { StubToken.new(account.id, ['member'], 456) }
-  let(:authorization) { Authorization.new(token) }
-  let(:unauth_account) { create(:account) }
-
   it 'requires default fields' do
     err = assert_raises { ESQueryBuilder.new(query: 'foobar') }
     err.message.must_match /override default_fields/
   end
 
-  it 'creates a query hash' do
-    dsl = ESQueryBuilder.new(
-      query: 'foobar',
-      fields: ['what', 'ever'],
-      params: {from: 1, size: 5, fq: {something: '123'}}
-    )
-    hash = dsl.to_hash
-
-    hash.keys.sort.must_equal [:_source, :from, :query, :size, :sort]
-    hash[:_source].must_equal ['id']
-    hash[:size].must_equal 5
-    hash[:from].must_equal 1
-    hash[:sort].must_equal [{updated_at: {order: :desc, missing: '_last'}}]
-    hash[:query].must_equal({
-      bool: {
-        must: [{
-          query_string: {
-            query: '(foobar) AND (something:(123))',
-            default_operator: 'and',
-            lenient: true,
-            fields: ['what', 'ever']
-          }
-        }]
-      }
-    })
-  end
-
-  it 'can have no fielded query' do
-    dsl = ESQueryBuilder.new(query: 'foobar', fields: ['foo'], params: {sort: [created_at: :asc]})
-    hash = dsl.to_hash
-
+  it 'has sane defaults' do
+    hash = ESQueryBuilder.new(fields: ['foo']).to_hash
     hash.keys.sort.must_equal [:_source, :from, :query, :size, :sort]
     hash[:_source].must_equal ['id']
     hash[:size].must_equal 10
     hash[:from].must_equal 0
-    hash[:sort].must_equal [{created_at: {order: :asc, missing: '_first'}}]
+    hash[:sort].must_equal [{updated_at: {order: :desc, missing: '_last'}}]
+    hash[:query].must_equal({bool: {}})
+  end
+
+  it 'overrides pagination' do
+    hash = ESQueryBuilder.new(fields: ['foo'], params: {size: 1, from: 5}).to_hash
+    hash[:size].must_equal 1
+    hash[:from].must_equal 5
+  end
+
+  it 'overrides sorting' do
+    hash = ESQueryBuilder.new(fields: ['foo'], params: {sort: [foo: :asc, foo_at: :asc]}).to_hash
+    hash[:sort].must_equal [{foo: :asc, foo_at: {order: :asc, missing: '_first'}}]
+  end
+
+  it 'overrides fields' do
+    hash = ESQueryBuilder.new(query: 'foobar', fields: ['what', 'ever']).to_hash
+    hash[:query][:bool][:must][0][:query_string][:fields].must_equal ['what', 'ever']
+  end
+
+  it 'queries for text' do
+    hash = ESQueryBuilder.new(query: 'foobar', fields: ['foo']).to_hash
     hash[:query].must_equal({
       bool: {
         must: [{
@@ -62,20 +49,13 @@ describe ESQueryBuilder do
     })
   end
 
-  it 'can have only a fielded query' do
-    dsl = ESQueryBuilder.new(fields: ['foo'], params: {fq: {something: '123'}})
-    hash = dsl.to_hash
-
-    hash.keys.sort.must_equal [:_source, :from, :query, :size, :sort]
-    hash[:_source].must_equal ['id']
-    hash[:size].must_equal 10
-    hash[:from].must_equal 0
-    hash[:sort].must_equal [{updated_at: {order: :desc, missing: '_last'}}]
+  it 'does a fielded query' do
+    hash = ESQueryBuilder.new(fields: ['foo'], params: {fq: {what: 'ever'}}).to_hash
     hash[:query].must_equal({
       bool: {
         must: [{
           query_string: {
-            query: 'something:(123)',
+            query: 'what:(ever)',
             default_operator: 'and',
             lenient: true,
             fields: ['foo']
@@ -85,15 +65,56 @@ describe ESQueryBuilder do
     })
   end
 
-  it 'can have no query' do
-    dsl = ESQueryBuilder.new(fields: ['foo'], params: {sort: [foo: :desc]})
-    hash = dsl.to_hash
+  it 'does both text and fielded query' do
+    params = {fq: {what: 'ever'}}
+    hash = ESQueryBuilder.new(query: 'foobar', fields: ['foo'], params: params).to_hash
+    hash[:query].must_equal({
+      bool: {
+        must: [{
+          query_string: {
+            query: '(foobar) AND (what:(ever))',
+            default_operator: 'and',
+            lenient: true,
+            fields: ['foo']
+          }
+        }]
+      }
+    })
+  end
 
-    hash.keys.sort.must_equal [:_source, :from, :query, :size, :sort]
-    hash[:_source].must_equal ['id']
-    hash[:size].must_equal 10
-    hash[:from].must_equal 0
-    hash[:sort].must_equal [{foo: :desc}]
-    hash[:query].must_equal({bool: {}})
+  it 'searches for nulls' do
+    params = {fq: {what: 'ever', maybe: 'NULL', other: nil}}
+    hash = ESQueryBuilder.new(fields: ['foo'], params: params).to_hash
+    hash[:query].must_equal({
+      bool: {
+        must: [{
+          query_string: {
+            query: 'what:(ever)',
+            default_operator: 'and',
+            lenient: true,
+            fields: ['foo']
+          }
+        }],
+        must_not: [
+          {exists: {field: :maybe}},
+          {exists: {field: :other}}
+        ]
+      }
+    })
+  end
+
+  it 'fields by created_at within a duration' do
+    params = {fq: {created_at: '2010-06-01T00:00:00Z', created_within: '3 months'}}
+    dsl = ESQueryBuilder.new(fields: 'foo', params: params)
+    str = dsl.composite_query_string
+    str.must_equal('created_at:[2010-03-01T00:00:00Z TO 2010-06-01T00:00:00Z]')
+  end
+
+  it 'fields by created_at relative to now' do
+    Timecop.freeze do
+      dsl = ESQueryBuilder.new(fields: 'foo', params: {fq: {created_within: '6 months'}})
+      str = dsl.composite_query_string
+      str.must_equal("created_at:[#{6.months.ago.iso8601} TO now]")
+    end
   end
 end
