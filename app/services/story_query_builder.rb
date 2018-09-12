@@ -1,9 +1,5 @@
 class StoryQueryBuilder < ESQueryBuilder
 
-  def default_max_search_results
-    Story::MAX_SEARCH_RESULTS
-  end
-
   def default_fields
     ['title', 'short_description', 'description']
   end
@@ -40,10 +36,10 @@ class StoryQueryBuilder < ESQueryBuilder
     end
     if apply_public_filter?
       bools.push published_filter
-      bools.push v4_or_deleted_at_null_filter
       bools.push network_visible_filter
       bools.push series_visible_filter
     end
+    bools.push v4_or_deleted_at_null_filter
     bools
   end
 
