@@ -17,4 +17,8 @@ describe Api::Auth::SeriesRepresenter do
     get_link_href('prx:stories').must_include('authorization')
     get_embedded_href('prx:stories').must_include('authorization')
   end
+
+  it 'has authorization links for searching stories' do
+    get_link_href('prx:stories-search').must_include('authorization')
+  end
 end

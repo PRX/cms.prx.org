@@ -36,9 +36,25 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
     ]
   end
 
+  link :series_search do
+    {
+      href: "#{search_api_authorization_series_index_path}#{search_url_params}",
+      templated: true,
+      count: represented.token_auth_series.count
+    }
+  end
+
   link :stories do
     {
       href: "#{api_authorization_stories_path}#{index_url_params}",
+      templated: true,
+      count: represented.token_auth_stories.count
+    }
+  end
+
+  link :stories_search do
+    {
+      href: "#{search_api_authorization_stories_path}#{search_url_params}",
       templated: true,
       count: represented.token_auth_stories.count
     }

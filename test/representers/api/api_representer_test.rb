@@ -26,4 +26,9 @@ describe Api::ApiRepresenter do
     json['_links']['prx:picks'].size.must_equal 1
   end
 
+  it 'returns search links' do
+    json['_links']['prx:series-search'].wont_be_nil
+    json['_links']['prx:stories-search'].wont_be_nil
+  end
+
 end

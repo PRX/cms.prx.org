@@ -16,6 +16,14 @@ class Api::Auth::SeriesRepresenter < Api::SeriesRepresenter
         url: ->(_r) { api_authorization_series_stories_path(represented.parent) },
         zoom: false
 
+  link :stories_search do
+    {
+      href: "#{search_api_authorization_series_stories_path(represented)}#{search_url_params}",
+      templated: true,
+      count: represented.stories.count
+    } if represented.id
+  end
+
   def self_url(r)
     api_authorization_series_path(r)
   end

@@ -31,6 +31,15 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     ]
   end
 
+  link :stories_search do
+    {
+      title: 'Search for a paged collection of stories',
+      profile: profile_url(:collection, :story),
+      href: "#{search_api_stories_path}#{search_url_params}",
+      templated: true
+    }
+  end
+
   links :series do
     [
       {
@@ -47,6 +56,15 @@ class Api::ApiRepresenter < Api::BaseRepresenter
         templated: true
       }
     ]
+  end
+
+  link :series_search do
+    {
+      title: 'Search for a paged collection of series',
+      profile: profile_url(:collection, :series),
+      href: "#{search_api_series_index_path}#{search_url_params}",
+      templated: true
+    }
   end
 
   links :account do
