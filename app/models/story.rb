@@ -9,23 +9,12 @@ class Story < BaseModel
   include ValidityFlag
 
   include Searchable
-  MAX_SEARCH_RESULTS = 10
 
-  # ES index definition
-  settings index: {
-    number_of_shards: 1, # increase this if we ever get more than N records
-    number_of_replicas: 1
-  } do
-    # with dynamic mapping==true, we only need to explicitly define overrides.
-    # https://www.elastic.co/guide/en/elasticsearch/guide/current/dynamic-mapping.html
-    # e.g. if a field's value might be ambiguous (Float vs Integer)
-    # then best to declare it explicitly here.
-    # Any boosts or other index trickery also required here.
-    mappings dynamic: "true" do
+  settings index: {number_of_shards: 1, number_of_replicas: 1} do
+    mappings dynamic: 'true' do
       indexes :series do
         indexes :subscription_approval_status, type: 'keyword' # keyword == do not analyze
       end
-
     end
   end
 
@@ -159,21 +148,9 @@ class Story < BaseModel
 
   scope :public_stories, -> { published.network_visible.series_visible }
 
-  def self.build_query_dsl(query_text, params, authorization)
-    StoryQueryBuilder.new(
-      query: query_text,
-      params: params,
-      authorization: authorization,
-      fielded_query: params[:fq],
-    ).as_dsl
-  end
-
-  def self.text_search(text, params={}, authorization=nil)
-    search(build_query_dsl(text, params.with_indifferent_access, authorization)).records
-  end
-
-  def self.searchable_fields
-    [:title, :short_description, :description]
+  def self.text_search(text, params={}, authz=nil)
+    builder = StoryQueryBuilder.new(query: text, params: params, authorization: authz)
+    search(builder.as_dsl).records
   end
 
   def points(level=point_level)
