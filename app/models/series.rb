@@ -69,7 +69,7 @@ class Series < BaseModel
           "`series`.`description` like '%#{text}%'")
   }
 
-  def self.text_search(text, params={}, authz=nil)
+  def self.text_search(text, params = {}, authz = nil)
     builder = SeriesQueryBuilder.new(query: text, params: params, authorization: authz)
     search(builder.as_dsl).records
   end
