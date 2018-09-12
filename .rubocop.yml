@@ -283,3 +283,6 @@ SymbolArray:
 
 BlockLength:
   Enabled: false
+
+MultilineIfModifier:
+  Enabled: false
