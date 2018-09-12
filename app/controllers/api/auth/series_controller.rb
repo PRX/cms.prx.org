@@ -12,4 +12,9 @@ class Api::Auth::SeriesController < Api::SeriesController
   def resources_base
     @series ||= authorization.token_auth_series
   end
+
+  def search
+    @series ||= Series.text_search(search_query, search_params, authorization)
+    index
+  end
 end

@@ -16,12 +16,18 @@ class Api::StoriesController < Api::BaseController
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
   def search
-    @stories = Story.text_search(search_query, search_params)
+    @stories ||= Story.text_search(search_query, search_params)
     index
   end
 
-  def searchable_fields
-    Story.searchable_fields
+  def search_params
+    sparams = super
+    sparams[:sort] = rename_sort_param(sparams[:sort], 'title', 'title.keyword')
+    sparams[:fq]['account_id'] = params[:account_id] if params[:account_id]
+    sparams[:fq]['network_id'] = params[:network_id] if params[:network_id]
+    sparams[:fq]['series_id'] = params[:series_id] if params[:series_id]
+    sparams[:fq]['app_version'] = 'v4' if filters.v4?
+    sparams
   end
 
   def after_create_resource(res)
