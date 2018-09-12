@@ -11,7 +11,7 @@ describe FieldedSearchQuery do
 
   it 'joins multiple clauses' do
     query = FieldedSearchQuery.new(field_a: '123', field_b: '456')
-    query.to_h.must_equal({field_a: '123', field_b: '456'})
+    query.to_h.must_equal({'field_a' => '123', 'field_b' => '456'})
     query.to_s.must_equal 'field_a:(123) field_b:(456)'
   end
 
@@ -23,7 +23,7 @@ describe FieldedSearchQuery do
 
   it 'ignores blank clauses' do
     query = FieldedSearchQuery.new(a: nil, b: '', c: '*', d: 'NULL', e: 123)
-    query.to_h.must_equal({e: 123})
+    query.to_h.must_equal({'e' => 123})
     query.to_s.must_equal 'e:(123)'
   end
 
