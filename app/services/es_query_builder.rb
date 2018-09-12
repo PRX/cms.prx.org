@@ -10,7 +10,7 @@ class ESQueryBuilder
     @fields = args[:fields] || default_fields
     @authorization = args[:authorization]
     @params = args[:params]
-    @fielded_query = args[:fielded_query]
+    @fielded_query = @params ? @params[:fq] : nil
 
     build_dsl
   end
@@ -30,6 +30,18 @@ class ESQueryBuilder
 
   def default_fields
     fail "You should override default_fields"
+  end
+
+  def default_sort_params
+    [updated_at: :desc]
+  end
+
+  def default_max_search_results
+    10
+  end
+
+  def has_query?
+    [query_str, structured_query].any?(&:present?)
   end
 
   def composite_query_string
@@ -111,12 +123,14 @@ class ESQueryBuilder
     @dsl.query = Query.new
     @dsl.query do
       bool do
-        must do
-          query_string do
-            query searchdsl.composite_query_string
-            default_operator searchdsl.default_operator
-            lenient true
-            fields searchdsl.fields
+        if searchdsl.composite_query_string.present?
+          must do
+            query_string do
+              query searchdsl.composite_query_string
+              default_operator searchdsl.default_operator
+              lenient true
+              fields searchdsl.fields
+            end
           end
         end
         if bools.any?
@@ -144,8 +158,7 @@ class ESQueryBuilder
 
   def add_sort
     if params && params[:sort]
-      sarray = params[:sort].is_a?(Array) ? params[:sort] : [params[:sort]]
-      @dsl.sort(coerce_sort_params(sarray.map { |pair| [pair.split(":")].to_h }))
+      @dsl.sort(coerce_sort_params(params[:sort]))
     else
       @dsl.sort(coerce_sort_params(default_sort_params))
     end
