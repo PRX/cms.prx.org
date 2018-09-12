@@ -148,7 +148,7 @@ class Story < BaseModel
 
   scope :public_stories, -> { published.network_visible.series_visible }
 
-  def self.text_search(text, params={}, authz=nil)
+  def self.text_search(text, params = {}, authz = nil)
     builder = StoryQueryBuilder.new(query: text, params: params, authorization: authz)
     search(builder.as_dsl).records
   end

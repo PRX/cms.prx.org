@@ -40,10 +40,12 @@ describe ApiSearchable do
 
   it 'renames sort params' do
     sorts = [{fld1: :asc}, {fld2: :desc, fld3: :asc}, {fld4: :asc}]
-    controller.rename_sort_param(sorts, :fld3, 'fld3.changed').must_equal([
-      {fld1: :asc},
-      {fld2: :desc, 'fld3.changed' => :asc},
-      {fld4: :asc}
-    ])
+    controller.rename_sort_param(sorts, :fld3, 'fld3.changed').must_equal(
+      [
+        {fld1: :asc},
+        {fld2: :desc, 'fld3.changed' => :asc},
+        {fld4: :asc}
+      ]
+    )
   end
 end
