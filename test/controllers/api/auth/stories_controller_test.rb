@@ -118,7 +118,7 @@ describe Api::Auth::StoriesController do
 
       it 'searches stories with unpublished first, recently published after' do
         published_story.published_at.must_be :<, latest_story.published_at
-        get(:search, api_request_opts(q: search_term, account_id: account.id, sort: 'published_at:desc'))
+        get(:search, api_request_opts(q: search_term, account_id: account.id, sorts: 'published_at:desc'))
         assert_response :success
         stories[0].wont_be :published?
         stories[1].wont_be :published?
@@ -127,7 +127,7 @@ describe Api::Auth::StoriesController do
 
       it 'searches stories with unpublished first, oldest published after' do
         published_story.published_at.must_be :<, latest_story.published_at
-        get(:search, api_request_opts(q: search_term, account_id: account.id, sort: 'published_at:asc'))
+        get(:search, api_request_opts(q: search_term, account_id: account.id, sorts: 'published_at:asc'))
         assert_response :success
         stories[0].wont_be :published?
         stories[1].wont_be :published?
@@ -135,7 +135,7 @@ describe Api::Auth::StoriesController do
       end
 
       it 'searches stories with coalesced published, released dates' do
-        get(:search, api_request_opts(q: search_term, account_id: account.id, sort: 'published_released_at:desc'))
+        get(:search, api_request_opts(q: search_term, account_id: account.id, sorts: 'published_released_at:desc'))
         assert_response :success
         JSON.parse(response.body)['count'].must_equal account.stories.count
         stories[0].wont_be :published?
@@ -154,27 +154,25 @@ describe Api::Auth::StoriesController do
       it 'filters v4 stories' do
         unpublished_story.must_be :v4?
         v3_story.wont_be :v4?
-        get(:search, api_version: 'v1', format: 'json', app_version: 'v4', q: search_term)
+        get(:search, api_version: 'v1', format: 'json', filters: 'v4', q: search_term)
         assert_response :success
         assert_not_nil assigns[:stories]
         stories.must_include unpublished_story
         stories.wont_include v3_story
       end
 
-      it 'applies multiple filters, including field:NULL' do
+      it 'applies multiple filters' do
         create(:series, stories: [unpublished_story])
-        unpublished_story.series.wont_be_nil
+        unpublished_story.reindex(true)
+        unpublished_story.series_id.wont_be_nil
         v3_story.wont_be :v4?
         v3_story.series.must_be_nil
 
-        # must re-index because we just updated unpublished_story
-        unpublished_story.reindex(true)
-
-        get(:search, api_version: 'v1', app_version: 'v4', series_id: 'NULL', q: search_term)
+        get(:search, api_version: 'v1', format: 'json', filters: 'v4,noseries', q: search_term)
         assert_response :success
         assert_not_nil assigns[:stories]
-        stories.wont_include unpublished_story
-        stories.wont_include v3_story
+        assigns[:stories].wont_include unpublished_story
+        assigns[:stories].wont_include v3_story
       end
 
       it 'searches zero hits for network user access' do
