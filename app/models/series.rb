@@ -14,6 +14,12 @@ class Series < BaseModel
 
   include Searchable
 
+  settings index: {number_of_shards: 1, number_of_replicas: 1} do
+    mappings dynamic: 'true' do
+      indexes :subscription_approval_status, type: 'keyword'
+    end
+  end
+
   def description_html=(html)
     self.description = v4? ? html_to_markdown(html) : html
   end
@@ -62,6 +68,11 @@ class Series < BaseModel
           "`series`.`short_description` like '%#{text}%' OR " +
           "`series`.`description` like '%#{text}%'")
   }
+
+  def self.text_search(text, params={}, authz=nil)
+    builder = SeriesQueryBuilder.new(query: text, params: params, authorization: authz)
+    search(builder.as_dsl).records
+  end
 
   def default_image
     @default_image ||= images.profile
