@@ -6,7 +6,7 @@ class ESQueryBuilder
   attr_reader :authorization, :params, :query_str, :fields, :fielded_query
 
   def initialize(args)
-    @query_str = args[:query]
+    @query_str = SanitizedSearchQuery.new(args[:query])
     @fields = args[:fields] || default_fields
     @authorization = args[:authorization]
     @params = args[:params]
