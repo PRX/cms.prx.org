@@ -118,7 +118,8 @@ describe Api::Auth::StoriesController do
 
       it 'searches stories with unpublished first, recently published after' do
         published_story.published_at.must_be :<, latest_story.published_at
-        get(:search, api_request_opts(q: search_term, account_id: account.id, sorts: 'published_at:desc'))
+        sort = 'published_at:desc'
+        get(:search, api_request_opts(q: search_term, account_id: account.id, sorts: sort))
         assert_response :success
         stories[0].wont_be :published?
         stories[1].wont_be :published?
@@ -127,7 +128,8 @@ describe Api::Auth::StoriesController do
 
       it 'searches stories with unpublished first, oldest published after' do
         published_story.published_at.must_be :<, latest_story.published_at
-        get(:search, api_request_opts(q: search_term, account_id: account.id, sorts: 'published_at:asc'))
+        sort = 'published_at:asc'
+        get(:search, api_request_opts(q: search_term, account_id: account.id, sorts: sort))
         assert_response :success
         stories[0].wont_be :published?
         stories[1].wont_be :published?
@@ -135,7 +137,8 @@ describe Api::Auth::StoriesController do
       end
 
       it 'searches stories with coalesced published, released dates' do
-        get(:search, api_request_opts(q: search_term, account_id: account.id, sorts: 'published_released_at:desc'))
+        sort = 'published_released_at:desc'
+        get(:search, api_request_opts(q: search_term, account_id: account.id, sorts: sort))
         assert_response :success
         JSON.parse(response.body)['count'].must_equal account.stories.count
         stories[0].wont_be :published?

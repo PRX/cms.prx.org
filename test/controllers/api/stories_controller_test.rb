@@ -316,7 +316,8 @@ describe Api::StoriesController do
   it 'should allow fielded search' do
     ElasticsearchHelper.new.create_es_index(Story)
     story = create(:story, title: 'You are all Weirdos').reindex(true)
-    story2 = create(:story, title: 'We are all Freakazoids', description: 'And weirdos').reindex(true)
+    story2 = create(:story, title: 'We are all Freakazoids', description: 'And weirdos')
+    story2.reindex(true)
     get(:search, api_version: 'v1', format: 'json', q: 'title:weirdos')
     assert_response :success
     assert_not_nil assigns[:stories]
