@@ -2,7 +2,6 @@
 
 class Playlist < BaseModel
   include Storied
-  include Searchable
 
   acts_as_paranoid
 

@@ -15,4 +15,9 @@ describe Api::BaseRepresenter do
     representer.index_url_params.wont_be_nil
     representer.index_url_params.must_equal '{?page,per,zoom,filters,sorts}'
   end
+
+  it '#search_url_params' do
+    representer.search_url_params.wont_be_nil
+    representer.search_url_params.must_equal '{?page,per,zoom,filters,sorts,q}'
+  end
 end

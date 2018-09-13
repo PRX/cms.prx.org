@@ -45,7 +45,7 @@ class ElasticsearchHelper
   # create test indices.
   def self.es_setup
     helper = new
-    [User, Series, Story, StationAccount, GroupAccount, Playlist].each do |klass|
+    [Series, Story].each do |klass|
       helper.create_es_index(klass)
     end
   rescue Faraday::ConnectionFailed

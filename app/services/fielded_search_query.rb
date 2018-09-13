@@ -4,7 +4,9 @@ class FieldedSearchQuery
   NULL_STRING = 'NULL'
 
   def initialize(field_pairs)
-    @field_pairs = field_pairs
+    if field_pairs
+      @field_pairs = field_pairs.with_indifferent_access
+    end
   end
 
   def present?
@@ -35,7 +37,7 @@ class FieldedSearchQuery
       field_pairs.each do |k, v|
         next if v.nil?
         next if v.blank?
-        next if v == '*' 
+        next if v == '*'
         next if v == NULL_STRING
         clauses << clause_to_s(k, v)
       end

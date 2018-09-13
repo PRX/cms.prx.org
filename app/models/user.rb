@@ -1,8 +1,6 @@
 # encoding: utf-8
 
 class User < BaseModel
-  include Searchable
-
   acts_as_paranoid
 
   # DON'T touch the account, as you'll create an infinite loop

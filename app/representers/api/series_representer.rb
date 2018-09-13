@@ -26,6 +26,14 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         item_decorator: Api::Min::StoryRepresenter,
         zoom: false
 
+  link :stories_search do
+    {
+      href: "#{search_api_series_stories_path(represented)}#{search_url_params}",
+      templated: true,
+      count: represented.public_stories.count
+    } if represented.id
+  end
+
   link :image do
     {
       href: api_series_series_image_path(represented, represented.default_image),

@@ -216,9 +216,6 @@ TrailingCommaInArguments:
 TrivialAccessors:
   Enabled: false
 
-VariableInterpolation:
-  Enabled: false
-
 WhenThen:
   Enabled: false
 
@@ -270,4 +267,22 @@ Void:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
+  Enabled: false
+
+SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+IndentHash:
+  Enabled: false
+
+BracesAroundHashParameters:
+  Enabled: false
+
+SymbolArray:
+  Enabled: false
+
+BlockLength:
+  Enabled: false
+
+MultilineIfModifier:
   Enabled: false

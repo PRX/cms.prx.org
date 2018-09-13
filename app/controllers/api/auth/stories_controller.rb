@@ -67,16 +67,7 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   def search_params
     sparams = super
-    sparams[:fq] ||= {}
-    [:network_id, :series_id, :account_id, :app_version].each do |p|
-      if params[p]
-        sparams[:fq][p.to_s] = params[p]
-      end
-    end
+    sparams[:fq]['series_id'] = 'NULL' if filters.noseries?
     sparams
-  end
-
-  def searchable_fields
-    Story.searchable_fields
   end
 end

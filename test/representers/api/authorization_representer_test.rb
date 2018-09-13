@@ -29,6 +29,11 @@ describe Api::AuthorizationRepresenter do
     get_link('prx:story').must_match 'authorization/stories/{id}'
   end
 
+  it 'links directly to search endpoints' do
+    get_link('prx:series-search').must_match 'authorization/series/search'
+    get_link('prx:stories-search').must_match 'authorization/stories/search'
+  end
+
   it 'embeds the default account with the auth url' do
     get_embed('prx:default-account', 'id').must_equal account.id
     links = get_embed('prx:default-account', '_links')

@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Api::SeriesController < Api::BaseController
+  include ApiSearchable
+
   api_versions :v1
 
   filter_resources_by :account_id
@@ -11,6 +13,19 @@ class Api::SeriesController < Api::BaseController
               allowed: [:id, :created_at, :updated_at, :title]
 
   announce_actions
+
+  def search
+    @series ||= Series.text_search(search_query, search_params)
+    index
+  end
+
+  def search_params
+    sparams = super
+    sparams[:sort] = rename_sort_param(sparams[:sort], 'title', 'title.keyword')
+    sparams[:fq]['account_id'] = params[:account_id] if params[:account_id]
+    sparams[:fq]['app_version'] = 'v4' if filters.v4?
+    sparams
+  end
 
   def filtered(resources)
     resources = resources.v4 if filters.v4?

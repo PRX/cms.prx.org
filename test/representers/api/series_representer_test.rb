@@ -22,6 +22,11 @@ describe Api::SeriesRepresenter do
     json['_links']['prx:audio-version-templates'].wont_be_nil
   end
 
+  it 'includes stories search links' do
+    json['_links']['prx:stories-search'].wont_be_nil
+    json['_links']['prx:stories-search']['href'].must_match "series/#{series.id}/stories/search"
+  end
+
   it 'can set the account' do
     series.account_id.wont_be_nil
     series_hash = { title: 'Title', set_account_uri: 'api/v1/accounts/123' }
