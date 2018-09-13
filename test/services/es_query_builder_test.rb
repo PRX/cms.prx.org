@@ -96,8 +96,8 @@ describe ESQueryBuilder do
           }
         }],
         must_not: [
-          {exists: {field: :maybe}},
-          {exists: {field: :other}}
+          {exists: {field: 'maybe'}},
+          {exists: {field: 'other'}}
         ]
       }
     })
