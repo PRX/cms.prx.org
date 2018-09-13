@@ -96,6 +96,7 @@ class Story < BaseModel
           class_name: 'AudioVersion',
           foreign_key: :piece_id
   has_one :license, foreign_key: :piece_id, dependent: :destroy
+  has_one :episode_import, foreign_key: :piece_id
 
   before_validation :set_app_version, on: :create
   before_validation :update_published_to_released
