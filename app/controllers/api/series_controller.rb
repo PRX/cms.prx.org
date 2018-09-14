@@ -51,21 +51,20 @@ class Api::SeriesController < Api::BaseController
     # XXX this method is copied from the ResourceCallbacks concern
     json_body_params = JSON.parse(request.body)
 
-    create_resource.tap do |res|
-      consume! res, create_options
-      hal_authorize res
-      res = if json_body_params.has_key?("import_url")
-              Series.create_from_feed(json_body_params["import_url"],
-                                      current_user,
-                                      account)
-            else
-              res.save!
-              res
-            end
-      after_create_resource(res)
-      respond_with root_resource(res), create_options
-    end
+    series = create_resource
+    consume! series, create_options
+    hal_authorize series
 
+    @series = if json_body_params.has_key?('import_url')
+                Series.create_from_feed(json_body_params['import_url'],
+                                        current_user,
+                                        account)
+              else
+                series.save!
+                series
+              end
+    after_create_resource(@series)
+    respond_with root_resource(@series), create_options
   end
 
   def included(relation)
