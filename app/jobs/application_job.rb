@@ -4,6 +4,7 @@ class ApplicationJob < ActiveJob::Base
 
   rescue_from(StandardError) do |e|
     NewRelic::Agent.notice_error(e)
+    raise e
   end
 
   around_perform do |job, block|
