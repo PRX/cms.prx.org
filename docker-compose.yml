@@ -11,7 +11,7 @@ services:
       - pg
       - elasticsearch
     ports:
-      - "3000:3000"
+      - "3002:3000"
     command: web
     environment:
       VIRTUAL_HOST: cms.prx.docker
