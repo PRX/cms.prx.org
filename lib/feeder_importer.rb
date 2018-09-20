@@ -22,6 +22,10 @@
 
 require 'addressable/uri'
 require 'prx_access'
+require 'tempfile'
+require 'digest/sha2'
+require 'fileutils'
+require 'excon'
 
 # Feeder models start
 # some pidgin models for feeder db
@@ -95,6 +99,9 @@ class Enclosure < MediaResource; end
 # Feeder models end
 
 class FeederImporter
+  MAX_FILENAME_LENGTH = 160
+  MAX_EXTENSION_LENGTH = 6
+
   include Announce::Publisher
   include PRXAccess
   include ImportUtils
@@ -113,7 +120,7 @@ class FeederImporter
   def import
     retrieve_podcast
     lock_podcast!
-    create_series
+    create_series unless find_series
     create_stories
     update_podcast
     remind_to_unlock(podcast.title)
@@ -125,6 +132,12 @@ class FeederImporter
 
   def lock_podcast!
     podcast.update!(locked: true)
+  end
+
+  def find_series
+    self.distribution = Distributions::PodcastDistribution.find_by_url("#{feeder_root}/podcasts/#{podcast_id}")
+    self.series = distribution.owner if self.distribution
+    self.series
   end
 
   def create_series
@@ -204,8 +217,13 @@ class FeederImporter
 
   def create_stories
     podcast.episodes.each do |episode|
-      create_story(episode)
+      create_story(episode) unless find_story(episode)
     end
+  end
+
+  def find_story(episode)
+    episode_url = "#{feeder_root}/episodes/#{episode.guid}"
+    StoryDistributions::EpisodeDistribution.find_by_url(episode_url)
   end
 
   def template_for_episode(episode)
@@ -292,7 +310,11 @@ class FeederImporter
   def copy_image(guid, image)
     from_path = URI.parse(image.url).path[1..-1]
     to_path = "#{short_env}/#{guid}/#{from_path.split('/').last}"
-    copy_file(from_path, to_path)
+    if image.url =~ /f.prxu.org/
+      copy_file(from_path, to_path)
+    else
+      upload_file(image.url, to_path)
+    end
   end
 
   def copy_media(episode, media)
@@ -313,6 +335,102 @@ class FeederImporter
     end
 
     "https://prx-up.s3.amazonaws.com/#{to_path}"
+  end
+
+  def upload_file(from_url, to_path)
+    file_name = File.basename(to_path)
+    connection = AudioFileUploader.new.send(:storage).connection
+    options = {
+      'Content-Disposition' => "attachment; filename=\"#{file_name}\"",
+      'Cache-Control' => 'max-age=86400',
+      'x-amz-acl' => 'public-read'
+    }
+
+    tmpfile = download_file(from_url)
+
+    if ['production', 'staging'].include?(ENV['RAILS_ENV'])
+      connection.put_object('prx-up', to_path, tmpfile, options)
+    end
+
+    "https://prx-up.s3.amazonaws.com/#{to_path}"
+  end
+
+  def create_temp_file(base_file_name = nil, bin_mode = true)
+    file_name = File.basename(base_file_name)
+    file_name = Digest::SHA256.hexdigest(base_file_name) if file_name.length > MAX_FILENAME_LENGTH
+    file_ext = File.extname(base_file_name)[0, MAX_EXTENSION_LENGTH]
+
+    FileUtils.mkdir_p(tmp_dir)
+
+    Tempfile.new([file_name, file_ext], tmp_dir).tap { |t| t.binmode if bin_mode }
+  end
+
+  def close_temp_file(temp_file)
+    if temp_file
+      temp_file.close
+      File.unlink(temp_file)
+    end
+  rescue
+    nil
+  end
+
+  def tmp_dir
+    "./tmp/feeder_import"
+  end
+
+  def download_file(uri, limit = 10)
+    temp_file = nil
+    try_count = 0
+    file_downloaded = false
+
+    prior_remaining, prior_total = 0
+    streamer = lambda do |chunk, remaining_bytes, total_bytes|
+      if (remaining_bytes.to_i > prior_remaining) || (total_bytes.to_i != prior_total) || !temp_file
+        close_temp_file(temp_file)
+        temp_file = create_temp_file(uri.to_s)
+      end
+
+      prior_remaining = remaining_bytes.to_i
+      prior_total = total_bytes.to_i
+      temp_file.write(chunk)
+    end
+
+    while !file_downloaded && try_count < limit
+      try_count += 1
+      begin
+
+        close_temp_file(temp_file)
+
+        Excon.get(uri.to_s, {
+          idempotent: false,
+          retry_limit: 0,
+          omit_default_port: true,
+          ssl_verify_peer: ENV['SSL_VERIFY_PEER'],
+          response_block: streamer,
+          middlewares: Excon.defaults[:middlewares] + [Excon::Middleware::RedirectFollower]
+        })
+
+        temp_file.fsync()
+        file_downloaded = true
+      rescue StandardError => err
+        puts "File failed to be retrieved: '#{uri}': #{err.message}"
+      end
+      sleep(1)
+    end
+
+    unless file_downloaded
+      raise "HTTP Download #{uri}: did not complete"
+    end
+
+    if prior_total > 0 && temp_file.size != prior_total
+      raise "HTTP Download #{uri}: #{temp_file.size} is not the expected size: #{prior_total}"
+    end
+
+    if temp_file.size == 0
+      raise "HTTP Download #{uri}: Zero length file downloaded"
+    end
+
+    temp_file
   end
 
   def announce_image(image)
