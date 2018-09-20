@@ -135,9 +135,10 @@ class FeederImporter
   end
 
   def find_series
-    self.distribution = Distributions::PodcastDistribution.find_by_url("#{feeder_root}/podcasts/#{podcast_id}")
-    self.series = distribution.owner if self.distribution
-    self.series
+    podcast_url = "#{feeder_root}/podcasts/#{podcast_id}"
+    self.distribution = Distributions::PodcastDistribution.find_by_url(podcast_url)
+    self.series = distribution.owner if distribution
+    series
   end
 
   def create_series
@@ -370,12 +371,12 @@ class FeederImporter
       temp_file.close
       File.unlink(temp_file)
     end
-  rescue
+  rescue StandardError
     nil
   end
 
   def tmp_dir
-    "./tmp/feeder_import"
+    './tmp/feeder_import'
   end
 
   def download_file(uri, limit = 10)
@@ -398,7 +399,6 @@ class FeederImporter
     while !file_downloaded && try_count < limit
       try_count += 1
       begin
-
         close_temp_file(temp_file)
 
         Excon.get(uri.to_s, {
@@ -410,7 +410,7 @@ class FeederImporter
           middlewares: Excon.defaults[:middlewares] + [Excon::Middleware::RedirectFollower]
         })
 
-        temp_file.fsync()
+        temp_file.fsync
         file_downloaded = true
       rescue StandardError => err
         puts "File failed to be retrieved: '#{uri}': #{err.message}"
@@ -422,11 +422,11 @@ class FeederImporter
       raise "HTTP Download #{uri}: did not complete"
     end
 
-    if prior_total > 0 && temp_file.size != prior_total
+    if prior_total.positive? && temp_file.size != prior_total
       raise "HTTP Download #{uri}: #{temp_file.size} is not the expected size: #{prior_total}"
     end
 
-    if temp_file.size == 0
+    unless temp_file.size
       raise "HTTP Download #{uri}: Zero length file downloaded"
     end
 
