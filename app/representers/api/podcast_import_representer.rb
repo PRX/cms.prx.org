@@ -10,6 +10,8 @@ class Api::PodcastImportRepresenter < Api::BaseRepresenter
   property :updated_at, writeable: false
   property :updated_at, writeable: false
   property :feed, writeable: false
+  property :episode_importing_count, writeable: false
+
 
   def self_url(represented)
     if represented.persisted?
@@ -42,6 +44,19 @@ class Api::PodcastImportRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :episode_imports,
+        paged: true,
+        item_class: EpisodeImport,
+        item_decorator: Api::EpisodeImportRepresenter,
+        zoom: true
+
+  link :episode_import_placeholders do
+    {
+      href: "#{api_authorization_podcast_import_episode_import_placeholders_path(represented)}#{index_url_params}",
+      templated: true,
+      count: represented.episode_imports.having_duplicate_guids.count
+    } if represented.id
+  end
+  embed :episode_import_placeholders,
         paged: true,
         item_class: EpisodeImport,
         item_decorator: Api::EpisodeImportRepresenter,

@@ -88,6 +88,10 @@ PRX::Application.routes.draw do
           resources :episode_imports, except: [:new, :edit] do
             post 'retry', on: :member
           end
+
+          resources :episode_import_placeholders, except: [:new, :edit] do
+            post 'retry', on: :member
+          end
         end
 
         resources :series, except: [:new, :edit, :create], module: :auth do
@@ -95,6 +99,7 @@ PRX::Application.routes.draw do
           resources :stories, only: [:index, :create] do
             get 'search', on: :collection
           end
+          resources :podcast_imports, only: [:index]
         end
 
         resources :stories, except: [:new, :edit, :create], module: :auth do

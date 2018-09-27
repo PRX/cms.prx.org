@@ -32,6 +32,7 @@ describe Api::PodcastImportRepresenter do
   it 'has basic attributes and links' do
     json['status'].must_equal 'created'
     json['url'].must_equal 'http://feeds.prx.org/transistor_stem'
+    json['episodeImportingCount'].must_equal 10
     get_link_href('prx:series').must_match /series/
   end
 

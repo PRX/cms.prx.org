@@ -93,7 +93,7 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
 
   link :podcast_imports do
     {
-      href: api_authorization_podcast_imports_path,
+      href: api_authorization_series_podcast_imports_path(represented),
       count: represented.podcast_imports.count
     } if represented.id
   end
