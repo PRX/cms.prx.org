@@ -44,7 +44,7 @@ class Api::PodcastImportRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :episode_imports,
-        paged: true,
+        paged: false,
         item_class: EpisodeImport,
         item_decorator: Api::EpisodeImportRepresenter,
         zoom: true
@@ -57,7 +57,7 @@ class Api::PodcastImportRepresenter < Api::BaseRepresenter
     } if represented.id
   end
   embed :episode_import_placeholders,
-        paged: true,
+        paged: false,
         item_class: EpisodeImport,
         item_decorator: Api::EpisodeImportRepresenter,
         zoom: true
