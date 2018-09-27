@@ -89,7 +89,7 @@ PRX::Application.routes.draw do
             post 'retry', on: :member
           end
 
-          resources :episode_import_placeholders, except: [:new, :edit] do
+          resources :episode_imports, as: :episode_import_placeholders, path: :episode_import_placeholders, except: [:new, :edit] do
             post 'retry', on: :member
           end
         end
