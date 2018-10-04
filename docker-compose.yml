@@ -23,6 +23,7 @@ services:
       FEEDER_DB_HOST: pg
       FEEDER_DB_DATABASE: feeder
       FEEDER_DB_PASSWORD: password
+      ELASTICSEARCH_URL: http://elasticsearch:9200
   worker:
     image: cmsprxorg_cms
     volumes:
