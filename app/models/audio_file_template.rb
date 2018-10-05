@@ -4,7 +4,7 @@ class AudioFileTemplate < BaseModel
 
   include IntegerEnhancements
 
-  belongs_to :audio_version_template, touch: true
+  belongs_to :audio_version_template
 
   acts_as_list scope: :audio_version_template
 
@@ -19,6 +19,12 @@ class AudioFileTemplate < BaseModel
             numericality: true
 
   validate :max_is_greater_than_min_if_set
+
+  after_commit :touch_audio_version_template
+
+  def touch_audio_version_template
+    audio_version_template.try(:touch)
+  end
 
   def set_defaults
     self.label ||= 'segment'

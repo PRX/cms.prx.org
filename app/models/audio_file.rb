@@ -6,7 +6,7 @@ class AudioFile < BaseModel
   include ValidityFlag
 
   belongs_to :account
-  belongs_to :audio_version, touch: true
+  belongs_to :audio_version
 
   has_one :story, through: :audio_version
 
@@ -21,6 +21,7 @@ class AudioFile < BaseModel
 
   before_save :set_position, :set_status, only: [:update, :create]
   after_commit :update_version_status
+  after_commit :touch_audio_version
   after_destroy :update_version_status
 
   MP3_CONTENT_TYPE = 'audio/mpeg'.freeze
@@ -34,6 +35,10 @@ class AudioFile < BaseModel
     if !account && story
       self.account = story.account
     end
+  end
+
+  def touch_audio_version
+    audio_version.try(:touch)
   end
 
   def fixerable_final?

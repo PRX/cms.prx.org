@@ -4,14 +4,15 @@ class AudioVersionTemplate < BaseModel
 
   include IntegerEnhancements
 
-  belongs_to :series, touch: true
+  belongs_to :series
 
   has_many :audio_versions, dependent: :nullify
   has_many :audio_file_templates, -> { order :position }, dependent: :destroy
   has_many :distribution_templates, dependent: :destroy
   has_many :distributions, through: :distribution_templates
 
-  after_save :touch_audio_versions
+  after_commit :touch_audio_versions
+  after_commit :touch_series
 
   after_touch :touch_audio_versions
 
@@ -40,6 +41,10 @@ class AudioVersionTemplate < BaseModel
 
   def touch_audio_versions
     audio_versions.update_all(updated_at: Time.now)
+  end
+
+  def touch_series
+    series.try(:touch)
   end
 
   def validate_audio_version(audio_version)

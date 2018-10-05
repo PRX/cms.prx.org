@@ -6,16 +6,21 @@ class AudioVersion < BaseModel
 
   belongs_to :story, -> { with_deleted },
              class_name: 'Story',
-             foreign_key: 'piece_id', touch: true
+             foreign_key: 'piece_id'
 
   belongs_to :audio_version_template
   has_many :audio_files, -> { order :position }, dependent: :destroy
 
   before_save :set_status, only: [:update, :create]
   after_commit :update_story_status
+  after_commit :touch_story
   after_destroy :update_story_status
 
   acts_as_paranoid
+
+  def touch_story
+    story.try(:touch)
+  end
 
   def length(reload=false)
     @_length = nil if reload
