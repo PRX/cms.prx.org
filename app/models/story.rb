@@ -63,7 +63,7 @@ class Story < BaseModel
 
   belongs_to :account, -> { with_deleted }
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
-  belongs_to :series, touch: true
+  belongs_to :series
   belongs_to :network
 
   has_many :images,
@@ -102,6 +102,8 @@ class Story < BaseModel
   before_validation :update_published_to_released
 
   before_save :set_status, only: [:update, :create]
+
+  after_commit :touch_series
 
   # indicates piece is published with promos only - not full audio
   event_attribute :promos_only_at
@@ -152,6 +154,10 @@ class Story < BaseModel
   def self.text_search(text, params = {}, authz = nil)
     builder = StoryQueryBuilder.new(query: text, params: params, authorization: authz)
     search(builder.as_dsl).records
+  end
+
+  def touch_series
+    series.try(:touch)
   end
 
   def points(level=point_level)
