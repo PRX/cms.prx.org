@@ -101,5 +101,6 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         paged: true,
         item_class: PodcastImport,
         item_decorator: Api::PodcastImportRepresenter,
-        per: :all
+        per: :all,
+        zoom: false
 end
