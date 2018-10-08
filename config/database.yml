@@ -19,15 +19,6 @@ default: &default
   database: <%= ENV['DB_ENV_MYSQL_DATABASE'] %>
   reconnect: true
 
-makara: &makara
-  adapter: mysql2_makara
-  makara:
-    connections:
-      - role: master
-        host: <%= ENV['DB_PORT_3306_TCP_ADDR'] %>
-      - role: slave
-        host: <%= ENV['DB_PORT_3306_TCP_ADDR_REPLICA'] %>
-
 development:
   <<: *default
   database: cms_development
@@ -41,4 +32,3 @@ staging:
 
 production:
   <<: *default
-  <<: *makara
