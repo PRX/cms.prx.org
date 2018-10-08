@@ -12,7 +12,7 @@ class Api::AccountsController < Api::BaseController
   end
 
   def resources_base
-    user.try(:accounts) || Account
+    user.try(:accounts) || super
   end
 
   def user
