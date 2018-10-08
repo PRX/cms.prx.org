@@ -21,7 +21,6 @@ default: &default
 
 development:
   <<: *default
-  database: cms_development
 
 test:
   <<: *default
