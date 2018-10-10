@@ -1814,7 +1814,6 @@ ActiveRecord::Schema.define(version: 20180926154742) do
   add_foreign_key "purchases", "accounts", column: "seller_account_id", name: "purchases_seller_account_id_fk"
   add_foreign_key "purchases", "users", column: "purchaser_id", name: "purchases_purchaser_id_fk"
   add_foreign_key "series_files", "series", name: "series_files_series_id_fk"
-  add_foreign_key "series_images", "series", name: "series_images_series_id_fk"
   add_foreign_key "skills", "users", name: "skills_user_id_fk"
   add_foreign_key "station_formats", "accounts", column: "station_id", name: "station_formats_station_id_fk"
   add_foreign_key "tones", "pieces", name: "tones_piece_id_fk"
