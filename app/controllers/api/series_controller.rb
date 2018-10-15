@@ -47,8 +47,8 @@ class Api::SeriesController < Api::BaseController
     end
   end
 
+  # XXX this method is copied from the ResourceCallbacks concern
   def create
-    # XXX this method is copied from the ResourceCallbacks concern
     json_body_params = JSON.parse(request.body)
 
     series = create_resource
