@@ -384,6 +384,39 @@ describe Story do
       Story.text_search('random').to_a.wont_include story
     end
 
+    it 'skips search if the "skip_searchable" attr is set' do
+      # always start clean
+      ElasticsearchHelper.new.create_es_index(Story)
+      story = create(:story,
+                     title: 'Some Weirdo',
+                     description: 'Unique thing',
+                     short_description: 'Lacking sense').reindex(true)
+
+      def story.index_for_search
+        if skip_searchable
+          :skip_searchable
+        else
+          :searchable
+        end
+      end
+
+      story.skip_searchable = false
+      story.instance_variable_set(:@previously_changed, {foo: 1})
+      res1 = story.after_commit_create_update
+
+      story.skip_searchable = true
+      story.instance_variable_set(:@previously_changed, {foo: 1})
+      res2 = story.after_commit_create_update
+
+      story.skip_searchable = true
+      story.instance_variable_set(:@previously_changed, {})
+      res3 = story.after_commit_create_update
+
+      # true here means we never make it past the post commmit hook
+      # i.e. nothing was changed
+      [res1, res2, res3].must_equal [:searchable, :skip_searchable, true]
+    end
+
     it 'returns public only stories' do
       story = create(:story)
       story_n = create(:story, network_only_at: Time.now)
