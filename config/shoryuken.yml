@@ -10,6 +10,7 @@ concurrency:         <%= ENV['WORKER_COUNT'] || 25 %>
 # The delay in seconds to pause a queue when it's empty. Default 0
 delay:               <%= ENV['WORKER_PAUSE'] || 30 %>
 queues:
+  - [<%= env %>_cms_podcast_import, 4]
   - [<%= env %>_cms_default, 4]
   - [<%= env %>_cms_audio_callback, 3]
   - [<%= env %>_cms_image_callback, 2]
