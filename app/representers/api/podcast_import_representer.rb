@@ -12,7 +12,6 @@ class Api::PodcastImportRepresenter < Api::BaseRepresenter
   property :feed, writeable: false
   property :episode_importing_count, writeable: false
 
-
   def self_url(represented)
     if represented.persisted?
       api_authorization_podcast_import_path(represented)

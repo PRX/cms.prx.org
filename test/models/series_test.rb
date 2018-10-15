@@ -141,11 +141,11 @@ describe Series do
       stub_request(:get, 'http://feeds.prx.org/transistor_stem').
         to_return(status: 200, body: test_file('/fixtures/transistor_two.xml'), headers: {})
       assert_send([importer, :import_series!])
-      assert_send([importer, :import_later, [{import_series: false}]])
+      assert_send([importer, :import_later, [{ import_series: false }]])
 
       PodcastImport.stub(:create!, importer) do
         # note that we are mocking ^ so these args are unused
-        Series.create_from_feed("http://feeds.prx.org/transistor_stem", user, account)
+        Series.create_from_feed('http://feeds.prx.org/transistor_stem', user, account)
       end
     end
   end
