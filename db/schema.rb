@@ -1284,14 +1284,14 @@ ActiveRecord::Schema.define(version: 20180926154742) do
   add_index "playlists", ["type"], name: "type_idx", using: :btree
 
   create_table "podcast_imports", force: :cascade do |t|
-    t.integer  "user_id",                 limit: 4
-    t.integer  "account_id",              limit: 4
-    t.integer  "series_id",               limit: 4
-    t.string   "url",                     limit: 255
-    t.string   "status",                  limit: 255
+    t.integer  "user_id",            limit: 4
+    t.integer  "account_id",         limit: 4
+    t.integer  "series_id",          limit: 4
+    t.string   "url",                limit: 255
+    t.string   "status",             limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "config",                  limit: 4294967295
+    t.text     "config",             limit: 4294967295
     t.integer  "feed_episode_count", limit: 4
   end
 
@@ -1793,22 +1793,17 @@ ActiveRecord::Schema.define(version: 20180926154742) do
 
   add_foreign_key "educational_experiences", "users", name: "educational_experiences_user_id_fk"
   add_foreign_key "equipment", "users", name: "equipment_user_id_fk"
-  add_foreign_key "formats", "pieces", name: "formats_piece_id_fk"
   add_foreign_key "languages", "users", name: "languages_user_id_fk"
-  add_foreign_key "licenses", "pieces", name: "licenses_piece_id_fk"
   add_foreign_key "memberships_old", "accounts", name: "memberships_account_id_fk"
   add_foreign_key "memberships_old", "users", name: "memberships_user_id_fk"
   add_foreign_key "network_pieces", "networks", name: "network_pieces_network_id_fk"
-  add_foreign_key "network_pieces", "pieces", name: "network_pieces_piece_id_fk"
   add_foreign_key "outside_purchaser_infos", "accounts", column: "outside_purchaser_id", name: "outside_purchaser_infos_outside_purchaser_id_fk"
   add_foreign_key "outside_purchaser_optins", "accounts", column: "outside_purchaser_id", name: "outside_purchaser_pieces_outside_purchaser_id_fk"
-  add_foreign_key "outside_purchaser_optins", "pieces", name: "outside_purchaser_pieces_piece_id_fk"
   add_foreign_key "outside_purchaser_preferences", "accounts", column: "outside_purchaser_id", name: "account_outside_purchaser_options_outside_purchaser_id_fk"
   add_foreign_key "outside_purchaser_preferences", "accounts", name: "account_outside_purchaser_options_account_id_fk"
   add_foreign_key "playlisting_images", "playlistings", name: "playlisting_images_playlisting_id_fk"
   add_foreign_key "point_packages", "accounts", name: "point_packages_account_id_fk"
   add_foreign_key "point_packages", "users", column: "seller_id", name: "point_packages_seller_id_fk"
-  add_foreign_key "producers", "pieces", name: "producers_piece_id_fk"
   add_foreign_key "producers", "users", name: "producers_user_id_fk"
   add_foreign_key "purchases", "accounts", column: "purchaser_account_id", name: "purchases_purchaser_account_id_fk"
   add_foreign_key "purchases", "accounts", column: "seller_account_id", name: "purchases_seller_account_id_fk"
@@ -1817,8 +1812,6 @@ ActiveRecord::Schema.define(version: 20180926154742) do
   add_foreign_key "series_images", "series", name: "series_images_series_id_fk"
   add_foreign_key "skills", "users", name: "skills_user_id_fk"
   add_foreign_key "station_formats", "accounts", column: "station_id", name: "station_formats_station_id_fk"
-  add_foreign_key "tones", "pieces", name: "tones_piece_id_fk"
-  add_foreign_key "topics", "pieces", name: "topics_piece_id_fk"
   add_foreign_key "user_images", "users", name: "user_images_user_id_fk"
   add_foreign_key "work_experiences", "users", name: "work_experiences_user_id_fk"
 end
