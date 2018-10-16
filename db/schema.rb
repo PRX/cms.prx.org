@@ -1292,7 +1292,7 @@ ActiveRecord::Schema.define(version: 20180926154742) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "config",                  limit: 4294967295
-    t.integer  "episode_importing_count", limit: 4
+    t.integer  "feed_episode_count", limit: 4
   end
 
   create_table "point_package_versions", force: :cascade do |t|

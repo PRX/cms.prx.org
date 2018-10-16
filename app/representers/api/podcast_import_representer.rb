@@ -10,7 +10,7 @@ class Api::PodcastImportRepresenter < Api::BaseRepresenter
   property :updated_at, writeable: false
   property :updated_at, writeable: false
   property :feed, writeable: false
-  property :episode_importing_count, writeable: false
+  property :feed_episode_count, writeable: false
 
   def self_url(represented)
     if represented.persisted?
