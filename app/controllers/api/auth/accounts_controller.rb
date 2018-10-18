@@ -7,6 +7,13 @@ class Api::Auth::AccountsController < Api::AccountsController
 
   represent_with Api::Auth::AccountRepresenter
 
+  filter_resources_by :user_id
+
+  def after_create_resource(res)
+    account_user = User.find(params['user_id'])
+    account_user.individual_account = res
+  end
+
   private
 
   def resources

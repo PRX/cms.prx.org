@@ -18,6 +18,7 @@ describe Api::Auth::AccountsController do
   describe 'with a valid token' do
 
     around do |test|
+      @request.env['CONTENT_TYPE'] = 'application/json'
       @controller.stub(:prx_auth_token, token) { test.call }
     end
 
@@ -48,6 +49,25 @@ describe Api::Auth::AccountsController do
       ids.wont_include unapproved_account.id
     end
 
+    it 'creates an account' do
+      post :create, { name: 'Foo Bar', login: 'foobar', path: 'foobar' }.to_json, api_version: 'v1'
+      assert_response :success
+      new_account = Account.find(JSON.parse(response.body)['id'])
+      new_account.path.must_equal 'foobar'
+    end
+
+    # Simulates a post to /api/v1/authorization/users/:user_id/accounts
+    it 'creates an account with user' do
+      login = 'rickastley'
+
+      post :create, { name: "#{user.first_name} #{user.last_name}", login: login, path: login }.to_json, { api_version: 'v1', user_id: user.id }
+      assert_response :success
+
+      new_account_id = JSON.parse(response.body)['id']
+      new_account = Account.find(new_account_id)
+      new_membership = Membership.find_by!(user: user, account: new_account)
+      new_account.path.must_equal login
+    end
   end
 
   describe 'with no token' do
