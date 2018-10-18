@@ -8,6 +8,7 @@ FactoryGirl.define do
 
     first_name 'Rick'
     last_name 'Astley'
+    login 'rickastley'
 
     after(:create) do |user, evaluator|
       if evaluator.with_individual_account
