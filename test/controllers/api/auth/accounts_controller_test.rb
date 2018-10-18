@@ -3,6 +3,7 @@ require 'test_helper'
 describe Api::Auth::AccountsController do
 
   let (:user) { create(:user_with_accounts, group_accounts: 2) }
+  let (:user_without_account) { create(:user, with_individual_account: false) }
   let (:individual_account) { user.individual_account }
   let (:member_account) { create(:account) }
   let (:unapproved_account) { create(:account) }
@@ -60,12 +61,15 @@ describe Api::Auth::AccountsController do
     it 'creates an account with user' do
       login = 'rickastley'
 
-      post :create, { name: "#{user.first_name} #{user.last_name}", login: login, path: login }.to_json, { api_version: 'v1', user_id: user.id }
+      post :create, {
+        name: "#{user_without_account.first_name} #{user_without_account.last_name}",
+        login: login
+      }.to_json, { api_version: 'v1', user_id: user_without_account.id }
       assert_response :success
 
       new_account_id = JSON.parse(response.body)['id']
       new_account = Account.find(new_account_id)
-      new_membership = Membership.find_by!(user: user, account: new_account)
+      new_membership = Membership.find_by!(user: user_without_account, account: new_account)
       new_account.path.must_equal login
     end
   end

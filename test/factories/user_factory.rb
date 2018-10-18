@@ -1,15 +1,20 @@
 FactoryGirl.define do
   factory :user, aliases: [:opener, :creator] do
+    transient do
+      with_individual_account { true }
+    end
 
     address
 
     first_name 'Rick'
     last_name 'Astley'
 
-    after(:create) do |user, _evaluator|
-      user.individual_account = create(:individual_account)
-      user.update_attributes!(account_id: user.individual_account.id)
-      user.reload
+    after(:create) do |user, evaluator|
+      if evaluator.with_individual_account
+        user.individual_account = create(:individual_account)
+        user.update_attributes!(account_id: user.individual_account.id)
+        user.reload
+      end
     end
 
     factory :user_with_accounts do
