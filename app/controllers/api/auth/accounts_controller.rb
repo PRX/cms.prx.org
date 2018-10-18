@@ -10,6 +10,7 @@ class Api::Auth::AccountsController < Api::AccountsController
   filter_resources_by :user_id
 
   def after_create_resource(res)
+    return unless params['user_id']
     account_user = User.find(params['user_id'])
     account_user.individual_account = res
   end
