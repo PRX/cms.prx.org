@@ -8,7 +8,6 @@ class Api::PodcastImportRepresenter < Api::BaseRepresenter
   property :status, writeable: false
   property :created_at, writeable: false
   property :updated_at, writeable: false
-  property :updated_at, writeable: false
   property :feed, writeable: false
   property :feed_episode_count, writeable: false
 
