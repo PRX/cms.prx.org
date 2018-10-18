@@ -59,9 +59,7 @@ describe Api::Auth::AccountsController do
 
     # Simulates a post to /api/v1/authorization/users/:user_id/accounts
     it 'creates an account with user' do
-      post :create, {
-        name: "#{user_without_account.first_name} #{user_without_account.last_name}"
-      }.to_json, { api_version: 'v1', user_id: user_without_account.id }
+      post :create, { name: user_without_account.name }.to_json, { api_version: 'v1', user_id: user_without_account.id }
       assert_response :success
 
       new_account_id = JSON.parse(response.body)['id']

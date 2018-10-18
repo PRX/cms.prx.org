@@ -39,4 +39,11 @@ describe User do
   it 'has a list of networks' do
     user.networks.must_include network
   end
+
+  it 'validates uniqueness of login' do
+    user1 = create(:user)
+    user2 = build(:user, login: user1.login)
+
+    user2.wont_be :valid?
+  end
 end
