@@ -25,11 +25,11 @@ class Account < BaseModel
   scope :active, -> { where status: :open }
   scope :member, -> { where type: ['StationAccount', 'GroupAccount'] }
 
-  validates_format_of :path, with: /\A[A-Za-z\d_-]+\z/
-  validates_length_of :path, within: 1..40
-  validates_uniqueness_of :path, case_sensitive: false
-  validates_presence_of :path
-  validate :path_is_not_reserved
+  validates_format_of :path, with: /\A[A-Za-z\d_-]+\z/, unless: :individual_acct?
+  validates_length_of :path, within: 1..40, unless: :individual_acct?
+  validates_uniqueness_of :path, case_sensitive: false, unless: :individual_acct?
+  validates_presence_of :path, unless: :individual_acct?
+  validate :path_is_not_reserved, unless: :individual_acct?
 
   def short_name
     name
@@ -44,6 +44,9 @@ class Account < BaseModel
   end
 
   private
+  def individual_acct?
+    self.type.eql?('IndividualAccount')
+  end
 
   def path_is_not_reserved
     errors.add(:path, "has already been taken") if path_changed? &&
