@@ -1,10 +1,24 @@
 require 'test_helper'
 
 describe Account do
+  should validate_presence_of(:path)
+  should validate_length_of(:path).is_at_least(1)
+  should validate_length_of(:path).is_at_most(40)
+  should allow_value('path_mcgee').for(:path)
+  should allow_value('path_mcgee-the-3rd').for(:path)
+  should_not allow_value('Path McGee').for(:path)
+  should_not allow_value('excited_user!').for(:path)
 
   let(:account) { create(:account) }
   let(:unpublished_story) do
     create(:story, account: account, published_at: nil)
+  end
+
+  it 'fails if path is a reserved word' do
+    a = Account.new(name: 'name', path: ROUTE_RESERVED_WORDS.sample)
+    a.validate
+    refute(a.errors[:path].empty?)
+    assert(a.errors[:path].include? "has already been taken")
   end
 
   it 'has a table defined' do

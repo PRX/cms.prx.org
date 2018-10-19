@@ -107,6 +107,8 @@ group :test do
   gem 'factory_girl_rails'
   gem 'codeclimate-test-reporter', require: false
   gem 'simplecov', require: false
+  gem 'shoulda-context'
+  gem 'shoulda-matchers'
   gem 'timecop'
   gem 'codecov', require: false
   gem 'webmock'

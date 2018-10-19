@@ -25,6 +25,12 @@ class Account < BaseModel
   scope :active, -> { where status: :open }
   scope :member, -> { where type: ['StationAccount', 'GroupAccount'] }
 
+  validates_format_of :path, with: /\A[A-Za-z\d_-]+\z/
+  validates_length_of :path, within: 1..40
+  validates_uniqueness_of :path, case_sensitive: false
+  validates_presence_of :path
+  validate :path_is_not_reserved
+
   def short_name
     name
   end
@@ -35,5 +41,12 @@ class Account < BaseModel
 
   def self.policy_class
     AccountPolicy
+  end
+
+  private
+
+  def path_is_not_reserved
+    errors.add(:path, "has already been taken") if path_changed? &&
+      ROUTE_RESERVED_WORDS.include?(path.downcase)
   end
 end

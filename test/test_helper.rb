@@ -89,6 +89,17 @@ class StubToken
   end
 end
 
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    # Choose a test framework:
+    with.test_framework :minitest
+    # Choose one or more libraries:
+    with.library :active_model
+    # Or, choose the following (which implies all of the above):
+    # with.library :rails
+  end
+end
+
 def json_file(name)
   test_file("/fixtures/#{name}.json")
 end
