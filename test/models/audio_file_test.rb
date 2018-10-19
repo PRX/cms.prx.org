@@ -85,8 +85,12 @@ describe AudioFile do
 
     audio_file.filename = 'something'
     audio_file.save!
-    story.reload
+
+    # simulate the touch chaing
+    audio_file.run_callbacks(:commit)
     version.reload
+    version.run_callbacks(:commit)
+    story.reload
 
     story.updated_at.must_be :>, stamp
     version.updated_at.must_be :>, stamp
