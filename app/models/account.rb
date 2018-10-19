@@ -44,12 +44,13 @@ class Account < BaseModel
   end
 
   private
+
   def individual_acct?
-    self.type.eql?('IndividualAccount')
+    type.eql?('IndividualAccount')
   end
 
   def path_is_not_reserved
-    errors.add(:path, "has already been taken") if path_changed? &&
-      ROUTE_RESERVED_WORDS.include?(path.downcase)
+    errors.add(:path, 'has already been taken') if path_changed? &&
+                                                   ROUTE_RESERVED_WORDS.include?(path.downcase)
   end
 end

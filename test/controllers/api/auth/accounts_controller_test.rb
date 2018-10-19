@@ -59,12 +59,13 @@ describe Api::Auth::AccountsController do
 
     # Simulates a post to /api/v1/authorization/users/:user_id/accounts
     it 'creates an account with user' do
-      post :create, { name: user_without_account.name }.to_json, { api_version: 'v1', user_id: user_without_account.id }
+      post :create, { name: user_without_account.name }.to_json,
+           { api_version: 'v1', user_id: user_without_account.id }
       assert_response :success
 
       new_account_id = JSON.parse(response.body)['id']
       new_account = Account.find(new_account_id)
-      new_membership = Membership.find_by!(user: user_without_account, account: new_account)
+      Membership.find_by!(user: user_without_account, account: new_account)
       new_account.path.must_equal user_without_account.login
     end
   end

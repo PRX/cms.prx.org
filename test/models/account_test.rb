@@ -18,7 +18,7 @@ describe Account do
     a = Account.new(name: 'name', path: ROUTE_RESERVED_WORDS.sample)
     a.validate
     refute(a.errors[:path].empty?)
-    assert(a.errors[:path].include? "has already been taken")
+    assert(a.errors[:path].include?('has already been taken'))
   end
 
   it 'has a table defined' do
