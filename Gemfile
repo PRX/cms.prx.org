@@ -14,9 +14,9 @@ gem 'mysql2'
 gem 'pg', '~> 0.19'
 
 # ActiveRecord model additions
-gem 'paranoia',' ~> 2.0'
 gem 'acts_as_list'
 gem 'event_attribute'
+gem 'paranoia', ' ~> 2.0'
 
 # file uploads
 gem 'carrierwave', '~> 0.11'
@@ -24,14 +24,14 @@ gem 'fog'
 gem 'unf'
 
 # hal api access
-gem 'oauth2'
 gem 'hyperresource'
+gem 'oauth2'
 
 # feed import
-gem 'feedjira'
 gem 'addressable'
-gem 'faraday'
 gem 'excon'
+gem 'faraday'
+gem 'feedjira'
 gem 'loofah'
 gem 'nokogiri', '>= 1.8.1'
 
@@ -39,34 +39,33 @@ gem 'nokogiri', '>= 1.8.1'
 gem 'sanitize'
 
 ## Controller
-gem 'responders', '~> 2.0'
 gem 'hal_api-rails', '~> 0.3.3'
+gem 'responders', '~> 2.0'
 
 # auth
-gem 'rack-cors', require: 'rack/cors'
 gem 'pundit'
+gem 'rack-cors', require: 'rack/cors'
 
 # paging
 gem 'kaminari'
 
 # caching
-gem 'dalli' # perhaps only production?
 gem 'actionpack-action_caching'
-
+gem 'dalli' # perhaps only production?
 
 ## View
 # json handling
-gem 'roar'
-gem 'roar-rails'
 gem 'oj'
 gem 'oj_mimic_json'
 gem 'redcarpet'
 gem 'reverse_markdown'
+gem 'roar'
+gem 'roar-rails'
 
 ## Messaging
-gem 'shoryuken', '~> 2.0.11'
 gem 'announce'
 gem 'say_when', '~> 2.x'
+gem 'shoryuken', '~> 2.0.11'
 
 ## Deployment
 # configuration
@@ -80,43 +79,43 @@ gem 'rake'
 gem 'slackistrano', require: false
 
 # monitoring
-gem 'newrelic_rpm'
 gem 'capistrano-newrelic'
+gem 'newrelic_rpm'
 
 # elasticsearch
+gem 'elasticsearch-dsl'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
-gem 'elasticsearch-dsl'
 
 # dev-only
 group :development do
-  gem 'web-console', '~> 2.0'
-  gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'guard', '~> 2.10.0'
-  gem 'guard-minitest'
   gem 'guard-bundler'
+  gem 'guard-minitest'
+  gem 'quiet_assets'
   gem 'spring'
+  gem 'web-console', '~> 2.0'
 end
 
 group :test do
-  gem 'minitest-around'
-  gem 'minitest-spec-rails'
-  gem 'minitest-reporters', require: false
-  gem 'factory_girl_rails'
   gem 'codeclimate-test-reporter', require: false
-  gem 'simplecov', require: false
+  gem 'codecov', require: false
+  gem 'factory_girl_rails'
+  gem 'minitest-around'
+  gem 'minitest-reporters', require: false
+  gem 'minitest-spec-rails'
   gem 'shoulda-context'
   gem 'shoulda-matchers'
+  gem 'simplecov', require: false
   gem 'timecop'
-  gem 'codecov', require: false
   gem 'webmock'
 end
 
 group :development, :test do
-  gem 'pry-byebug', '~> 3.4.1'
   gem 'minitest', '~> 5.9.1'
+  gem 'pry-byebug', '~> 3.4.1'
 end
 
 group :doc do
