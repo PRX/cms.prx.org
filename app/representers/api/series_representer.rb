@@ -9,7 +9,6 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   property :created_at, writeable: false
   property :updated_at, writeable: false
   property :app_version, writeable: false
-  property :import_url
 
   alternate_link
 
