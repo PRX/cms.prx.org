@@ -8,6 +8,7 @@ describe Api::Auth::AccountsController do
   let (:member_account) { create(:account) }
   let (:unapproved_account) { create(:account) }
   let (:token) { StubToken.new(nil, nil, user.id) }
+  let (:write_token) { StubToken.new(nil, ['account:write'], user.id) }
 
   before do
     token.authorized_resources = {
@@ -63,13 +64,9 @@ describe Api::Auth::AccountsController do
   end
 
   describe 'with account:write scoped token' do
-    before do
-      token.scopes = ['account:write']
-    end
-
     around do |test|
       @request.env['CONTENT_TYPE'] = 'application/json'
-      @controller.stub(:prx_auth_token, token) { test.call }
+      @controller.stub(:prx_auth_token, write_token) { test.call }
     end
 
     it 'creates an account' do
@@ -93,7 +90,6 @@ describe Api::Auth::AccountsController do
   end
 
   describe 'with no token' do
-
     it 'will not show you anything' do
       get(:show, api_version: 'v1', id: individual_account.id)
       assert_response :unauthorized
