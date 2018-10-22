@@ -50,6 +50,28 @@ describe Api::Auth::AccountsController do
       ids.wont_include unapproved_account.id
     end
 
+    it 'fails to create an account' do
+      post :create, { name: 'Foo Bar', login: 'foobar', path: 'foobar' }.to_json, api_version: 'v1'
+      assert_response :unauthorized
+    end
+
+    it 'fails to create an account for a user' do
+      post :create, { name: user_without_account.name }.to_json,
+           { api_version: 'v1', user_id: user_without_account.id }
+      assert_response :unauthorized
+    end
+  end
+
+  describe 'with account:write scoped token' do
+    before do
+      token.scopes = ['account:write']
+    end
+
+    around do |test|
+      @request.env['CONTENT_TYPE'] = 'application/json'
+      @controller.stub(:prx_auth_token, token) { test.call }
+    end
+
     it 'creates an account' do
       post :create, { name: 'Foo Bar', login: 'foobar', path: 'foobar' }.to_json, api_version: 'v1'
       assert_response :success
