@@ -31,3 +31,4 @@ pickle-email-*.html
 
 # local docker compose config
 my-docker-compose.yml
+docker-compose.override.yml
