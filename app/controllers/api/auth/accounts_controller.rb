@@ -12,11 +12,10 @@ class Api::Auth::AccountsController < Api::AccountsController
   before_filter :ensure_write_scope, except: [:index, :show]
 
   def create_resource
-    return super unless params['user_id']
+    return super unless user
 
-    account_user = User.find(params['user_id'])
-    account_user.create_individual_account
-    account_user.individual_account
+    user.create_individual_account
+    user.individual_account
   end
 
   private
