@@ -16,7 +16,11 @@ namespace :sqs do
     }
 
     # create the queues and DLQs
-    ['default', 'image_callback', 'audio_callback', 'search_indexer'].each do |queue|
+    ['default',
+     'image_callback',
+     'audio_callback',
+     'search_indexer',
+     'podcast_import'].each do |queue|
       base_name = "#{env}_cms_#{queue}"
       dlq_arn = create_dlq(base_name, default_options)
       create_queue(base_name, dlq_arn, default_options)

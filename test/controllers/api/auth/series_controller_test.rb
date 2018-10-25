@@ -8,7 +8,10 @@ describe Api::Auth::SeriesController do
   let(:v3_series) { create(:series_v3, account: account) }
   let(:other_account_series) { create(:series) }
 
-  before { Series.delete_all }
+  before do
+    SeriesImage.delete_all
+    Series.delete_all
+  end
 
   describe 'with a valid token' do
 

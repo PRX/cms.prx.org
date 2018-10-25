@@ -17,27 +17,33 @@ class EpisodeImport < BaseModel
   belongs_to :story, -> { with_deleted }, class_name: 'Story', foreign_key: 'piece_id', touch: true
   belongs_to :podcast_import
   has_one :series, through: :podcast_import
+  delegate :config, to: :podcast_import
+
+  scope :having_duplicate_guids, -> do
+    unscope(where: :has_duplicate_guid).where(has_duplicate_guid: true)
+  end
 
   before_validation :set_defaults, on: :create
-  after_commit :update_import_status
 
   validates :entry, :guid, presence: true
 
+  COMPLETE = 'complete'.freeze
+  FAILED = 'failed'.freeze
+
+  CREATED = 'created'.freeze
+  AUDIO_SAVED = 'audio saved'.freeze
+  RETRYING = 'retrying'.freeze
+  STORY_SAVED = 'story saved'.freeze
+  EPISODE_SAVED = 'episode saved'.freeze
+
   def retry!
-    update_attributes(status: 'retrying')
+    update_attributes(status: RETRYING)
     import_later
   end
 
   def set_defaults
-    self.status ||= 'created'
+    self.status ||= CREATED
     self.audio ||= { files: [] }
-  end
-
-  def update_import_status
-    return unless podcast_import
-    podcast_import.with_lock do
-      podcast_import.update_status!
-    end
   end
 
   def import_later
@@ -46,16 +52,36 @@ class EpisodeImport < BaseModel
   end
 
   def import
+    update_episode_audio!
+    update_attributes!(status: AUDIO_SAVED)
     create_or_update_story!
-    update_attributes!(status: 'story saved', piece_id: story.id)
+    update_attributes!(status: STORY_SAVED, piece_id: story.id)
     create_or_update_episode!
-    update_attributes!(status: 'episode saved')
+    update_attributes!(status: EPISODE_SAVED)
     story.save!
-    update_attributes!(status: 'complete')
+    update_search_index!
+    update_attributes!(status: COMPLETE)
     story
   rescue StandardError => err
-    update_attributes(status: 'failed')
+    update_attributes(status: FAILED)
     raise err
+  end
+
+  def update_search_index!
+    SearchIndexerJob.set(wait: 5.minutes).perform_later(story)
+  end
+
+  def update_episode_audio!
+    audio_files = entry_audio_files(entry)
+    update_attributes!(audio: audio_files)
+  end
+
+  def entry_audio_files(entry)
+    if config[:audio] && config[:audio][entry[:entry_id]]
+      { files: (config[:audio][entry[:entry_id]] || []) }
+    elsif enclosure = enclosure_url(entry)
+      { files: [enclosure] }
+    end
   end
 
   def create_or_update_story!
@@ -63,7 +89,7 @@ class EpisodeImport < BaseModel
   end
 
   def create_story_with_entry!
-    self.story = Story.create!(series: series)
+    self.story = Story.create!(series: series, skip_searchable: true)
     update_story_with_entry!
   end
 
@@ -71,7 +97,7 @@ class EpisodeImport < BaseModel
     story.app_version = PRX::APP_VERSION
     story.creator_id = podcast_import.user_id
     story.account_id = series.account_id
-    story.title = clean_string(entry[:title])
+    story.title = clean_title(entry[:title])
     story.short_description = clean_string(episode_short_desc(entry))
     story.description_html = entry_description(entry)
     story.tags = Array(entry[:categories]).map(&:strip).reject(&:blank?)
@@ -83,6 +109,7 @@ class EpisodeImport < BaseModel
     new_audio = update_audio
     new_images = update_image
 
+    story.skip_searchable = true
     story.save!
 
     new_audio.each { |a| announce_audio(a) }
@@ -181,11 +208,6 @@ class EpisodeImport < BaseModel
 
   def get_or_create_template(segments, enclosure)
     podcast_import.get_or_create_template(segments, enclosure)
-  end
-
-  def enclosure_url(entry)
-    url = entry[:feedburner_orig_enclosure_link] || entry[:enclosure].try(:url)
-    clean_string(url)
   end
 
   def create_or_update_episode!

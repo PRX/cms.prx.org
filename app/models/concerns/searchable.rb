@@ -6,20 +6,34 @@ module Searchable
   included do
     include Elasticsearch::Model
 
+    attr_accessor :skip_searchable
+
     after_commit on: [:create, :update] do
-      if Rails.env.test?
-        #reindex # call manually in tests if needed, for performance reasons
-      else
-        SearchIndexerJob.perform_later self
-      end
+      after_commit_create_update
     end
 
     after_commit on: [:destroy] do
-      if Rails.env.test?
-        #remove_from_index # call manually in tests if needed, for performance reasons
+      deindex_for_search
+    end
+
+    def after_commit_create_update
+      if previous_changes.keys.blank?
+        true
       else
-        SearchDeindexerJob.perform_later self.class.name, id
+        previous_changes.clear
+        index_for_search
       end
+    end
+
+    def index_for_search
+      return true if skip_searchable
+      # call `reindex` manually in tests if needed, for performance reasons
+      SearchIndexerJob.perform_later(self)
+    end
+
+    def deindex_for_search
+      # call `remove_from_index` manually in tests if needed, for performance reasons
+      SearchDeindexerJob.perform_later(self.class.name, id)
     end
 
     # shorthand methods

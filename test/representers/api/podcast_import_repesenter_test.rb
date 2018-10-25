@@ -11,6 +11,12 @@ describe Api::PodcastImportRepresenter do
     json['_links'][name] ? json['_links'][name]['href'] : nil
   end
 
+  it 'handles a deleted series' do
+    podcast_import.series.destroy
+    podcast_import.reload
+    get_link_href('prx:series').must_equal nil
+  end
+
   it 'create representer' do
     representer.wont_be_nil
   end
@@ -26,6 +32,14 @@ describe Api::PodcastImportRepresenter do
   it 'has basic attributes and links' do
     json['status'].must_equal 'created'
     json['url'].must_equal 'http://feeds.prx.org/transistor_stem'
+    json['feedEpisodeCount'].must_equal 10
     get_link_href('prx:series').must_match /series/
+  end
+
+  it 'represents a podcast import that is not persisted' do
+    representer = Api::PodcastImportRepresenter.new(PodcastImport.new(url: 'http://google.horse'))
+    json = JSON.parse(representer.to_json)
+    json['url'].must_equal 'http://google.horse'
+    json['_links']['self']['href'].must_match /authorization\/podcast_imports$/
   end
 end

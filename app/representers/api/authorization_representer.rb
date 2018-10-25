@@ -89,6 +89,13 @@ class Api::AuthorizationRepresenter < Api::BaseRepresenter
     }
   end
 
+  link :verify_rss do
+    {
+      href: "#{verify_rss_api_authorization_podcast_imports_path}#{'{?url}'}",
+      templated: true,
+    }
+  end
+
   def self_url(_r)
     api_authorization_path
   end

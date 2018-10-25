@@ -56,6 +56,8 @@ class Series < BaseModel
 
   has_many :images, -> { where(parent_id: nil) }, class_name: 'SeriesImage', dependent: :destroy
 
+  has_many :podcast_imports
+
   before_validation :set_app_version, on: :create
   after_save :update_account_for_stories, on: :update
 
@@ -68,6 +70,17 @@ class Series < BaseModel
           "`series`.`short_description` like '%#{text}%' OR " +
           "`series`.`description` like '%#{text}%'")
   }
+
+  attr_reader :import_url
+
+  def self.create_from_feed(rss_url, user, account)
+    pi = PodcastImport.create!(url: rss_url, user: user, account: account)
+    pi.import_series!
+
+    pi.import_later(import_series = false)
+
+    pi.series
+  end
 
   def self.text_search(text, params = {}, authz = nil)
     builder = SeriesQueryBuilder.new(query: text, params: params, authorization: authz)
@@ -168,6 +181,10 @@ class Series < BaseModel
 
   def self.policy_class
     AccountablePolicy
+  end
+
+  def import_url=(url)
+    @import_url = url
   end
 
   private

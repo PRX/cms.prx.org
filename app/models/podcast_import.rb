@@ -13,17 +13,34 @@ class PodcastImport < BaseModel
 
   serialize :config, HashSerializer
 
-  attr_accessor :feed, :templates, :podcast, :distribution
+  attr_accessor :feed, :feed_raw_doc, :templates, :podcast
 
   belongs_to :user, -> { with_deleted }
   belongs_to :account, -> { with_deleted }
   belongs_to :series, -> { with_deleted }
 
-  has_many :episode_imports, dependent: :destroy
-
   before_validation :set_defaults, on: :create
 
   validates :user_id, :account_id, :url, presence: true
+
+  COMPLETE        = 'complete'.freeze
+  FAILED          = 'failed'.freeze
+
+  CREATED         = 'created'.freeze
+  STARTED         = 'started'.freeze
+  FEED_RETRIEVED  = 'feed retrieved'.freeze
+  RETRYING        = 'retrying'.freeze
+  SERIES_CREATED  = 'series created'.freeze
+  IMPORTING       = 'importing'.freeze
+  PODCAST_CREATED = 'podcast created'.freeze
+
+  def episode_imports
+    EpisodeImport.where(podcast_import_id: self.id, has_duplicate_guid: false)
+  end
+
+  def episode_import_placeholders
+    EpisodeImport.where(podcast_import_id: self.id).having_duplicate_guids
+  end
 
   def config_url=(config_url)
     c_url = Addressable::URI.parse(config_url)
@@ -32,70 +49,129 @@ class PodcastImport < BaseModel
   end
 
   def set_defaults
-    self.status ||= 'created'
+    self.status ||= CREATED
     self.config ||= {
       audio: {},            # map of guids to array of audio file urls
       episodes_only: false  # indicates if podcast and series should be updated
     }
   end
 
-  def update_status!
-    return unless episode_imports.count > 0
-    if episode_imports.all? { |e| e.status == 'complete' }
-      update_attributes!(status: 'complete')
-      remind_to_unlock(series.title)
-    elsif episode_imports.any? { |e| e.status == 'failed' }
-      update_attributes!(status: 'failed')
+  def episode_importing_count
+    feed_episode_count - episode_import_placeholders.count
+  end
+
+  def status
+    return super unless episode_imports.count > 0
+    return super if episode_importing_count > episode_imports.count
+
+    if complete?
+      COMPLETE
+    elsif finished? && some_failed?
+      FAILED
+    else
+      super
     end
+  end
+
+  def finished?
+    return false unless episode_imports.count == episode_importing_count
+    episode_imports.all? do |e|
+      e.status == EpisodeImport::COMPLETE ||
+        e.status == EpisodeImport::FAILED
+    end
+  end
+
+  def complete?
+    return false unless episode_imports.count == episode_importing_count
+    episode_imports.all? { |e| e.status == EpisodeImport::COMPLETE }
+  end
+
+  def some_failed?
+    episode_imports.any? { |e| e.status == EpisodeImport::FAILED }
   end
 
   def retry!
-    update_attributes(status: 'retrying')
+    update_attributes(status: RETRYING)
     import_later
   end
 
-  def import_later
-    PodcastImportJob.perform_later self
+  def import_later(import_series = true)
+    PodcastImportJob.perform_later(self, import_series)
   end
 
-  def import
-    update_attributes!(status: 'started')
+  def import_series!
+    update_attributes!(status: STARTED)
 
     # Request the RSS feed
     get_feed
-    update_attributes!(status: 'feed retrieved')
+    update_attributes!(status: FEED_RETRIEVED)
 
     # Create the series
     create_or_update_series!
-    update_attributes!(status: 'series created')
-
-    # Update podcast attributes
-    create_or_update_podcast!
-    update_attributes!(status: 'podcast created')
-
-    # Create the episodes
-    update_attributes!(status: 'importing')
-    create_or_update_episode_imports!
+    update_attributes!(status: SERIES_CREATED)
   rescue StandardError => err
-    update_attributes(status: 'failed')
+    update_attributes(status: FAILED)
     raise err
   end
 
-  def entry_audio_files(entry)
-    if config[:audio] && config[:audio][entry[:entry_id]]
-      { files: (config[:audio][entry[:entry_id]] || []) }
-    elsif enclosure = enclosure_url(entry)
-      { files: [enclosure] }
-    end
+  def import_episodes!
+    # Request the RSS feed again
+    get_feed
+
+    # Update podcast attributes
+    create_or_update_podcast!
+    update_attributes!(status: PODCAST_CREATED)
+
+    # Create the episodes
+    update_attributes!(status: IMPORTING)
+    create_or_update_episode_imports!
+  rescue StandardError => err
+    update_attributes(status: FAILED)
+    raise err
+  end
+
+  def import
+    import_series!
+    import_episodes!
   end
 
   def create_or_update_episode_imports!
-    feed.entries.map do |entry|
-      entry_hash = feed_entry_to_hash(entry)
-      audio_files = entry_audio_files(entry_hash)
-      get_or_create_template(audio_files, entry_hash['enclosure'].type)
-      episode_import = create_or_update_episode_import!(entry_hash, audio_files)
-      episode_import.import_later
+    update_attributes(feed_episode_count: feed.entries.count)
+
+    feed_entries, entries_with_dupe_guids = parse_feed_entries_for_dupe_guids
+
+    episode_imports.having_duplicate_guids.destroy_all
+
+    created_imports = feed_entries.map do |entry|
+      episode_import = create_or_update_episode_import!(entry)
+    end
+
+    enqueue_episode_import_jobs(created_imports)
+
+    created_imports += entries_with_dupe_guids.map do |entry|
+      create_or_update_episode_import!(entry, has_duplicate_guid = true)
+    end
+
+    created_imports
+  end
+
+  def enqueue_episode_import_jobs(created_imports)
+    # TODO port these jobs to a shoryuken worker
+    messages = created_imports.map do |ei|
+      job = EpisodeImportJob.new(ei)
+      msg = {}
+      msg[:message_body] = job.serialize
+      msg[:message_attributes] = {
+        'shoryuken_class' => {
+          string_value: ActiveJob::QueueAdapters::ShoryukenAdapter::JobWrapper.to_s,
+          data_type: 'String'
+        }
+      }
+      msg
+    end
+    queue_name = EpisodeImportJob.queue_name
+    messages.in_groups_of(10, false) do |msg_group|
+      Shoryuken::Client.queues(queue_name).send_messages(msg_group)
     end
   end
 
@@ -104,16 +180,21 @@ class PodcastImport < BaseModel
       .to_h
       .with_indifferent_access
       .transform_values { |x| x.is_a?(String) ? remove_utf8_4byte(x) : x }
+      .as_json
+      .with_indifferent_access
   end
 
-  def create_or_update_episode_import!(entry, audio_files)
-    if ei = episode_imports.where(guid: entry[:entry_id]).first
-      ei.update_attributes!(entry: entry, audio: audio_files)
+  def create_or_update_episode_import!(entry, has_duplicate_guid = false)
+
+    entry_hash = feed_entry_to_hash(entry)
+
+    if ei = episode_imports.where(guid: entry_hash[:entry_id]).first
+      ei.update_attributes!(entry: entry_hash, has_duplicate_guid: has_duplicate_guid)
     else
-      ei = episode_imports.create(
-        guid: entry[:entry_id],
-        entry: entry,
-        audio: audio_files
+      ei = episode_imports.create!(
+        guid: entry_hash[:entry_id],
+        entry: entry_hash,
+        has_duplicate_guid: has_duplicate_guid
       )
     end
     ei
@@ -121,7 +202,8 @@ class PodcastImport < BaseModel
 
   def get_feed
     response = connection.get(uri.path, uri.query_values)
-    podcast_feed = Feedjira::Feed.parse(response.body)
+    self.feed_raw_doc = response.body
+    podcast_feed = Feedjira::Feed.parse(feed_raw_doc)
     validate_feed(podcast_feed)
     self.feed = podcast_feed
   end
@@ -197,13 +279,19 @@ class PodcastImport < BaseModel
       to_insert << series.images.build(upload: clean_string(image_url), purpose: purpose)
     end
 
-    story.images.destroy(to_destroy) if to_destroy.size > 0
-
     to_insert
   end
 
+  def distribution=(dist)
+    @distribution = dist
+  end
+
+  def distribution
+    @distribution ||= series.distributions.where(type: 'Distributions::PodcastDistribution').first
+  end
+
   def podcast_distribution
-    self.distribution ||= series.distributions.where(type: 'Distributions::PodcastDistribution').first
+    distribution
   end
 
   def create_or_update_podcast!
@@ -362,6 +450,33 @@ class PodcastImport < BaseModel
   end
 
   def self.policy_class
-    AccountablePolicy
+    PodcastImportPolicy
+  end
+
+  def parse_feed_entries_for_dupe_guids
+    sorted_entries = feed.entries.sort_by(&:entry_id)
+
+    dupped_entries = []
+    good_entries = []
+    duplicate_run = []
+
+    process_duplicate_run = lambda do
+      if duplicate_run.length > 1
+        dupped_entries += duplicate_run
+      else
+        good_entries += duplicate_run
+      end
+      duplicate_run = []
+    end
+
+    sorted_entries.each do |entry|
+      if duplicate_run.last.present? && (entry.entry_id != duplicate_run.last.entry_id)
+        process_duplicate_run.call
+      end
+      duplicate_run.push(entry)
+    end
+    process_duplicate_run.call
+
+    [good_entries, dupped_entries]
   end
 end

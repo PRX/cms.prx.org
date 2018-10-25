@@ -13,12 +13,24 @@ module ImportUtils
   end
 
   def enclosure_url(entry)
-    url = entry[:feedburner_orig_enclosure_link] || entry[:enclosure].try(:url)
+    url = entry[:feedburner_orig_enclosure_link] || enclosure_url_from_entry(entry)
     clean_string(url)
   end
 
   def default_story_url(story)
     StoryDistributions::EpisodeDistribution.default_story_url(story)
+  end
+
+  def clean_title(str)
+    str = clean_string(str)
+    return str if str.length <= 255
+    truncated = str[0..254]
+
+    e = RuntimeError.new("ImportUtils: #{self.class.name}[id:#{try(:id)}] having title string length of #{str.length} exceeds column length of 255: #{truncated}")
+    e.set_backtrace(caller)
+    NewRelic::Agent.notice_error(e)
+
+    clean_string(truncated)
   end
 
   def explicit(str)
@@ -104,6 +116,13 @@ module ImportUtils
       puts "Reminder: #{title} is LOCKED. Unlock in Feeder to publish feed."
       puts '################################'
     end
+  end
+
+  private
+
+  def enclosure_url_from_entry(entry)
+    return nil unless entry.key?(:enclosure)
+    entry[:enclosure][:url]
   end
 
 end

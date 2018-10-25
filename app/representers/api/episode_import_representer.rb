@@ -8,15 +8,22 @@ class Api::EpisodeImportRepresenter < Api::BaseRepresenter
   property :status, writeable: false
   property :created_at, writeable: false
   property :updated_at, writeable: false
+  property :has_duplicate_guid, writable: false
 
   def self_url(represented)
     api_authorization_podcast_import_episode_import_path(represented.podcast_import, represented)
   end
 
+  def series_title(represented)
+    return nil unless represented.podcast_import.series.present?
+
+    represented.podcast_import.series.title
+  end
+
   link :podcast_import do
     {
       href: api_authorization_podcast_import_path(represented.podcast_import),
-      title: represented.podcast_import.series.title
+      title: series_title(represented)
     } if represented.podcast_import_id
   end
   embed :series, class: Series, decorator: Api::Min::SeriesRepresenter, zoom: false
@@ -28,5 +35,5 @@ class Api::EpisodeImportRepresenter < Api::BaseRepresenter
       profile: model_uri(represented.story)
     } if represented.story
   end
-  embed :story, as: :story, item_class: Story, decorator: Api::Min::StoryRepresenter, zoom: false
+  embed :story, as: :story, item_class: Story, decorator: Api::Min::StoryRepresenter, zoom: true
 end
