@@ -108,7 +108,6 @@ describe Api::Auth::AccountsController do
       get(:index, api_version: 'v1')
       assert_response :unauthorized
     end
-
   end
 
 end

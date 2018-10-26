@@ -2,13 +2,18 @@ require 'test_helper'
 
 describe AccountPolicy do
   let(:admin_token) { StubToken.new(account.id, ['admin']) }
-  let(:member_token) { StubToken.new(account.id, ['member']) }
+  let(:member_token) { StubToken.new(account.id, ['member', 'account:write']) }
   let(:non_member_token) { StubToken.new(account.id + 2, ['admin']) }
+  let(:member_without_write_token) { StubToken.new(account.id, ['member']) }
   let(:account) { build_stubbed(:account) }
 
   describe '#create?' do
-    it 'returns true if user exists' do
+    it 'returns true if user exists and has write scope' do
       AccountPolicy.new(member_token, account).must_allow :create?
+    end
+
+    it 'returns false if member does not have write scope' do
+      AccountPolicy.new(member_without_write_token, account).wont_allow :create?
     end
 
     it 'returns false if user is not present' do
