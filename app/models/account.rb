@@ -69,6 +69,6 @@ class Account < BaseModel
 
   def path_is_right_format
     return unless self[:path]
-    errors.add(:path, "is invalid. Must be only letters, numbers, '-' and '_'") unless self.path.match /\A[A-Za-z\d_-]+\z/
+    errors.add(:path, "is invalid. Must be only letters, numbers, '-' and '_'") unless self[:path].match /\A[A-Za-z\d_-]+\z/
   end
 end
