@@ -25,7 +25,8 @@ class Account < BaseModel
   scope :active, -> { where status: :open }
   scope :member, -> { where type: ['StationAccount', 'GroupAccount'] }
 
-  validate :path_is_present, :path_is_right_length, :path_is_right_format, :path_is_not_reserved, :path_is_unique
+  validate :path_is_present, :path_is_right_length, :path_is_right_format, :path_is_not_reserved,
+           :path_is_unique
 
   def short_name
     name
@@ -47,11 +48,15 @@ class Account < BaseModel
 
   def path_is_not_reserved
     return unless self[:path] && path_changed?
-    errors.add(:path, 'has already been taken') if ROUTE_RESERVED_WORDS.include?(self[:path].downcase)
+
+    if ROUTE_RESERVED_WORDS.include?(self[:path].downcase)
+      errors.add(:path, 'has already been taken')
+    end
   end
 
   def path_is_unique
     return unless self[:path] && path_changed?
+
     errors.add(:path, 'has already been taken') if Account.find_by(path: self[:path])
   end
 
@@ -61,13 +66,22 @@ class Account < BaseModel
 
   def path_is_right_length
     return unless self[:path] && path_changed?
-    (pathmin, pathmax) = [1, 40]
-    errors.add(:path, "is too short (minimum is #{pathmin} #{'character'.pluralize(pathmin)})") if self[:path].length < pathmin
-    errors.add(:path, "is too long (maximum is #{pathmax} #{'character'.pluralize(pathmax)})") if self[:path].length > pathmax
+
+    pathmin = 1
+    pathmax = 40
+    if self[:path].length < pathmin
+      errors.add(:path, "is too short (minimum is #{pathmin} #{'character'.pluralize(pathmin)})")
+    end
+    if self[:path].length > pathmax
+      errors.add(:path, "is too long (maximum is #{pathmax} #{'character'.pluralize(pathmax)})")
+    end
   end
 
   def path_is_right_format
     return unless self[:path] && path_changed?
-    errors.add(:path, "is invalid. Must be only letters, numbers, '-' and '_'") unless self[:path].match /\A[A-Za-z\d_-]+\z/
+
+    unless self[:path] =~ /\A[A-Za-z\d_-]+\z/
+      errors.add(:path, "is invalid. Must be only letters, numbers, '-' and '_'")
+    end
   end
 end
