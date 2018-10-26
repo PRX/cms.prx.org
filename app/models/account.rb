@@ -46,13 +46,12 @@ class Account < BaseModel
   end
 
   def path_is_not_reserved
-    return unless self[:path]
+    return unless self[:path] && path_changed?
     errors.add(:path, 'has already been taken') if ROUTE_RESERVED_WORDS.include?(self[:path].downcase)
   end
 
   def path_is_unique
-    return unless self[:path]
-    # validates_uniqueness_of :path, case_sensitive: false, unless: :individual_acct?
+    return unless self[:path] && path_changed?
     errors.add(:path, 'has already been taken') if Account.find_by(path: self[:path])
   end
 
@@ -61,14 +60,14 @@ class Account < BaseModel
   end
 
   def path_is_right_length
-    return unless self[:path]
+    return unless self[:path] && path_changed?
     (pathmin, pathmax) = [1, 40]
     errors.add(:path, "is too short (minimum is #{pathmin} #{'character'.pluralize(pathmin)})") if self[:path].length < pathmin
     errors.add(:path, "is too long (maximum is #{pathmax} #{'character'.pluralize(pathmax)})") if self[:path].length > pathmax
   end
 
   def path_is_right_format
-    return unless self[:path]
+    return unless self[:path] && path_changed?
     errors.add(:path, "is invalid. Must be only letters, numbers, '-' and '_'") unless self[:path].match /\A[A-Za-z\d_-]+\z/
   end
 end
