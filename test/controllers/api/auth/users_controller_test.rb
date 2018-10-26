@@ -12,12 +12,14 @@ describe Api::Auth::UsersController do
     end
 
     it 'should show' do
+      skip 'pending implimentation'
       user.id.wont_be_nil
       get :index, api_request_opts(id: user.id)
       assert_response :success
     end
 
     it 'should list' do
+      skip 'pending implimentation'
       user.id.wont_be_nil
       get :index, api_request_opts
       assert_response :success
@@ -26,11 +28,13 @@ describe Api::Auth::UsersController do
 
   describe 'with no token' do
     it 'will not show you anything' do
+      skip 'pending implimentation'
       get(:show, api_version: 'v1', id: user.id)
       assert_response :unauthorized
     end
 
     it 'will not index you anything' do
+      skip 'pending implementation'
       get(:index, api_version: 'v1')
       assert_response :unauthorized
     end
