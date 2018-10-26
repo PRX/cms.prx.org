@@ -87,6 +87,15 @@ describe Api::Auth::AccountsController do
       Membership.find_by!(user: user_without_account, account: new_account)
       new_account.path.must_equal user_without_account.login
     end
+
+    it 'throws error if creating account with user login matching existing path' do
+      user_with_dupe_path = create(:user, with_individual_account: false)
+      user_with_dupe_path.login = individual_account[:path]
+      user_with_dupe_path.save!
+      post :create, { name: user_with_dupe_path.name }.to_json,
+           { api_version: 'v1', user_id: user_with_dupe_path.id }
+      assert_response 409
+    end
   end
 
   describe 'with no token' do

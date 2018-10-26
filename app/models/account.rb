@@ -25,11 +25,7 @@ class Account < BaseModel
   scope :active, -> { where status: :open }
   scope :member, -> { where type: ['StationAccount', 'GroupAccount'] }
 
-  validates_format_of :path, with: /\A[A-Za-z\d_-]+\z/, unless: :individual_acct?
-  validates_length_of :path, within: 1..40, unless: :individual_acct?
-  validates_uniqueness_of :path, case_sensitive: false, unless: :individual_acct?
-  validates_presence_of :path, unless: :individual_acct?
-  validate :path_is_not_reserved, unless: :individual_acct?
+  validate :path_is_present, :path_is_right_length, :path_is_right_format, :path_is_not_reserved, :path_is_unique
 
   def short_name
     name
@@ -50,7 +46,29 @@ class Account < BaseModel
   end
 
   def path_is_not_reserved
-    errors.add(:path, 'has already been taken') if path_changed? &&
-                                                   ROUTE_RESERVED_WORDS.include?(path.downcase)
+    return unless self[:path]
+    errors.add(:path, 'has already been taken') if ROUTE_RESERVED_WORDS.include?(self[:path].downcase)
+  end
+
+  def path_is_unique
+    return unless self[:path]
+    # validates_uniqueness_of :path, case_sensitive: false, unless: :individual_acct?
+    errors.add(:path, 'has already been taken') if Account.find_by(path: self[:path])
+  end
+
+  def path_is_present
+    errors.add(:path, 'can\'t be blank') unless self[:path]
+  end
+
+  def path_is_right_length
+    return unless self[:path]
+    (pathmin, pathmax) = [1, 40]
+    errors.add(:path, "is too short (minimum is #{pathmin} #{'character'.pluralize(pathmin)})") if self[:path].length < pathmin
+    errors.add(:path, "is too long (maximum is #{pathmax} #{'character'.pluralize(pathmax)})") if self[:path].length > pathmax
+  end
+
+  def path_is_right_format
+    return unless self[:path]
+    errors.add(:path, "is invalid. Must be only letters, numbers, '-' and '_'") unless self.path.match /\A[A-Za-z\d_-]+\z/
   end
 end

@@ -1,24 +1,57 @@
 require 'test_helper'
 
 describe Account do
-  should validate_presence_of(:path)
-  should validate_length_of(:path).is_at_least(1)
-  should validate_length_of(:path).is_at_most(40)
-  should allow_value('path_mcgee').for(:path)
-  should allow_value('path_mcgee-the-3rd').for(:path)
-  should_not allow_value('Path McGee').for(:path)
-  should_not allow_value('excited_user!').for(:path)
 
   let(:account) { create(:account) }
   let(:unpublished_story) do
     create(:story, account: account, published_at: nil)
   end
 
-  it 'fails if path is a reserved word' do
-    a = Account.new(name: 'name', path: ROUTE_RESERVED_WORDS.sample)
-    a.validate
-    refute(a.errors[:path].empty?)
-    assert(a.errors[:path].include?('has already been taken'))
+  it 'validates path is not a reserved word' do
+    reservedpath = build(:account, path: ROUTE_RESERVED_WORDS.sample)
+    refute reservedpath.valid?
+    assert reservedpath.errors[:path].include? 'has already been taken'
+  end
+
+  it 'validates path is not taken' do
+    create(:account, path: 'takenpath')
+    takenpath = build(:account, path: 'takenpath')
+    refute takenpath.valid?
+    assert takenpath.errors[:path].include? 'has already been taken'
+  end
+
+  it 'validates presence of path' do
+    nopath = build(:account, path: nil)
+    refute nopath.valid?
+    assert nopath.errors[:path].include? 'can\'t be blank'
+  end
+
+  it 'validates path is long enough' do
+    shortpath = build(:account, path: '')
+    refute shortpath.valid?
+    assert shortpath.errors[:path].any? { |e| e.match /is too short/ }
+  end
+
+  it 'validates path is not too long' do
+    longpath = build(:account, path: (1..41).map { |_i| 'a' }.join)
+    refute longpath.valid?
+    assert longpath.errors[:path].any? { |e| e.match /is too long/ }
+  end
+
+  it 'allows valid path names' do
+    goodpath = build(:account, path: 'path_mcgee')
+    goodpath2 = build(:account, path: 'path_mcgee-the-3rd')
+    assert goodpath.valid?
+    assert goodpath2.valid?
+  end
+
+  it 'disallows invalid path names' do
+    badpath = build(:account, path: 'Path McGee')
+    badpath2 = build(:account, path: 'excited_user!')
+    refute badpath.valid?
+    assert badpath.errors[:path].any? { |e| e.match /is invalid/ }
+    refute badpath2.valid?
+    assert badpath2.errors[:path].any? { |e| e.match /is invalid/ }
   end
 
   it 'has a table defined' do

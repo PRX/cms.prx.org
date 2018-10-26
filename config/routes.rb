@@ -77,10 +77,8 @@ PRX::Application.routes.draw do
       resource :authorization, only: [:show] do
         resources :audio_files, except: [:new, :edit]
 
-        resources :users, except: [:new, :edit, :create, :destroy], module: :auth do
-          resource :user_image, path: 'image', except: [:new, :edit]
-          resources :memberships, only: [:index]
-          resources :accounts, only: [:index, :create]
+        resources :users, only: [], module: :auth do
+          resources :accounts, only: [:create]
         end
 
         resources :accounts, only: [:index, :show, :create], module: :auth do

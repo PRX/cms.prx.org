@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'hal_api/rails'
 
 class Api::BaseController < ApplicationController
@@ -80,12 +81,26 @@ class Api::BaseController < ApplicationController
 
   private
 
+  def respond_with_error(exception)
+    return validation_failed exception if exception.instance_of? ActiveRecord::RecordInvalid
+
+    super
+  end
+
   def user_not_authorized(exception = nil)
     message = { status: 401, message: 'You are not authorized to perform this action' }
     if exception && Rails.configuration.try(:consider_all_requests_local)
       message[:backtrace] = exception.backtrace
     end
     render json: message, status: 401
+  end
+
+  def validation_failed(exception = nil)
+    message = { status: 409, message: exception.message }
+    if exception && Rails.configuration.try(:consider_all_requests_local)
+      message[:backtrace] = exception.backtrace
+    end
+    render json: message, status: 409
   end
 
   def wrap_in_transaction
