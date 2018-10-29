@@ -17,7 +17,7 @@ describe User do
   end
 
   it 'creates an individual account on user create' do
-    new_user = User.create(first_name: 'New', last_name: 'User')
+    new_user = User.create(first_name: 'New', last_name: 'User', login: 'newuser')
     new_user.run_callbacks(:commit)
     new_user.individual_account.wont_be_nil
   end
@@ -38,5 +38,12 @@ describe User do
 
   it 'has a list of networks' do
     user.networks.must_include network
+  end
+
+  it 'validates uniqueness of login' do
+    user1 = create(:user)
+    user2 = build(:user, login: user1.login)
+
+    user2.wont_be :valid?
   end
 end

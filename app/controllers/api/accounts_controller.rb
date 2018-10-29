@@ -5,6 +5,15 @@ class Api::AccountsController < Api::BaseController
 
   represent_with Api::AccountRepresenter
 
+  # filter_resources_by :user_id
+
+  def create_resource
+    return super unless user
+
+    user.create_individual_account
+    user.individual_account
+  end
+
   private
 
   def resources
@@ -12,7 +21,7 @@ class Api::AccountsController < Api::BaseController
   end
 
   def resources_base
-    user.try(:accounts) || Account
+    user.try(:accounts) || super
   end
 
   def user

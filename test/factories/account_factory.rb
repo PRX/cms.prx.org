@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :account, class: 'GroupAccount' do
 
     name 'name'
+    sequence(:path) { |n| "path#{n}" }
 
     address
 

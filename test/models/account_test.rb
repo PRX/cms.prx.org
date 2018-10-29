@@ -7,6 +7,53 @@ describe Account do
     create(:story, account: account, published_at: nil)
   end
 
+  it 'validates path is not a reserved word' do
+    reservedpath = build(:account, path: ROUTE_RESERVED_WORDS.sample)
+    refute reservedpath.valid?
+    assert reservedpath.errors[:path].include? 'has already been taken'
+  end
+
+  it 'validates path is not taken' do
+    create(:account, path: 'takenpath')
+    takenpath = build(:account, path: 'takenpath')
+    refute takenpath.valid?
+    assert takenpath.errors[:path].include? 'has already been taken'
+  end
+
+  it 'validates presence of path' do
+    nopath = build(:account, path: nil)
+    refute nopath.valid?
+    assert nopath.errors[:path].include? 'can\'t be blank'
+  end
+
+  it 'validates path is long enough' do
+    shortpath = build(:account, path: '')
+    refute shortpath.valid?
+    assert(shortpath.errors[:path].any? { |e| e.match /is too short/ })
+  end
+
+  it 'validates path is not too long' do
+    longpath = build(:account, path: (1..41).map { |_i| 'a' }.join)
+    refute longpath.valid?
+    assert(longpath.errors[:path].any? { |e| e.match /is too long/ })
+  end
+
+  it 'allows valid path names' do
+    goodpath = build(:account, path: 'path_mcgee')
+    goodpath2 = build(:account, path: 'path_mcgee-the-3rd')
+    assert goodpath.valid?
+    assert goodpath2.valid?
+  end
+
+  it 'disallows invalid path names' do
+    badpath = build(:account, path: 'Path McGee')
+    badpath2 = build(:account, path: 'excited_user!')
+    refute badpath.valid?
+    assert(badpath.errors[:path].any? { |e| e.match /is invalid/ })
+    refute badpath2.valid?
+    assert(badpath2.errors[:path].any? { |e| e.match /is invalid/ })
+  end
+
   it 'has a table defined' do
     Account.table_name.must_equal 'accounts'
   end

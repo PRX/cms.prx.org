@@ -459,6 +459,9 @@ GEM
     shoryuken (2.0.11)
       aws-sdk-core (~> 2)
       celluloid (~> 0.16)
+    shoulda-context (1.2.2)
+    shoulda-matchers (3.1.2)
+      activesupport (>= 4.0.0)
     simplecov (0.12.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -574,6 +577,8 @@ DEPENDENCIES
   say_when (~> 2.x)
   sdoc
   shoryuken (~> 2.0.11)
+  shoulda-context
+  shoulda-matchers
   simplecov
   slackistrano
   spring
@@ -583,4 +588,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.16.4
+   1.16.5

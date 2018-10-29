@@ -1,6 +1,6 @@
 class AccountPolicy < ApplicationPolicy
   def create?
-    token.present?
+    token.present? && token.scopes&.include?('account:write')
   end
 
   def update?

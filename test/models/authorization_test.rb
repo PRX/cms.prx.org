@@ -15,8 +15,8 @@ describe Authorization do
   end
 
   it 'has lists of stories and series belonging to accounts authorized on token' do
-    authorization.token_auth_stories.must_equal account.stories
-    authorization.token_auth_series.must_equal account.series
+    assert_same_elements(authorization.token_auth_stories, account.stories)
+    assert_same_elements(authorization.token_auth_series, account.series)
   end
 
   it 'checks against token to see if accounts are authorized' do

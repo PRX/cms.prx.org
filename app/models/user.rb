@@ -15,6 +15,8 @@ class User < BaseModel
 
   after_commit :create_individual_account, on: [:create]
 
+  validates_uniqueness_of :login
+
   def individual_account
     accounts.where('type = \'IndividualAccount\'').first
   end

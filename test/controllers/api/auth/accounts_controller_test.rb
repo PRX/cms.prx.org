@@ -16,8 +16,8 @@ describe Api::Auth::AccountsController do
   end
 
   describe 'with a valid token' do
-
     around do |test|
+      @request.env['CONTENT_TYPE'] = 'application/json'
       @controller.stub(:prx_auth_token, token) { test.call }
     end
 
@@ -47,21 +47,5 @@ describe Api::Auth::AccountsController do
       ids.must_include member_account.id
       ids.wont_include unapproved_account.id
     end
-
   end
-
-  describe 'with no token' do
-
-    it 'will not show you anything' do
-      get(:show, api_version: 'v1', id: individual_account.id)
-      assert_response :unauthorized
-    end
-
-    it 'will not index you anything' do
-      get(:index, api_version: 'v1')
-      assert_response :unauthorized
-    end
-
-  end
-
 end
