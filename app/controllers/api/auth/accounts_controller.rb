@@ -7,15 +7,6 @@ class Api::Auth::AccountsController < Api::AccountsController
 
   represent_with Api::Auth::AccountRepresenter
 
-  filter_resources_by :user_id
-
-  def create_resource
-    return super unless user
-
-    user.create_individual_account
-    user.individual_account
-  end
-
   private
 
   def resources
