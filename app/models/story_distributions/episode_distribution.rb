@@ -66,7 +66,8 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
   end
 
   def get_episode
-    @episode ||= api(root: feeder_root, account: distribution.account.id).tap { |a| a.href = auth_url }.get
+    @get_episode ||= api(root: feeder_root, account: distribution.account.id).
+                     tap { |a| a.href = auth_url }.get
   end
 
   def auth_url
