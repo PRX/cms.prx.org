@@ -13,29 +13,24 @@ class Distribution < BaseModel
     data ||= {}
     start_secs = (data[:start_secs] || '60').to_i
     end_secs = (data[:end_secs] || '3600').to_i
-    story_id = nil
-    dist_id = nil
 
     recently_published_stories(start_secs, end_secs).each do |story|
-      story_id = story.id
-      dist_id = nil
       story.distributions.each do |dist|
-        dist_id = dist.id
-        if !dist.distributed?
-          notice_message("Story #{story_id} not distributed: #{dist.distribution.url}")
-          story.touch
-          dist.reload.distribute!
-        end
-
-        if !dist.published?
-          notice_message("Story #{story_id} distribution not published: #{dist.url}")
-          story.touch
-          dist.reload.publish!
-        end
+        fix_story_distribution(story, dist)
       end
     end
-  rescue StandardError => e
-    NewRelic::Agent.notice_error(e, custom_params: { story: story_id, distribution: dist_id })
+  end
+
+  def self.check_imported!(data = nil)
+    data ||= {}
+    start_secs = (data[:start_secs] || '60').to_i
+    end_secs = (data[:end_secs] || '3600').to_i
+
+    recently_imported_stories(start_secs, end_secs).each do |story|
+      story.distributions.each do |dist|
+        fix_story_distribution(story, dist)
+      end
+    end
   end
 
   def self.notice_message(msg)
@@ -48,6 +43,41 @@ class Distribution < BaseModel
       start_secs.seconds.ago,
       end_secs.seconds.ago
     ).joins(:distributions).distinct
+  end
+
+  def self.recently_imported_stories(start_secs, end_secs)
+    story_ids = EpisodeImport.completed.where(
+      '`updated_at` <= ? AND `updated_at` >= ?',
+      start_secs.seconds.ago,
+      end_secs.seconds.ago
+    ).pluck(:story_id).uniq
+
+    Story.find(story_ids).joins(:distributions).distinct
+  end
+
+  def self.fix_story_distribution(story, dist)
+    story_id = story.id
+    dist_id = dist.id
+
+    if !dist.distributed?
+      notice_message("Story #{story_id} not distributed: #{dist.distribution.url}")
+      story.touch
+      dist.reload.distribute!
+    end
+
+    if !dist.published?
+      notice_message("Story #{story_id} distribution not published: #{dist.url}")
+      story.touch
+      dist.reload.publish!
+    end
+
+    if !dist.completed?
+      notice_message("Story #{story_id} distribution incomplete: #{dist.url}")
+      story.touch
+      dist.reload.complete!
+    end
+  rescue StandardError => e
+    NewRelic::Agent.notice_error(e, custom_params: { story: story_id, distribution: dist_id })
   end
 
   def set_template_ids(ids)
@@ -93,6 +123,14 @@ class Distribution < BaseModel
   end
 
   def published?
+    true
+  end
+
+  def complete!
+    # no op for the super class
+  end
+
+  def completed?
     true
   end
 

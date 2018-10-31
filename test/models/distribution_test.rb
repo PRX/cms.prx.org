@@ -2,12 +2,14 @@ require 'test_helper'
 require 'minitest/mock'
 
 class TestStoryDistribution < StoryDistribution
-  attr_accessor :distributed, :published
+  attr_accessor :distributed, :published, :completed
 
   def distributed?; self.distributed; end
   def published?; self.published; end
+  def completed?; self.completed; end
   def distribute!; self.distributed = true; end
   def publish!; self.published = true; end
+  def complete!; self.completed = true; end
 end
 
 describe Distribution do
@@ -80,6 +82,7 @@ describe Distribution do
       tsd = TestStoryDistribution.new(story: story, distribution: distribution)
       tsd.wont_be :published?
       tsd.wont_be :distributed?
+      tsd.wont_be :completed?
       story.distributions = [tsd]
       before_touch_at = story.updated_at
 
@@ -91,6 +94,28 @@ describe Distribution do
 
       tsd.must_be :published?
       tsd.must_be :distributed?
+      tsd.must_be :completed?
+    end
+
+    it 'attempts to update incomplete story imports' do
+      tsd = TestStoryDistribution.new(story: story, distribution: distribution)
+      tsd.published = true
+      tsd.distributed = true
+      tsd.must_be :published?
+      tsd.must_be :distributed?
+      tsd.wont_be :completed?
+      story.distributions = [tsd]
+      before_touch_at = story.updated_at
+
+      Distribution.stub(:recently_imported_stories, [story]) do
+        Distribution.check_imported!
+      end
+
+      story.updated_at.must_be :>, before_touch_at
+
+      tsd.must_be :published?
+      tsd.must_be :distributed?
+      tsd.must_be :completed?
     end
   end
 end
