@@ -104,6 +104,7 @@ describe Distributions::PodcastDistribution do
       episode_distribution.wont_be_nil
       episode_distribution.wont_be :distributed?
       episode_distribution.wont_be :published?
+      episode_distribution.wont_be :completed?
 
       distribution.story_distributions.count.must_equal 1
       distribution.wont_be :stories_published?
@@ -111,6 +112,7 @@ describe Distributions::PodcastDistribution do
       episode_distribution.update_attributes(url: episode_url)
       episode_distribution.must_be :distributed?
       episode_distribution.must_be :published?
+      episode_distribution.wont_be :completed?
       distribution.story_distributions = [episode_distribution]
       distribution.must_be :stories_published?
     end
