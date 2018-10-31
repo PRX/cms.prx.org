@@ -30,6 +30,19 @@ end
 begin
   SayWhen.schedule(
     group: 'application',
+    name: 'check_imported',
+    trigger_strategy: 'cron',
+    trigger_options: { expression: '0 0/5 * * * ?', time_zone: 'UTC' },
+    job_class: 'Distribution',
+    job_method: 'check_imported!'
+  )
+rescue ActiveRecord::StatementInvalid => ex
+  puts "Failed to init say_when job: #{ex.inspect}"
+end
+
+begin
+  SayWhen.schedule(
+    group: 'application',
     name: 'reindex_stories',
     trigger_strategy: 'cron',
     trigger_options: { expression: '0 0 8 * * ? *', time_zone: 'UTC' },
