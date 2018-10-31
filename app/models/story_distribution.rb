@@ -22,6 +22,14 @@ class StoryDistribution < BaseModel
     true
   end
 
+  def complete!
+    # no op for the super class
+  end
+
+  def completed?
+    true
+  end
+
   def kind
     (type || 'StoryDistribution').safe_constantize.model_name.element.sub(/_distribution$/, '')
   end

@@ -39,6 +39,17 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
     published
   end
 
+  def complete!
+    super
+    announce(:story, :update, Api::Msg::StoryRepresenter.new(story).to_json)
+  end
+
+  def completed?
+    episode = get_episode
+    episode.try(:media)
+    get_episode.media.present?
+  end
+
   def create_or_update_episode(attrs = {})
     episode = nil
     if url.blank?
@@ -55,7 +66,7 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
   end
 
   def get_episode
-    api(root: feeder_root, account: distribution.account.id).tap { |a| a.href = auth_url }.get
+    @episode ||= api(root: feeder_root, account: distribution.account.id).tap { |a| a.href = auth_url }.get
   end
 
   def auth_url
