@@ -60,8 +60,7 @@ class Distributions::PodcastDistribution < Distribution
   end
 
   def update_podcast!(attrs = {})
-      podcast = get_podcast
-      podcast = podcast.put(attrs)
+    get_podcast.put(attrs)
   end
 
   def get_podcast
