@@ -54,10 +54,13 @@ class Distributions::PodcastDistribution < Distribution
       raise 'Failed to get podcast url on create' if podcast_url.blank?
       update_attributes!(url: podcast_url)
     else
-      podcast = get_podcast
-      podcast = podcast.put(attrs)
+      podcast = update_podcast!(attrs)
     end
     podcast
+  end
+
+  def update_podcast!(attrs = {})
+    get_podcast.put(attrs)
   end
 
   def get_podcast
