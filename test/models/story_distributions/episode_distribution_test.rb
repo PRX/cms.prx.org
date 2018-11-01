@@ -78,4 +78,13 @@ describe StoryDistributions::EpisodeDistribution do
       end
     end
   end
+
+  it 'checks if the episode has completed' do
+    distro = build(:episode_distribution, distribution: podcast_distribution, url: episode_url)
+    podcast_distribution.stub(:get_account_token, 'token') do
+      distro.stub(:get_account_token, 'token') do
+        distro.wont_be :completed?
+      end
+    end
+  end
 end

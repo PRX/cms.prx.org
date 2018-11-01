@@ -7,6 +7,8 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
   include Rails.application.routes.url_helpers
   include Announce::Publisher
 
+  before_save :clear_episode, if: :url_changed?
+
   def self.default_story_url(story)
     path = "#{story.class.name.underscore.pluralize}/#{story.id}"
     ENV['PRX_HOST'].nil? ? nil : "https://#{ENV['PRX_HOST']}/#{path}"
@@ -39,6 +41,15 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
     published
   end
 
+  def complete!
+    super
+    announce(:story, :update, Api::Msg::StoryRepresenter.new(story).to_json)
+  end
+
+  def completed?
+    get_episode.try(:media).present?
+  end
+
   def create_or_update_episode(attrs = {})
     episode = nil
     if url.blank?
@@ -55,7 +66,12 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
   end
 
   def get_episode
-    api(root: feeder_root, account: distribution.account.id).tap { |a| a.href = auth_url }.get
+    @get_episode ||= api(root: feeder_root, account: distribution.account.id).
+                     tap { |a| a.href = auth_url }.get
+  end
+
+  def clear_episode
+    @get_episode = nil
   end
 
   def auth_url
