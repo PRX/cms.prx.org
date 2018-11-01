@@ -46,13 +46,13 @@ class Distribution < BaseModel
   end
 
   def self.recently_imported_stories(start_secs, end_secs)
-    story_ids = EpisodeImport.completed.where(
+    story_ids = EpisodeImport.complete.where(
       '`updated_at` <= ? AND `updated_at` >= ?',
       start_secs.seconds.ago,
       end_secs.seconds.ago
-    ).pluck(:story_id).uniq
+    ).pluck(:piece_id).uniq
 
-    Story.find(story_ids).joins(:distributions).distinct
+    Story.where(id: story_ids).joins(:distributions).distinct
   end
 
   def self.fix_story_distribution(story, dist)
