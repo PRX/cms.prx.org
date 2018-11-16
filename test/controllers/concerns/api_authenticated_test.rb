@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe ApiAuthenticated do
 
-  class ApiAuthenticatedTestController < ActionController::Base
+  class ApiAuthenticatedTestController < Api::BaseController
     include ApiAuthenticated
 
     def current_user
