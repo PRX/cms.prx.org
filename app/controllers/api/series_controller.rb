@@ -3,6 +3,8 @@
 class Api::SeriesController < Api::BaseController
   include ApiSearchable
 
+  before_filter :authenticate_user!, only: :create
+
   api_versions :v1
 
   filter_resources_by :account_id

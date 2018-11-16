@@ -68,6 +68,10 @@ class Api::BaseController < ApplicationController
     Authorization.new(prx_auth_token) if prx_auth_token
   end
 
+  def authenticate_user!
+    user_not_authorized unless current_user
+  end
+
   def filtered(arel)
     keys = self.class.resources_params || []
     where_hash = params.slice(*keys)
