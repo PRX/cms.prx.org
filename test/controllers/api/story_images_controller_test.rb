@@ -1,10 +1,11 @@
 require 'test_helper'
 
 describe Api::StoryImagesController do
+  let(:user) { create(:user) }
   let(:story_image) { create(:story_image) }
   let(:story) { story_image.story }
   let(:account) { story.account }
-  let(:token) { StubToken.new(account.id, ['member']) }
+  let(:token) { StubToken.new(account.id, ['member'], user.id) }
 
   before(:each) do
     class << @controller; attr_accessor :prx_auth_token; end

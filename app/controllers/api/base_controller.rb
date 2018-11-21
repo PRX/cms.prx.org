@@ -18,6 +18,8 @@ class Api::BaseController < ApplicationController
   include PolymorphicResource
   include AnnounceActions
 
+  before_filter :authenticate_user!, only: [:create, :update, :delete]
+
   protect_from_forgery with: :null_session
 
   allow_params :show, [:api_version, :format, :zoom]
