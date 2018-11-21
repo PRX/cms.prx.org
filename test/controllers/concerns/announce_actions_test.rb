@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'announce_actions'
+require 'test_models'
 
 Api::TestObjectsController.class_eval do
   include AnnounceActions
