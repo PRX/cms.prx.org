@@ -18,6 +18,8 @@ class Api::BaseController < ApplicationController
   include PolymorphicResource
   include AnnounceActions
 
+  before_filter :authenticate_user!, only: [:create, :update, :delete]
+
   protect_from_forgery with: :null_session
 
   allow_params :show, [:api_version, :format, :zoom]
@@ -66,6 +68,10 @@ class Api::BaseController < ApplicationController
 
   def authorization
     Authorization.new(prx_auth_token) if prx_auth_token
+  end
+
+  def authenticate_user!
+    user_not_authorized unless current_user
   end
 
   def filtered(arel)

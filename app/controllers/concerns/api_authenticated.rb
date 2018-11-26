@@ -10,10 +10,6 @@ module ApiAuthenticated
     before_filter :authenticate_user!
   end
 
-  def authenticate_user!
-    user_not_authorized unless current_user
-  end
-
   def cache_show?
     false
   end

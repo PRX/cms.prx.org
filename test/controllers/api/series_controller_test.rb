@@ -63,6 +63,13 @@ describe Api::SeriesController do
     end
   end
 
+  describe 'without a valid token' do
+    it 'does not create a series' do
+      post :create, { title: 'foobar' }.to_json, api_version: 'v1', account_id: account.id
+      assert_response 401
+    end
+  end
+
   describe 'with a valid token' do
     around do |test|
       token = StubToken.new(account.id, ['member'], user.id)

@@ -5,8 +5,8 @@ describe Api::AccountsController do
   let(:membership) { create(:membership, account: account) }
   let (:user_without_account) { create(:user, with_individual_account: false) }
   let (:user) { create(:user) }
-  let (:write_token) { StubToken.new(nil, ['account:write'], nil) }
-  let (:token) { StubToken.new(nil, ['account'], nil) }
+  let (:write_token) { StubToken.new(nil, ['account:write'], user.id) }
+  let (:token) { StubToken.new(nil, ['account'], user.id) }
 
   it 'should show' do
     get(:show, { api_version: 'v1', format: 'json', id: account.id } )
