@@ -46,7 +46,13 @@ class AudioFile < BaseModel
   end
 
   def enclosure_url
-    audio? ? public_url(version: :broadcast, extension: 'mp3') : public_url
+    if audio? && filename_extension.downcase == 'mp3'
+      public_url(version: :broadcast)
+    elsif audio?
+      public_url(version: :broadcast, extension: 'mp3') # force extension
+    else
+      public_url
+    end
   end
 
   def enclosure_content_type
