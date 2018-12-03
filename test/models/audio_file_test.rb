@@ -59,21 +59,6 @@ describe AudioFile do
     audio_file.enclosure_content_type.must_match 'audio/mpeg'
   end
 
-  # because of all the caching in carrierwave, just stub the asset filename
-  it 'sets a correct extension on the enclosure_url' do
-    audio_file.stub(:public_asset_filename, 'something.MP2') do
-      audio_file.enclosure_url.must_match "/web/audio_file/#{audio_file.id}/broadcast/something.mp3"
-    end
-
-    audio_file.stub(:public_asset_filename, 'something.MP3') do
-      audio_file.enclosure_url.must_match "/web/audio_file/#{audio_file.id}/broadcast/something.MP3"
-    end
-
-    audio_file.stub(:public_asset_filename, 'something.mp3') do
-      audio_file.enclosure_url.must_match "/web/audio_file/#{audio_file.id}/broadcast/something.mp3"
-    end
-  end
-
   it 'can update the underlying file' do
     audio_file.update_file!('test2.mp3')
     audio_file.filename.must_equal 'test2.mp3'
