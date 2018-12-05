@@ -5,7 +5,7 @@ describe Api::AccountsController do
   let(:membership) { create(:membership, account: account) }
   let (:user_without_account) { create(:user, with_individual_account: false) }
   let (:user) { create(:user) }
-  let (:write_token) { StubToken.new(nil, ['account:write'], user.id) }
+  let (:write_token) { StubToken.new(ENV['PRX_ADMIN_ID'], ['admin'], user.id) }
   let (:token) { StubToken.new(nil, ['account'], user.id) }
 
   it 'should show' do
