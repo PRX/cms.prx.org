@@ -36,6 +36,22 @@ class Account < BaseModel
     portfolio ? portfolio.stories.order(published_at: :desc) : Story.none
   end
 
+  def kind
+    (type || 'Account').safe_constantize.model_name.element.sub(/_account$/, '')
+  end
+
+  def kind=(k)
+    child_class = "#{k.titleize}Account".safe_constantize if k
+    if child_class
+      self.type = child_class.name
+    end
+  end
+
+  def self.class_for_kind(k)
+    child_class = "#{k.titleize}Account".safe_constantize if k
+    child_class || Account
+  end
+
   def self.policy_class
     AccountPolicy
   end

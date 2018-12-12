@@ -82,6 +82,28 @@ describe Account do
     account.must_respond_to :portfolio
   end
 
+  describe '.class_for_kind' do
+    it 'returns appropriate individual_account class' do
+      ia_class = Account.class_for_kind('individual')
+      ia_class.name.must_equal 'IndividualAccount'
+    end
+
+    it 'returns appropriate group_account class' do
+      ia_class = Account.class_for_kind('group')
+      ia_class.name.must_equal 'GroupAccount'
+    end
+
+    it 'returns appropriate station_account class' do
+      ia_class = Account.class_for_kind('station')
+      ia_class.name.must_equal 'StationAccount'
+    end
+
+    it 'returns base class if no match' do
+      ia_class = Account.class_for_kind('foobar')
+      ia_class.name.must_equal 'Account'
+    end
+  end
+
   describe '#portfolio_stories' do
     it 'returns only stories in portfolio' do
       portfolio = create(:portfolio, account: account)
