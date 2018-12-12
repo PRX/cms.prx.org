@@ -24,4 +24,8 @@ class IndividualAccount < Account
   def description
     opener.try(:bio)
   end
+
+  def self.policy_class
+    IndividualAccountPolicy
+  end
 end

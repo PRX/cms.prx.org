@@ -8,6 +8,10 @@ describe IndividualAccount do
     IndividualAccount.table_name.must_equal 'accounts'
   end
 
+  it 'has individual account specific policy' do
+    IndividualAccount.policy_class.must_equal IndividualAccountPolicy
+  end
+
   it 'has opener' do
     account.opener.wont_be_nil
   end
@@ -24,7 +28,6 @@ describe IndividualAccount do
     individual = build_stubbed(:individual_account, {:opener => user})
     individual.short_name.must_equal 'sigil'
   end
-
 end
 
 

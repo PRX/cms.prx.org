@@ -1,19 +1,14 @@
 require 'test_helper'
 
 describe AccountPolicy do
-  let(:prx_admin_token) { StubToken.new(ENV['PRX_ADMIN_ID'], ['admin']) }
   let(:admin_token) { StubToken.new(account.id, ['admin']) }
   let(:member_token) { StubToken.new(account.id, ['member']) }
   let(:non_member_token) { StubToken.new(account.id + 2, ['admin']) }
   let(:account) { build_stubbed(:account) }
 
   describe '#create?' do
-    it 'returns true if PRX admin' do
-      AccountPolicy.new(prx_admin_token, account).must_allow :create?
-    end
-
-    it 'returns false if not PRX admin' do
-      AccountPolicy.new(admin_token, account).wont_allow :create?
+    it 'returns true if user exists' do
+      AccountPolicy.new(member_token, account).must_allow :create?
     end
 
     it 'returns false if user is not present' do

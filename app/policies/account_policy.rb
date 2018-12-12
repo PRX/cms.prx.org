@@ -1,6 +1,6 @@
 class AccountPolicy < ApplicationPolicy
   def create?
-    token && token.authorized?(ENV['PRX_ADMIN_ID'], :admin)
+    token.present?
   end
 
   def update?

@@ -1,18 +1,15 @@
 # encoding: utf-8
 
+require 'abstract_resource'
+
 class Api::AccountsController < Api::BaseController
+  include AbstractResource
+
   api_versions :v1
 
   represent_with Api::AccountRepresenter
 
   # filter_resources_by :user_id
-
-  def create_resource
-    return super unless user
-
-    user.create_individual_account
-    user.individual_account
-  end
 
   private
 
