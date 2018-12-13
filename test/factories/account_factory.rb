@@ -28,6 +28,12 @@ FactoryGirl.define do
 
     factory :individual_account, class: 'IndividualAccount', aliases: [:default_account] do
       name 'individual'
+      before(:create) do |account, evaluator|
+        account.opener = evaluator.opener
+      end
+      after(:create) do |account, evaluator|
+        evaluator.opener.reload
+      end
     end
 
     factory :individual_account_with_owner, class: 'IndividualAccount' do
