@@ -7,6 +7,7 @@ class Api::AccountRepresenter < Api::BaseRepresenter
   property :path
   property :short_name
   property :description
+  property :kind
 
   alternate_link
 

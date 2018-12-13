@@ -11,6 +11,14 @@ class Api::AccountsController < Api::BaseController
 
   # filter_resources_by :user_id
 
+  # Unless there's already an opener, set it to the authenticated user
+  def create_resource
+    super.tap do |acct|
+      acct.opener_id ||= current_user.id
+      acct
+    end
+  end
+
   private
 
   def resources
