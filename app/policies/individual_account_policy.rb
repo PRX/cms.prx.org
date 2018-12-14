@@ -1,6 +1,5 @@
 class IndividualAccountPolicy < AccountPolicy
   def create?
-    binding.pry
     # An account without a membership to an Individual Account
     token.present? && !IndividualAccount.
       joins(:memberships).
