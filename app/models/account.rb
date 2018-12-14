@@ -40,15 +40,15 @@ class Account < BaseModel
     (type || 'Account').safe_constantize.model_name.element.sub(/_account$/, '')
   end
 
-  def kind=(k)
-    child_class = "#{k.titleize}Account".safe_constantize if k
+  def kind=(kind)
+    child_class = "#{kind.titleize}Account".safe_constantize if kind
     if child_class
       self.type = child_class.name
     end
   end
 
-  def self.class_for_kind(k)
-    child_class = "#{k.titleize}Account".safe_constantize if k
+  def self.class_for_kind(kind)
+    child_class = "#{kind.titleize}Account".safe_constantize if kind
     child_class || Account
   end
 

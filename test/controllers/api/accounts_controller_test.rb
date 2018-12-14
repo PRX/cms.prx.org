@@ -9,13 +9,13 @@ describe Api::AccountsController do
   let (:token) { StubToken.new(nil, ['account'], user.id) }
 
   it 'should show' do
-    get(:show, { api_version: 'v1', format: 'json', id: account.id } )
+    get(:show, { api_version: 'v1', format: 'json', id: account.id })
     assert_response :success
   end
 
   it 'should list' do
     account.id.wont_be_nil
-    get(:index, { api_version: 'v1', format: 'json' } )
+    get(:index, { api_version: 'v1', format: 'json' })
     assert_response :success
   end
 
@@ -23,7 +23,7 @@ describe Api::AccountsController do
     membership.user.wont_be_nil
     membership.account.wont_be_nil
 
-    get(:index, { api_version: 'v1', format: 'json', user_id: membership.user.id } )
+    get(:index, { api_version: 'v1', format: 'json', user_id: membership.user.id })
     assert_response :success
   end
 
@@ -48,6 +48,7 @@ describe Api::AccountsController do
     it 'creates an individual account' do
       post :create, { kind: 'individual' }.to_json, { api_version: 'v1'}
       assert_response :success, JSON.parse(@response.body)['message']
+
       new_account = IndividualAccount.find(JSON.parse(response.body)['id'])
       Membership.find_by!(user: user_without_account, account: new_account)
       new_account.path.must_equal user_without_account.login
@@ -55,7 +56,8 @@ describe Api::AccountsController do
 
     # Simulates a post to /api/v1/users/:user_id/accounts
     it 'creates an account with user' do
-      post :create, { kind: 'individual' }.to_json, { api_version: 'v1', user_id: user_without_account.id }
+      post :create, { kind: 'individual' }.to_json,
+           { api_version: 'v1', user_id: user_without_account.id }
       assert_response :success, JSON.parse(@response.body)['message']
 
       new_account = IndividualAccount.find(JSON.parse(response.body)['id'])

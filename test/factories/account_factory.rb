@@ -31,7 +31,7 @@ FactoryGirl.define do
       before(:create) do |account, evaluator|
         account.opener = evaluator.opener
       end
-      after(:create) do |account, evaluator|
+      after(:create) do |_account, evaluator|
         evaluator.opener.reload
       end
     end
