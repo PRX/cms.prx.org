@@ -5,7 +5,7 @@ describe IndividualAccountPolicy do
   let(:existing_token) { StubToken.new(nil, nil, existing_user.id) }
   let(:new_user) { create(:user, with_individual_account: false) }
   let(:new_token) { StubToken.new(nil, nil, new_user.id) }
-  let(:account) { build_stubbed(:account) }
+  let(:account) { build_stubbed(:individual_account) }
 
   describe '#create?' do
     it 'returns true for user without individual account' do
