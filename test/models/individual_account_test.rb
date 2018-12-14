@@ -2,7 +2,8 @@ require 'test_helper'
 
 describe IndividualAccount do
 
-  let(:account) { FactoryGirl.create(:individual_account_with_owner) }
+  let(:user) { create(:user) }
+  let(:account) { user.individual_account }
 
   it 'has a table defined' do
     IndividualAccount.table_name.must_equal 'accounts'
@@ -29,6 +30,3 @@ describe IndividualAccount do
     individual.short_name.must_equal 'sigil'
   end
 end
-
-
-
