@@ -102,6 +102,7 @@ end
 group :test do
   gem 'codeclimate-test-reporter', require: false
   gem 'codecov', require: false
+  gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'minitest-around'
   gem 'minitest-reporters', require: false

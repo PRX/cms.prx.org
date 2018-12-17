@@ -22,10 +22,9 @@ class User < BaseModel
   end
 
   def individual_account=(account)
-    prior_account = individual_account
-    memberships.create!(account_id: account.id, approved: true, role: 'admin')
-    if prior_account
-      memberships.where(account_id: prior_account.id).each { |m| memberships.destroy(m) }
+    update_attributes!(account_id: account.id)
+    accounts.where(type: 'IndividualAccount').where.not(id: account.id).pluck(:id).each do |old_id|
+      memberships.where(account_id: old_id).each { |m| memberships.destroy(m) }
     end
   end
 
@@ -34,7 +33,6 @@ class User < BaseModel
     User.transaction do
       ia = IndividualAccount.create!(opener_id: id, path: login, status: 'open')
       self.individual_account = ia
-      update_attributes!(account_id: individual_account.id)
     end
   end
 

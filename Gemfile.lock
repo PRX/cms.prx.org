@@ -97,6 +97,7 @@ GEM
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
     dalli (2.7.6)
+    database_cleaner (1.4.1)
     debug_inspector (0.0.2)
     diffy (3.1.0)
     docile (1.1.5)
@@ -527,6 +528,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   codecov
   dalli
+  database_cleaner
   dotenv-rails
   elasticsearch-dsl
   elasticsearch-model

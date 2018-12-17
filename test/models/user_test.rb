@@ -26,10 +26,12 @@ describe User do
     user.individual_account.wont_be_nil
   end
 
-  it 'can set the individual account' do
+  it 'can update the individual account' do
     current_account = user.individual_account
-    user.individual_account = create(:individual_account)
+    user.login = [user.login, 'but_better'].join('_')
+    user.individual_account = create(:individual_account, opener: user)
     user.individual_account.wont_equal current_account
+    user.memberships.length.must_equal 1
   end
 
   it 'has a list of accounts' do

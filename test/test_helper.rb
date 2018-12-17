@@ -29,6 +29,9 @@ require 'minitest/pride'
 require 'announce'
 require 'announce/testing'
 require 'webmock/minitest'
+require 'database_cleaner'
+
+DatabaseCleaner.strategy = :transaction
 
 def use_webmock?
   ENV['USE_WEBMOCK'].nil? || (ENV['USE_WEBMOCK'] == 'true')
@@ -57,6 +60,14 @@ class MiniTest::Spec
 
   def extract_filename(uri)
     URI.parse(uri).path.split('?')[0].split('/').last
+  end
+
+  before :each do
+    DatabaseCleaner.start
+  end
+
+  after :each do
+    DatabaseCleaner.clean
   end
 
   ElasticsearchHelper.es_setup
