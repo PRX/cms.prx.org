@@ -28,7 +28,7 @@ class Api::AudioVersionRepresenter < Api::BaseRepresenter
   link rel: :audio_version_template, writeable: true do
     {
       href: api_audio_version_template_path(represented.audio_version_template)
-    } if represented.audio_version_template_id
+    } if represented.audio_version_template
   end
   embed :audio_version_template,
         class: AudioVersionTemplate,
