@@ -42,4 +42,16 @@ describe Api::PodcastImportRepresenter do
     json['url'].must_equal 'http://google.horse'
     json['_links']['self']['href'].must_match /authorization\/podcast_imports$/
   end
+
+  it 'renders a nil feed_episode_count' do
+    podcast_import.feed_episode_count = nil
+    json = JSON.parse(representer.to_json)
+    json['feedEpisodeCount'].must_equal nil
+  end
+
+  it 'renders a numeric feed_episode_count' do
+    podcast_import.feed_episode_count = 10
+    json = JSON.parse(representer.to_json)
+    json['feedEpisodeCount'].must_equal 10
+  end
 end
