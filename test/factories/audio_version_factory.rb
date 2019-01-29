@@ -16,6 +16,7 @@ FactoryGirl.define do
       c = evaluator.audio_files_count.to_i
       (1..c).each { |i| FactoryGirl.create(:audio_file, audio_version: audio_version, position: i) }
       audio_version.reload
+      audio_version.length(true)
     end
 
     factory :promos do
