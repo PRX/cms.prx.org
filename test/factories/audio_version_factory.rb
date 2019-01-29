@@ -12,7 +12,7 @@ FactoryGirl.define do
       audio_files_count 1
     end
 
-    after(:create) do |audio_version, evaluator|
+    after(:create, :stub) do |audio_version, evaluator|
       c = evaluator.audio_files_count.to_i
       (1..c).each { |i| FactoryGirl.create(:audio_file, audio_version: audio_version, position: i) }
       audio_version.reload

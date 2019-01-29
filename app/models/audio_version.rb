@@ -54,12 +54,6 @@ class AudioVersion < BaseModel
   end
 
   def set_status
-    if audio_files.empty?
-      self.status = INVALID
-      self.status_message = 'No audio files uploaded'
-      return
-    end
-
     noncompliant_files = audio_files.select do |af|
       !af.compliant_with_template? || af.status == INVALID
     end

@@ -17,12 +17,6 @@ describe AudioVersion do
     audio_version.length(true).must_equal audio_version.duration
   end
 
-  it 'checks that the files exist' do
-    av = create(:audio_version, audio_files_count: 0)
-    av.status.must_equal 'invalid'
-    av.status_message.must_equal 'No audio files uploaded'
-  end
-
   describe 'checks files are in order' do
     let(:av) { create(:audio_version, audio_files_count: 4) }
 
