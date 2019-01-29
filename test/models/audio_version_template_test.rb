@@ -2,9 +2,9 @@ require 'test_helper'
 
 describe AudioVersionTemplate do
 
-  let(:audio_version_template) {
+  let(:audio_version_template) do
     create(:audio_version_template, series: build(:series), length_minimum: 70)
-  }
+  end
   let(:audio_version) { create(:audio_version, audio_version_template: audio_version_template) }
   let(:audio_file) { create(:audio_file, audio_version: audio_version) }
 
