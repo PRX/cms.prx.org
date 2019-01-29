@@ -326,12 +326,12 @@ class Story < BaseModel
 
   def set_status
     av_errors = ''
-    if audio_versions.empty?
-      av_errors << "Story '#{title}' has no audio."
+    if audio_files.empty?
+      av_errors << "Story '#{title}' has no audio"
     else
       audio_versions.each do |av|
         if !av.compliant_with_template? || av.status == INVALID
-          av_errors << "Invalid audio version: '#{av.label}.' "
+          av_errors << "Invalid audio version: '#{av.label}' "
         end
       end
     end
