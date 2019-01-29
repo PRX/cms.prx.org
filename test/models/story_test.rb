@@ -71,8 +71,8 @@ describe Story do
     let(:story) { create(:story) }
     let(:valid_version) { create(:audio_version, audio_version_template: valid_template) }
     let(:invalid_version) { create(:audio_version, audio_version_template: invalid_template) }
-    let(:valid_template) { create(:audio_version_template, length_minimum: 10)}
-    let(:invalid_template) { create(:audio_version_template, length_minimum: 70)}
+    let(:valid_template) { create(:audio_version_template, length_minimum: 10) }
+    let(:invalid_template) { create(:audio_version_template, length_minimum: 70) }
 
     it 'is invalid if it has no audio files' do
       story.audio_versions.first.audio_files = []
