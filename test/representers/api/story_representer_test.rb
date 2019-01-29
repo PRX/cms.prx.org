@@ -27,8 +27,6 @@ describe Api::StoryRepresenter do
   end
 
   describe 'status flags' do
-    let(:invalid_audio_versions) { create_list(:audio_version_with_template, 5) }
-    let(:valid_audio_versions) { create_list(:audio_version, 5) }
 
     it 'shows complete status if story has all valid and complete audio' do
       story.audio_versions.wont_be(:empty?)
@@ -38,7 +36,10 @@ describe Api::StoryRepresenter do
     end
 
     it 'shows invalid, plus errors, if story is invalid' do
-      story.audio_versions = invalid_audio_versions
+      tpl = create(:audio_version_template, length_minimum: 70)
+      version = create(:audio_version, audio_version_template: tpl)
+
+      story.audio_versions = [version]
       story.update(title: 'Title!')
       representer = Api::StoryRepresenter.new(story)
       json = JSON.parse(representer.to_json)

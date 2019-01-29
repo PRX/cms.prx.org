@@ -32,7 +32,8 @@ describe AudioFile do
     af2.destroy!
     af1.reload.position.must_equal 1
     af3.reload.position.must_equal 3
-    av.save
+    av.reload
+
     av.status.must_equal 'invalid'
     av.status_message.must_equal 'Audio file missing for position 2'
   end
