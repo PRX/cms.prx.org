@@ -2,7 +2,9 @@ require 'test_helper'
 
 describe AudioVersionTemplate do
 
-  let(:audio_version_template) { create(:audio_version_template) }
+  let(:audio_version_template) do
+    create(:audio_version_template, series: build(:series), length_minimum: 70)
+  end
   let(:audio_version) { create(:audio_version, audio_version_template: audio_version_template) }
   let(:audio_file) { create(:audio_file, audio_version: audio_version) }
 
@@ -26,7 +28,7 @@ describe AudioVersionTemplate do
 
   it 'can tell if version length doesnt match template' do
     error_results = audio_version_template.validate_audio_version(audio_version)
-    error_results.must_include 'long but must be 10 seconds - 1 minute and'
+    error_results.must_include 'long but must be 1 minute and 10 seconds - 1 minute and'
   end
 
   it 'validates with just a minimum' do
