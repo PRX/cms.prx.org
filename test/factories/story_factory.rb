@@ -10,6 +10,7 @@ FactoryGirl.define do
     length 120
     point_level 1
     short_description 'Short description'
+    production_notes 'Production notes'
     description 'Long description'
     episode_identifier '123'
     season_identifier '1'

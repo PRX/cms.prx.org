@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Api::Auth::StoryRepresenter < Api::StoryRepresenter
+  property :production_notes
+
   # make sure "self" stays under authorization, because unpublished
   # stories won't exist under the public stories path
   def self_url(r)
