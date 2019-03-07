@@ -109,7 +109,6 @@ describe Api::StoryRepresenter do
       end
     end
 
-
     it 'includes topics, tones and formats as tags' do
       tags = ['Art', 'Women', 'Fresh Air-ish']
       story.stub(:tags, tags) do
