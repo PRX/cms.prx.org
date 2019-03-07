@@ -1185,6 +1185,7 @@ ActiveRecord::Schema.define(version: 20181030200041) do
     t.text     "status_message",          limit: 16777215
     t.string   "season_identifier",       limit: 255
     t.string   "clean_title",             limit: 255
+    t.string   "production_notes",        limit: 255
   end
 
   add_index "pieces", ["account_id"], name: "pieces_account_id_fk", using: :btree

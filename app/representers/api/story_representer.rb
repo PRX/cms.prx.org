@@ -5,6 +5,7 @@ class Api::StoryRepresenter < Api::BaseRepresenter
   property :title
   property :clean_title
   property :short_description
+  property :production_notes
   property :episode_number
   property :episode_identifier
   property :season_identifier
