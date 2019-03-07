@@ -30,4 +30,11 @@ describe Api::Auth::StoryRepresenter do
     af = pub_json['_embedded']['prx:audio']['_embedded']['prx:items'].first
     get_link_href(af, 'prx:storage').must_match /s3:\/\//
   end
+
+  it 'includes production notes' do
+    sigil = 'sigil'
+    pub_story.stub(:production_notes, sigil) do
+      pub_json['productionNotes'].must_equal sigil
+    end
+  end
 end

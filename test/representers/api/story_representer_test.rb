@@ -109,12 +109,6 @@ describe Api::StoryRepresenter do
       end
     end
 
-    it 'includes production notes' do
-      sigil = 'sigil'
-      story.stub(:production_notes, sigil) do
-        json['productionNotes'].must_equal sigil
-      end
-    end
 
     it 'includes topics, tones and formats as tags' do
       tags = ['Art', 'Women', 'Fresh Air-ish']
