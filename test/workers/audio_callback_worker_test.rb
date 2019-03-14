@@ -23,7 +23,7 @@ describe AudioCallbackWorker do
       size: 1234,
       mime: 'audio/mpeg',
       downloaded: true,
-      valid: true,
+      detected: true,
       processed: true,
       error: nil,
     }
@@ -43,6 +43,12 @@ describe AudioCallbackWorker do
     audio.bit_rate.must_equal 128
     audio.frequency.must_equal 44.1
     audio.channel_mode.must_equal(AudioCallbackWorker::STEREO)
+  end
+
+  it 'gets an explicit mpeg layer' do
+    meta = { format: 'mp3', layer: 5 }
+    perform(audio: meta)
+    audio.layer.must_equal 5
   end
 
   it 'updates video file attributes' do
@@ -80,15 +86,24 @@ describe AudioCallbackWorker do
     audio.fixerable_final?.must_equal false
   end
 
+  it 'ignores detection errors' do
+    perform(detected: false)
+    audio.status.must_equal AudioCallbackWorker::COMPLETE
+    audio.status_message.must_be_nil
+    audio.fixerable_final?.must_equal true
+  end
+
   it 'sets processing errors' do
     perform(processed: false)
     audio.status.must_equal AudioCallbackWorker::FAILED
     audio.status_message.must_match 'Error processing file'
     audio.fixerable_final?.must_equal false
+  end
 
-    perform(downloaded: false)
-    audio.status.must_equal AudioCallbackWorker::NOTFOUND
-    audio.status_message.must_match 'Error downloading file'
+  it 'sets callback error messages' do
+    perform(error: 'any error message')
+    audio.status.must_equal AudioCallbackWorker::FAILED
+    audio.status_message.must_equal 'any error message'
     audio.fixerable_final?.must_equal false
   end
 
