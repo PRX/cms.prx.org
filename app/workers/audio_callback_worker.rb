@@ -34,7 +34,10 @@ class AudioCallbackWorker
     audio.length = (meta.fetch('duration', 0) / 1000.0).round
     audio.bit_rate = (meta.fetch('bitrate', 0) / 1000.0).round
     audio.frequency = meta.fetch('frequency', 0) / 1000.0
-    audio.layer = meta.fetch('format', '').match(/mp(\d)/).try(:[], 1).to_i
+
+    # fallback to guessing layer from the format string (mp2 / mp3 / etc)
+    format_layer = meta.fetch('format', '').match(/mp(\d)/).try(:[], 1).to_i
+    audio.layer = meta.fetch('layer', nil) || format_layer
 
     # TODO: not quite sure how to get this from ffprobe
     # job['channels'] = ffmpeg.channels
@@ -45,15 +48,16 @@ class AudioCallbackWorker
                            SINGLE_CHANNEL
                          end
 
-    # set errors but ignore valid/invalid status (will be determined later)
+    # set errors - content type validation happens in the AudioVersionTemplate
     if !job['downloaded']
       audio.status = NOTFOUND
-      audio.status_message = job['error'] ||
-                             "Error downloading file for #{audio.label || audio.id}"
+      audio.status_message = job['error'] || error_message('downloading', audio)
     elsif !job['processed']
       audio.status = FAILED
-      audio.status_message = job['error'] ||
-                             "Error processing file #{audio.label || audio.id}"
+      audio.status_message = job['error'] || error_message('processing', audio)
+    elsif job['error']
+      audio.status = FAILED
+      audio.status_message = job['error']
     else
       audio.status = TRANSFORMED
       audio.status_message = nil
@@ -63,5 +67,11 @@ class AudioCallbackWorker
     end_state = audio.status_message ? "#{audio.status} => #{audio}" : audio.status
     Shoryuken.logger.info("Updating #{job['type']}[#{audio.id}]: status => #{end_state}")
     audio.save!
+  end
+
+  private
+
+  def error_message(label, audio)
+    "Error #{label} file #{audio.label || audio.id}"
   end
 end
