@@ -122,7 +122,8 @@ class Story < BaseModel
       select('pieces.*, series.subscription_approval_status, series.subscriber_only_at')
   }
   scope :published, -> { where('`published_at` <= ?', Time.now) }
-  scope :unpublished, -> { where('`published_at` IS NULL OR `published_at` > ?', Time.now) }
+  scope :scheduled, -> { where('`published_at` > ?', Time.now) }
+  scope :draft, -> { where('`published_at` IS NULL', Time.now) }
   scope :unseries, -> { where('`series_id` IS NULL') }
   scope :v4, -> { where(app_version: PRX::APP_VERSION) }
   scope :network_visible, -> { where('`network_only_at` IS NULL') }
@@ -231,13 +232,21 @@ class Story < BaseModel
   end
 
   def published
-    published_at && published_at <= DateTime.now
+    !!published_at && published_at <= DateTime.now
   end
 
   alias_method :"published?", :published
 
   def published=(value)
     self.published_at = date_for_boolean(value)
+  end
+
+  def scheduled?
+    !!published_at && published_at > DateTime.now
+  end
+
+  def draft?
+    published_at.nil?
   end
 
   def date_for_boolean(value)
