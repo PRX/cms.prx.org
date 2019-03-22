@@ -81,6 +81,19 @@ class Api::Auth::StoriesController < Api::StoriesController
   def search_params
     sparams = super
     sparams[:fq]['series_id'] = 'NULL' if filters.noseries?
+    sparams[:fq]['published_at'] = search_by_state(filters.state) if filters.state?
     sparams
+  end
+
+  def search_by_state(state)
+    if state == 'published'
+      '[* TO now]'
+    elsif state == 'scheduled'
+      '{now TO *}'
+    elsif state == 'draft'
+      'NULL'
+    else
+      'this-will-not-match'
+    end
   end
 end
