@@ -112,9 +112,10 @@ describe Api::Auth::StoriesController do
       assigns[:stories].must_include unpublished_story
     end
 
-    it 'filters to no stories' do
+    it 'throws an error for unknown states' do
       get(:index, api_version: 'v1', format: 'json', filters: 'state=whatever')
-      assigns[:stories].must_equal []
+      assert_response :bad_request
+      JSON.parse(response.body)['message'].must_match /invalid state filter/i
     end
 
     it 'applies multiple filters' do

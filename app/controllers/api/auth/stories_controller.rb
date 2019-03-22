@@ -20,6 +20,12 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   before_filter :check_user_network, only: [:index], if: -> { params[:network_id] }
 
+  class InvalidState < HalApi::Errors::ApiError
+    def initialize(state = nil)
+      super("Invalid state filter: #{state}", 400)
+    end
+  end
+
   def sorted(arel)
     if coalesce_sort = (sorts || []).find_index { |s| s.keys.first == 'published_released_at' }
       arel = arel.coalesce_published_released(sorts[coalesce_sort].values.first)
@@ -54,7 +60,7 @@ class Api::Auth::StoriesController < Api::StoriesController
     elsif state == 'draft'
       resources.draft
     else
-      resources.none
+      raise InvalidState.new(state)
     end
   end
 
@@ -93,7 +99,7 @@ class Api::Auth::StoriesController < Api::StoriesController
     elsif state == 'draft'
       'NULL'
     else
-      'this-will-not-match'
+      raise InvalidState.new(state)
     end
   end
 end
