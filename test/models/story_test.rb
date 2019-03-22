@@ -27,17 +27,17 @@ describe Story do
 
     it 'has a published state' do
       story.must_be :published?
-      story.must_be :scheduled?
-      story.must_be :draft?
+      story.wont_be :scheduled?
+      story.wont_be :draft?
 
       story.published_at = Time.now + 1.hour
-      story.must_be :published?
+      story.wont_be :published?
       story.must_be :scheduled?
-      story.must_be :draft?
+      story.wont_be :draft?
 
       story.published_at = nil
-      story.must_be :published?
-      story.must_be :scheduled?
+      story.wont_be :published?
+      story.wont_be :scheduled?
       story.must_be :draft?
     end
   end
