@@ -232,7 +232,7 @@ class Story < BaseModel
   end
 
   def published
-    !!published_at && published_at <= DateTime.now
+    !!published_at && published_at <= Time.now
   end
 
   alias_method :"published?", :published
@@ -242,7 +242,7 @@ class Story < BaseModel
   end
 
   def scheduled?
-    !!published_at && published_at > DateTime.now
+    !!published_at && published_at > Time.now
   end
 
   def draft?
