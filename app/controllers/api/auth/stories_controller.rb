@@ -8,7 +8,7 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   filter_resources_by :account_id, :series_id, :network_id
 
-  filter_params :highlighted, :purchased, :v4, :text, :noseries
+  filter_params :highlighted, :purchased, :v4, :text, :noseries, before: :time, after: :time
 
   sort_params default: { updated_at: :desc },
               allowed: [:id, :created_at, :updated_at, :published_at, :title,
