@@ -289,7 +289,7 @@ describe Story do
     end
 
     it 'filters stories published or released before a date' do
-      now = DateTime.parse('2019-03-22T00:00:10Z')
+      now = Time.parse('2019-03-22T00:00:10Z')
       title = 'filter-published-released'
       create(:unpublished_story, title: title, short_description: '0')
       create(:unpublished_story, title: title, short_description: '1', released_at: now)
@@ -301,7 +301,7 @@ describe Story do
     end
 
     it 'filters stories published or released after a date' do
-      now = DateTime.parse('2019-03-22T00:00:10Z')
+      now = Time.parse('2019-03-22T00:00:10Z')
       title = 'filter-published-released'
       create(:unpublished_story, title: title, short_description: '0')
       create(:unpublished_story, title: title, short_description: '1', released_at: now)

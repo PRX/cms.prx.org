@@ -52,9 +52,9 @@ module ApiFiltering
     private
 
     def add_filter_param(name, type = nil)
-      unless self.allowed_filter_names.include? name
-        self.allowed_filter_names << name
-        self.allowed_filter_types[name] = type unless type.nil?
+      unless allowed_filter_names.include? name
+        allowed_filter_names << name
+        allowed_filter_types[name] = type unless type.nil?
       end
     end
   end
@@ -84,8 +84,8 @@ module ApiFiltering
       filters_map[name] =
         if force_types[name] == 'date'
           parse_date(value)
-        elsif force_types[name] == 'datetime'
-          parse_datetime(value)
+        elsif force_types[name] == 'time'
+          parse_time(value)
         elsif value.nil?
           true
         elsif value.blank?
@@ -109,9 +109,9 @@ module ApiFiltering
     raise BadFilterValueError.new "Invalid filter date: '#{str}'"
   end
 
-  def parse_datetime(str)
-    DateTime.parse(str)
+  def parse_time(str)
+    Time.find_zone('UTC').parse(str) || (raise ArgumentError.new 'Nil result!')
   rescue ArgumentError
-    raise BadFilterValueError.new "Invalid filter datetime: '#{str}'"
+    raise BadFilterValueError.new "Invalid filter time: '#{str}'"
   end
 end

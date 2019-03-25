@@ -5,7 +5,7 @@ describe ApiFiltering do
   class ApiFilteringTestController < ActionController::Base
     include ApiFiltering
 
-    filter_params :one, :two, :three, :four, :five, six: :date, seven: :datetime
+    filter_params :one, :two, :three, :four, :five, six: :date, seven: :time
 
     attr_accessor :filter_string
 
@@ -65,18 +65,18 @@ describe ApiFiltering do
   end
 
   it 'parses datetimes' do
-    controller.filter_string = 'seven=2019-02-03T01:02:03Z'
+    controller.filter_string = 'seven=2019-02-03T01:02:03 -0700'
     controller.filters.seven?.must_equal true
-    controller.filters.seven.must_equal DateTime.parse('2019-02-03T01:02:03Z')
+    controller.filters.seven.must_equal Time.parse('2019-02-03T08:02:03Z')
   end
 
   it 'defaults datetimes to utc' do
     controller.filter_string = 'seven=20190203'
     controller.filters.seven?.must_equal true
-    controller.filters.seven.must_equal DateTime.parse('2019-02-03T00:00:00Z')
+    controller.filters.seven.must_equal Time.parse('2019-02-03T00:00:00Z')
   end
 
-  it 'raises parse errors for datetimes' do
+  it 'raises parse errors for times' do
     controller.filter_string = 'seven=bad-string'
     err = assert_raises { puts controller.filters.seven }
     err.must_be_instance_of(ApiFiltering::BadFilterValueError)
