@@ -27,7 +27,7 @@ class Api::StoriesController < Api::BaseController
     sparams[:fq]['network_id'] = params[:network_id] if params[:network_id]
     sparams[:fq]['series_id'] = params[:series_id] if params[:series_id]
     sparams[:fq]['app_version'] = 'v4' if filters.v4?
-    sparams[:fq]['published_released_at'] = search_before_after() if filters.before? || filters.after?
+    sparams[:fq]['published_released_at'] = search_before_after if filters.before? || filters.after?
     sparams
   end
 
