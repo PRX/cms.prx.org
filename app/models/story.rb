@@ -131,6 +131,12 @@ class Story < BaseModel
       order("ISNULL(pieces_published_released_at) #{dir}").
       order("pieces_published_released_at #{dir}")
   }
+  scope :published_released_before, ->(time) {
+    where('published_at < ? OR (published_at IS NULL AND released_at < ?)', time, time)
+  }
+  scope :published_released_after, ->(time) {
+    where('published_at >= ? OR (published_at IS NULL AND released_at >= ?)', time, time)
+  }
 
   scope :series_visible, -> {
     joins('LEFT OUTER JOIN `series` ON `pieces`.`series_id` = `series`.`id`').

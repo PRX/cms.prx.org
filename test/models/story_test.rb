@@ -288,6 +288,30 @@ describe Story do
       stories.map(&:short_description).must_equal ['0', '3', '1', '2']
     end
 
+    it 'filters stories published or released before a date' do
+      now = DateTime.parse('2019-03-22T00:00:10Z')
+      title = 'filter-published-released'
+      create(:unpublished_story, title: title, short_description: '0')
+      create(:unpublished_story, title: title, short_description: '1', released_at: now)
+      create(:story, title: title, short_description: '2', published_at: now)
+      create(:story, title: title, short_description: '3', published_at: now + 1.second)
+
+      stories = Story.where(title: title).published_released_before(now + 1.second)
+      stories.pluck(:short_description).must_equal ['1', '2']
+    end
+
+    it 'filters stories published or released after a date' do
+      now = DateTime.parse('2019-03-22T00:00:10Z')
+      title = 'filter-published-released'
+      create(:unpublished_story, title: title, short_description: '0')
+      create(:unpublished_story, title: title, short_description: '1', released_at: now)
+      create(:story, title: title, short_description: '2', published_at: now)
+      create(:story, title: title, short_description: '3', published_at: now - 1.second)
+
+      stories = Story.where(title: title).published_released_after(now)
+      stories.pluck(:short_description).must_equal ['1', '2']
+    end
+
     it 'wont publish when already published' do
       lambda do
         story.publish!
