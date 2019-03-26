@@ -7,7 +7,7 @@ class Api::StoriesController < Api::BaseController
 
   filter_resources_by :series_id, :account_id, :network_id
 
-  filter_params :highlighted, :purchased, :v4, :text
+  filter_params :highlighted, :purchased, :v4, :text, before: :time, after: :time
 
   sort_params default: { published_at: :desc, updated_at: :desc },
               allowed: [:id, :created_at, :updated_at, :published_at, :title,
@@ -27,6 +27,7 @@ class Api::StoriesController < Api::BaseController
     sparams[:fq]['network_id'] = params[:network_id] if params[:network_id]
     sparams[:fq]['series_id'] = params[:series_id] if params[:series_id]
     sparams[:fq]['app_version'] = 'v4' if filters.v4?
+    sparams[:fq]['published_released_at'] = search_before_after if filters.before? || filters.after?
     sparams
   end
 
@@ -112,10 +113,22 @@ class Api::StoriesController < Api::BaseController
   def filtered(resources)
     resources = resources.v4 if filters.v4?
     resources = resources.match_text(filters.text) if filters.text?
+    resources = resources.published_released_after(filters.after) if filters.after?
+    resources = resources.published_released_before(filters.before) if filters.before?
     if highlighted?
       resources
     else
       super
+    end
+  end
+
+  def search_before_after
+    if filters.before? && filters.after?
+      "[#{filters.after.iso8601} TO #{filters.before.iso8601}}"
+    elsif filters.before?
+      "[* TO #{filters.before.iso8601}}"
+    elsif filters.after?
+      "[#{filters.after.iso8601} TO *}"
     end
   end
 

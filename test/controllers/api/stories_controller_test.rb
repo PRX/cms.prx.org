@@ -277,6 +277,18 @@ describe Api::StoriesController do
     assigns[:stories].wont_include story2
   end
 
+  it 'should list only stories published in a timeframe' do
+    story1 = create(:story, published_at: Time.parse('2019-03-21T00:00:00Z'))
+    story2 = create(:story, published_at: Time.parse('2019-03-22T00:00:00Z'))
+    story3 = create(:story, published_at: Time.parse('2019-03-23T00:00:00Z'))
+    get(:index, api_version: 'v1', format: 'json', filters: 'before=20190323,after=20190321')
+    assert_response :success
+    assert_not_nil assigns[:stories]
+    assigns[:stories].must_include story1
+    assigns[:stories].must_include story2
+    assigns[:stories].wont_include story3
+  end
+
   it 'should error on bad version' do
     get(:index, { api_version: 'v2', format: 'json' } )
     assert_response :not_acceptable
@@ -311,5 +323,18 @@ describe Api::StoriesController do
     assert_not_nil assigns[:stories]
     assigns[:stories].must_include story
     assigns[:stories].wont_include story2
+  end
+
+  it 'should filter by published date with Elasticsearch' do
+    ElasticsearchHelper.new.create_es_index(Story)
+    story1 = create(:story, published_at: Time.parse('2019-03-21T00:00:00Z')).reindex(true)
+    story2 = create(:story, published_at: Time.parse('2019-03-22T00:00:00Z')).reindex(true)
+    story3 = create(:story, published_at: Time.parse('2019-03-23T00:00:00Z')).reindex(true)
+    get(:search, api_version: 'v1', format: 'json', filters: 'before=20190323,after=20190321')
+    assert_response :success
+    assert_not_nil assigns[:stories]
+    assigns[:stories].must_include story1
+    assigns[:stories].must_include story2
+    assigns[:stories].wont_include story3
   end
 end
