@@ -24,6 +24,22 @@ describe Story do
     it 'is deleted by default' do
       create(:story).must_be :deleted?
     end
+
+    it 'has a published state' do
+      story.must_be :published?
+      story.wont_be :scheduled?
+      story.wont_be :draft?
+
+      story.published_at = Time.now + 1.hour
+      story.wont_be :published?
+      story.must_be :scheduled?
+      story.wont_be :draft?
+
+      story.published_at = nil
+      story.wont_be :published?
+      story.wont_be :scheduled?
+      story.must_be :draft?
+    end
   end
 
   describe 'status updates' do
@@ -468,6 +484,23 @@ describe Story do
       Story.public_stories.wont_include story_n
       Story.public_stories.wont_include story_s
       Story.public_stories.wont_include story_u
+    end
+
+    it 'filters by published state' do
+      story = create(:story)
+      Story.where(id: story.id).published.must_include story
+      Story.where(id: story.id).scheduled.wont_include story
+      Story.where(id: story.id).draft.wont_include story
+
+      story.update_attributes(published_at: Time.now + 1.hour)
+      Story.where(id: story.id).published.wont_include story
+      Story.where(id: story.id).scheduled.must_include story
+      Story.where(id: story.id).draft.wont_include story
+
+      story.update_attributes(published_at: nil)
+      Story.where(id: story.id).published.wont_include story
+      Story.where(id: story.id).scheduled.wont_include story
+      Story.where(id: story.id).draft.must_include story
     end
   end
 

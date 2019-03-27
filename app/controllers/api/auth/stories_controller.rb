@@ -8,7 +8,8 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   filter_resources_by :account_id, :series_id, :network_id
 
-  filter_params :highlighted, :purchased, :v4, :text, :noseries, before: :time, after: :time
+  filter_params :highlighted, :purchased, :v4, :text, :noseries, :state,
+                before: :time, after: :time
 
   sort_params default: { updated_at: :desc },
               allowed: [:id, :created_at, :updated_at, :published_at, :title,
@@ -42,7 +43,20 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   def filtered(resources)
     resources = resources.unseries if filters.noseries?
+    resources = filter_by_state(resources, filters.state) if filters.state?
     super(resources)
+  end
+
+  def filter_by_state(resources, state)
+    if state == 'published'
+      resources.published
+    elsif state == 'scheduled'
+      resources.scheduled
+    elsif state == 'draft'
+      resources.draft
+    else
+      raise ApiFiltering::BadFilterValueError.new("Invalid state filter: #{state}")
+    end
   end
 
   def resources_base
@@ -68,6 +82,19 @@ class Api::Auth::StoriesController < Api::StoriesController
   def search_params
     sparams = super
     sparams[:fq]['series_id'] = 'NULL' if filters.noseries?
+    sparams[:fq]['published_at'] = search_by_state(filters.state) if filters.state?
     sparams
+  end
+
+  def search_by_state(state)
+    if state == 'published'
+      '[* TO now]'
+    elsif state == 'scheduled'
+      '{now TO *}'
+    elsif state == 'draft'
+      'NULL'
+    else
+      raise ApiFiltering::BadFilterValueError.new("Invalid state filter: #{state}")
+    end
   end
 end
