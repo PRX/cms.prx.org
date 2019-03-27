@@ -8,10 +8,16 @@ module ApiFiltering
   included do
     class_eval do
       class_attribute :allowed_filter_names
+      class_attribute :allowed_filter_types
     end
   end
 
   class UnknownFilterError < NoMethodError
+  end
+  class BadFilterValueError < HalApi::Errors::ApiError
+    def initialize(msg)
+      super(msg, 400)
+    end
   end
 
   class FilterParams < OpenStruct
@@ -32,7 +38,24 @@ module ApiFiltering
 
   module ClassMethods
     def filter_params(*args)
-      self.allowed_filter_names = args.map(&:to_s).uniq || []
+      self.allowed_filter_names = []
+      self.allowed_filter_types = {}
+      (args || []).map do |arg|
+        if arg.is_a? Hash
+          arg.to_a.each { |key, val| add_filter_param(key.to_s, val.to_s) }
+        else
+          add_filter_param(arg.to_s)
+        end
+      end
+    end
+
+    private
+
+    def add_filter_param(name, type = nil)
+      unless allowed_filter_names.include? name
+        allowed_filter_names << name
+        allowed_filter_types[name] = type unless type.nil?
+      end
     end
   end
 
@@ -45,6 +68,7 @@ module ApiFiltering
   def parse_filters_param
     filters_map = {}
     filters = self.class.allowed_filter_names
+    force_types = self.class.allowed_filter_types
 
     # set nils
     filters.each do |name|
@@ -58,7 +82,11 @@ module ApiFiltering
 
       # convert/guess type of known params
       filters_map[name] =
-        if value.nil?
+        if force_types[name] == 'date'
+          parse_date(value)
+        elsif force_types[name] == 'time'
+          parse_time(value)
+        elsif value.nil?
           true
         elsif value.blank?
           ''
@@ -73,5 +101,17 @@ module ApiFiltering
         end
     end
     FilterParams.new(filters_map)
+  end
+
+  def parse_date(str)
+    Date.parse(str)
+  rescue ArgumentError
+    raise BadFilterValueError.new "Invalid filter date: '#{str}'"
+  end
+
+  def parse_time(str)
+    Time.find_zone('UTC').parse(str) || (raise ArgumentError.new 'Nil result!')
+  rescue ArgumentError
+    raise BadFilterValueError.new "Invalid filter time: '#{str}'"
   end
 end

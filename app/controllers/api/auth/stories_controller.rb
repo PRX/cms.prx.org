@@ -8,7 +8,8 @@ class Api::Auth::StoriesController < Api::StoriesController
 
   filter_resources_by :account_id, :series_id, :network_id
 
-  filter_params :highlighted, :purchased, :v4, :text, :noseries, :state
+  filter_params :highlighted, :purchased, :v4, :text, :noseries, :state,
+                before: :time, after: :time
 
   sort_params default: { updated_at: :desc },
               allowed: [:id, :created_at, :updated_at, :published_at, :title,
@@ -19,12 +20,6 @@ class Api::Auth::StoriesController < Api::StoriesController
   represent_with Api::Auth::StoryRepresenter
 
   before_filter :check_user_network, only: [:index], if: -> { params[:network_id] }
-
-  class InvalidState < HalApi::Errors::ApiError
-    def initialize(state = nil)
-      super("Invalid state filter: #{state}", 400)
-    end
-  end
 
   def sorted(arel)
     if coalesce_sort = (sorts || []).find_index { |s| s.keys.first == 'published_released_at' }
@@ -60,7 +55,7 @@ class Api::Auth::StoriesController < Api::StoriesController
     elsif state == 'draft'
       resources.draft
     else
-      raise InvalidState.new(state)
+      raise ApiFiltering::BadFilterValueError.new("Invalid state filter: #{state}")
     end
   end
 
@@ -99,7 +94,7 @@ class Api::Auth::StoriesController < Api::StoriesController
     elsif state == 'draft'
       'NULL'
     else
-      raise InvalidState.new(state)
+      raise ApiFiltering::BadFilterValueError.new("Invalid state filter: #{state}")
     end
   end
 end
