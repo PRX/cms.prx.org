@@ -123,7 +123,7 @@ class Story < BaseModel
   }
   scope :published, -> { where('`published_at` <= ?', Time.now) }
   scope :scheduled, -> { where('`published_at` > ?', Time.now) }
-  scope :draft, -> { where('`published_at` IS NULL', Time.now) }
+  scope :draft, -> { where('`published_at` IS NULL') }
   scope :unseries, -> { where('`series_id` IS NULL') }
   scope :v4, -> { where(app_version: PRX::APP_VERSION) }
   scope :network_visible, -> { where('`network_only_at` IS NULL') }
