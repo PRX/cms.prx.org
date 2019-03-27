@@ -75,11 +75,22 @@ describe StoryDistributions::EpisodeDistribution do
   it 'checks if the episode is published' do
     stub_episode!
     distribution.must_be :published?
+    distribution.clear_episode
+
+    stub_episode! publishedAt: nil
+    distribution.wont_be :published?
+    distribution.clear_episode
+
+    stub_episode! publishedAt: '3000-01-01T00:00:00.000Z'
+    distribution.wont_be :published?
   end
 
   it 'checks if the episode is completed' do
     stub_episode!
-    distribution.wont_be :completed?
+    distribution.must_be :completed?
     distribution.clear_episode
+
+    stub_episode! is_feed_ready: false
+    distribution.wont_be :completed?
   end
 end
