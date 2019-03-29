@@ -5,7 +5,9 @@ describe StoryDistributions::EpisodeDistribution do
   let(:podcast_distribution) { create(:podcast_distribution) }
   let(:feeder_root) { StoryDistributions::EpisodeDistribution.new.feeder_root }
   let(:episode_url) { URI.join(feeder_root, '/api/v1/episodes/aguid').to_s }
-  let(:distribution) { build(:episode_distribution, distribution: podcast_distribution, url: episode_url) }
+  let(:distribution) do
+    build(:episode_distribution, distribution: podcast_distribution, url: episode_url)
+  end
 
   before do
     stub_request(:get, 'https://feeder.prx.org/api/v1').
