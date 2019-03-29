@@ -112,7 +112,7 @@ describe Distributions::PodcastDistribution do
       episode_distribution.update_attributes(url: episode_url)
       episode_distribution.must_be :distributed?
       episode_distribution.must_be :published?
-      episode_distribution.wont_be :completed?
+      episode_distribution.must_be :completed?
       distribution.story_distributions = [episode_distribution]
       distribution.must_be :stories_published?
     end
