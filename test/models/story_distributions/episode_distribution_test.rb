@@ -3,8 +3,11 @@ require 'test_helper'
 describe StoryDistributions::EpisodeDistribution do
 
   let(:podcast_distribution) { create(:podcast_distribution) }
-  let(:distribution) { build(:episode_distribution, distribution: podcast_distribution) }
-  let(:episode_url) { URI.join(distribution.feeder_root, '/api/v1/episodes/aguid').to_s }
+  let(:feeder_root) { StoryDistributions::EpisodeDistribution.new.feeder_root }
+  let(:episode_url) { URI.join(feeder_root, '/api/v1/episodes/aguid').to_s }
+  let(:distribution) do
+    build(:episode_distribution, distribution: podcast_distribution, url: episode_url)
+  end
 
   before do
     stub_request(:get, 'https://feeder.prx.org/api/v1').
@@ -27,10 +30,19 @@ describe StoryDistributions::EpisodeDistribution do
       with(headers: { 'Authorization' => 'Bearer token', 'Content-Type' => 'application/json' }).
       to_return(status: 200, body: json_file('episode'), headers: {})
 
+  end
+
+  around do |test|
+    podcast_distribution.stub(:get_account_token, 'token') do
+      distribution.stub(:get_account_token, 'token') { test.call }
+    end
+  end
+
+  def stub_episode!(overrides = {})
+    episode = JSON.parse(json_file('episode')).merge(overrides)
     stub_request(:get, "https://feeder.prx.org/api/v1/authorization/episodes/aguid").
       with(:headers => {'Authorization'=>'Bearer token', 'Content-Type'=>'application/json'}).
-      to_return(status: 200, body: json_file('episode'), headers: {})
-
+      to_return(status: 200, body: episode.to_json, headers: {})
   end
 
   it 'gets the episode attributes' do
@@ -47,44 +59,40 @@ describe StoryDistributions::EpisodeDistribution do
   end
 
   it 'creates the episode on feeder' do
-    podcast_distribution.stub(:get_account_token, 'token') do
-      distribution.stub(:get_account_token, 'token') do
-        distribution.url = nil
-        distribution.wont_be :distributed?
-        distribution.save!
-        distribution.distribute!
-        distribution.must_be :distributed?
-        distribution.url.must_equal(episode_url)
-      end
-    end
+    distribution.url = nil
+    distribution.wont_be :distributed?
+    distribution.save!
+    distribution.distribute!
+    distribution.must_be :distributed?
+    distribution.url.must_equal(episode_url)
   end
 
   it 'gets the episode' do
-    distro = build(:episode_distribution, distribution: podcast_distribution, url: episode_url)
-    podcast_distribution.stub(:get_account_token, 'token') do
-      distro.stub(:get_account_token, 'token') do
-        ep = distro.get_episode
-        ep.title.must_equal 'Episode 1'
-        ep.published_at.must_equal '2017-08-30T04:00:00.000Z'
-      end
-    end
+    stub_episode!
+    ep = distribution.get_episode
+    ep.title.must_equal 'Episode 1'
+    ep.published_at.must_equal '2017-08-30T04:00:00.000Z'
   end
 
   it 'checks if the episode is published' do
-    distro = build(:episode_distribution, distribution: podcast_distribution, url: episode_url)
-    podcast_distribution.stub(:get_account_token, 'token') do
-      distro.stub(:get_account_token, 'token') do
-        distro.must_be :published?
-      end
-    end
+    stub_episode!
+    distribution.must_be :published?
+    distribution.clear_episode
+
+    stub_episode! publishedAt: nil
+    distribution.wont_be :published?
+    distribution.clear_episode
+
+    stub_episode! publishedAt: '3000-01-01T00:00:00.000Z'
+    distribution.wont_be :published?
   end
 
-  it 'checks if the episode has completed' do
-    distro = build(:episode_distribution, distribution: podcast_distribution, url: episode_url)
-    podcast_distribution.stub(:get_account_token, 'token') do
-      distro.stub(:get_account_token, 'token') do
-        distro.wont_be :completed?
-      end
-    end
+  it 'checks if the episode is completed' do
+    stub_episode!
+    distribution.must_be :completed?
+    distribution.clear_episode
+
+    stub_episode! is_feed_ready: false
+    distribution.wont_be :completed?
   end
 end

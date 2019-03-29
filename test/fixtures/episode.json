@@ -2,7 +2,8 @@
   "guid": "aguid",
   "title": "Episode 1",
   "publishedAt": "2017-08-30T04:00:00.000Z",
-  "media": [],
+  "isFeedReady": true,
+  "media": [{"href": "https://f.prxu.org/1/aguid/filename.mp3"}],
   "_links": {
     "curies": [
       {

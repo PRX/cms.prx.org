@@ -47,7 +47,7 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
   end
 
   def completed?
-    get_episode.try(:media).present?
+    !!get_episode.try(:is_feed_ready)
   end
 
   def create_or_update_episode(attrs = {})
