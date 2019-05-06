@@ -95,4 +95,13 @@ describe StoryDistributions::EpisodeDistribution do
     stub_episode! is_feed_ready: false
     distribution.wont_be :completed?
   end
+
+  it 'looks for media when checking is completed' do
+    stub_episode!
+    distribution.must_be :completed?
+    distribution.clear_episode
+
+    stub_episode! media: []
+    distribution.wont_be :completed?
+  end
 end
