@@ -4,7 +4,7 @@ namespace :production_calendar do
   task :movement => :environment do
     # For stories to be released in the future (drafts),
     # select the date they were created
-    stories = Story.draft.where(app_version: 'v4').where('released_at >= ?', Time.now).select('*, date(created_at) as created_date')
+    stories = Story.where(app_version: 'v4').where('released_at >= ?', Time.now).select('*, date(created_at) as created_date')
 
     # group by created date,
     # sum up the num of episodes created on a date
