@@ -363,7 +363,8 @@ class Story < BaseModel
 
   def update_account_for_audio_files
     if account_id_changed?
-      audio_files.with_deleted.unscope(where: :promos).reorder('').update_all(account_id: account_id)
+      audio_files.with_deleted.unscope(where: :promos).
+        reorder('').update_all(account_id: account_id)
     end
   end
 end
