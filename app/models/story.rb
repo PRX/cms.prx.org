@@ -102,6 +102,7 @@ class Story < BaseModel
   before_validation :update_published_to_released
 
   before_save :set_status, only: [:update, :create]
+  after_save :update_account_for_audio_files, on: :update
 
   after_commit :touch_series
 
@@ -357,6 +358,12 @@ class Story < BaseModel
     else
       self.status = INVALID
       self.status_message = av_errors.strip
+    end
+  end
+
+  def update_account_for_audio_files
+    if account_id_changed?
+      audio_files.with_deleted.unscope(where: :promos).reorder('').update_all(account_id: account_id)
     end
   end
 end
