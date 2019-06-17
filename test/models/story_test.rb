@@ -81,6 +81,13 @@ describe Story do
       story.reload.status.must_equal 'invalid'
       story.status_message.must_include 'has no audio'
     end
+
+    it 'changes account_id for audio files when own account changes' do
+      story.update_attributes!(account_id: 123)
+      story.audio_files.all.each do |af|
+        af.account_id.must_equal 123
+      end
+    end
   end
 
   describe 'checking audio versions' do

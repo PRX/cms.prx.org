@@ -21,8 +21,15 @@ describe Series do
 
     it 'changes account_id for stories when own account changes' do
       series.update_attributes!(account_id: 123)
-      series.stories.each do |story|
+      series.stories.all.each do |story|
         story.account_id.must_equal 123
+      end
+    end
+
+    it 'changes account_id for audio files when own account changes' do
+      series.update_attributes!(account_id: 123)
+      series.audio_files.all.each do |af|
+        af.account_id.must_equal 123
       end
     end
   end
