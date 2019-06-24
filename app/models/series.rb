@@ -198,9 +198,11 @@ class Series < BaseModel
 
   def update_account_for_stories
     if account_id_changed?
-      stories.update_all(account_id: account_id)
-      audio_files.with_deleted.unscope(where: :promos).
-        reorder('').update_all(account_id: account_id)
+      Series.transaction do
+        stories.update_all(account_id: account_id)
+        audio_files.with_deleted.unscope(where: :promos).
+          reorder('').update_all(account_id: account_id)
+      end
       stories.all.each(&:index_for_search)
     end
   end
