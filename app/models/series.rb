@@ -50,6 +50,7 @@ class Series < BaseModel
   belongs_to :creator, -> { with_deleted }, class_name: 'User', foreign_key: 'creator_id'
 
   has_many :stories, -> { order('episode_number DESC, position DESC, published_at DESC') }, dependent: :nullify
+  has_many :audio_files, through: :stories
   has_many :schedules
   has_many :audio_version_templates
   has_many :distributions, as: :distributable, dependent: :destroy
@@ -196,6 +197,13 @@ class Series < BaseModel
   end
 
   def update_account_for_stories
-    stories.each { |s| s.update_attributes!(account_id: account_id) } if account_id_changed?
+    if account_id_changed?
+      Series.transaction do
+        stories.update_all(account_id: account_id)
+        audio_files.with_deleted.unscope(where: :promos).
+          reorder('').update_all(account_id: account_id)
+      end
+      stories.all.each(&:index_for_search)
+    end
   end
 end

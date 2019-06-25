@@ -32,7 +32,7 @@ class AudioFile < BaseModel
       self.status ||= UPLOADED
     end
 
-    if !account && story
+    if !account_id && story.try(:account_id)
       self.account = story.account
     end
   end
