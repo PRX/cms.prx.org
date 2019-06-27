@@ -34,6 +34,7 @@ PRX::Application.routes.draw do
         resources :series_images, path: 'images', except: [:new, :edit]
         resources :stories, only: [:index, :create] do
           get 'search', on: :collection
+          get 'calendar', on: :collection
         end
         resources :audio_version_templates, except: [:new, :edit]
         resources :distributions, except: [:new, :edit]

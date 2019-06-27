@@ -15,6 +15,14 @@ class Api::StoriesController < Api::BaseController
 
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
+  def calendar
+    series = Series.find(params.require(:series_id).to_i)
+
+    respond_to do |format|
+      format.ics { render body: series.calendar.to_ical, mime_type: Mime::Type.lookup("text/calendar")  }
+    end
+  end
+
   def search
     @stories ||= Story.text_search(search_query, search_params)
     index

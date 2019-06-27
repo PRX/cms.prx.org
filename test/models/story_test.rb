@@ -486,11 +486,19 @@ describe Story do
                       subscriber_only_at: Time.now)
       story_s = create(:story, series_id: series.id)
       story_u = create(:story, published_at: nil)
+      story_r = create(:story, published_at: nil, released_at: Time.now)
 
       Story.public_stories.must_include story
+      Story.public_stories.wont_include story_r
       Story.public_stories.wont_include story_n
       Story.public_stories.wont_include story_s
       Story.public_stories.wont_include story_u
+
+      Story.public_calendar_stories.must_include story
+      Story.public_calendar_stories.must_include story_r
+      Story.public_calendar_stories.wont_include story_n
+      Story.public_calendar_stories.wont_include story_s
+      Story.public_calendar_stories.wont_include story_u
     end
 
     it 'filters by published state' do

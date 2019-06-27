@@ -159,6 +159,13 @@ class Story < BaseModel
 
   scope :public_stories, -> { published.network_visible.series_visible }
 
+  scope :public_calendar_stories, -> do
+    network_visible.
+      series_visible.
+      coalesce_published_released('ASC').
+      having('pieces_published_released_at is not null')
+  end
+
   def self.text_search(text, params = {}, authz = nil)
     builder = StoryQueryBuilder.new(query: text, params: params, authorization: authz)
     search(builder.as_dsl).records

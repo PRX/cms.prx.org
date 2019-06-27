@@ -19,6 +19,11 @@ describe Series do
       series.public_stories.count.must_equal public_stories_count
     end
 
+    it 'has a calendar count' do
+      public_stories_count = series.stories.published.network_visible.series_visible.count
+      series.calendar.events.length.must_equal public_stories_count
+    end
+
     it 'changes account_id for stories when own account changes' do
       series.update_attributes!(account_id: 123)
       series.stories.all.each do |story|
