@@ -88,24 +88,6 @@ class Series < BaseModel
     search(builder.as_dsl).records
   end
 
-  def calendar
-    cal = Icalendar::Calendar.new
-
-    stories.
-      public_calendar_stories.
-      order("pieces_published_released_at ASC").
-      pluck('pieces.title, COALESCE(published_at, released_at) AS pieces_published_released_at').
-      each do |story_frag|
-      story_title, published_released_at = story_frag
-
-      event = Icalendar::Event.new
-      event.dtstart = published_released_at
-      event.summary = "#{title}: #{story_title}"
-      cal.add_event(event)
-    end
-    cal
-  end
-
   def default_image
     @default_image ||= images.profile
   end
