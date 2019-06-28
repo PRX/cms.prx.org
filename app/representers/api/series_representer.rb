@@ -14,7 +14,7 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   alternate_link
 
   def calendar_ics_url
-    api_series_calendar_path(represented, format: :ics)
+    api_series_calendar_url(represented, format: :ics)
   end
 
   link :stories do
