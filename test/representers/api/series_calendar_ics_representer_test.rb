@@ -15,7 +15,11 @@ describe Api::SeriesCalendarICSRepresenter do
   end
 
   it 'use representer to create an ics representation' do
-    FactoryGirl.create(:story, title: 'foobar', series: series, published_at: nil, released_at: Time.parse('2019-01-01T00:00:00Z'))
+    FactoryGirl.create(:story,
+                       title: 'foobar',
+                       series: series,
+                       published_at: nil,
+                       released_at: Time.parse('2019-01-01T00:00:00Z'))
     ics_repr.must_match /20190101T000000/
     ics_repr.must_match /foobar/
   end
