@@ -102,4 +102,10 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         item_decorator: Api::PodcastImportRepresenter,
         per: :all,
         zoom: false
+
+  link :calendar do
+    {
+      href: api_series_calendar_path(represented, format: :ics)
+    } if represented.id
+  end
 end
