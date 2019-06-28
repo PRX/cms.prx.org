@@ -9,7 +9,7 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   property :created_at, writeable: false
   property :updated_at, writeable: false
   property :app_version, writeable: false
-  property :calendar_ics_url, exec_context: :decorator
+  property :calendar_ics_url, writeable: false, exec_context: :decorator
 
   alternate_link
 
