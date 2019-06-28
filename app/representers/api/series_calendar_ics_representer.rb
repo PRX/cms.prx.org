@@ -6,9 +6,10 @@ class Api::SeriesCalendarICSRepresenter < Representable::Decorator
   def calendar
     cal = Icalendar::Calendar.new
 
-    represented.stories.
+    represented.
+      stories.
       public_calendar_stories.
-      order("pieces_published_released_at ASC").
+      order('pieces_published_released_at ASC').
       pluck('pieces.title, COALESCE(published_at, released_at) AS pieces_published_released_at').
       each do |story_frag|
       story_title, published_released_at = story_frag
