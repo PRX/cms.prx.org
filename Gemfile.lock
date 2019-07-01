@@ -56,7 +56,7 @@ GEM
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
       rack (>= 0.9.0)
-    bindata (2.4.3)
+    bindata (2.4.4)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.3)
@@ -92,7 +92,7 @@ GEM
       simplecov
       url
     coderay (1.1.1)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.5)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
@@ -367,8 +367,8 @@ GEM
     paranoia (2.2.0)
       activerecord (>= 4.0, < 5.1)
     pg (0.21.0)
-    prx_auth-rails (0.1.0)
-      rack-prx_auth (~> 0.1.0)
+    prx_auth-rails (0.2.0)
+      rack-prx_auth (~> 0.2.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -384,10 +384,10 @@ GEM
       railties (>= 3.1, < 5.0)
     rack (1.6.11)
     rack-cors (1.0.2)
-    rack-prx_auth (0.1.0)
-      json (~> 1.8, >= 1.8.1)
+    rack-prx_auth (0.2.1)
+      json (>= 1.8.1)
       json-jwt (~> 1.9.4)
-      rack (~> 1.5, >= 1.5.2)
+      rack (>= 1.5.2)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.10)
@@ -559,13 +559,13 @@ DEPENDENCIES
   oj_mimic_json
   paranoia (~> 2.0)
   pg (~> 0.19)
-  prx_auth-rails (~> 0.1.0)
+  prx_auth-rails (~> 0.2.0)
   pry-byebug (~> 3.4.1)
   puma
   pundit
   quiet_assets
   rack-cors
-  rack-prx_auth (~> 0.1.0)
+  rack-prx_auth (~> 0.2.1)
   rails (~> 4.2.10)
   rails-html-sanitizer (~> 1.0.4)
   rails_12factor
