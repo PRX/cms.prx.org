@@ -30,5 +30,6 @@ pickle-email-*.html
 .capistrano
 
 # local docker compose config
+docker-compose-shared.yml
 my-docker-compose.yml
 docker-compose.override.yml
