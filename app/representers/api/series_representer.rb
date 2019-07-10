@@ -9,13 +9,8 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
   property :created_at, writeable: false
   property :updated_at, writeable: false
   property :app_version, writeable: false
-  property :calendar_ics_url, writeable: false, exec_context: :decorator
 
   alternate_link
-
-  def calendar_ics_url
-    api_series_calendar_url(represented, format: :ics)
-  end
 
   link :stories do
     {
@@ -107,4 +102,11 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         item_decorator: Api::PodcastImportRepresenter,
         per: :all,
         zoom: false
+
+  link :calendar_ics do
+    {
+      href: api_series_calendar_path(represented, format: :ics),
+      type: 'text/calendar'
+    } if represented
+  end
 end
