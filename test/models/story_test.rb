@@ -495,11 +495,11 @@ describe Story do
       Story.public_stories.wont_include story_u
 
       episode_identifiers = Story.public_calendar_stories.map(&:third)
-      episode_identifiers.must_include "story"
-      episode_identifiers.must_include "story_r"
-      episode_identifiers.wont_include "story_n"
-      episode_identifiers.wont_include "story_s"
-      episode_identifiers.wont_include "story_u"
+      episode_identifiers.must_include 'story'
+      episode_identifiers.must_include 'story_r'
+      episode_identifiers.wont_include 'story_n'
+      episode_identifiers.wont_include 'story_s'
+      episode_identifiers.wont_include 'story_u'
     end
 
     it 'filters by published state' do
