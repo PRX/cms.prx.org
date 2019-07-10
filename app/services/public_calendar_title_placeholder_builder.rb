@@ -12,14 +12,23 @@ class PublicCalendarTitlePlaceholderBuilder
   end
 
   def generate!
-    title_parts = []
-    if season_identifier || episode_number
-      title_parts.push("Season: #{season_identifier}") if season_identifier
-      title_parts.push("Episode: #{episode_number}") if episode_number
-    else
-      title_parts.push("Publish Release At: #{published_released_at}") if published_released_at
-    end
+    @generated_title = if season_identifier || episode_number
+                         season_episode_title
+                       else
+                         publish_released_at_title
+                       end
+  end
 
-    @generated_title = title_parts.join(', ')
+  private
+
+  def season_episode_title
+    title_parts = []
+    title_parts.push("Season: #{season_identifier}") if season_identifier
+    title_parts.push("Episode: #{episode_number}") if episode_number
+    title_parts.join(', ')
+  end
+
+  def publish_released_at_title
+    "Publish Release At: #{published_released_at}"
   end
 end
