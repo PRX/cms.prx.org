@@ -69,7 +69,7 @@ class Api::SeriesController < Api::BaseController
 
   def calendar
     @series = Series.find(params.require(:series_id).to_i)
-    @series_ics = SeriesCalendarICSRepresenter.new(@series)
+    @series_ics = Api::SeriesCalendarICSRepresenter.new(@series)
 
     respond_to do |format|
       format.ics { render body: @series_ics.to_object }
