@@ -16,8 +16,8 @@ class Api::SeriesCalendarICSRepresenter < Representable::Decorator
       each do |story_frag|
       published_released_at, season_identifier, episode_identifier = story_frag
       placeholder_title = PublicCalendarTitlePlaceholderBuilder.
-                            new(published_released_at, season_identifier, episode_identifier).
-                            generate!
+                          new(published_released_at, season_identifier, episode_identifier).
+                          generate!
 
       event = Icalendar::Event.new
       event.dtstart = published_released_at
