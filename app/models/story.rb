@@ -163,7 +163,11 @@ class Story < BaseModel
     network_visible.
       series_visible.
       coalesce_published_released('ASC').
-      having('pieces_published_released_at is not null')
+      order('pieces_published_released_at ASC').
+      having('pieces_published_released_at is not null').
+      pluck("COALESCE(published_at, released_at) AS pieces_published_released_at, \
+              season_identifier, \
+              episode_identifier")
   end
 
   def self.text_search(text, params = {}, authz = nil)
