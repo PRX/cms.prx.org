@@ -16,7 +16,7 @@ describe PublicCalendarTitlePlaceholderBuilder do
 
     it 'generates a title using the published_released_at' do
       p = PublicCalendarTitlePlaceholderBuilder.new(t)
-      p.generate!.must_equal("Publish Releas At: #{t.to_s}")
+      p.generate!.must_equal("Publish Release At: #{t.to_s}")
     end
 
     it 'generates a title using season_identifier' do
