@@ -67,6 +67,15 @@ class Api::SeriesController < Api::BaseController
     respond_with root_resource(@series), create_options
   end
 
+  def calendar
+    @series = Series.find(params.require(:series_id).to_i)
+    @series_ics = Api::SeriesCalendarICSRepresenter.new(@series)
+
+    respond_to do |format|
+      format.ics { render body: @series_ics.to_object }
+    end
+  end
+
   def included(relation)
     relation.includes(
       { account: [:image, :address, { opener: [:image] }] },

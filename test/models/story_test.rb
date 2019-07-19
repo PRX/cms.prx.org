@@ -479,18 +479,27 @@ describe Story do
     end
 
     it 'returns public only stories' do
-      story = create(:story)
-      story_n = create(:story, network_only_at: Time.now)
+      story = create(:story, episode_identifier: 'story')
+      story_n = create(:story, network_only_at: Time.now, episode_identifier: 'story_n')
       series = create(:series,
                       subscription_approval_status: Series::SUBSCRIPTION_PRX_APPROVED,
                       subscriber_only_at: Time.now)
-      story_s = create(:story, series_id: series.id)
-      story_u = create(:story, published_at: nil)
+      story_s = create(:story, series_id: series.id, episode_identifier: 'story_s')
+      story_u = create(:story, published_at: nil, episode_identifier: 'story_u')
+      story_r = create(:story, published_at: nil, released_at: Time.now, episode_identifier: 'story_r')
 
       Story.public_stories.must_include story
+      Story.public_stories.wont_include story_r
       Story.public_stories.wont_include story_n
       Story.public_stories.wont_include story_s
       Story.public_stories.wont_include story_u
+
+      episode_identifiers = Story.public_calendar_stories.map(&:third)
+      episode_identifiers.must_include 'story'
+      episode_identifiers.must_include 'story_r'
+      episode_identifiers.wont_include 'story_n'
+      episode_identifiers.wont_include 'story_s'
+      episode_identifiers.wont_include 'story_u'
     end
 
     it 'filters by published state' do

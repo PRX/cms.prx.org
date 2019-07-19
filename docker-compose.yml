@@ -23,6 +23,9 @@ services:
     environment:
       VIRTUAL_HOST: cms.prx.docker
       LOCAL_ENV: "true"
+      FEEDER_DB_HOST: pg
+      FEEDER_DB_DATABASE: feeder
+      FEEDER_DB_PASSWORD: password
     networks:
       - cms-net
   worker:
@@ -58,6 +61,10 @@ services:
       - ./test/db/:/docker-entrypoint-initdb.d/
     networks:
       - cms-net
+    environment:
+      POSTGRES_USER: feeder
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: feeder
   elasticsearch:
     image: elasticsearch:6.4.3
     container_name: elasticsearch

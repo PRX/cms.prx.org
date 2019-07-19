@@ -88,6 +88,9 @@ gem 'elasticsearch-dsl'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
+# production calendar
+gem 'icalendar', '~> 2.5.0'
+
 # dev-only
 group :development do
   gem 'better_errors'

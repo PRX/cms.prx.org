@@ -30,6 +30,7 @@ PRX::Application.routes.draw do
       end
 
       resources :series, except: [:new, :edit] do
+        get 'calendar'
         get 'search', on: :collection
         resources :series_images, path: 'images', except: [:new, :edit]
         resources :stories, only: [:index, :create] do
