@@ -16,6 +16,10 @@ class StoryQueryBuilder < ESQueryBuilder
     !apply_authz? && has_network_query?
   end
 
+  def apply_state_filter?
+    params && params[:state].present?
+  end
+
   def has_network_query?
     structured_query.present? && structured_query.value_for(:network_id)
   end
@@ -30,6 +34,9 @@ class StoryQueryBuilder < ESQueryBuilder
     bools = []
     if apply_published_filter?
       bools.push published_filter
+    end
+    if apply_state_filter?
+      bools.push state_filter
     end
     if apply_authz?
       bools.push authz_filter
@@ -47,6 +54,42 @@ class StoryQueryBuilder < ESQueryBuilder
     searchdsl = self
     Filter.new do
       range published_at: { lte: 'now', _name: :published }
+    end
+  end
+
+  def state_filter
+    searchdsl = self
+    if params[:state] === 'published'
+      Filter.new do
+        range published_at: { lte: 'now' }
+      end
+    elsif params[:state] === 'unpublished'
+      Filter.new do
+        bool do
+          should do
+            bool do
+              must_not do
+                exists field: 'published_at'
+              end
+            end
+          end
+          should do
+            range published_at: { gt: 'now' }
+          end
+        end
+      end
+    elsif params[:state] === 'scheduled'
+      Filter.new do
+        range published_at: { gt: 'now' }
+      end
+    else params[:state] === 'draft'
+      Filter.new do
+        bool do
+          must_not do
+            exists field: 'published_at'
+          end
+        end
+      end
     end
   end
 

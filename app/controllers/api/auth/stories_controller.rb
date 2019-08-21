@@ -50,6 +50,8 @@ class Api::Auth::StoriesController < Api::StoriesController
   def filter_by_state(resources, state)
     if state == 'published'
       resources.published
+    elsif state == 'unpublished'
+      resources.unpublished
     elsif state == 'scheduled'
       resources.scheduled
     elsif state == 'draft'
@@ -82,17 +84,13 @@ class Api::Auth::StoriesController < Api::StoriesController
   def search_params
     sparams = super
     sparams[:fq]['series_id'] = 'NULL' if filters.noseries?
-    sparams[:fq]['published_at'] = search_by_state(filters.state) if filters.state?
+    sparams[:state] = search_by_state(filters.state) if filters.state?
     sparams
   end
 
   def search_by_state(state)
-    if state == 'published'
-      '[* TO now]'
-    elsif state == 'scheduled'
-      '{now TO *}'
-    elsif state == 'draft'
-      'NULL'
+    if %w(published unpublished scheduled draft).include?(state)
+      state
     else
       raise ApiFiltering::BadFilterValueError.new("Invalid state filter: #{state}")
     end
