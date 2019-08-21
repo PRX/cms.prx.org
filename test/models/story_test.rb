@@ -505,16 +505,19 @@ describe Story do
     it 'filters by published state' do
       story = create(:story)
       Story.where(id: story.id).published.must_include story
+      Story.where(id: story.id).unpublished.wont_include story
       Story.where(id: story.id).scheduled.wont_include story
       Story.where(id: story.id).draft.wont_include story
 
       story.update_attributes(published_at: Time.now + 1.hour)
       Story.where(id: story.id).published.wont_include story
+      Story.where(id: story.id).unpublished.must_include story
       Story.where(id: story.id).scheduled.must_include story
       Story.where(id: story.id).draft.wont_include story
 
       story.update_attributes(published_at: nil)
       Story.where(id: story.id).published.wont_include story
+      Story.where(id: story.id).unpublished.must_include story
       Story.where(id: story.id).scheduled.wont_include story
       Story.where(id: story.id).draft.must_include story
     end
