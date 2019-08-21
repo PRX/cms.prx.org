@@ -58,7 +58,6 @@ class StoryQueryBuilder < ESQueryBuilder
   end
 
   def state_filter
-    searchdsl = self
     if params[:state] === 'published'
       Filter.new do
         range published_at: { lte: 'now' }
@@ -82,7 +81,7 @@ class StoryQueryBuilder < ESQueryBuilder
       Filter.new do
         range published_at: { gt: 'now' }
       end
-    else params[:state] === 'draft'
+    elsif params[:state] === 'draft'
       Filter.new do
         bool do
           must_not do
