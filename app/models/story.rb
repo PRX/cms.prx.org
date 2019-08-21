@@ -140,6 +140,10 @@ class Story < BaseModel
   scope :published_released_after, ->(time) {
     where('published_at >= ? OR (published_at IS NULL AND released_at >= ?)', time, time)
   }
+  scope :published_released_after_null, ->(time) {
+    where('published_at >= ? OR (published_at IS NULL AND released_at >= ?) ' +
+          'OR (published_at IS NULL and released_at IS NULL)', time, time)
+  }
 
   scope :series_visible, -> {
     joins('LEFT OUTER JOIN `series` ON `pieces`.`series_id` = `series`.`id`').
