@@ -26,11 +26,10 @@ class Api::Auth::StoriesController < Api::StoriesController
       arel = arel.coalesce_published_released(sorts[coalesce_sort].values.first)
       sorts.delete_at(coalesce_sort)
     end
-    if pub_sort = (sorts || []).find_index { |s| s.keys.first == 'published_at' }
+    if pub_sort = (sorts || []).find_index { |s| s.try(:keys).try(:first) == 'published_at' }
       sorts.insert(pub_sort, 'ISNULL(`pieces`.`published_at`) DESC')
-    end
-    if pub_sort = (sorts || []).find_index { |s| s.keys.first == 'released_at' }
-      sorts.insert(pub_sort, 'ISNULL(`pieces`.`released_at`) DESC')
+    elsif rel_sort = (sorts || []).find_index { |s| s.try(:keys).try(:first) == 'released_at' }
+      sorts.insert(rel_sort, 'ISNULL(`pieces`.`released_at`) DESC')
     end
     super
   end
