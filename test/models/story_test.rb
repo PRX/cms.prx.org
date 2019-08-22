@@ -335,6 +335,18 @@ describe Story do
       stories.pluck(:short_description).must_equal ['1', '2']
     end
 
+    it 'filters stories published or released after or null' do
+      now = Time.parse('2019-03-22T00:00:10Z')
+      title = 'filter-published-released-null'
+      create(:unpublished_story, title: title, short_description: '0')
+      create(:unpublished_story, title: title, short_description: '1', released_at: now)
+      create(:story, title: title, short_description: '2', published_at: now)
+      create(:story, title: title, short_description: '3', published_at: now - 1.second)
+
+      stories = Story.where(title: title).published_released_after_null(now)
+      stories.pluck(:short_description).must_equal ['0', '1', '2']
+    end
+
     it 'wont publish when already published' do
       lambda do
         story.publish!
@@ -505,16 +517,19 @@ describe Story do
     it 'filters by published state' do
       story = create(:story)
       Story.where(id: story.id).published.must_include story
+      Story.where(id: story.id).unpublished.wont_include story
       Story.where(id: story.id).scheduled.wont_include story
       Story.where(id: story.id).draft.wont_include story
 
       story.update_attributes(published_at: Time.now + 1.hour)
       Story.where(id: story.id).published.wont_include story
+      Story.where(id: story.id).unpublished.must_include story
       Story.where(id: story.id).scheduled.must_include story
       Story.where(id: story.id).draft.wont_include story
 
       story.update_attributes(published_at: nil)
       Story.where(id: story.id).published.wont_include story
+      Story.where(id: story.id).unpublished.must_include story
       Story.where(id: story.id).scheduled.wont_include story
       Story.where(id: story.id).draft.must_include story
     end

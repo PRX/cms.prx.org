@@ -92,6 +92,16 @@ describe Api::Auth::StoriesController do
       assigns[:stories].wont_include unpublished_story
     end
 
+    it 'filters unpublished stories' do
+      published_story.must_be :published?
+      scheduled_story.must_be :scheduled?
+      unpublished_story.must_be :draft?
+      get(:index, api_version: 'v1', format: 'json', filters: 'state=unpublished')
+      assigns[:stories].wont_include published_story
+      assigns[:stories].must_include scheduled_story
+      assigns[:stories].must_include unpublished_story
+    end
+
     it 'filters scheduled stories' do
       published_story.must_be :published?
       scheduled_story.must_be :scheduled?
@@ -201,14 +211,48 @@ describe Api::Auth::StoriesController do
         stories.wont_include v3_story
       end
 
-      it 'filters published state stories' do
-        published_story.must_be :published?
-        unpublished_story.must_be :draft?
-        get(:search, api_version: 'v1', format: 'json', filters: 'state=published', q: search_term)
-        assert_response :success
-        assert_not_nil assigns[:stories]
-        stories.must_include published_story
-        stories.wont_include unpublished_story
+      describe 'state filter' do
+        before(:all) do
+          published_story.reindex(true)
+          scheduled_story.reindex(true)
+          unpublished_story.reindex(true)
+        end
+
+        it 'filters published state stories' do
+          get(:search, api_version: 'v1', filters: 'state=published', q: search_term)
+          assert_response :success
+          assert_not_nil assigns[:stories]
+          stories.must_include published_story
+          stories.wont_include scheduled_story
+          stories.wont_include unpublished_story
+        end
+
+        it 'filters unpublished state stories' do
+          get(:search, api_version: 'v1', filters: 'state=unpublished', q: search_term)
+          assert_response :success
+          assert_not_nil assigns[:stories]
+          stories.wont_include published_story
+          stories.must_include scheduled_story
+          stories.must_include unpublished_story
+        end
+
+        it 'filters scheduled state stories' do
+          get(:search, api_version: 'v1', filters: 'state=scheduled', q: search_term)
+          assert_response :success
+          assert_not_nil assigns[:stories]
+          stories.wont_include published_story
+          stories.must_include scheduled_story
+          stories.wont_include unpublished_story
+        end
+
+        it 'filters draft state stories' do
+          get(:search, api_version: 'v1', filters: 'state=draft', q: search_term)
+          assert_response :success
+          assert_not_nil assigns[:stories]
+          stories.wont_include published_story
+          stories.wont_include scheduled_story
+          stories.must_include unpublished_story
+        end
       end
 
       it 'applies multiple filters' do

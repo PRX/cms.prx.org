@@ -123,6 +123,7 @@ class Story < BaseModel
       select('pieces.*, series.subscription_approval_status, series.subscriber_only_at')
   }
   scope :published, -> { where('`published_at` <= ?', Time.now) }
+  scope :unpublished, -> { where('`published_at` IS NULL OR `published_at` > ?', Time.now) }
   scope :scheduled, -> { where('`published_at` > ?', Time.now) }
   scope :draft, -> { where('`published_at` IS NULL') }
   scope :unseries, -> { where('`series_id` IS NULL') }
@@ -138,6 +139,10 @@ class Story < BaseModel
   }
   scope :published_released_after, ->(time) {
     where('published_at >= ? OR (published_at IS NULL AND released_at >= ?)', time, time)
+  }
+  scope :published_released_after_null, ->(time) {
+    where('published_at >= ? OR (published_at IS NULL AND released_at >= ?) ' +
+          'OR (published_at IS NULL and released_at IS NULL)', time, time)
   }
 
   scope :series_visible, -> {

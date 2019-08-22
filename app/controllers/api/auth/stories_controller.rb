@@ -9,11 +9,11 @@ class Api::Auth::StoriesController < Api::StoriesController
   filter_resources_by :account_id, :series_id, :network_id
 
   filter_params :highlighted, :purchased, :v4, :text, :noseries, :state,
-                before: :time, after: :time
+                before: :time, after: :time, afternull: :time
 
   sort_params default: { updated_at: :desc },
-              allowed: [:id, :created_at, :updated_at, :published_at, :title,
-                        :episode_number, :position, :published_released_at]
+              allowed: [:id, :created_at, :updated_at, :published_at, :released_at,
+                        :title, :episode_number, :position, :published_released_at]
 
   announce_actions :create, :update, :destroy, :publish, :unpublish
 
@@ -26,8 +26,10 @@ class Api::Auth::StoriesController < Api::StoriesController
       arel = arel.coalesce_published_released(sorts[coalesce_sort].values.first)
       sorts.delete_at(coalesce_sort)
     end
-    if pub_sort = (sorts || []).find_index { |s| s.keys.first == 'published_at' }
+    if pub_sort = (sorts || []).find_index { |s| s.try(:keys).try(:first) == 'published_at' }
       sorts.insert(pub_sort, 'ISNULL(`pieces`.`published_at`) DESC')
+    elsif rel_sort = (sorts || []).find_index { |s| s.try(:keys).try(:first) == 'released_at' }
+      sorts.insert(rel_sort, 'ISNULL(`pieces`.`released_at`) DESC')
     end
     super
   end
@@ -50,6 +52,8 @@ class Api::Auth::StoriesController < Api::StoriesController
   def filter_by_state(resources, state)
     if state == 'published'
       resources.published
+    elsif state == 'unpublished'
+      resources.unpublished
     elsif state == 'scheduled'
       resources.scheduled
     elsif state == 'draft'
@@ -82,17 +86,13 @@ class Api::Auth::StoriesController < Api::StoriesController
   def search_params
     sparams = super
     sparams[:fq]['series_id'] = 'NULL' if filters.noseries?
-    sparams[:fq]['published_at'] = search_by_state(filters.state) if filters.state?
+    sparams[:state] = search_by_state(filters.state) if filters.state?
     sparams
   end
 
   def search_by_state(state)
-    if state == 'published'
-      '[* TO now]'
-    elsif state == 'scheduled'
-      '{now TO *}'
-    elsif state == 'draft'
-      'NULL'
+    if %w(published unpublished scheduled draft).include?(state)
+      state
     else
       raise ApiFiltering::BadFilterValueError.new("Invalid state filter: #{state}")
     end

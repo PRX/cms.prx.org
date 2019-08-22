@@ -7,7 +7,7 @@ class Api::StoriesController < Api::BaseController
 
   filter_resources_by :series_id, :account_id, :network_id
 
-  filter_params :highlighted, :purchased, :v4, :text, before: :time, after: :time
+  filter_params :highlighted, :purchased, :v4, :text, before: :time, after: :time, afternull: :time
 
   sort_params default: { published_at: :desc, updated_at: :desc },
               allowed: [:id, :created_at, :updated_at, :published_at, :title,
@@ -114,6 +114,7 @@ class Api::StoriesController < Api::BaseController
     resources = resources.v4 if filters.v4?
     resources = resources.match_text(filters.text) if filters.text?
     resources = resources.published_released_after(filters.after) if filters.after?
+    resources = resources.published_released_after_null(filters.afternull) if filters.afternull?
     resources = resources.published_released_before(filters.before) if filters.before?
     if highlighted?
       resources
