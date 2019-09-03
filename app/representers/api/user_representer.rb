@@ -9,7 +9,7 @@ class Api::UserRepresenter < Api::BaseRepresenter
   link :default_account do
     {
       href: api_account_path(represented.default_account)
-    }
+    } if represented.id && represented.default_account
   end
   embed :default_account, decorator: Api::Min::AccountRepresenter, zoom: false
 
