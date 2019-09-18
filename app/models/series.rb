@@ -60,7 +60,7 @@ class Series < BaseModel
   has_many :podcast_imports
 
   before_validation :set_app_version, on: :create
-  after_save :update_account_for_stories, on: :update
+  after_save :update_account_for_relations, on: :update
 
   event_attribute :subscriber_only_at
 
@@ -196,12 +196,13 @@ class Series < BaseModel
     self.deleted_at = DateTime.now
   end
 
-  def update_account_for_stories
+  def update_account_for_relations
     if account_id_changed?
       Series.transaction do
         stories.update_all(account_id: account_id)
         audio_files.with_deleted.unscope(where: :promos).
           reorder('').update_all(account_id: account_id)
+        podcast_imports.update_all(account_id: account_id)
       end
       stories.all.each(&:index_for_search)
     end
