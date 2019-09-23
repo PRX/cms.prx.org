@@ -32,6 +32,15 @@ describe Series do
         af.account_id.must_equal 123
       end
     end
+
+    it 'changes account_id for podcast_imports when own account changes' do
+      user = create(:user)
+      PodcastImport.create(user: user, account: series.account, url: 'http://feeds.prx.org/transistor_stem')
+      series.update_attributes!(account_id: 123)
+      series.podcast_imports.all.each do |pi|
+        pi.account_id.must_equal 123
+      end
+    end
   end
 
   describe 'deleting' do
