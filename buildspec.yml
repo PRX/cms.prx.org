@@ -5,6 +5,9 @@ env:
     PRX_ECR_REPOSITORY: "cms.prx.org"
     PRX_ECR_CONFIG_PARAMETERS: "CmsEcrImageTag"
 phases:
+  install:
+    runtime-versions:
+      docker: 18
   build:
     commands:
       - "cd $(ls -d */|head -n 1)"
