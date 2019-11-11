@@ -1,8 +1,11 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.10'
+gem 'rails', '~> 4.2.11'
 gem 'rails-html-sanitizer', '~> 1.0.4'
+
+# TODO: sprockets 4.0.0 needs ruby >= 2.5.0
+gem 'sprockets', '~> 3.7.2'
 
 # JWS
 gem 'prx_auth-rails', '~> 0.2.0'
@@ -73,14 +76,10 @@ gem 'shoryuken', '~> 2.0.11'
 gem 'dotenv-rails'
 
 # scripting
-gem 'capistrano', '~> 3.2'
-gem 'capistrano-rails', '~> 1.1'
 gem 'highline'
 gem 'rake'
-gem 'slackistrano', require: false
 
 # monitoring
-gem 'capistrano-newrelic'
 gem 'newrelic_rpm'
 
 # elasticsearch
