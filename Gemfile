@@ -15,7 +15,6 @@ gem 'rack-prx_auth', '~> 0.2.1'
 ## Model
 # Use mysql as the database for Active Record
 gem 'mysql2'
-gem 'pg', '~> 0.19'
 
 # ActiveRecord model additions
 gem 'acts_as_list'

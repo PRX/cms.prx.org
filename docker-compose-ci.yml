@@ -4,7 +4,6 @@ services:
     build: .
     links:
       - db
-      - pg
       - elasticsearch
     ports:
       - 3000:3000
@@ -18,9 +17,6 @@ services:
       DB_ENV_MYSQL_PASSWORD: password
       DB_PORT_3306_TCP_ADDR: db
       DB_PORT_3306_TCP_PORT: "3306"
-      FEEDER_DB_HOST: pg
-      FEEDER_DB_DATABASE: feeder
-      FEEDER_DB_PASSWORD: password
       ELASTICSEARCH_URL: http://elasticsearch:9200
   db:
     image: mysql:8.0.2
@@ -30,18 +26,6 @@ services:
     ports:
       - 3306:3306
     command: mysqld --log_error_verbosity=1 --default-authentication-plugin=mysql_native_password
-  pg:
-    image: postgres
-    env_file:
-      - env-example
-    environment:
-      POSTGRES_USER: feeder
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: feeder
-    ports:
-      - 5432:5432
-    volumes:
-      - ./test/db/:/docker-entrypoint-initdb.d/
   elasticsearch:
     image: elasticsearch:6.4.3
     container_name: elasticsearch
