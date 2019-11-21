@@ -5,7 +5,7 @@ LABEL org.prx.app="yes"
 
 RUN apk --no-cache add ca-certificates ruby ruby-irb ruby-json ruby-rake \
     ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev mysql-client \
-    linux-headers libc-dev zlib libxml2 libxslt libffi less git groff postgresql-client \
+    linux-headers libc-dev zlib libxml2 libxslt libffi less git groff \
     python py-pip py-setuptools && \
     pip --no-cache-dir install awscli
 
@@ -25,7 +25,7 @@ ADD Gemfile.lock ./
 RUN gem install bundler
 
 RUN apk --update add --virtual build-dependencies build-base curl-dev libressl-dev \
-    zlib-dev libxml2-dev libxslt-dev libffi-dev libgcrypt-dev postgresql-dev && \
+    zlib-dev libxml2-dev libxslt-dev libffi-dev libgcrypt-dev && \
     bundle config --global build.nokogiri  "--use-system-libraries" && \
     bundle config --global build.nokogumbo "--use-system-libraries" && \
     bundle config --global build.ffi  "--use-system-libraries" && \
