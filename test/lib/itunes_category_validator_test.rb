@@ -9,8 +9,9 @@ describe ITunesCategoryValidator do
 
   it 'checks subcategory' do
     ITunesCategoryValidator.subcategory?('Design').must_equal 'Arts'
-    ITunesCategoryValidator.subcategory?('Podcasting', 'Technology').must_equal 'Technology'
+    ITunesCategoryValidator.subcategory?('Podcasting', 'Technology').must_equal nil
     ITunesCategoryValidator.subcategory?('Design', 'Comedy').must_equal nil
+    ITunesCategoryValidator.subcategory?('Books', 'Arts').must_equal 'Arts'
     ITunesCategoryValidator.subcategory?('Paper').must_equal nil
   end
 end
