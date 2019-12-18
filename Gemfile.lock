@@ -104,7 +104,7 @@ GEM
     erubis (2.7.0)
     event_attribute (1.0.1)
       activesupport (>= 3.0.0)
-    excon (0.54.0)
+    excon (0.71.0)
     factory_girl (4.7.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.7.0)
