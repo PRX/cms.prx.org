@@ -12,8 +12,8 @@ describe Api::Auth::StoriesController do
   let (:network) { create(:network, account: account) }
   let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now) }
   let (:v3_story) { create(:story_v3, account: account) }
-  let (:released_story) { create(:story, account: account, released_at: Time.now + 1.day) }
-  let (:scheduled_story) { create(:story, account: account, published_at: Time.now + 1.day) }
+  let (:released_story) { create(:unpublished_story, account: account, released_at: Time.now + 1.day) }
+  let (:scheduled_story) { create(:unpublished_story, account: account, published_at: Time.now + 1.day) }
 
   before do
     account.stories.each { |s| s }
