@@ -292,11 +292,43 @@ describe Story do
       story.published_at.must_equal release_date
     end
 
+    it 'does not set the publish date on an unpublished story' do
+      story.unpublish!
+      story.published_at.must_be_nil
+      story.released_at.must_be_nil
+
+      story.update_attributes(released_at: 1.day.ago)
+      story.published_at.must_be_nil
+      story.released_at.wont_be_nil
+    end
+
+    it 'changes publish date when changing release date' do
+      time = 100.days.ago
+      story.update_attributes(released_at: time)
+      story.published_at.must_equal time
+    end
+
     it 'removes future publish date when release date is removed' do
       story.update_attributes(published_at: 1.week.from_now, released_at: 1.week.from_now)
       story.published_at.wont_be_nil
       story.update_attributes(released_at: nil)
       story.published_at.must_be_nil
+    end
+
+    it 'refuses to remove past publish date when release date is removed' do
+      story.update_attributes(published_at: 1.week.ago, released_at: 1.week.ago)
+      story.published_at.wont_be_nil
+      story.update_attributes(released_at: nil)
+      story.wont_be :valid?
+      story.errors[:released_at].must_include 'already published - cannot unset scheduled date'
+    end
+
+    it 'refuses to set a past publish date into the future' do
+      story.update_attributes(published_at: 1.week.ago, released_at: 1.week.ago)
+      story.published_at.wont_be_nil
+      story.update_attributes(released_at: 1.week.from_now)
+      story.wont_be :valid?
+      story.errors[:released_at].must_include 'already published - cannot schedule for future publishing'
     end
 
     it 'orders coalesce publish and release dates' do
