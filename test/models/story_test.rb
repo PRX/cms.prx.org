@@ -320,7 +320,7 @@ describe Story do
       story.published_at.wont_be_nil
       story.update_attributes(released_at: nil)
       story.wont_be :valid?
-      story.errors[:released_at].must_include 'already published - cannot unset scheduled date'
+      story.errors[:released_at].must_include 'cannot be unset - already published'
     end
 
     it 'refuses to set a past publish date into the future' do
@@ -328,7 +328,7 @@ describe Story do
       story.published_at.wont_be_nil
       story.update_attributes(released_at: 1.week.from_now)
       story.wont_be :valid?
-      story.errors[:released_at].must_include 'already published - cannot schedule for future publishing'
+      story.errors[:released_at].must_include 'cannot be set to future - already published'
     end
 
     it 'orders coalesce publish and release dates' do

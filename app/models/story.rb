@@ -351,9 +351,9 @@ class Story < BaseModel
   def update_published_to_released
     if published_at? && released_at_changed?
       if published? && released_at.nil?
-        errors.add(:released_at, 'already published - cannot unset scheduled date')
+        errors.add(:released_at, 'cannot be unset - already published')
       elsif published? && (released_at > Time.now)
-        errors.add(:released_at, 'already published - cannot schedule for future publishing')
+        errors.add(:released_at, 'cannot be set to future - already published')
       else
         self.published_at = released_at
       end
