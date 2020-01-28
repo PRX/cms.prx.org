@@ -13,7 +13,7 @@ describe Api::Auth::StoriesController do
   let (:network_story) { create(:story, network_id: network.id, network_only_at: Time.now) }
   let (:v3_story) { create(:story_v3, account: account) }
 
-  let (:tomorrow) { Time.now + 1.day.from.now }
+  let (:tomorrow) { Time.now + 1.day }
   let (:released_story) { create(:unpublished_story, account: account, released_at: tomorrow) }
   let (:scheduled_story) { create(:unpublished_story, account: account, published_at: tomorrow) }
 
