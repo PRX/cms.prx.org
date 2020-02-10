@@ -59,9 +59,7 @@ FactoryGirl.define do
     end
 
     factory :unpublished_story do
-      after(:create, :stub) do |story, _evaluator|
-        story.update_attributes(published_at: nil)
-      end
+      published_at nil
     end
 
   end

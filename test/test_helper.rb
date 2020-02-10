@@ -37,7 +37,7 @@ def use_webmock?
   ENV['USE_WEBMOCK'].nil? || (ENV['USE_WEBMOCK'] == 'true')
 end
 WebMock.allow_net_connect! unless use_webmock?
-WebMock.disable_net_connect!(allow: /elasticsearch/) if use_webmock?
+WebMock.disable_net_connect!(allow: /elasticsearch|9200/) if use_webmock?
 
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 

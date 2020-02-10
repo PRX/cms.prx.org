@@ -349,10 +349,14 @@ class Story < BaseModel
   # If story is published and user wants to update the published_at value
   # OR if story is published for future release and user wants to undo that
   def update_published_to_released
-    canceling_future_release = released_at.nil? && published_at && published_at > DateTime.now
-    updating_release = !released_at.nil?
-    if published_at && released_at_changed? && (canceling_future_release || updating_release)
+    if published_at? && released_at_changed?
+      if published? && released_at.nil?
+        errors.add(:released_at, 'cannot be unset - already published')
+      elsif published? && (released_at > Time.now)
+        errors.add(:released_at, 'cannot be set to future - already published')
+      else
         self.published_at = released_at
+      end
     end
   end
 
