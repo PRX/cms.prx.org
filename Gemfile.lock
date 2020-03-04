@@ -334,6 +334,7 @@ GEM
     mysql2 (0.4.10)
     nenv (0.3.0)
     newrelic_rpm (5.2.0.345)
+    nio4r (2.5.2)
     nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     nokogumbo (1.5.0)
@@ -358,7 +359,8 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (2.0.4)
-    puma (3.12.3)
+    puma (4.3.3)
+      nio4r (~> 2.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     quiet_assets (1.1.0)
@@ -564,4 +566,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.16.6
+   1.17.3
