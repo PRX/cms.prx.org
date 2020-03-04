@@ -27,14 +27,14 @@ describe Api::SeriesImagesController do
   end
 
   it 'triggers image transform! on update' do
-    image_hash = { credit: 'second blah credit' }
+    image_opt = { credit: 'second blah credit' }
     mock_image = Minitest::Mock.new series_image
 
     mock_image.expect :transform!, true
-    
+
     @controller.stub :authorize, true do
       @controller.stub :update_resource, mock_image do
-        put(:update, image_hash.to_json, api_request_opts(series_id: series.id, id: series_image.id))
+        put(:update, image_opt.to_json, api_request_opts(series_id: series.id, id: series_image.id))
       end
     end
 
@@ -43,13 +43,11 @@ describe Api::SeriesImagesController do
 
   it 'triggers image transform! on create' do
 
-    original = series.default_image
-
     image_hash = {
       upload: 'http://thisisatest.com/guid1/image.gif',
       set_series_uri: api_series_url(series)
     }
-    
+
     series_image = SeriesImage.where(series_id: series.id).build
     mock_image = Minitest::Mock.new(series_image)
 

@@ -37,9 +37,9 @@ describe Api::StoryImagesController do
   it 'triggers image transform! on update' do
     image_hash = { credit: 'credit' }
     mock_image = Minitest::Mock.new story_image
-    
+
     mock_image.expect :transform!, true
-    
+
     @controller.stub :authorize, true do
       @controller.stub :update_resource, mock_image do
         put(:update, image_hash.to_json, api_request_opts(story_id: account.id, id: story_image.id))
@@ -65,7 +65,7 @@ describe Api::StoryImagesController do
       upload: 'http://thisisatest.com/guid1/image.gif',
       set_series_uri: api_story_url(story)
     }
-    
+
     story_image = StoryImage.where(story: story).build
     mock_image = Minitest::Mock.new(story_image)
 

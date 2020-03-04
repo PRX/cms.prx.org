@@ -12,5 +12,4 @@ class Api::AccountImagesController < Api::BaseImagesController
     announce('image', 'destroy', Api::Msg::ImageRepresenter.new(original).to_json)
   end
 
-
 end
