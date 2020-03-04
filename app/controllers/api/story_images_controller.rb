@@ -1,11 +1,8 @@
 # encoding: utf-8
 
-class Api::StoryImagesController < Api::BaseController
+class Api::StoryImagesController < Api::BaseImagesController
   api_versions :v1
+  represent_with Api::ImageRepresenter
 
   filter_resources_by :story_id
-
-  announce_actions decorator: Api::Msg::ImageRepresenter, subject: :image
-
-  represent_with Api::ImageRepresenter
 end

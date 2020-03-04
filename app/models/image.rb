@@ -35,4 +35,8 @@ class Image < BaseModel
   def self.policy_class
     ImagePolicy
   end
+
+  def transform!
+    true
+  end
 end

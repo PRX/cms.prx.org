@@ -34,6 +34,21 @@ describe Api::StoryImagesController do
     StoryImage.find(story_image.id).credit.must_equal('blah credit')
   end
 
+  it 'triggers image transform! on update' do
+    image_hash = { credit: 'credit' }
+    mock_image = Minitest::Mock.new story_image
+    
+    mock_image.expect :transform!, true
+    
+    @controller.stub :authorize, true do
+      @controller.stub :update_resource, mock_image do
+        put(:update, image_hash.to_json, api_request_opts(story_id: account.id, id: story_image.id))
+      end
+    end
+
+    mock_image.verify
+  end
+
   it 'should create' do
     image_hash = {
       upload: 'http://thisisatest.com/guid1/image.gif',
@@ -43,5 +58,25 @@ describe Api::StoryImagesController do
     assert_response :success
     last_message['subject'].to_s.must_equal 'image'
     last_message['action'].to_s.must_equal 'create'
+  end
+
+  it 'triggers image transform! on create' do
+    image_hash = {
+      upload: 'http://thisisatest.com/guid1/image.gif',
+      set_series_uri: api_story_url(story)
+    }
+    
+    story_image = StoryImage.where(story: story).build
+    mock_image = Minitest::Mock.new(story_image)
+
+    mock_image.expect :transform!, true
+
+    @controller.stub :authorize, true do
+      @controller.stub :create_resource, mock_image do
+        post(:create, image_hash.to_json, api_request_opts(story_id: story.id))
+      end
+    end
+
+    mock_image.verify
   end
 end
