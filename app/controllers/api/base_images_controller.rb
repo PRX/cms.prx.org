@@ -13,4 +13,9 @@ class Api::BaseImagesController < Api::BaseController
     image.transform!
   end
 
+  def after_destroy_resource(image)
+    super
+    image.remove!
+  end
+
 end

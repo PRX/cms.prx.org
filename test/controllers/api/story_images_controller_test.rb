@@ -79,4 +79,18 @@ describe Api::StoryImagesController do
 
     mock_image.verify
   end
+
+  it 'triggers image remove! on destroy' do
+    mock_image = Minitest::Mock.new(story_image)
+
+    mock_image.expect :remove!, true
+
+    @controller.stub :authorize, true do
+      @controller.stub :destroy_resource, mock_image do
+        delete :destroy, api_request_opts(story_id: story.id, id: story_image.id)
+      end
+    end
+
+    mock_image.verify
+  end
 end

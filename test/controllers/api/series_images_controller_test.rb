@@ -103,4 +103,19 @@ describe Api::SeriesImagesController do
     -> { SeriesImage.find(series_image.id) }.must_raise(ActiveRecord::RecordNotFound)
     series_update.wont_equal series.reload.updated_at
   end
+
+  it 'triggers image remove! on destroy' do
+    mock_image = Minitest::Mock.new(series_image)
+
+    mock_image.expect :remove!, true
+
+    @controller.stub :authorize, true do
+      @controller.stub :destroy_resource, mock_image do
+        delete :destroy, api_request_opts(series_id: series.id, id: series_image.id)
+      end
+    end
+
+    mock_image.verify
+  end
+    
 end

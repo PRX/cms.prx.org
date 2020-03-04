@@ -12,5 +12,6 @@ class Api::UserImagesController < Api::BaseImagesController
 
   def after_original_destroyed(original)
     announce('image', 'destroy', Api::Msg::ImageRepresenter.new(original).to_json)
+    original.remove!
   end
 end

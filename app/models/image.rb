@@ -39,4 +39,8 @@ class Image < BaseModel
   def transform!
     true
   end
+
+  def remove!
+    true
+  end
 end
