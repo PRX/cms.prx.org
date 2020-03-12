@@ -11,6 +11,7 @@ FactoryGirl.define do
     channel_mode 'Single Channel'
 
     status 'complete'
+    filename 'test.mp3'
 
     after(:create) { |af| af.update_file!('test.mp2') unless af.status == 'uploaded' }
 
