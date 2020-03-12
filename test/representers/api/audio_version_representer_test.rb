@@ -47,4 +47,9 @@ describe Api::AudioVersionRepresenter do
   it 'shows version validity' do
     json.keys.must_include('status')
   end
+
+  it 'returns the template segment count' do
+    representer.represented.audio_version_template.segment_count = 5
+    json['segmentCount'].must_equal 5
+  end
 end
