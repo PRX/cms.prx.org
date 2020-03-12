@@ -113,7 +113,6 @@ group :test do
   gem 'shoulda-context'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
-  gem 'test_after_commit'
   gem 'timecop'
   gem 'webmock'
 end
