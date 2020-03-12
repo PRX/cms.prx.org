@@ -78,10 +78,17 @@ describe AudioVersionTemplate do
     audio_version_template.audio_file_templates.count.must_equal 0
     audio_version_template.segment_count.must_be_nil
 
-    audio_version_template.audio_file_templates.create!(label: 'seg1')
-    audio_version_template.audio_file_templates.create!(label: 'seg2')
+    f1 = audio_version_template.audio_file_templates.create!(label: 'seg1')
+    f1.run_callbacks(:commit)
+    f2 = audio_version_template.audio_file_templates.create!(label: 'seg2')
+    f2.run_callbacks(:commit)
     audio_version_template.audio_file_templates.count.must_equal 2
     audio_version_template.reload.segment_count.must_equal 2
+
+    f1.destroy!
+    f1.run_callbacks(:commit)
+    audio_version_template.audio_file_templates.count.must_equal 1
+    audio_version_template.reload.segment_count.must_equal 1
   end
 
 end
