@@ -11,10 +11,8 @@ FactoryGirl.define do
     sequence(:login)  { |n| "rickastley#{n}" }
 
     after(:create) do |user, evaluator|
-      if evaluator.with_individual_account
-        user.individual_account = create(:individual_account, opener: user)
-        user.update_attributes!(account_id: user.individual_account.id)
-        user.reload
+      unless evaluator.with_individual_account
+        user.individual_account.try(:destroy!)
       end
     end
 
