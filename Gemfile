@@ -106,12 +106,14 @@ group :test do
   gem 'codecov', require: false
   gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'm', '~> 1.5.0'
   gem 'minitest-around'
   gem 'minitest-reporters', require: false
   gem 'minitest-spec-rails'
   gem 'shoulda-context'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
+  gem 'test_after_commit'
   gem 'timecop'
   gem 'webmock'
 end
