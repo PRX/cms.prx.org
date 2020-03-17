@@ -308,6 +308,9 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.10)
+    m (1.5.1)
+      method_source (>= 0.6.7)
+      rake (>= 0.9.2.2)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     method_source (0.8.2)
@@ -522,6 +525,7 @@ DEPENDENCIES
   icalendar (~> 2.5.0)
   kaminari
   loofah
+  m (~> 1.5.0)
   minitest (~> 5.9.1)
   minitest-around
   minitest-reporters
