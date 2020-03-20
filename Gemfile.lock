@@ -46,9 +46,13 @@ GEM
     announce (0.2.3)
     ansi (1.5.0)
     arel (6.0.4)
+    aws-sdk (2.10.122)
+      aws-sdk-resources (= 2.10.122)
     aws-sdk-core (2.10.122)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
+    aws-sdk-resources (2.10.122)
+      aws-sdk-core (= 2.10.122)
     aws-sigv4 (1.0.2)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -498,6 +502,7 @@ DEPENDENCIES
   acts_as_list
   addressable
   announce
+  aws-sdk
   better_errors
   binding_of_caller
   carrierwave (~> 0.11)

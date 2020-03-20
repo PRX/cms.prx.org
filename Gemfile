@@ -89,6 +89,11 @@ gem 'elasticsearch-rails'
 # production calendar
 gem 'icalendar', '~> 2.5.0'
 
+# SNS for communication with Porter
+# NOTE: We can't do the single-package version (aws-sdk-sns) because that
+#       depends on a newer version of aws-sdk-core than shoryuken supports
+gem 'aws-sdk'
+
 # dev-only
 group :development do
   gem 'better_errors'
