@@ -98,7 +98,7 @@ describe ImageCallbackWorker do
 
     let(:porter_job_id) { SecureRandom.uuid }
 
-    def porter_job_result(data={})
+    def porter_job_result(data = {})
       {
         Time: '2020-03-18T13:27:45.855Z',
         Timestamp: 1584538065.855,
@@ -107,7 +107,7 @@ describe ImageCallbackWorker do
             Id: image.porter_job_id
           },
           Execution: {
-            Id: 'arn:aws:states:us-east-1:561178107736:execution:StateMachine-8B8z7vHLT4JS:f9e2df59-b9db-4908-bb9d-f0b78d0d23c3'
+            Id: 'arn:aws:states:us-east-1:561178107736:execution:StateMachine-8B8z7vHLT4JS:etc'
           },
           Result: [
             {
@@ -158,7 +158,7 @@ describe ImageCallbackWorker do
       }.deep_merge(data)
     end
 
-    let(:image) { create(:story_image_uploaded, porter_job_id: porter_job_id)}
+    let(:image) { create(:story_image_uploaded, porter_job_id: porter_job_id) }
     let(:series_image) { create(:series_image, porter_job_id: SecureRandom.uuid) }
 
     it 'does not crash' do
@@ -190,26 +190,38 @@ describe ImageCallbackWorker do
     end
 
     it 'rescues from unknown image types' do
-      worker.perform(nil, porter_job_result(JobResult: { Result: [{
-        Task: 'Inspect',
-        Inspection: {
-          Size: 71484,
-          Audio: {},
-          Image: {
-            Width: 450,
-            Height: 450,
-            Format: 'jpeg'
-          },
-          Extension: 'jpg',
-          MIME: 'foobar'
+      worker.perform(nil, porter_job_result({
+        JobResult: {
+          Result: [
+            {
+              Task: 'Inspect',
+              Inspection: {
+                Size: 71484,
+                Audio: {},
+                Image: {
+                  Width: 450,
+                  Height: 450,
+                  Format: 'jpeg'
+                },
+                Extension: 'jpg',
+                MIME: 'foobar'
+              }
+            }
+          ]
         }
-      }]}))
+      }))
       image.reload
       image.content_type.must_equal 'foobar'
     end
 
     it 'stays silent for unrecognized job IDs' do
-      worker.perform(nil, porter_job_result({JobResult: {Job: { Id: SecureRandom.uuid } } } ))
+      worker.perform(nil, porter_job_result({
+        JobResult: {
+          Job: {
+            Id: SecureRandom.uuid
+          }
+        }
+      }))
       image.reload
       image.size.must_be_nil
     end
@@ -222,14 +234,20 @@ describe ImageCallbackWorker do
     end
 
     it 'sets validation errors' do
-      worker.perform(nil, porter_job_result(JobResult: { Result: [{
-        Task: 'Copy',
-        Mode: 'AWS/S3',
-        BucketName: 'prx-porter-sandbox',
-        ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg',
-        Time: '2020-03-18T13:27:42.115Z',
-        Timestamp: 1584538062.115
-      }]}))
+      worker.perform(nil, porter_job_result({
+        JobResult: {
+          Result: [
+            {
+              Task: 'Copy',
+              Mode: 'AWS/S3',
+              BucketName: 'prx-porter-sandbox',
+              ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg',
+              Time: '2020-03-18T13:27:42.115Z',
+              Timestamp: 1584538062.115
+            }
+          ]
+        }
+      }))
       image.reload
       image.status.must_equal ImageCallbackWorker::INVALID
       image.fixerable_final?.must_equal false

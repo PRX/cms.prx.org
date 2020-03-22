@@ -63,7 +63,7 @@ class Image < BaseModel
               ObjectKey: file.upload_path
             },
             Tasks: [
-              { Type: "Inspect" },
+              { Type: 'Inspect' },
               {
                 Type: 'Copy',
                 Mode: 'AWS/S3',
@@ -95,7 +95,7 @@ class Image < BaseModel
     ImageUploader.version_formats.map do |(name, dimensions)|
       {
         Type: 'Image',
-        Format: 'png', #TODO: Make this conform to existing format
+        Format: 'png', # TODO: Make this conform to existing format
         Metadata: 'PRESERVE',
         Resize: {
           Fit: 'contain',

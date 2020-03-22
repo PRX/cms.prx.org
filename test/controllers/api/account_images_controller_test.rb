@@ -66,7 +66,7 @@ describe Api::AccountImagesController do
           delete :destroy, api_request_opts(account_id: account.id, id: account_image.id)
         end
       end
-  
+
       mock_image.verify
     end
   end

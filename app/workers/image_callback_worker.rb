@@ -14,12 +14,12 @@ class ImageCallbackWorker
       image = Image.by_porter_job_id(job[:JobResult][:Job][:Id])
       if image.present?
         job_results = job[:JobResult][:Result]
-        copy_task_result = job_results.find{|result| result[:Task] === 'Copy' }
+        copy_task_result = job_results.detect { |result| result[:Task] === 'Copy' }
         if copy_task_result.present?
           image.filename = File.basename(copy_task_result[:ObjectKey])
         end
 
-        inspect_task_result = job_results.find{|result| result[:Task] === 'Inspect' }
+        inspect_task_result = job_results.detect { |result| result[:Task] === 'Inspect' }
         if inspect_task_result.present?
           image.size = inspect_task_result[:Inspection][:Size]
           image.width = inspect_task_result[:Inspection][:Image][:Width]
@@ -28,14 +28,14 @@ class ImageCallbackWorker
           image.content_type = inspect_task_result[:Inspection][:MIME]
         end
 
-        if copy_task_result.nil?
-          image.status = NOTFOUND
+        image.status = if copy_task_result.nil?
+          NOTFOUND
         elsif inspect_task_result.nil? || image.content_type.split('/')[0] != 'image'
-          image.status = INVALID
-        elsif job_results.find_all{|result| result[:Task] === 'Image' }.present?
-          image.status = COMPLETE
+          INVALID
+        elsif job_results.select{ |result| result[:Task] === 'Image' }.present?
+          COMPLETE
         else
-          image.status = FAILED
+          FAILED
         end
       end
     else
@@ -49,14 +49,14 @@ class ImageCallbackWorker
       mime_type = MIME::Types.type_for(job['format'] || '').first.try(:content_type)
       image.content_type = mime_type || job['format']
 
-      if !job['downloaded']
-        image.status = NOTFOUND
+      image.status = if !job['downloaded']
+        NOTFOUND
       elsif !job['valid']
-        image.status = INVALID
+        INVALID
       elsif !job['resized']
-        image.status = FAILED
+        FAILED
       else
-        image.status = COMPLETE
+        COMPLETE
       end
     end
 
