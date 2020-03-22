@@ -29,14 +29,14 @@ class ImageCallbackWorker
         end
 
         image.status = if copy_task_result.nil?
-          NOTFOUND
-        elsif inspect_task_result.nil? || image.content_type.split('/')[0] != 'image'
-          INVALID
-        elsif job_results.select{ |result| result[:Task] === 'Image' }.present?
-          COMPLETE
-        else
-          FAILED
-        end
+                         NOTFOUND
+                       elsif inspect_task_result.nil? || image.content_type.split('/')[0] != 'image'
+                         INVALID
+                       elsif job_results.select { |result| result[:Task] === 'Image' }.present?
+                         COMPLETE
+                       else
+                         FAILED
+                       end
       end
     else
       image = find_image(job['type'], job['id'])
@@ -50,14 +50,14 @@ class ImageCallbackWorker
       image.content_type = mime_type || job['format']
 
       image.status = if !job['downloaded']
-        NOTFOUND
-      elsif !job['valid']
-        INVALID
-      elsif !job['resized']
-        FAILED
-      else
-        COMPLETE
-      end
+                       NOTFOUND
+                     elsif !job['valid']
+                       INVALID
+                     elsif !job['resized']
+                       FAILED
+                     else
+                       COMPLETE
+                     end
     end
 
     Shoryuken.logger.info("Updating #{job['type']}[#{image.id}]: status => #{image.status}")
