@@ -4,13 +4,17 @@ require 'aws-sdk'
 require 'securerandom'
 
 class Image < BaseModel
-  SNS_CLIENT = Aws::SNS::Client.new
 
   self.abstract_class = true
 
   include PublicAsset
   include Fixerable
   include ValidityFlag
+
+  SNS_CLIENT = Aws::SNS::Client.new
+
+  CALLBACK_QUEUE_NAME = "#{ENV['RAILS_ENV']}_cms_image_callback"
+  SQS_QUEUE_URI = "https://sqs.#{ENV['AWS_REGION']}.amazonaws.com/#{ENV['AWS_ACCOUNT_ID']}/#{CALLBACK_QUEUE_NAME}"
 
   def self.profile
     order("field(purpose, '#{Image::PROFILE}') desc, created_at desc").first
@@ -74,7 +78,7 @@ class Image < BaseModel
             Callbacks: [
               {
                 Type: 'AWS/SQS',
-                Queue: "https://sqs.#{ENV['AWS_REGION']}.amazonaws.com/#{ENV['AWS_ACCOUNT_ID']}/#{ENV['RAILS_ENV']}_cms_image_callback",
+                Queue: SQS_QUEUE_URI,
               }
             ]
           }
