@@ -100,57 +100,57 @@ describe ImageCallbackWorker do
 
     def porter_job_result(data={})
       {
-        Time: "2020-03-18T13:27:45.855Z",
+        Time: '2020-03-18T13:27:45.855Z',
         Timestamp: 1584538065.855,
         JobResult: {
           Job: {
             Id: image.porter_job_id
           },
           Execution: {
-            Id: "arn:aws:states:us-east-1:561178107736:execution:StateMachine-8B8z7vHLT4JS:f9e2df59-b9db-4908-bb9d-f0b78d0d23c3"
+            Id: 'arn:aws:states:us-east-1:561178107736:execution:StateMachine-8B8z7vHLT4JS:f9e2df59-b9db-4908-bb9d-f0b78d0d23c3'
           },
           Result: [
             {
-              Task: "Inspect",
+              Task: 'Inspect',
               Inspection: {
                 Size: 71484,
                 Audio: {},
                 Image: {
                   Width: 450,
                   Height: 450,
-                  Format: "jpeg"
+                  Format: 'jpeg'
                 },
-                Extension: "jpg",
-                MIME: "image/jpeg"
+                Extension: 'jpg',
+                MIME: 'image/jpeg'
               }
             },
             {
-              Task: "Copy",
-              Mode: "AWS/S3",
-              BucketName: "prx-porter-sandbox",
-              ObjectKey: "public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg",
-              Time: "2020-03-18T13:27:42.115Z",
+              Task: 'Copy',
+              Mode: 'AWS/S3',
+              BucketName: 'prx-porter-sandbox',
+              ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg',
+              Time: '2020-03-18T13:27:42.115Z',
               Timestamp: 1584538062.115
             },
             {
-              Task: "Image",
-              BucketName: "prx-porter-sandbox",
-              ObjectKey: "public/user_images/20926/if3i36p9ok7bv9lygcih_square.jpeg",
-              Time: "2020-03-18T13:27:42.021Z",
+              Task: 'Image',
+              BucketName: 'prx-porter-sandbox',
+              ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih_square.jpeg',
+              Time: '2020-03-18T13:27:42.021Z',
               Timestamp: 1584538062.021
             },
             {
-              Task: "Image",
-              BucketName: "prx-porter-sandbox",
-              ObjectKey: "public/user_images/20926/if3i36p9ok7bv9lygcih_small.jpeg",
-              Time: "2020-03-18T13:27:42.099Z",
+              Task: 'Image',
+              BucketName: 'prx-porter-sandbox',
+              ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih_small.jpeg',
+              Time: '2020-03-18T13:27:42.099Z',
               Timestamp: 1584538062.099
             },
             {
-              Task: "Image",
-              BucketName: "prx-porter-sandbox",
-              ObjectKey: "public/user_images/20926/if3i36p9ok7bv9lygcih_medium.jpeg",
-              Time: "2020-03-18T13:27:42.277Z",
+              Task: 'Image',
+              BucketName: 'prx-porter-sandbox',
+              ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih_medium.jpeg',
+              Time: '2020-03-18T13:27:42.277Z',
               Timestamp: 1584538062.277
             }
           ]
@@ -173,7 +173,7 @@ describe ImageCallbackWorker do
       image.height.must_equal 450
       image.aspect_ratio.must_equal 1
     end
-  
+
     it 'sets the status to point at the final image' do
       worker.perform(nil, porter_job_result)
       image.reload
@@ -182,86 +182,92 @@ describe ImageCallbackWorker do
       image.status.must_equal Image::COMPLETE
       image.fixerable_final?.must_equal true
     end
-  
+
     it 'decodes image mime-types' do
       worker.perform(nil, porter_job_result)
       image.reload
       image.content_type.must_equal 'image/jpeg'
     end
-  
+
     it 'rescues from unknown image types' do
       worker.perform(nil, porter_job_result(JobResult: { Result: [{
-        Task: "Inspect",
+        Task: 'Inspect',
         Inspection: {
           Size: 71484,
           Audio: {},
           Image: {
             Width: 450,
             Height: 450,
-            Format: "jpeg"
+            Format: 'jpeg'
           },
-          Extension: "jpg",
-          MIME: "foobar"
+          Extension: 'jpg',
+          MIME: 'foobar'
         }
       }]}))
       image.reload
       image.content_type.must_equal 'foobar'
     end
-  
+
     it 'stays silent for unrecognized job IDs' do
       worker.perform(nil, porter_job_result({JobResult: {Job: { Id: SecureRandom.uuid } } } ))
       image.reload
       image.size.must_be_nil
     end
-  
+
     it 'sets download errors' do
       worker.perform(nil, porter_job_result(JobResult: { Result: [] }))
       image.reload
       image.status.must_equal ImageCallbackWorker::NOTFOUND
       image.fixerable_final?.must_equal false
     end
-  
+
     it 'sets validation errors' do
       worker.perform(nil, porter_job_result(JobResult: { Result: [{
-        Task: "Copy",
-        Mode: "AWS/S3",
-        BucketName: "prx-porter-sandbox",
-        ObjectKey: "public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg",
-        Time: "2020-03-18T13:27:42.115Z",
+        Task: 'Copy',
+        Mode: 'AWS/S3',
+        BucketName: 'prx-porter-sandbox',
+        ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg',
+        Time: '2020-03-18T13:27:42.115Z',
         Timestamp: 1584538062.115
       }]}))
       image.reload
       image.status.must_equal ImageCallbackWorker::INVALID
       image.fixerable_final?.must_equal false
     end
-  
+
     it 'sets resize errors' do
-      worker.perform(nil, porter_job_result(JobResult: { Result: [{
-        Task: "Copy",
-        Mode: "AWS/S3",
-        BucketName: "prx-porter-sandbox",
-        ObjectKey: "public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg",
-        Time: "2020-03-18T13:27:42.115Z",
-        Timestamp: 1584538062.115
-      },{
-        Task: "Inspect",
-        Inspection: {
-          Size: 71484,
-          Audio: {},
-          Image: {
-            Width: 450,
-            Height: 450,
-            Format: "jpeg"
-          },
-          Extension: "jpg",
-          MIME: "image/jpeg"
+      worker.perform(nil, porter_job_result({
+        JobResult: {
+          Result: [
+            {
+              Task: 'Copy',
+              Mode: 'AWS/S3',
+              BucketName: 'prx-porter-sandbox',
+              ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg',
+              Time: '2020-03-18T13:27:42.115Z',
+              Timestamp: 1584538062.115
+            }, {
+              Task: 'Inspect',
+              Inspection: {
+                Size: 71484,
+                Audio: {},
+                Image: {
+                  Width: 450,
+                  Height: 450,
+                  Format: 'jpeg'
+                },
+                Extension: 'jpg',
+                MIME: 'image/jpeg'
+              }
+            }
+          ]
         }
-      },]}))
+      }))
       image.reload
       image.status.must_equal ImageCallbackWorker::FAILED
       image.fixerable_final?.must_equal false
     end
-  
+
     it 'announces story updates for story-image' do
       worker.perform(nil, porter_job_result)
       last_message.wont_be_nil
@@ -269,7 +275,7 @@ describe ImageCallbackWorker do
       last_message['action'].must_equal :update
       JSON.parse(last_message['body'])['id'].must_equal image.story.id
     end
-  
+
     it 'announces series updates for series-image' do
       worker.perform(nil, porter_job_result(JobResult: { Job: { Id: series_image.porter_job_id}}))
       last_message.wont_be_nil

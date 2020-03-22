@@ -28,18 +28,15 @@ class ImageCallbackWorker
           image.content_type = inspect_task_result[:Inspection][:MIME]
         end
 
-        if copy_task_result.blank?
+        if copy_task_result.nil?
           image.status = NOTFOUND
-        elsif inspect_task_result.blank? || image.content_type.split('/')[0] != 'image'
+        elsif inspect_task_result.nil? || image.content_type.split('/')[0] != 'image'
           image.status = INVALID
         elsif job_results.find_all{|result| result[:Task] === 'Image' }.present?
           image.status = COMPLETE
         else
           image.status = FAILED
         end
-
-        image.save!
-          
       end
     else
       image = find_image(job['type'], job['id'])
@@ -61,10 +58,10 @@ class ImageCallbackWorker
       else
         image.status = COMPLETE
       end
-
-      Shoryuken.logger.info("Updating #{job['type']}[#{image.id}]: status => #{image.status}")
-      image.save!
     end
+
+    Shoryuken.logger.info("Updating #{job['type']}[#{image.id}]: status => #{image.status}")
+    image.save!
 
     # announce the image changes on its story or series
     if image.is_a?(StoryImage)

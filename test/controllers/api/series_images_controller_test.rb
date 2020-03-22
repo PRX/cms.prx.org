@@ -116,6 +116,5 @@ describe Api::SeriesImagesController do
     end
 
     mock_image.verify
-  end
-    
+  end    
 end
