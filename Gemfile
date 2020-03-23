@@ -11,7 +11,6 @@ gem 'sprockets', '~> 3.7.2'
 gem 'prx_auth-rails', '~> 0.2.0'
 gem 'rack-prx_auth', '~> 0.2.1'
 
-
 ## Model
 # Use mysql as the database for Active Record
 gem 'mysql2'
@@ -104,6 +103,7 @@ group :development do
   gem 'quiet_assets'
   gem 'spring'
   gem 'web-console', '~> 2.0'
+  gem 'rubocop', '~> 0.79.0'
 end
 
 group :test do
