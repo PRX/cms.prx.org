@@ -191,37 +191,37 @@ describe ImageCallbackWorker do
 
     it 'rescues from unknown image types' do
       worker.perform(nil, porter_job_result({
-        JobResult: {
-          Result: [
-            {
-              Task: 'Inspect',
-              Inspection: {
-                Size: 71484,
-                Audio: {},
-                Image: {
-                  Width: 450,
-                  Height: 450,
-                  Format: 'jpeg'
-                },
-                Extension: 'jpg',
-                MIME: 'foobar'
-              }
-            }
-          ]
-        }
-      }))
+                                              JobResult: {
+                                                Result: [
+                                                  {
+                                                    Task: 'Inspect',
+                                                    Inspection: {
+                                                      Size: 71484,
+                                                      Audio: {},
+                                                      Image: {
+                                                        Width: 450,
+                                                        Height: 450,
+                                                        Format: 'jpeg'
+                                                      },
+                                                      Extension: 'jpg',
+                                                      MIME: 'foobar'
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            }))
       image.reload
       image.content_type.must_equal 'foobar'
     end
 
     it 'stays silent for unrecognized job IDs' do
       worker.perform(nil, porter_job_result({
-        JobResult: {
-          Job: {
-            Id: SecureRandom.uuid
-          }
-        }
-      }))
+                                              JobResult: {
+                                                Job: {
+                                                  Id: SecureRandom.uuid
+                                                }
+                                              }
+                                            }))
       image.reload
       image.size.must_be_nil
     end
@@ -235,19 +235,19 @@ describe ImageCallbackWorker do
 
     it 'sets validation errors' do
       worker.perform(nil, porter_job_result({
-        JobResult: {
-          Result: [
-            {
-              Task: 'Copy',
-              Mode: 'AWS/S3',
-              BucketName: 'prx-porter-sandbox',
-              ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg',
-              Time: '2020-03-18T13:27:42.115Z',
-              Timestamp: 1584538062.115
-            }
-          ]
-        }
-      }))
+                                              JobResult: {
+                                                Result: [
+                                                  {
+                                                    Task: 'Copy',
+                                                    Mode: 'AWS/S3',
+                                                    BucketName: 'prx-porter-sandbox',
+                                                    ObjectKey: 'public/user_images/20926/abc.jpeg',
+                                                    Time: '2020-03-18T13:27:42.115Z',
+                                                    Timestamp: 1584538062.115
+                                                  }
+                                                ]
+                                              }
+                                            }))
       image.reload
       image.status.must_equal ImageCallbackWorker::INVALID
       image.fixerable_final?.must_equal false
@@ -255,32 +255,32 @@ describe ImageCallbackWorker do
 
     it 'sets resize errors' do
       worker.perform(nil, porter_job_result({
-        JobResult: {
-          Result: [
-            {
-              Task: 'Copy',
-              Mode: 'AWS/S3',
-              BucketName: 'prx-porter-sandbox',
-              ObjectKey: 'public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg',
-              Time: '2020-03-18T13:27:42.115Z',
-              Timestamp: 1584538062.115
-            }, {
-              Task: 'Inspect',
-              Inspection: {
-                Size: 71484,
-                Audio: {},
-                Image: {
-                  Width: 450,
-                  Height: 450,
-                  Format: 'jpeg'
-                },
-                Extension: 'jpg',
-                MIME: 'image/jpeg'
-              }
-            }
-          ]
-        }
-      }))
+                                              JobResult: {
+                                                Result: [
+                                                  {
+                                                    Task: 'Copy',
+                                                    Mode: 'AWS/S3',
+                                                    BucketName: 'prx-porter-sandbox',
+                                                    ObjectKey: 'public/user_images/20926/abc.jpeg',
+                                                    Time: '2020-03-18T13:27:42.115Z',
+                                                    Timestamp: 1584538062.115
+                                                  }, {
+                                                    Task: 'Inspect',
+                                                    Inspection: {
+                                                      Size: 71484,
+                                                      Audio: {},
+                                                      Image: {
+                                                        Width: 450,
+                                                        Height: 450,
+                                                        Format: 'jpeg'
+                                                      },
+                                                      Extension: 'jpg',
+                                                      MIME: 'image/jpeg'
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            }))
       image.reload
       image.status.must_equal ImageCallbackWorker::FAILED
       image.fixerable_final?.must_equal false
