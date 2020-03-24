@@ -11,8 +11,12 @@ class Image < BaseModel
   include Fixerable
   include ValidityFlag
 
-  SNS_CLIENT = ENV['PORTER_SNS_TOPIC_ARN'] && Aws::SNS::Client.new
-  Rails.logger.warn('No Porter SNS topic provided - Porter jobs will be skipped.') unless SNS_CLIENT
+  SNS_CLIENT = if ENV['PORTER_SNS_TOPIC_ARN']
+                 Aws::SNS::Client.new
+               elsif !Rails.environment.test?
+                 Rails.logger.warn('No Porter SNS topic provided - Porter jobs will be skipped.')
+                 nil
+               end
 
   CALLBACK_QUEUE_NAME = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
   SQS_QUEUE_URI = URI::HTTPS.build(
@@ -50,7 +54,7 @@ class Image < BaseModel
 
   # for backwards compatibility, null statuses are considered final
   def fixerable_final?
-    status != NOTFOUND && status != UPLOADED
+    ![FAILED, NOTFOUND, UPLOADED, INVALID].include?(status)
   end
 
   def complete?
@@ -66,9 +70,7 @@ class Image < BaseModel
 
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
-      SNS_CLIENT.publish({
-                           topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
-                           message: {
+      publish_porter_sns(
                              Job: {
                                Id: "#{porter_job_id}:copy",
                                Source: {
@@ -89,9 +91,7 @@ class Image < BaseModel
                                    Queue: SQS_QUEUE_URI
                                  }
                                ]
-                             }
-                           }.to_json
-                         })
+                             })
     end
   end
 
@@ -100,9 +100,7 @@ class Image < BaseModel
 
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
-      SNS_CLIENT.publish({
-                           topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
-                           message: {
+      publish_porter_sns(
                              Job: {
                                Id: "#{porter_job_id}:analyze",
                                Source: {
@@ -119,20 +117,16 @@ class Image < BaseModel
                                    Queue: SQS_QUEUE_URI
                                  }
                                ]
-                             }
-                           }.to_json
-                         })
+                             })
     end
   end
 
   def generate_thumbnails!(format)
-    return false if complete? || !SNS_CLIENT.present?
+    return false if complete?
 
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
-      SNS_CLIENT.publish({
-                           topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
-                           message: {
+      publish_porter_sns(
                              Job: {
                                Id: "#{porter_job_id}:resize",
                                Source: {
@@ -148,8 +142,7 @@ class Image < BaseModel
                                  }
                                ]
                              }
-                           }.to_json
-                         })
+                           )
     end
   end
 
@@ -178,4 +171,12 @@ class Image < BaseModel
     end
   end
 
+  def publish_porter_sns(message)
+    return false if Rails.env.test? || !SNS_CLIENT.present?
+
+    SNS_CLIENT.publish({
+      topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
+      message: message.to_json
+    })
+  end
 end
