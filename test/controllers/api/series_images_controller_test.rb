@@ -26,11 +26,11 @@ describe Api::SeriesImagesController do
     SeriesImage.find(series_image.id).credit.must_equal('blah credit')
   end
 
-  it 'triggers image transform! on update' do
+  it 'triggers image copy on update' do
     image_opt = { credit: 'second blah credit' }
     mock_image = Minitest::Mock.new series_image
 
-    mock_image.expect :transform!, true
+    mock_image.expect :copy_upload!, true
 
     @controller.stub :authorize, true do
       @controller.stub :update_resource, mock_image do
@@ -41,7 +41,7 @@ describe Api::SeriesImagesController do
     mock_image.verify
   end
 
-  it 'triggers image transform! on create' do
+  it 'triggers image copy on create' do
 
     image_hash = {
       upload: 'http://thisisatest.com/guid1/image.gif',
@@ -51,7 +51,7 @@ describe Api::SeriesImagesController do
     series_image = SeriesImage.where(series_id: series.id).build
     mock_image = Minitest::Mock.new(series_image)
 
-    mock_image.expect :transform!, true
+    mock_image.expect :copy_upload!, true
 
     @controller.stub :authorize, true do
       @controller.stub :create_resource, mock_image do

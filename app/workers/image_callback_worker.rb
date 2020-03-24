@@ -58,7 +58,7 @@ class ImageCallbackWorker
     else
       copy_task_result = job_result['Result'].detect { |result| result['Task'] == 'Copy' }
       image.filename = File.basename(copy_task_result['ObjectKey'])
-      
+
       image.analyze_file!
     end
 
@@ -77,7 +77,7 @@ class ImageCallbackWorker
         image.height = inspect_task_result['Inspection']['Image']['Height']
         image.aspect_ratio = image.width / image.height.to_f if image.width && image.height
         image.content_type = inspect_task_result['Inspection']['MIME']
-        
+
         image.generate_thumbnails!(inspect_task_result['Inspection']['Image']['Format'])
       end
     end
@@ -86,11 +86,11 @@ class ImageCallbackWorker
   end
 
   def callback_resize(image, job_result)
-    if job_result['Error']
-      image.status = FAILED
-    else
-      image.status = COMPLETE
-    end
+    image.status = if job_result['Error']
+                     FAILED
+                   else
+                     COMPLETE
+                   end
 
     image.save!
     announce_image_changed(image)
@@ -121,7 +121,6 @@ class ImageCallbackWorker
 
     image.save!
     announce_image_changed(image)
-
   rescue ActiveRecord::RecordNotFound
     Shoryuken.logger.error("Record #{job['type']}[#{job['id']}] not found")
   rescue UnknownImageTypeError

@@ -30,17 +30,17 @@ describe Api::StoryImagesController do
     put(:update, image_hash.to_json, api_request_opts(story_id: story.id, id: story_image.id))
     p response
     assert_response :success
-    
+
     last_message['subject'].to_s.must_equal 'image'
     last_message['action'].to_s.must_equal 'update'
     StoryImage.find(story_image.id).credit.must_equal('blah credit')
   end
 
-  it 'triggers image transform! on update' do
+  it 'triggers image copy on update' do
     image_hash = { credit: 'credit' }
     mock_image = Minitest::Mock.new story_image
 
-    mock_image.expect :transform!, true
+    mock_image.expect :copy_upload!, true
 
     @controller.stub :authorize, true do
       @controller.stub :update_resource, mock_image do
@@ -62,7 +62,7 @@ describe Api::StoryImagesController do
     last_message['action'].to_s.must_equal 'create'
   end
 
-  it 'triggers image transform! on create' do
+  it 'triggers image copy on create' do
     image_hash = {
       upload: 'http://thisisatest.com/guid1/image.gif',
       set_series_uri: api_story_url(story)
@@ -71,7 +71,7 @@ describe Api::StoryImagesController do
     story_image = StoryImage.where(story: story).build
     mock_image = Minitest::Mock.new(story_image)
 
-    mock_image.expect :transform!, true
+    mock_image.expect :copy_upload!, true
 
     @controller.stub :authorize, true do
       @controller.stub :create_resource, mock_image do

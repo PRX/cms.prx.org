@@ -21,11 +21,11 @@ describe Api::UserImagesController do
       clear_messages
     end
 
-    it 'triggers image transform! on update' do
+    it 'triggers image copy on update' do
       image_hash = { credit: 'credit' }
       mock_image = Minitest::Mock.new user_image
 
-      mock_image.expect :transform!, true
+      mock_image.expect :copy_upload!, true
 
       @controller.stub :authorize, true do
         @controller.stub :update_resource, mock_image do
@@ -36,7 +36,7 @@ describe Api::UserImagesController do
       mock_image.verify
     end
 
-    it 'triggers image transform! on create' do
+    it 'triggers image copy on create' do
       image_hash = {
         upload: 'http://thisisatest.com/guid1/image.gif',
         set_user_uri: api_user_url(user)
@@ -45,7 +45,7 @@ describe Api::UserImagesController do
       user_image = UserImage.where(user: user).build
       mock_image = Minitest::Mock.new(user_image)
 
-      mock_image.expect :transform!, true
+      mock_image.expect :copy_upload!, true
 
       @controller.stub :authorize, true do
         @controller.stub :create_resource, mock_image do
