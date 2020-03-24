@@ -39,7 +39,7 @@ describe Api::UserImagesController do
     it 'triggers image transform! on create' do
       image_hash = {
         upload: 'http://thisisatest.com/guid1/image.gif',
-        set_series_uri: api_user_url(user)
+        set_user_uri: api_user_url(user)
       }
 
       user_image = UserImage.where(user: user).build

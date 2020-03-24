@@ -28,7 +28,9 @@ describe Api::StoryImagesController do
   it 'should update' do
     image_hash = { credit: 'blah credit' }
     put(:update, image_hash.to_json, api_request_opts(story_id: story.id, id: story_image.id))
+    p response
     assert_response :success
+    
     last_message['subject'].to_s.must_equal 'image'
     last_message['action'].to_s.must_equal 'update'
     StoryImage.find(story_image.id).credit.must_equal('blah credit')

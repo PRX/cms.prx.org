@@ -11,12 +11,13 @@ class Image < BaseModel
   include Fixerable
   include ValidityFlag
 
-  SNS_CLIENT = Aws::SNS::Client.new
+  SNS_CLIENT = ENV['PORTER_SNS_TOPIC_ARN'] && Aws::SNS::Client.new
+  Rails.logger.warn("No Porter SNS topic provided - Porter jobs will be skipped.") unless SNS_CLIENT
 
   CALLBACK_QUEUE_NAME = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
   SQS_QUEUE_URI = URI::HTTPS.build(
     host: "sqs.#{ENV['AWS_REGION']}.amazonaws.com",
-    path: "#{ENV['AWS_ACCOUNT_ID']}/#{CALLBACK_QUEUE_NAME}"
+    path: "/#{ENV['AWS_ACCOUNT_ID']}/#{CALLBACK_QUEUE_NAME}"
   ).to_s.freeze
 
   def self.profile
@@ -49,58 +50,120 @@ class Image < BaseModel
 
   # for backwards compatibility, null statuses are considered final
   def fixerable_final?
-    status.nil? || status == COMPLETE
+    status != NOTFOUND && status != UPLOADED
+  end
+
+  def complete?
+    status == COMPLETE || status.nil?
   end
 
   def self.policy_class
     ImagePolicy
   end
 
-  def transform!
-    return false unless file.upload_path.present?
+  def copy_upload!
+    return false if complete? || !SNS_CLIENT.present?
 
-    self.porter_job_id = SecureRandom.uuid
-    SNS_CLIENT.publish({
-                         topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
-                         message: {
-                           Job: {
-                             Id: porter_job_id,
-                             Source: {
-                               Mode: 'AWS/S3',
-                               BucketName: ENV['AWS_BUCKET'],
-                               ObjectKey: file.upload_path
-                             },
-                             Tasks: [
-                               { Type: 'Inspect' },
-                               {
-                                 Type: 'Copy',
-                                 Mode: 'AWS/S3',
-                                 BucketName: ENV['AWS_BUCKET'],
-                                 ObjectKey: file.path
-                               }
-                             ] + resize_tasks,
-                             Callbacks: [
-                               {
-                                 Type: 'AWS/SQS',
-                                 Queue: SQS_QUEUE_URI,
-                               }
-                             ]
-                           }
-                         }.to_json
-                       })
+    Image.transaction do
+      update_attribute :porter_job_id, SecureRandom.uuid
+      SNS_CLIENT.publish({
+                          topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
+                          message: {
+                            Job: {
+                              Id: "#{porter_job_id}:copy",
+                              Source: {
+                                Mode: 'HTTP',
+                                URL: asset_url
+                              },
+                              Tasks: [
+                                {
+                                  Type: 'Copy',
+                                  Mode: 'AWS/S3',
+                                  BucketName: ENV['AWS_BUCKET'],
+                                  ObjectKey: "#{fixerable_final_path}/#{filename}"
+                                }
+                              ],
+                              Callbacks: [
+                                {
+                                  Type: 'AWS/SQS',
+                                  Queue: SQS_QUEUE_URI
+                                }
+                              ]
+                            }
+                          }.to_json
+                        })
+    end
+  end
+
+  def analyze_file!
+    return false if complete? || !SNS_CLIENT.present?
+
+    Image.transaction do
+      update_attribute :porter_job_id, SecureRandom.uuid
+      SNS_CLIENT.publish({
+                          topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
+                          message: {
+                            Job: {
+                              Id: "#{porter_job_id}:analyze",
+                              Source: {
+                                Mode: 'AWS/S3',
+                                BucketName: ENV['AWS_BUCKET'],
+                                ObjectKey: file.path
+                              },
+                              Tasks: [
+                                { Type: 'Inspect' }
+                              ],
+                              Callbacks: [
+                                {
+                                  Type: 'AWS/SQS',
+                                  Queue: SQS_QUEUE_URI
+                                }
+                              ]
+                            }
+                          }.to_json
+                        })
+    end
+  end
+
+  def generate_thumbnails!(format)
+    return false if complete? || !SNS_CLIENT.present?
+
+    Image.transaction do
+      update_attribute :porter_job_id, SecureRandom.uuid
+      SNS_CLIENT.publish({
+                          topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
+                          message: {
+                            Job: {
+                              Id: "#{porter_job_id}:resize",
+                              Source: {
+                                Mode: 'AWS/S3',
+                                BucketName: ENV['AWS_BUCKET'],
+                                ObjectKey: file.path
+                              },
+                              Tasks: resize_tasks(format),
+                              Callbacks: [
+                                {
+                                  Type: 'AWS/SQS',
+                                  Queue: SQS_QUEUE_URI
+                                }
+                              ]
+                            }
+                          }.to_json
+                        })
+    end
   end
 
   def remove!
-    true
+    
   end
 
   private
 
-  def resize_tasks
+  def resize_tasks(format)
     ImageUploader.version_formats.map do |(name, dimensions)|
       {
         Type: 'Image',
-        Format: 'png', # TODO: Make this conform to existing format
+        Format: format,
         Metadata: 'PRESERVE',
         Resize: {
           Fit: 'contain',
@@ -110,8 +173,8 @@ class Image < BaseModel
         },
         Destination: {
           Mode: 'AWS/S3',
-          BucketName: 'prx-porter-sandbox',
-          ObjectKey: file.send(name).path
+          BucketName: ENV['AWS_BUCKET'],
+          ObjectKey: file.public_send(name).path
         }
       }
     end

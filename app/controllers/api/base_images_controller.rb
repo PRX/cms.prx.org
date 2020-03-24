@@ -4,7 +4,7 @@ class Api::BaseImagesController < Api::BaseController
   announce_actions decorator: Api::Msg::ImageRepresenter, subject: :image
 
   def after_create_resource(image)
-    super
+    super 
     image.transform!
   end
 
