@@ -71,27 +71,28 @@ class Image < BaseModel
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
       publish_porter_sns(
-                             Job: {
-                               Id: "#{porter_job_id}:copy",
-                               Source: {
-                                 Mode: 'HTTP',
-                                 URL: asset_url
-                               },
-                               Tasks: [
-                                 {
-                                   Type: 'Copy',
-                                   Mode: 'AWS/S3',
-                                   BucketName: ENV['AWS_BUCKET'],
-                                   ObjectKey: "#{fixerable_final_path}/#{filename}"
-                                 }
-                               ],
-                               Callbacks: [
-                                 {
-                                   Type: 'AWS/SQS',
-                                   Queue: SQS_QUEUE_URI
-                                 }
-                               ]
-                             })
+        Job: {
+          Id: "#{porter_job_id}:copy",
+          Source: {
+            Mode: 'HTTP',
+            URL: asset_url
+          },
+          Tasks: [
+            {
+              Type: 'Copy',
+              Mode: 'AWS/S3',
+              BucketName: ENV['AWS_BUCKET'],
+              ObjectKey: "#{fixerable_final_path}/#{filename}"
+            }
+          ],
+          Callbacks: [
+            {
+              Type: 'AWS/SQS',
+              Queue: SQS_QUEUE_URI
+            }
+          ]
+        }
+      )
     end
   end
 
@@ -101,23 +102,24 @@ class Image < BaseModel
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
       publish_porter_sns(
-                             Job: {
-                               Id: "#{porter_job_id}:analyze",
-                               Source: {
-                                 Mode: 'AWS/S3',
-                                 BucketName: ENV['AWS_BUCKET'],
-                                 ObjectKey: file.path
-                               },
-                               Tasks: [
-                                 { Type: 'Inspect' }
-                               ],
-                               Callbacks: [
-                                 {
-                                   Type: 'AWS/SQS',
-                                   Queue: SQS_QUEUE_URI
-                                 }
-                               ]
-                             })
+        Job: {
+          Id: "#{porter_job_id}:analyze",
+          Source: {
+            Mode: 'AWS/S3',
+            BucketName: ENV['AWS_BUCKET'],
+            ObjectKey: file.path
+          },
+          Tasks: [
+            { Type: 'Inspect' }
+          ],
+          Callbacks: [
+            {
+              Type: 'AWS/SQS',
+              Queue: SQS_QUEUE_URI
+            }
+          ]
+        }
+      )
     end
   end
 
@@ -127,22 +129,22 @@ class Image < BaseModel
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
       publish_porter_sns(
-                             Job: {
-                               Id: "#{porter_job_id}:resize",
-                               Source: {
-                                 Mode: 'AWS/S3',
-                                 BucketName: ENV['AWS_BUCKET'],
-                                 ObjectKey: file.path
-                               },
-                               Tasks: resize_tasks(format),
-                               Callbacks: [
-                                 {
-                                   Type: 'AWS/SQS',
-                                   Queue: SQS_QUEUE_URI
-                                 }
-                               ]
-                             }
-                           )
+        Job: {
+          Id: "#{porter_job_id}:resize",
+          Source: {
+            Mode: 'AWS/S3',
+            BucketName: ENV['AWS_BUCKET'],
+            ObjectKey: file.path
+          },
+          Tasks: resize_tasks(format),
+          Callbacks: [
+            {
+              Type: 'AWS/SQS',
+              Queue: SQS_QUEUE_URI
+            }
+          ]
+        }
+      )
     end
   end
 
@@ -175,8 +177,8 @@ class Image < BaseModel
     return false if Rails.env.test? || !SNS_CLIENT.present?
 
     SNS_CLIENT.publish({
-      topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
-      message: message.to_json
-    })
+                         topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
+                         message: message.to_json
+                       })
   end
 end
