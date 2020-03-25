@@ -128,13 +128,13 @@ describe ImageCallbackWorker do
       }
     end
 
-    def perform_porter_result(job_name, result, use_image=image)
+    def perform_porter_result(job_name, result, use_image = image)
       worker.perform(nil, porter_job_result(use_image, job_name, result))
       use_image.reload
       use_image
     end
 
-    def perform_porter_error(job_name, use_image=image)
+    def perform_porter_error(job_name, use_image = image)
       worker.perform(nil, porter_error(use_image, job_name))
       use_image.reload
       use_image
@@ -145,17 +145,17 @@ describe ImageCallbackWorker do
 
     it 'updates image attributes' do
       image = perform_porter_result('analyze', 'Task' => 'Inspect',
-        'Inspection' => {
-          'Size' => 71484,
-          'Audio' => {},
-          'Image' => {
-            'Width' => 450,
-            'Height' => 450,
-            'Format' => 'jpeg'
-          },
-          'Extension' => 'jpg',
-          'MIME' => 'image/jpeg'
-        })
+                                               'Inspection' => {
+                                                 'Size' => 71484,
+                                                 'Audio' => {},
+                                                 'Image' => {
+                                                   'Width' => 450,
+                                                   'Height' => 450,
+                                                   'Format' => 'jpeg'
+                                                 },
+                                                 'Extension' => 'jpg',
+                                                 'MIME' => 'image/jpeg'
+                                               })
       image.size.must_equal 71484
       image.width.must_equal 450
       image.height.must_equal 450
@@ -164,49 +164,49 @@ describe ImageCallbackWorker do
     end
 
     it 'sets the status to point at the final image' do
-     perform_porter_result('copy', 
-        'Task' => 'Copy',
-        'Mode' => 'AWS/S3',
-        'BucketName' => 'prx-porter-sandbox',
-        'ObjectKey' => 'public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg',
-        'Time' => '2020-03-18T13:27:42.115Z',
-        'Timestamp' => 1584538062.115)
+      perform_porter_result('copy',
+                            'Task' => 'Copy',
+                            'Mode' => 'AWS/S3',
+                            'BucketName' => 'prx-porter-sandbox',
+                            'ObjectKey' => 'public/user_images/20926/if3i36p9ok7bv9lygcih.jpeg',
+                            'Time' => '2020-03-18T13:27:42.115Z',
+                            'Timestamp' => 1584538062.115)
 
       perform_porter_result('analyze', 'Task' => 'Inspect',
-        'Inspection' => {
-          'Size' => 71484,
-          'Audio' => {},
-          'Image' => {
-            'Width' => 450,
-            'Height' => 450,
-            'Format' => 'jpeg'
-          },
-          'Extension' => 'jpg',
-          'MIME' => 'image/jpeg'
-        })
+                                       'Inspection' => {
+                                         'Size' => 71484,
+                                         'Audio' => {},
+                                         'Image' => {
+                                           'Width' => 450,
+                                           'Height' => 450,
+                                           'Format' => 'jpeg'
+                                         },
+                                         'Extension' => 'jpg',
+                                         'MIME' => 'image/jpeg'
+                                       })
 
-        perform_porter_result('resize', [
-          {
-            'Task' => 'Image',
-            'BucketName' => 'prx-porter-sandbox',
-            'ObjectKey' => 'public/user_images/20926/if3i36p9ok7bv9lygcih_square.jpeg',
-            'Time' => '2020-03-18T13:27:42.021Z',
-            'Timestamp' => 1584538062.021
-          },
-          {
-            'Task' => 'Image',
-            'BucketName' => 'prx-porter-sandbox',
-            'ObjectKey' => 'public/user_images/20926/if3i36p9ok7bv9lygcih_small.jpeg',
-            'Time' => '2020-03-18T13:27:42.021Z',
-            'Timestamp' => 1584538062.021
-          },{
-            'Task' => 'Image',
-            'BucketName' => 'prx-porter-sandbox',
-            'ObjectKey' => 'public/user_images/20926/if3i36p9ok7bv9lygcih_medium.jpeg',
-            'Time' => '2020-03-18T13:27:42.021Z',
-            'Timestamp' => 1584538062.021
-          }
-        ])
+      perform_porter_result('resize', [
+                              {
+                                'Task' => 'Image',
+                                'BucketName' => 'prx-porter-sandbox',
+                                'ObjectKey' => 'public/user_images/20926/ex_square.jpeg',
+                                'Time' => '2020-03-18T13:27:42.021Z',
+                                'Timestamp' => 1584538062.021
+                              },
+                              {
+                                'Task' => 'Image',
+                                'BucketName' => 'prx-porter-sandbox',
+                                'ObjectKey' => 'public/user_images/20926/ex_small.jpeg',
+                                'Time' => '2020-03-18T13:27:42.021Z',
+                                'Timestamp' => 1584538062.021
+                              }, {
+                                'Task' => 'Image',
+                                'BucketName' => 'prx-porter-sandbox',
+                                'ObjectKey' => 'public/user_images/20926/ex_medium.jpeg',
+                                'Time' => '2020-03-18T13:27:42.021Z',
+                                'Timestamp' => 1584538062.021
+                              }
+                            ])
 
       image.filename.must_equal 'if3i36p9ok7bv9lygcih.jpeg'
       image.upload_path.wont_be_nil
@@ -216,17 +216,17 @@ describe ImageCallbackWorker do
 
     it 'rescues from unknown image types' do
       image = perform_porter_result('analyze', 'Task' => 'Inspect',
-        'Inspection' => {
-          'Size' => 71484,
-          'Audio' => {},
-          'Image' => {
-            'Width' => 450,
-            'Height' => 450,
-            'Format' => 'jpeg'
-          },
-          'Extension' => 'jpg',
-          'MIME' => 'foobar'
-        })
+                                               'Inspection' => {
+                                                 'Size' => 71484,
+                                                 'Audio' => {},
+                                                 'Image' => {
+                                                   'Width' => 450,
+                                                   'Height' => 450,
+                                                   'Format' => 'jpeg'
+                                                 },
+                                                 'Extension' => 'jpg',
+                                                 'MIME' => 'foobar'
+                                               })
       image.content_type.must_equal 'foobar'
     end
 
@@ -244,7 +244,7 @@ describe ImageCallbackWorker do
 
     it 'sets resize errors' do
       perform_porter_error('resize')
-      
+
       image.status.must_equal ImageCallbackWorker::FAILED
       image.fixerable_final?.must_equal false
     end
@@ -254,27 +254,27 @@ describe ImageCallbackWorker do
       image.save
 
       perform_porter_result('resize', [
-        {
-          'Task' => 'Image',
-          'BucketName' => 'prx-porter-sandbox',
-          'ObjectKey' => 'public/user_images/20926/if3i36p9ok7bv9lygcih_square.jpeg',
-          'Time' => '2020-03-18T13:27:42.021Z',
-          'Timestamp' => 1584538062.021
-        },
-        {
-          'Task' => 'Image',
-          'BucketName' => 'prx-porter-sandbox',
-          'ObjectKey' => 'public/user_images/20926/if3i36p9ok7bv9lygcih_small.jpeg',
-          'Time' => '2020-03-18T13:27:42.021Z',
-          'Timestamp' => 1584538062.021
-        },{
-          'Task' => 'Image',
-          'BucketName' => 'prx-porter-sandbox',
-          'ObjectKey' => 'public/user_images/20926/if3i36p9ok7bv9lygcih_medium.jpeg',
-          'Time' => '2020-03-18T13:27:42.021Z',
-          'Timestamp' => 1584538062.021
-        }
-      ])
+                              {
+                                'Task' => 'Image',
+                                'BucketName' => 'prx-porter-sandbox',
+                                'ObjectKey' => 'public/user_images/20926/ex_square.jpeg',
+                                'Time' => '2020-03-18T13:27:42.021Z',
+                                'Timestamp' => 1584538062.021
+                              },
+                              {
+                                'Task' => 'Image',
+                                'BucketName' => 'prx-porter-sandbox',
+                                'ObjectKey' => 'public/user_images/20926/ex_small.jpeg',
+                                'Time' => '2020-03-18T13:27:42.021Z',
+                                'Timestamp' => 1584538062.021
+                              }, {
+                                'Task' => 'Image',
+                                'BucketName' => 'prx-porter-sandbox',
+                                'ObjectKey' => 'public/user_images/20926/ex_medium.jpeg',
+                                'Time' => '2020-03-18T13:27:42.021Z',
+                                'Timestamp' => 1584538062.021
+                              }
+                            ])
       last_message.wont_be_nil
       last_message['subject'].must_equal :story
       last_message['action'].must_equal :update
@@ -285,14 +285,14 @@ describe ImageCallbackWorker do
       series_image.filename = 'test.jpeg'
 
       perform_porter_result('resize', [
-        {
-          'Task' => 'Image',
-          'BucketName' => 'prx-porter-sandbox',
-          'ObjectKey' => 'public/user_images/20926/if3i36p9ok7bv9lygcih_square.jpeg',
-          'Time' => '2020-03-18T13:27:42.021Z',
-          'Timestamp' => 1584538062.021
-        }
-      ], series_image)
+                              {
+                                'Task' => 'Image',
+                                'BucketName' => 'prx-porter-sandbox',
+                                'ObjectKey' => 'public/user_images/20926/ex_square.jpeg',
+                                'Time' => '2020-03-18T13:27:42.021Z',
+                                'Timestamp' => 1584538062.021
+                              }
+                            ], series_image)
       last_message.wont_be_nil
       last_message['subject'].must_equal :series
       last_message['action'].must_equal :update

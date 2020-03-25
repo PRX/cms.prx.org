@@ -13,7 +13,7 @@ class Image < BaseModel
 
   SNS_CLIENT = if ENV['PORTER_SNS_TOPIC_ARN']
                  Aws::SNS::Client.new
-               elsif !Rails.environment.test?
+               elsif !Rails.env.test?
                  Rails.logger.warn('No Porter SNS topic provided - Porter jobs will be skipped.')
                  nil
                end
