@@ -25,7 +25,7 @@ describe Api::AccountImagesController do
       image_hash = { credit: 'credit' }
       mock_image = Minitest::Mock.new account_image
 
-      mock_image.expect :copy_uplaod!, true
+      mock_image.expect :copy_upload!, true
 
       @controller.stub :authorize, true do
         @controller.stub :update_resource, mock_image do
