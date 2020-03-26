@@ -10,19 +10,11 @@ class Image < BaseModel
   include PublicAsset
   include Fixerable
   include ValidityFlag
+  include Portered
 
-  SNS_CLIENT = if ENV['PORTER_SNS_TOPIC_ARN']
-                 Aws::SNS::Client.new
-               elsif !Rails.env.test?
-                 Rails.logger.warn('No Porter SNS topic provided - Porter jobs will be skipped.')
-                 nil
-               end
+  CALLBACK_QUEUE = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
 
-  CALLBACK_QUEUE_NAME = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
-  SQS_QUEUE_URI = URI::HTTPS.build(
-    host: "sqs.#{ENV['AWS_REGION']}.amazonaws.com",
-    path: "/#{ENV['AWS_ACCOUNT_ID']}/#{CALLBACK_QUEUE_NAME}"
-  ).to_s.freeze
+  porter_callbacks sqs: CALLBACK_QUEUE
 
   def self.profile
     order("field(purpose, '#{Image::PROFILE}') desc, created_at desc").first
@@ -66,119 +58,57 @@ class Image < BaseModel
   end
 
   def copy_upload!
-    return false if complete? || !SNS_CLIENT.present?
+    return if complete?
 
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
-      publish_porter_sns(
-        Job: {
-          Id: "#{porter_job_id}:copy",
-          Source: {
-            Mode: 'HTTP',
-            URL: asset_url
-          },
-          Tasks: [
-            {
-              Type: 'Copy',
-              Mode: 'AWS/S3',
-              BucketName: ENV['AWS_BUCKET'],
-              ObjectKey: "#{fixerable_final_path}/#{filename}"
-            }
-          ],
-          Callbacks: [
-            {
-              Type: 'AWS/SQS',
-              Queue: SQS_QUEUE_URI
-            }
-          ]
+      submit_porter_job "#{porter_job_id}:copy", asset_url do
+        {
+          Type: 'Copy',
+          Mode: 'AWS/S3',
+          BucketName: ENV['AWS_BUCKET'],
+          ObjectKey: "#{fixerable_final_path}/#{filename}"
         }
-      )
+      end
     end
   end
 
   def analyze_file!
-    return false if complete? || !SNS_CLIENT.present?
+    return if complete?
 
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
-      publish_porter_sns(
-        Job: {
-          Id: "#{porter_job_id}:analyze",
-          Source: {
-            Mode: 'AWS/S3',
-            BucketName: ENV['AWS_BUCKET'],
-            ObjectKey: file.path
-          },
-          Tasks: [
-            { Type: 'Inspect' }
-          ],
-          Callbacks: [
-            {
-              Type: 'AWS/SQS',
-              Queue: SQS_QUEUE_URI
-            }
-          ]
-        }
-      )
+      submit_porter_job "#{porter_job_id}:analyze", fixerable_final_storage_url, Type: 'Inspect'
     end
   end
 
   def generate_thumbnails!(format)
-    return false if complete?
+    return if complete?
 
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
-      publish_porter_sns(
-        Job: {
-          Id: "#{porter_job_id}:resize",
-          Source: {
-            Mode: 'AWS/S3',
-            BucketName: ENV['AWS_BUCKET'],
-            ObjectKey: file.path
-          },
-          Tasks: resize_tasks(format),
-          Callbacks: [
-            {
-              Type: 'AWS/SQS',
-              Queue: SQS_QUEUE_URI
+      submit_porter_job "#{porter_job_id}:thumb", fixerable_final_storage_url do
+        ImageUploader.version_formats.map do |(name, dimensions)|
+          {
+            Type: 'Image',
+            Format: format,
+            Metadata: 'PRESERVE',
+            Resize: {
+              Fit: 'contain',
+              Height: dimensions[1],
+              Position: 'centre',
+              Width: dimensions[0]
+            },
+            Destination: {
+              Mode: 'AWS/S3',
+              BucketName: ENV['AWS_BUCKET'],
+              ObjectKey: file.public_send(name).path
             }
-          ]
-        }
-      )
+          }
+        end
+      end
     end
   end
 
   def remove!; end
-
-  private
-
-  def resize_tasks(format)
-    ImageUploader.version_formats.map do |(name, dimensions)|
-      {
-        Type: 'Image',
-        Format: format,
-        Metadata: 'PRESERVE',
-        Resize: {
-          Fit: 'contain',
-          Height: dimensions[1],
-          Position: 'centre',
-          Width: dimensions[0]
-        },
-        Destination: {
-          Mode: 'AWS/S3',
-          BucketName: ENV['AWS_BUCKET'],
-          ObjectKey: file.public_send(name).path
-        }
-      }
-    end
-  end
-
-  def publish_porter_sns(message)
-    return false if Rails.env.test? || !SNS_CLIENT.present?
-
-    SNS_CLIENT.publish({
-                         topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
-                         message: message.to_json
-                       })
-  end
 end

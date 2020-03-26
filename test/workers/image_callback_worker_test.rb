@@ -185,7 +185,7 @@ describe ImageCallbackWorker do
                                          'MIME' => 'image/jpeg'
                                        })
 
-      perform_porter_result('resize', [
+      perform_porter_result('thumb', [
                               {
                                 'Task' => 'Image',
                                 'BucketName' => 'prx-porter-sandbox',
@@ -243,7 +243,7 @@ describe ImageCallbackWorker do
     end
 
     it 'sets resize errors' do
-      perform_porter_error('resize')
+      perform_porter_error('thumb')
 
       image.status.must_equal ImageCallbackWorker::FAILED
       image.fixerable_final?.must_equal false
@@ -253,7 +253,7 @@ describe ImageCallbackWorker do
       image.filename = 'if3i36p9ok7bv9lygcih.jpeg'
       image.save
 
-      perform_porter_result('resize', [
+      perform_porter_result('thumb', [
                               {
                                 'Task' => 'Image',
                                 'BucketName' => 'prx-porter-sandbox',
@@ -284,7 +284,7 @@ describe ImageCallbackWorker do
     it 'announces series updates for series-image' do
       series_image.filename = 'test.jpeg'
 
-      perform_porter_result('resize', [
+      perform_porter_result('thumb', [
                               {
                                 'Task' => 'Image',
                                 'BucketName' => 'prx-porter-sandbox',

@@ -4,6 +4,11 @@ class AudioFile < BaseModel
   include PublicAsset
   include Fixerable
   include ValidityFlag
+  include Portered
+
+  CALLBACK_QUEUE = "#{ENV['RAILS_ENV']}_cms_audio_callback".freeze
+
+  porter_callbacks sqs: CALLBACK_QUEUE
 
   belongs_to :account
   belongs_to :audio_version
@@ -94,4 +99,21 @@ class AudioFile < BaseModel
       self.status_message = errors
     end
   end
+
+  def analyze!
+    return if status != UPLOADED
+
+    submit_porter_job "cms::audio_file:analyze:#{id}", asset_url do
+      [
+        {
+          Type: 'Copy',
+          Mode: 'AWS/S3',
+          BucketName: ENV['AWS_BUCKET'],
+          ObjectKey: "#{fixerable_final_path}/#{filename}"
+        },
+        { Type: 'Inspect' }
+      ]
+    end
+  end
+
 end

@@ -5,7 +5,7 @@ class ImageCallbackWorker
 
   class UnknownImageTypeError < StandardError; end
 
-  shoryuken_options queue: Image::CALLBACK_QUEUE_NAME
+  shoryuken_options queue: Image::CALLBACK_QUEUE
 
   # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
   def perform(_sqs_msg, job)
@@ -41,8 +41,8 @@ class ImageCallbackWorker
         callback_copy(image, job['JobResult'])
       when 'analyze'
         callback_analyze(image, job['JobResult'])
-      when 'resize'
-        callback_resize(image, job['JobResult'])
+      when 'thumb'
+        callback_thumb(image, job['JobResult'])
       else
         return nil
       end
@@ -85,7 +85,7 @@ class ImageCallbackWorker
     image.save!
   end
 
-  def callback_resize(image, job_result)
+  def callback_thumb(image, job_result)
     image.status = if job_result['Error']
                      FAILED
                    else
