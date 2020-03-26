@@ -107,7 +107,7 @@ describe ImageCallbackWorker do
           'Execution' => {
             'Id' => 'arn:aws:states:us-east-1:561178107736:execution:StateMachine-8B8z7vHLT4JS:etc'
           },
-          'Result' => Array.wrap(result)
+          'TaskResults' => Array.wrap(result)
         }
       }
     end

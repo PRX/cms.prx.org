@@ -51,42 +51,42 @@ class ImageCallbackWorker
   end
 
   def callback_copy(image, job_result)
-    if job_result['Error']
-      image.status = NOTFOUND
+    copy_task_result = job_result['TaskResults'].try(:detect) { |result| result['Task'] == 'Copy' }
 
-      announce_image_changed(image)
-    else
-      copy_task_result = job_result['Result'].detect { |result| result['Task'] == 'Copy' }
+    if copy_task_result.present?
       image.filename = File.basename(copy_task_result['ObjectKey'])
 
       image.analyze_file!
+    else
+      image.status = NOTFOUND
+
+      announce_image_changed(image)
     end
 
     image.save!
   end
 
   def callback_analyze(image, job_result)
-    if job_result['Error']
+    inspect_task_result = job_result['TaskResults'].try(:detect) { |result| result['Task'] == 'Inspect' }
+
+    if inspect_task_result.present?
+      image.size = inspect_task_result['Inspection']['Size']
+      image.width = inspect_task_result['Inspection']['Image']['Width']
+      image.height = inspect_task_result['Inspection']['Image']['Height']
+      image.aspect_ratio = image.width / image.height.to_f if image.width && image.height
+      image.content_type = inspect_task_result['Inspection']['MIME']
+
+      image.generate_thumbnails!(inspect_task_result['Inspection']['Image']['Format'])
+    else
       image.status = INVALID
       announce_image_changed(image)
-    else
-      inspect_task_result = job_result['Result'].detect { |result| result['Task'] == 'Inspect' }
-      if inspect_task_result
-        image.size = inspect_task_result['Inspection']['Size']
-        image.width = inspect_task_result['Inspection']['Image']['Width']
-        image.height = inspect_task_result['Inspection']['Image']['Height']
-        image.aspect_ratio = image.width / image.height.to_f if image.width && image.height
-        image.content_type = inspect_task_result['Inspection']['MIME']
-
-        image.generate_thumbnails!(inspect_task_result['Inspection']['Image']['Format'])
-      end
     end
 
     image.save!
   end
 
   def callback_resize(image, job_result)
-    image.status = if job_result['Error']
+    image.status = if job_result['TaskResults'].blank?
                      FAILED
                    else
                      COMPLETE
