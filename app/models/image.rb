@@ -159,7 +159,7 @@ class Image < BaseModel
         Format: format,
         Metadata: 'PRESERVE',
         Resize: {
-          Fit: 'contain',
+          Fit: name == 'square' ? 'cover' : 'inside',
           Height: dimensions[1],
           Position: 'centre',
           Width: dimensions[0]
