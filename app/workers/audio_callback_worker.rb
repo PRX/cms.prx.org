@@ -25,7 +25,6 @@ class AudioCallbackWorker
   def porter_callback(job)
     audio_file = AudioFile.find(audio_file_id(job))
     process_results(audio_file, job['JobResult']['TaskResults'])
-    set_status(audio_file, copy_result, inspect_result)
     finish(audio_file)
   end
 
@@ -153,5 +152,7 @@ class AudioCallbackWorker
 
     inspect_result = task_results.detect { |result| result['Task'] == 'Inspect' }
     process_inspect_result(audio_file, inspect_result)
+
+    set_status(audio_file, copy_result, inspect_result)
   end
 end
