@@ -92,7 +92,7 @@ Style/EvenOdd:
 Naming/FileName:
   Enabled: false
 
-Lint/FlipFlop:
+Style/FlipFlop:
   Enabled: false
 
 Style/FormatString:
@@ -122,7 +122,7 @@ Style/LambdaCall:
 Style/LineEndConcatenation:
   Enabled: false
 
-Layout/LineLength:
+Metrics/LineLength:
   Max: 100
 
 Metrics/MethodLength:

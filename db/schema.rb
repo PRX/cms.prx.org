@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181030200041) do
+ActiveRecord::Schema.define(version: 20200304162904) do
 
   create_table "account_applications", force: :cascade do |t|
     t.integer  "account_id",            limit: 4
@@ -23,26 +23,28 @@ ActiveRecord::Schema.define(version: 20181030200041) do
   add_index "account_applications", ["account_id", "client_application_id"], name: "index_account_applications_uniq", unique: true, using: :btree
 
   create_table "account_images", force: :cascade do |t|
-    t.integer  "parent_id",    limit: 4
-    t.string   "content_type", limit: 255
-    t.string   "filename",     limit: 255
-    t.string   "thumbnail",    limit: 255
-    t.integer  "size",         limit: 4
-    t.integer  "width",        limit: 4
-    t.integer  "height",       limit: 4
-    t.float    "aspect_ratio", limit: 24
-    t.integer  "account_id",   limit: 4
+    t.integer  "parent_id",     limit: 4
+    t.string   "content_type",  limit: 255
+    t.string   "filename",      limit: 255
+    t.string   "thumbnail",     limit: 255
+    t.integer  "size",          limit: 4
+    t.integer  "width",         limit: 4
+    t.integer  "height",        limit: 4
+    t.float    "aspect_ratio",  limit: 24
+    t.integer  "account_id",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "upload_path",  limit: 255
-    t.string   "status",       limit: 255
-    t.string   "caption",      limit: 255
-    t.string   "credit",       limit: 255
-    t.string   "purpose",      limit: 255
+    t.string   "upload_path",   limit: 255
+    t.string   "status",        limit: 255
+    t.string   "caption",       limit: 255
+    t.string   "credit",        limit: 255
+    t.string   "purpose",       limit: 255
+    t.string   "porter_job_id", limit: 255
   end
 
   add_index "account_images", ["account_id"], name: "account_images_account_id_fk", using: :btree
   add_index "account_images", ["parent_id"], name: "parent_id_idx", using: :btree
+  add_index "account_images", ["porter_job_id"], name: "index_account_images_on_porter_job_id", using: :btree
   add_index "account_images", ["updated_at"], name: "index_account_images_on_updated_at", using: :btree
 
   create_table "account_memberships", force: :cascade do |t|
@@ -1115,27 +1117,29 @@ ActiveRecord::Schema.define(version: 20181030200041) do
   add_index "piece_files", ["piece_id"], name: "piece_files_piece_id_fk", using: :btree
 
   create_table "piece_images", force: :cascade do |t|
-    t.integer  "parent_id",    limit: 4
-    t.string   "content_type", limit: 255
-    t.string   "filename",     limit: 255
-    t.string   "thumbnail",    limit: 255
-    t.integer  "size",         limit: 4
-    t.integer  "width",        limit: 4
-    t.integer  "height",       limit: 4
-    t.float    "aspect_ratio", limit: 24
-    t.integer  "piece_id",     limit: 4
-    t.string   "caption",      limit: 255
-    t.string   "credit",       limit: 255
-    t.integer  "position",     limit: 4
+    t.integer  "parent_id",     limit: 4
+    t.string   "content_type",  limit: 255
+    t.string   "filename",      limit: 255
+    t.string   "thumbnail",     limit: 255
+    t.integer  "size",          limit: 4
+    t.integer  "width",         limit: 4
+    t.integer  "height",        limit: 4
+    t.float    "aspect_ratio",  limit: 24
+    t.integer  "piece_id",      limit: 4
+    t.string   "caption",       limit: 255
+    t.string   "credit",        limit: 255
+    t.integer  "position",      limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "upload_path",  limit: 255
-    t.string   "status",       limit: 255
-    t.string   "purpose",      limit: 255
+    t.string   "upload_path",   limit: 255
+    t.string   "status",        limit: 255
+    t.string   "purpose",       limit: 255
+    t.string   "porter_job_id", limit: 255
   end
 
   add_index "piece_images", ["parent_id"], name: "parent_id_idx", using: :btree
   add_index "piece_images", ["piece_id"], name: "piece_images_piece_id_fk", using: :btree
+  add_index "piece_images", ["porter_job_id"], name: "index_piece_images_on_porter_job_id", using: :btree
   add_index "piece_images", ["position"], name: "position_idx", using: :btree
 
   create_table "pieces", force: :cascade do |t|
@@ -1531,24 +1535,26 @@ ActiveRecord::Schema.define(version: 20181030200041) do
   add_index "series_files", ["series_id"], name: "series_files_series_id_fk", using: :btree
 
   create_table "series_images", force: :cascade do |t|
-    t.integer  "parent_id",    limit: 4
-    t.string   "content_type", limit: 255
-    t.string   "filename",     limit: 255
-    t.string   "thumbnail",    limit: 255
-    t.integer  "size",         limit: 4
-    t.integer  "width",        limit: 4
-    t.integer  "height",       limit: 4
-    t.float    "aspect_ratio", limit: 24
-    t.integer  "series_id",    limit: 4
-    t.string   "caption",      limit: 255
-    t.string   "credit",       limit: 255
+    t.integer  "parent_id",     limit: 4
+    t.string   "content_type",  limit: 255
+    t.string   "filename",      limit: 255
+    t.string   "thumbnail",     limit: 255
+    t.integer  "size",          limit: 4
+    t.integer  "width",         limit: 4
+    t.integer  "height",        limit: 4
+    t.float    "aspect_ratio",  limit: 24
+    t.integer  "series_id",     limit: 4
+    t.string   "caption",       limit: 255
+    t.string   "credit",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "upload_path",  limit: 255
-    t.string   "status",       limit: 255
-    t.string   "purpose",      limit: 255
+    t.string   "upload_path",   limit: 255
+    t.string   "status",        limit: 255
+    t.string   "purpose",       limit: 255
+    t.string   "porter_job_id", limit: 255
   end
 
+  add_index "series_images", ["porter_job_id"], name: "index_series_images_on_porter_job_id", using: :btree
   add_index "series_images", ["series_id"], name: "series_images_series_id_fk", using: :btree
 
   create_table "site_message_receptions", force: :cascade do |t|
@@ -1650,7 +1656,7 @@ ActiveRecord::Schema.define(version: 20181030200041) do
     t.boolean  "approved_by_subscriber"
     t.boolean  "approved_by_producer"
     t.datetime "agreed_to_terms_at"
-    t.integer  "susbscriber_id",            limit: 4
+    t.integer  "subscriber_id",             limit: 4
     t.datetime "approved_at"
     t.integer  "days_early",                limit: 4
     t.integer  "days_late",                 limit: 4
@@ -1702,24 +1708,26 @@ ActiveRecord::Schema.define(version: 20181030200041) do
   add_index "topics", ["piece_id"], name: "topics_piece_id_fk", using: :btree
 
   create_table "user_images", force: :cascade do |t|
-    t.integer  "parent_id",    limit: 4
-    t.string   "content_type", limit: 255
-    t.string   "filename",     limit: 255
-    t.string   "thumbnail",    limit: 255
-    t.integer  "size",         limit: 4
-    t.integer  "width",        limit: 4
-    t.integer  "height",       limit: 4
-    t.float    "aspect_ratio", limit: 24
-    t.integer  "user_id",      limit: 4
+    t.integer  "parent_id",     limit: 4
+    t.string   "content_type",  limit: 255
+    t.string   "filename",      limit: 255
+    t.string   "thumbnail",     limit: 255
+    t.integer  "size",          limit: 4
+    t.integer  "width",         limit: 4
+    t.integer  "height",        limit: 4
+    t.float    "aspect_ratio",  limit: 24
+    t.integer  "user_id",       limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "upload_path",  limit: 255
-    t.string   "status",       limit: 255
-    t.string   "caption",      limit: 255
-    t.string   "credit",       limit: 255
-    t.string   "purpose",      limit: 255
+    t.string   "upload_path",   limit: 255
+    t.string   "status",        limit: 255
+    t.string   "caption",       limit: 255
+    t.string   "credit",        limit: 255
+    t.string   "purpose",       limit: 255
+    t.string   "porter_job_id", limit: 255
   end
 
+  add_index "user_images", ["porter_job_id"], name: "index_user_images_on_porter_job_id", using: :btree
   add_index "user_images", ["updated_at"], name: "index_user_images_on_updated_at", using: :btree
   add_index "user_images", ["user_id"], name: "user_images_user_id_fk", using: :btree
 

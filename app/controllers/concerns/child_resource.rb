@@ -55,6 +55,7 @@ module ChildResource
       hal_authorize res
       parent_resource.public_send("#{child_resource_name}=", res)
       try(:after_original_destroyed, original) if original && original.destroyed?
+      try(:after_create_resource, res)
       respond_with root_resource(res), create_options
     end
   end

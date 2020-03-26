@@ -46,9 +46,14 @@ GEM
     announce (0.2.3)
     ansi (1.5.0)
     arel (6.0.4)
+    ast (2.4.0)
+    aws-sdk (2.10.122)
+      aws-sdk-resources (= 2.10.122)
     aws-sdk-core (2.10.122)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
+    aws-sdk-resources (2.10.122)
+      aws-sdk-core (= 2.10.122)
     aws-sigv4 (1.0.2)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -337,6 +342,7 @@ GEM
     mysql2 (0.4.10)
     nenv (0.3.0)
     newrelic_rpm (5.2.0.345)
+    nio4r (2.5.2)
     nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     nokogumbo (1.5.0)
@@ -349,8 +355,12 @@ GEM
       rack (>= 1.2, < 3)
     oj (2.18.0)
     oj_mimic_json (1.0.1)
+    parallel (1.19.1)
     paranoia (2.2.0)
       activerecord (>= 4.0, < 5.1)
+    parser (2.7.0.5)
+      ast (~> 2.4.0)
+    powerpack (0.1.2)
     prx_auth-rails (0.2.0)
       rack-prx_auth (~> 0.2.0)
     pry (0.10.4)
@@ -361,7 +371,8 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (2.0.4)
-    puma (3.12.4)
+    puma (4.3.3)
+      nio4r (~> 2.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     quiet_assets (1.1.0)
@@ -404,6 +415,7 @@ GEM
       activesupport (= 4.2.11.1)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
+    rainbow (3.0.0)
     rake (13.0.0)
     rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
@@ -430,6 +442,13 @@ GEM
       roar (>= 1.0.0, <= 1.1.0)
       test_xml (>= 0.1.6)
       uber (>= 0.0.5)
+    rubocop (0.54.0)
+      parallel (~> 1.10)
+      parser (>= 2.5)
+      powerpack (~> 0.1)
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
     safe_yaml (1.0.4)
     sanitize (4.6.4)
@@ -478,6 +497,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
+    unicode-display_width (1.7.0)
     uri_template (0.7.0)
     url (0.3.2)
     web-console (2.3.0)
@@ -499,6 +519,7 @@ DEPENDENCIES
   acts_as_list
   addressable
   announce
+  aws-sdk
   better_errors
   binding_of_caller
   carrierwave (~> 0.11)
@@ -553,6 +574,7 @@ DEPENDENCIES
   reverse_markdown
   roar
   roar-rails
+  rubocop (= 0.54.0)
   sanitize
   say_when (~> 2.x)
   sdoc
@@ -568,4 +590,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.16.6
+   1.17.3

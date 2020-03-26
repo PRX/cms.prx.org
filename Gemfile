@@ -11,7 +11,6 @@ gem 'sprockets', '~> 3.7.2'
 gem 'prx_auth-rails', '~> 0.2.0'
 gem 'rack-prx_auth', '~> 0.2.1'
 
-
 ## Model
 # Use mysql as the database for Active Record
 gem 'mysql2'
@@ -89,6 +88,11 @@ gem 'elasticsearch-rails'
 # production calendar
 gem 'icalendar', '~> 2.5.0'
 
+# SNS for communication with Porter
+# NOTE: We can't do the single-package version (aws-sdk-sns) because that
+#       depends on a newer version of aws-sdk-core than shoryuken supports
+gem 'aws-sdk'
+
 # dev-only
 group :development do
   gem 'better_errors'
@@ -99,6 +103,7 @@ group :development do
   gem 'quiet_assets'
   gem 'spring'
   gem 'web-console', '~> 2.0'
+  gem 'rubocop', '0.54.0'
 end
 
 group :test do

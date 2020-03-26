@@ -30,6 +30,7 @@ require 'announce'
 require 'announce/testing'
 require 'webmock/minitest'
 require 'database_cleaner'
+require 'minitest_ext'
 
 DatabaseCleaner.strategy = :transaction
 
