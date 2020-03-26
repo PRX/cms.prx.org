@@ -74,4 +74,21 @@ describe AudioVersionTemplate do
     audio_version_template.validate_audio_file(audio_file).must_include 'is not in video format'
   end
 
+  it 'updates segment count when child file templates change' do
+    audio_version_template.audio_file_templates.count.must_equal 0
+    audio_version_template.segment_count.must_be_nil
+
+    f1 = audio_version_template.audio_file_templates.create!(label: 'seg1')
+    f1.run_callbacks(:commit)
+    f2 = audio_version_template.audio_file_templates.create!(label: 'seg2')
+    f2.run_callbacks(:commit)
+    audio_version_template.audio_file_templates.count.must_equal 2
+    audio_version_template.reload.segment_count.must_equal 2
+
+    f1.destroy!
+    f1.run_callbacks(:commit)
+    audio_version_template.audio_file_templates.count.must_equal 1
+    audio_version_template.reload.segment_count.must_equal 1
+  end
+
 end
