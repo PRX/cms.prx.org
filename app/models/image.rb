@@ -186,7 +186,7 @@ class Image < BaseModel
 
   # These are going away downstream, just need codebuild to
   # finish before the refactor can be merged.
-  
+
   def sns_client
     self.class.sns_client if porter_enabled?
   end
@@ -196,7 +196,7 @@ class Image < BaseModel
   end
 
   def self.sns_client
-    @sns_client || = Aws::SNS::Client.new
+    @sns_client ||= Aws::SNS::Client.new
   end
 
   def self.porter_enabled?
