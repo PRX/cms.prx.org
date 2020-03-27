@@ -11,13 +11,6 @@ class Image < BaseModel
   include Fixerable
   include ValidityFlag
 
-  SNS_CLIENT = if ENV['PORTER_SNS_TOPIC_ARN']
-                 Aws::SNS::Client.new
-               elsif !Rails.env.test?
-                 Rails.logger.warn('No Porter SNS topic provided - Porter jobs will be skipped.')
-                 nil
-               end
-
   CALLBACK_QUEUE_NAME = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
   SQS_QUEUE_URI = URI::HTTPS.build(
     host: "sqs.#{ENV['AWS_REGION']}.amazonaws.com",
@@ -66,7 +59,7 @@ class Image < BaseModel
   end
 
   def copy_upload!
-    return false if complete? || !SNS_CLIENT.present?
+    return false if complete?
 
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
@@ -101,7 +94,7 @@ class Image < BaseModel
   end
 
   def analyze_file!
-    return false if complete? || !SNS_CLIENT.present?
+    return false if complete?
 
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
@@ -183,11 +176,30 @@ class Image < BaseModel
   end
 
   def publish_porter_sns(message)
-    return false if Rails.env.test? || !SNS_CLIENT.present?
+    return false if Rails.env.test? || !porter_enabled?
 
-    SNS_CLIENT.publish({
+    sns_client.publish({
                          topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
                          message: message.to_json
                        })
+  end
+
+  # These are going away downstream, just need codebuild to
+  # finish before the refactor can be merged.
+  
+  def sns_client
+    self.class.sns_client if porter_enabled?
+  end
+
+  def porter_enabled?
+    self.class.porter_enabled?
+  end
+
+  def self.sns_client
+    @sns_client || = Aws::SNS::Client.new
+  end
+
+  def self.porter_enabled?
+    ENV['PORTER_SNS_TOPIC_ARN'].present?
   end
 end
