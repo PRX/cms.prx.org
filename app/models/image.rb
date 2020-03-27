@@ -83,6 +83,10 @@ class Image < BaseModel
               Mode: 'AWS/S3',
               BucketName: ENV['AWS_BUCKET'],
               ObjectKey: "#{fixerable_final_path}/#{filename}"
+              ContentType: 'REPLACE',
+              Parameters: {
+                ContentDisposition: "attachment; filename=\"#{filename}\""
+              }
             }
           ],
           Callbacks: [
@@ -154,6 +158,7 @@ class Image < BaseModel
 
   def resize_tasks(format)
     ImageUploader.version_formats.map do |(name, dimensions)|
+      derivative = file.public_send(name).path
       {
         Type: 'Image',
         Format: format,
@@ -167,7 +172,11 @@ class Image < BaseModel
         Destination: {
           Mode: 'AWS/S3',
           BucketName: ENV['AWS_BUCKET'],
-          ObjectKey: file.public_send(name).path
+          ObjectKey: derivative,
+          ContentType: 'REPLACE',
+          Parameters: {
+            ContentDisposition: "attachment; filename=\"#{File.basename(derivative)}\""
+          }
         }
       }
     end
