@@ -144,6 +144,8 @@ describe ImageCallbackWorker do
     let(:series_image) { create(:series_image, porter_job_id: SecureRandom.uuid) }
 
     it 'updates image attributes' do
+      image.filename = 'example.png'
+      image.save
       image = perform_porter_result('analyze', 'Task' => 'Inspect',
                                                'Inspection' => {
                                                  'Size' => 71484,
@@ -215,6 +217,8 @@ describe ImageCallbackWorker do
     end
 
     it 'rescues from unknown image types' do
+      image.filename = 'example.png'
+      image.save
       image = perform_porter_result('analyze', 'Task' => 'Inspect',
                                                'Inspection' => {
                                                  'Size' => 71484,
