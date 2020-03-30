@@ -100,7 +100,7 @@ class AudioFile < BaseModel
     end
   end
 
-  def analyze!
+  def process!
     return if status != UPLOADED
 
     submit_porter_job "cms::audio_file:analyze:#{id}", asset_url do

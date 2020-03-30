@@ -38,6 +38,22 @@ describe Api::AudioFilesController do
       assert_response :success
     end
 
+    it 'triggers processing on create' do
+      mock_file = MiniTest::Mock.new
+      mock_file.expect(:process!, true)
+      @controller.send(:after_create_resource, mock_file)
+
+      mock_file.verify
+    end
+
+    it 'triggers processing on update' do
+      mock_file = MiniTest::Mock.new
+      mock_file.expect(:process!, true)
+      @controller.send(:after_update_resource, mock_file)
+
+      mock_file.verify
+    end
+
     it 'can create an audio file for an audio version' do
       af_hash = {
         upload: 'http://thisisatest.com/guid1/test.mp3',
