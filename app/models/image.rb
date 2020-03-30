@@ -56,76 +56,67 @@ class Image < BaseModel
     ImagePolicy
   end
 
-  def copy_upload!
+  def process!
     return if complete?
 
-    Image.transaction do
+    with_lock do
       update_attribute :porter_job_id, SecureRandom.uuid
-      submit_porter_job "#{porter_job_id}:copy", asset_url do
-        {
-          Type: 'Copy',
-          Mode: 'AWS/S3',
-          BucketName: ENV['AWS_BUCKET'],
-          ObjectKey: "#{fixerable_final_path}/#{filename}"
-              ContentType: 'REPLACE',
-              Parameters: {
-                ContentDisposition: "attachment; filename=\"#{filename}\""
-              }
-            }
-          ],
-          Callbacks: [
-            {
-              Type: 'AWS/SQS',
-              Queue: SQS_QUEUE_URI
-            }
-          ]
-        }
-      end
-    end
-  end
-
-  def analyze_file!
-    return if complete?
-
-    Image.transaction do
-      update_attribute :porter_job_id, SecureRandom.uuid
-      submit_porter_job "#{porter_job_id}:analyze", fixerable_final_storage_url, Type: 'Inspect'
-    end
-  end
-
-  def generate_thumbnails!(format)
-    return if complete?
-
-    Image.transaction do
-      update_attribute :porter_job_id, SecureRandom.uuid
-      submit_porter_job "#{porter_job_id}:thumb", fixerable_final_storage_url do
-        derivative = file.public_send(name).path
-        ImageUploader.version_formats.map do |(name, dimensions)|
+      submit_porter_job porter_job_id, asset_url do
+        [
           {
-            Type: 'Image',
-            Format: format,
-            Metadata: 'PRESERVE',
-            Resize: {
-              Fit: 'contain',
-              Height: dimensions[1],
-              Position: 'centre',
-              Width: dimensions[0]
-            },
-            Destination: {
-              Mode: 'AWS/S3',
-              BucketName: ENV['AWS_BUCKET'],
-              ObjectKey: derivative,
-              ContentType: 'REPLACE',
-              Parameters: {
-                ContentDisposition: "attachment; filename=\"#{File.basename(derivative)}\""
-              }
+            Type: 'Copy',
+            Mode: 'AWS/S3',
+            BucketName: ENV['AWS_BUCKET'],
+            ObjectKey: "#{fixerable_final_path}/#{filename}",
+            ContentType: 'REPLACE',
+            Parameters: {
+              ContentDisposition: "attachment; filename=\"#{filename}\""
             }
-          }
-        end
+          },
+          { Type: 'Inspect' },
+        ] + thumbnail_tasks
       end
     end
   end
 
   def remove!; end
-  
+
+  private
+
+  def thumbnail_tasks
+    # Before we can ask carrierwave for the derivative filenames, we need to
+    # tell it where we are going to put the original (this matters on create)
+    current_filename = file.filename
+    self.filename = filename if current_filename.nil?
+
+    tasks = ImageUploader.version_formats.map do |(name, dimensions)|
+      derivative = file.public_send(name).path
+      {
+        Type: 'Image',
+        Metadata: 'PRESERVE',
+        Resize: {
+          Fit: 'contain',
+          Height: dimensions[1],
+          Position: 'centre',
+          Width: dimensions[0]
+        },
+        Destination: {
+          Mode: 'AWS/S3',
+          BucketName: ENV['AWS_BUCKET'],
+          ObjectKey: derivative,
+          ContentType: 'REPLACE',
+          Parameters: {
+            ContentDisposition: "attachment; filename=\"#{File.basename(derivative)}\""
+          }
+        }
+      }
+    end
+
+    # Cleaning up after ourselves from before. This shouldn't matter, but in
+    # the interest of correctness...
+    self.filename = nil if current_filename.nil?
+
+    tasks
+  end
+
 end

@@ -25,7 +25,7 @@ describe Api::UserImagesController do
       image_hash = { credit: 'credit' }
       mock_image = Minitest::Mock.new user_image
 
-      mock_image.expect :copy_upload!, true
+      mock_image.expect :process!, true
 
       @controller.stub :authorize, true do
         @controller.stub :update_resource, mock_image do
@@ -45,7 +45,7 @@ describe Api::UserImagesController do
       user_image = UserImage.where(user: user).build
       mock_image = Minitest::Mock.new(user_image)
 
-      mock_image.expect :copy_upload!, true
+      mock_image.expect :process!, true
 
       @controller.stub :authorize, true do
         @controller.stub :create_resource, mock_image do

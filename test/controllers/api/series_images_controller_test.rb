@@ -30,7 +30,7 @@ describe Api::SeriesImagesController do
     image_opt = { credit: 'second blah credit' }
     mock_image = Minitest::Mock.new series_image
 
-    mock_image.expect :copy_upload!, true
+    mock_image.expect :process!, true
 
     @controller.stub :authorize, true do
       @controller.stub :update_resource, mock_image do
@@ -51,7 +51,7 @@ describe Api::SeriesImagesController do
     series_image = SeriesImage.where(series_id: series.id).build
     mock_image = Minitest::Mock.new(series_image)
 
-    mock_image.expect :copy_upload!, true
+    mock_image.expect :process!, true
 
     @controller.stub :authorize, true do
       @controller.stub :create_resource, mock_image do

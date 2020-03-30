@@ -4,6 +4,12 @@ class ImageCallbackWorker
   include Announce::Publisher
 
   class UnknownImageTypeError < StandardError; end
+  class ImageProcessingError < StandardError
+    attr_reader :status
+    def initialize(status)
+      @status = status
+    end
+  end
 
   shoryuken_options queue: Image::CALLBACK_QUEUE
 
@@ -33,20 +39,21 @@ class ImageCallbackWorker
   end
 
   def perform_porter_job_callback(job)
-    job_id, task_type = job['JobResult']['Job']['Id'].split(':')
-    image = Image.by_porter_job_id(job_id)
+    job_result = job['JobResult']
+    image = Image.by_porter_job_id(job_result['Job']['Id'])
     if image.present?
-      case task_type
-      when 'copy'
-        callback_copy(image, job['JobResult'])
-      when 'analyze'
-        callback_analyze(image, job['JobResult'])
-      when 'thumb'
-        callback_thumb(image, job['JobResult'])
-      else
-        return nil
+      image.with_lock do
+        begin
+          callback_copy(image, job_result)
+          callback_analyze(image, job_result)
+          callback_thumb(image, job_result)
+        rescue ImageProcessingError => error
+          image.status = error.status
+        end
+
+        image.save!
+        announce_image_changed(image)
       end
-      return image
     end
   end
 
@@ -55,19 +62,15 @@ class ImageCallbackWorker
 
     if copy_task_result.present?
       image.filename = File.basename(copy_task_result['ObjectKey'])
-
-      image.analyze_file!
     else
-      image.status = NOTFOUND
-
-      announce_image_changed(image)
+      raise ImageProcessingError.new(NOTFOUND)
     end
-
-    image.save!
   end
 
   def callback_analyze(image, job_result)
-    inspect_task_result = job_result['TaskResults'].try(:detect) { |result| result['Task'] == 'Inspect' }
+    inspect_task_result = job_result['TaskResults'].try(:detect) do |result|
+      result['Task'] == 'Inspect'
+    end
 
     if inspect_task_result.present?
       image.size = inspect_task_result['Inspection']['Size']
@@ -75,25 +78,20 @@ class ImageCallbackWorker
       image.height = inspect_task_result['Inspection']['Image']['Height']
       image.aspect_ratio = image.width / image.height.to_f if image.width && image.height
       image.content_type = inspect_task_result['Inspection']['MIME']
-
-      image.generate_thumbnails!(inspect_task_result['Inspection']['Image']['Format'])
     else
-      image.status = INVALID
-      announce_image_changed(image)
+      raise ImageProcessingError.new(INVALID)
     end
-
-    image.save!
   end
 
   def callback_thumb(image, job_result)
-    image.status = if job_result['TaskResults'].blank?
-                     FAILED
-                   else
-                     COMPLETE
-                   end
-
-    image.save!
-    announce_image_changed(image)
+    resize_task_results = job_result['TaskResults'].try(:select) do |result|
+      result['Task'] == 'Image'
+    end
+    if resize_task_results.length >= ImageUploader.version_formats.length
+      image.status = COMPLETE
+    else
+      raise ImageProcessingError.new(FAILED)
+    end
   end
 
   # START cms-image-lambda behavior

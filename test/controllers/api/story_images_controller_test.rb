@@ -39,7 +39,7 @@ describe Api::StoryImagesController do
     image_hash = { credit: 'credit' }
     mock_image = Minitest::Mock.new story_image
 
-    mock_image.expect :copy_upload!, true
+    mock_image.expect :process!, true
 
     @controller.stub :authorize, true do
       @controller.stub :update_resource, mock_image do
@@ -70,7 +70,7 @@ describe Api::StoryImagesController do
     story_image = StoryImage.where(story: story).build
     mock_image = Minitest::Mock.new(story_image)
 
-    mock_image.expect :copy_upload!, true
+    mock_image.expect :process!, true
 
     @controller.stub :authorize, true do
       @controller.stub :create_resource, mock_image do
