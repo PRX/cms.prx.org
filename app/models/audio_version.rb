@@ -10,6 +10,7 @@ class AudioVersion < BaseModel
 
   belongs_to :audio_version_template
   has_many :audio_files, -> { order :position }, dependent: :destroy
+  delegate :segment_count, to: :audio_version_template, allow_nil: true
 
   before_save :set_status, only: [:update, :create]
   after_commit :update_story_status

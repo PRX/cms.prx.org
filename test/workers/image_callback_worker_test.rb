@@ -107,7 +107,7 @@ describe ImageCallbackWorker do
           'Execution' => {
             'Id' => 'arn:aws:states:us-east-1:561178107736:execution:StateMachine-8B8z7vHLT4JS:etc'
           },
-          'Result' => Array.wrap(result)
+          'TaskResults' => Array.wrap(result)
         }
       }
     end
@@ -144,6 +144,8 @@ describe ImageCallbackWorker do
     let(:series_image) { create(:series_image, porter_job_id: SecureRandom.uuid) }
 
     it 'updates image attributes' do
+      image.filename = 'example.png'
+      image.save
       image = perform_porter_result('analyze', 'Task' => 'Inspect',
                                                'Inspection' => {
                                                  'Size' => 71484,
@@ -215,6 +217,8 @@ describe ImageCallbackWorker do
     end
 
     it 'rescues from unknown image types' do
+      image.filename = 'example.png'
+      image.save
       image = perform_porter_result('analyze', 'Task' => 'Inspect',
                                                'Inspection' => {
                                                  'Size' => 71484,

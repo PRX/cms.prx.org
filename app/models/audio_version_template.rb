@@ -39,6 +39,10 @@ class AudioVersionTemplate < BaseModel
     self.length_maximum ||= 0
   end
 
+  def set_segment_count_and_touch
+    update_attributes(segment_count: audio_file_templates.count, updated_at: Time.now)
+  end
+
   def touch_audio_versions
     audio_versions.update_all(updated_at: Time.now)
   end

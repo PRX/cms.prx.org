@@ -13,7 +13,6 @@ class Image < BaseModel
   include Portered
 
   CALLBACK_QUEUE = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
-
   porter_callbacks sqs: CALLBACK_QUEUE
 
   def self.profile
@@ -68,6 +67,18 @@ class Image < BaseModel
           Mode: 'AWS/S3',
           BucketName: ENV['AWS_BUCKET'],
           ObjectKey: "#{fixerable_final_path}/#{filename}"
+              ContentType: 'REPLACE',
+              Parameters: {
+                ContentDisposition: "attachment; filename=\"#{filename}\""
+              }
+            }
+          ],
+          Callbacks: [
+            {
+              Type: 'AWS/SQS',
+              Queue: SQS_QUEUE_URI
+            }
+          ]
         }
       end
     end
@@ -88,6 +99,7 @@ class Image < BaseModel
     Image.transaction do
       update_attribute :porter_job_id, SecureRandom.uuid
       submit_porter_job "#{porter_job_id}:thumb", fixerable_final_storage_url do
+        derivative = file.public_send(name).path
         ImageUploader.version_formats.map do |(name, dimensions)|
           {
             Type: 'Image',
@@ -102,7 +114,11 @@ class Image < BaseModel
             Destination: {
               Mode: 'AWS/S3',
               BucketName: ENV['AWS_BUCKET'],
-              ObjectKey: file.public_send(name).path
+              ObjectKey: derivative,
+              ContentType: 'REPLACE',
+              Parameters: {
+                ContentDisposition: "attachment; filename=\"#{File.basename(derivative)}\""
+              }
             }
           }
         end
@@ -111,4 +127,5 @@ class Image < BaseModel
   end
 
   def remove!; end
+  
 end

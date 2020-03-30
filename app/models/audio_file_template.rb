@@ -23,7 +23,7 @@ class AudioFileTemplate < BaseModel
   after_commit :touch_audio_version_template
 
   def touch_audio_version_template
-    audio_version_template.try(:touch)
+    audio_version_template.try(:set_segment_count_and_touch)
   end
 
   def set_defaults

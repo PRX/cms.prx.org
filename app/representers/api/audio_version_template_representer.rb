@@ -7,6 +7,7 @@ class Api::AudioVersionTemplateRepresenter < Api::BaseRepresenter
   property :promos
   property :length_minimum
   property :length_maximum
+  property :segment_count
 
   set_link_property(rel: :series, writeable: true)
 
