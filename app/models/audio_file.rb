@@ -109,7 +109,11 @@ class AudioFile < BaseModel
           Type: 'Copy',
           Mode: 'AWS/S3',
           BucketName: ENV['AWS_BUCKET'],
-          ObjectKey: "#{fixerable_final_path}/#{filename}"
+          ObjectKey: "#{fixerable_final_path}/#{filename}",
+          ContentType: 'REPLACE',
+          Parameters: {
+            ContentDisposition: "attachment; filename=\"#{filename}\""
+          }
         },
         { Type: 'Inspect' }
       ]
