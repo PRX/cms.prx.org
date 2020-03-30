@@ -15,6 +15,16 @@ class AudioCallbackWorker
                 update_audio(audio_file, job)
               end
             end
+
+    # save and announce the audio changes on its story
+    end_state = if audio.status_message
+                  "#{audio.status} => #{audio}"
+                else
+                  audio.status
+                end
+    Shoryuken.logger.info("Updating AudioFile[#{audio.id}]: status => #{end_state}")
+
+    audio.save!
     story = audio.story
     story.with_lock do
       announce(:story, :update, Api::Msg::StoryRepresenter.new(story).to_json)
@@ -74,23 +84,11 @@ class AudioCallbackWorker
       audio.status_message = nil
     end
 
-    finish(audio)
+    audio
   end
   # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity
 
   private
-
-  def finish(audio)
-    # save and announce the audio changes on its story
-    end_state = if audio.status_message
-                  "#{audio.status} => #{audio}"
-                else
-                  audio.status
-                end
-    Shoryuken.logger.info("Updating AudioFile[#{audio.id}]: status => #{end_state}")
-    audio.save!
-    audio
-  end
 
   def error_message(label, audio)
     "Error #{label} file #{audio.label || audio.id}"

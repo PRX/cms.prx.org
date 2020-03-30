@@ -29,7 +29,7 @@ describe Api::AudioFilesController do
 
     it 'can create an audio file for a story' do
       af_hash = {
-        upload: "http://thisisatest.com/guid1/test.mp3",
+        upload: 'http://thisisatest.com/guid1/test.mp3',
         size: 1024,
         duration: 30
       }
