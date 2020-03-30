@@ -5,12 +5,12 @@ class Api::BaseImagesController < Api::BaseController
 
   def after_create_resource(image)
     super
-    image.copy_upload!
+    image.process!
   end
 
   def after_update_resource(image)
     super
-    image.copy_upload!
+    image.process!
   end
 
   def after_destroy_resource(image)

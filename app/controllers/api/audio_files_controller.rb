@@ -36,4 +36,14 @@ class Api::AudioFilesController < Api::BaseController
   def story
     @story ||= Story.find(params[:story_id]) if params[:story_id]
   end
+
+  def after_create_resource(audio_file)
+    super
+    audio_file.process!
+  end
+
+  def after_update_resource(audio_file)
+    super
+    audio_file.process!
+  end
 end

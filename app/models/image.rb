@@ -10,12 +10,10 @@ class Image < BaseModel
   include PublicAsset
   include Fixerable
   include ValidityFlag
+  include Portered
 
-  CALLBACK_QUEUE_NAME = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
-  SQS_QUEUE_URI = URI::HTTPS.build(
-    host: "sqs.#{ENV['AWS_REGION']}.amazonaws.com",
-    path: "/#{ENV['AWS_ACCOUNT_ID']}/#{CALLBACK_QUEUE_NAME}"
-  ).to_s.freeze
+  CALLBACK_QUEUE = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
+  porter_callbacks sqs: CALLBACK_QUEUE
 
   def self.profile
     order("field(purpose, '#{Image::PROFILE}') desc, created_at desc").first
@@ -23,14 +21,6 @@ class Image < BaseModel
 
   def self.thumbnail
     order("field(purpose, '#{Image::THUMBNAIL}') desc, created_at desc").first
-  end
-
-  def self.by_porter_job_id(porter_job_id)
-    [AccountImage, SeriesImage, StoryImage, UserImage].each do |klass|
-      result = klass.find_by(porter_job_id: porter_job_id)
-      return result if result.present?
-    end
-    nil
   end
 
   alias_attribute :upload, :upload_path
@@ -58,90 +48,25 @@ class Image < BaseModel
     ImagePolicy
   end
 
-  def copy_upload!
-    return false if complete?
+  def process!
+    return if complete?
 
-    Image.transaction do
-      update_attribute :porter_job_id, SecureRandom.uuid
-      publish_porter_sns(
-        Job: {
-          Id: "#{porter_job_id}:copy",
-          Source: {
-            Mode: 'HTTP',
-            URL: asset_url
-          },
-          Tasks: [
-            {
-              Type: 'Copy',
-              Mode: 'AWS/S3',
-              BucketName: ENV['AWS_BUCKET'],
-              ObjectKey: "#{fixerable_final_path}/#{filename}",
-              ContentType: 'REPLACE',
-              Parameters: {
-                ContentDisposition: "attachment; filename=\"#{filename}\""
-              }
-            }
-          ],
-          Callbacks: [
-            {
-              Type: 'AWS/SQS',
-              Queue: SQS_QUEUE_URI
-            }
-          ]
-        }
-      )
-    end
-  end
-
-  def analyze_file!
-    return false if complete?
-
-    Image.transaction do
-      update_attribute :porter_job_id, SecureRandom.uuid
-      publish_porter_sns(
-        Job: {
-          Id: "#{porter_job_id}:analyze",
-          Source: {
+    with_lock do
+      submit_porter_job to_global_id.to_s, asset_url do
+        [
+          {
+            Type: 'Copy',
             Mode: 'AWS/S3',
             BucketName: ENV['AWS_BUCKET'],
-            ObjectKey: file.path
-          },
-          Tasks: [
-            { Type: 'Inspect' }
-          ],
-          Callbacks: [
-            {
-              Type: 'AWS/SQS',
-              Queue: SQS_QUEUE_URI
+            ObjectKey: "#{fixerable_final_path}/#{filename}",
+            ContentType: 'REPLACE',
+            Parameters: {
+              ContentDisposition: "attachment; filename=\"#{filename}\""
             }
-          ]
-        }
-      )
-    end
-  end
-
-  def generate_thumbnails!(format)
-    return false if complete?
-
-    Image.transaction do
-      update_attribute :porter_job_id, SecureRandom.uuid
-      publish_porter_sns(
-        Job: {
-          Id: "#{porter_job_id}:resize",
-          Source: {
-            Mode: 'AWS/S3',
-            BucketName: ENV['AWS_BUCKET'],
-            ObjectKey: file.path
           },
-          Tasks: resize_tasks(format),
-          Callbacks: [
-            {
-              Type: 'AWS/SQS',
-              Queue: SQS_QUEUE_URI
-            }
-          ]
-        }
-      )
+          { Type: 'Inspect' },
+        ] + thumbnail_tasks
+      end
     end
   end
 
@@ -149,12 +74,16 @@ class Image < BaseModel
 
   private
 
-  def resize_tasks(format)
-    ImageUploader.version_formats.map do |(name, dimensions)|
+  def thumbnail_tasks
+    # Before we can ask carrierwave for the derivative filenames, we need to
+    # tell it where we are going to put the original (this matters on create)
+    current_filename = file.filename
+    self.filename = filename if current_filename.nil?
+
+    tasks = ImageUploader.version_formats.map do |(name, dimensions)|
       derivative = file.public_send(name).path
       {
         Type: 'Image',
-        Format: format,
         Metadata: 'PRESERVE',
         Resize: {
           Fit: name == 'square' ? 'cover' : 'inside',
@@ -173,33 +102,12 @@ class Image < BaseModel
         }
       }
     end
+
+    # Cleaning up after ourselves from before. This shouldn't matter, but in
+    # the interest of correctness...
+    self.filename = nil if current_filename.nil?
+
+    tasks
   end
 
-  def publish_porter_sns(message)
-    return false if Rails.env.test? || !porter_enabled?
-
-    sns_client.publish({
-                         topic_arn: ENV['PORTER_SNS_TOPIC_ARN'],
-                         message: message.to_json
-                       })
-  end
-
-  # These are going away downstream, just need codebuild to
-  # finish before the refactor can be merged.
-
-  def sns_client
-    self.class.sns_client if porter_enabled?
-  end
-
-  def porter_enabled?
-    self.class.porter_enabled?
-  end
-
-  def self.sns_client
-    @sns_client ||= Aws::SNS::Client.new
-  end
-
-  def self.porter_enabled?
-    ENV['PORTER_SNS_TOPIC_ARN'].present?
-  end
 end

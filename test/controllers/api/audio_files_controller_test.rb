@@ -29,13 +29,29 @@ describe Api::AudioFilesController do
 
     it 'can create an audio file for a story' do
       af_hash = {
-        upload: "http://thisisatest.com/guid1/test.mp3",
+        upload: 'http://thisisatest.com/guid1/test.mp3',
         size: 1024,
         duration: 30
       }
       @request.env['CONTENT_TYPE'] = 'application/json'
       post :create, af_hash.to_json, api_request_opts(story_id: story_with_version.id)
       assert_response :success
+    end
+
+    it 'triggers processing on create' do
+      mock_file = MiniTest::Mock.new
+      mock_file.expect(:process!, true)
+      @controller.send(:after_create_resource, mock_file)
+
+      mock_file.verify
+    end
+
+    it 'triggers processing on update' do
+      mock_file = MiniTest::Mock.new
+      mock_file.expect(:process!, true)
+      @controller.send(:after_update_resource, mock_file)
+
+      mock_file.verify
     end
 
     it 'can create an audio file for an audio version' do
