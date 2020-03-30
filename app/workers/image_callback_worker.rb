@@ -40,7 +40,7 @@ class ImageCallbackWorker
 
   def perform_porter_job_callback(job)
     job_result = job['JobResult']
-    image = Image.by_porter_job_id(job_result['Job']['Id'])
+    image = GlobalID::Locator.locate(job_result['Job']['Id'])
     if image.present?
       image.with_lock do
         begin

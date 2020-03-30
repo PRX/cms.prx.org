@@ -176,8 +176,7 @@ describe AudioCallbackWorker do
     end
 
     def perform_callback
-      job_id = "cms::audio_file:analyze:#{audio.id}"
-      worker.perform(nil, callback_message(job_id, successful_task_results))
+      worker.perform(nil, callback_message(audio.to_global_id.to_s, successful_task_results))
       audio.reload
     end
 
@@ -246,7 +245,7 @@ describe AudioCallbackWorker do
     end
 
     it 'rescues from non-existent audio ids' do
-      worker.perform(nil, callback_message('cms::audio_file:analyze:999', successful_task_results))
+      worker.perform(nil, callback_message(AudioFile.new(id:999).to_global_id.to_s, successful_task_results))
       audio.reload
       audio.size.must_be_nil
     end

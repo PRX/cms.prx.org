@@ -149,7 +149,7 @@ describe ImageCallbackWorker do
         'Timestamp' => 1584538065.855,
         'JobResult' => {
           'Job' => {
-            'Id' => image.porter_job_id
+            'Id' => image.to_global_id.to_s
           },
           'Execution' => {
             'Id' => 'arn:aws:states:us-east-1:561178107736:execution:StateMachine-8B8z7vHLT4JS:etc'
@@ -170,8 +170,8 @@ describe ImageCallbackWorker do
       use_image
     end
 
-    let(:image) { create(:story_image_uploaded, porter_job_id: SecureRandom.uuid) }
-    let(:series_image) { create(:series_image, porter_job_id: SecureRandom.uuid) }
+    let(:image) { create(:story_image_uploaded) }
+    let(:series_image) { create(:series_image) }
 
     it 'updates image attributes' do
       perform_porter_callback

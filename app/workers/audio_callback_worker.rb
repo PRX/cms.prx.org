@@ -24,9 +24,9 @@ class AudioCallbackWorker
   end
 
   def porter_callback(job)
-    audio_file = AudioFile.find(audio_file_id(job['JobResult']))
-    process_results(audio_file, job['JobResult']['TaskResults'])
-    finish(audio_file)
+    GlobalID::Locator.locate(job['JobResult']['Job']['Id']).tap do |audio_file|
+      process_results(audio_file, job['JobResult']['TaskResults'])
+    end
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
@@ -139,10 +139,6 @@ class AudioCallbackWorker
       audio_file.status = TRANSFORMED
       audio_file.status_message = nil
     end
-  end
-
-  def audio_file_id(job)
-    job['Job']['Id'].split(':').last
   end
 
   def process_results(audio_file, task_results)

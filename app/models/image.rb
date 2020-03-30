@@ -23,14 +23,6 @@ class Image < BaseModel
     order("field(purpose, '#{Image::THUMBNAIL}') desc, created_at desc").first
   end
 
-  def self.by_porter_job_id(porter_job_id)
-    [AccountImage, SeriesImage, StoryImage, UserImage].each do |klass|
-      result = klass.find_by(porter_job_id: porter_job_id)
-      return result if result.present?
-    end
-    nil
-  end
-
   alias_attribute :upload, :upload_path
 
   mount_uploader :file, ImageUploader, mount_on: :filename
@@ -60,8 +52,7 @@ class Image < BaseModel
     return if complete?
 
     with_lock do
-      update_attribute :porter_job_id, SecureRandom.uuid
-      submit_porter_job porter_job_id, asset_url do
+      submit_porter_job to_global_id.to_s, asset_url do
         [
           {
             Type: 'Copy',
