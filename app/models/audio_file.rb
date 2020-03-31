@@ -103,6 +103,7 @@ class AudioFile < BaseModel
   def process!
     return if status != UPLOADED
 
+    broadcast_filename = "#{File.basename(filename, '.*')}_broadcast#{File.extname(filename).downcase}"
     submit_porter_job to_global_id.to_s, asset_url do
       [
         {
@@ -113,6 +114,16 @@ class AudioFile < BaseModel
           ContentType: 'REPLACE',
           Parameters: {
             ContentDisposition: "attachment; filename=\"#{filename}\""
+          }
+        },
+        {
+          Type: 'Copy',
+          Mode: 'AWS/S3',
+          BucketName: ENV['AWS_BUCKET'],
+          ObjectKey: "#{fixerable_final_path}/#{broadcast_filename}",
+          ContentType: 'REPLACE',
+          Parameters: {
+            ContentDisposition: "attachment; filename=\"#{broadcast_filename}\""
           }
         },
         { Type: 'Inspect' }
