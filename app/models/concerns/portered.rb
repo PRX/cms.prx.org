@@ -14,7 +14,7 @@ module Portered
       if callbacks.present?
         @porter_callbacks = Array.wrap(callbacks).map { |callback| format_callback(callback) }
       end
-      @porter_callbacks
+      @porter_callbacks || superclass.try(:porter_callbacks)
     end
 
     def format_callback(callback)
@@ -37,7 +37,6 @@ module Portered
         callback
       end
     end
-
   end
 
   def self.sns_client
