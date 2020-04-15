@@ -6,12 +6,11 @@ describe Api::Auth::AccountsController do
   let (:individual_account) { user.individual_account }
   let (:member_account) { create(:account) }
   let (:unapproved_account) { create(:account) }
-  let (:token) { StubToken.new(nil, nil, user.id) }
-
-  before do
-    token.authorized_resources = {
-      member_account.id => 'member',
-      individual_account.id => 'admin'
+  let (:token) { PrxAuth::Rails::Token.new(Rack::PrxAuth::TokenData.new('sub' => user.id, 'aur' => aur)) }
+  let (:aur) do
+    {
+      member_account.id.to_s => 'member',
+      individual_account.id.to_s => 'admin'
     }
   end
 

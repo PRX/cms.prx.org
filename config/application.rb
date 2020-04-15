@@ -60,7 +60,6 @@ module PRX
     # explicitly set auth host, rather than defaulting to id.prx.org
     if ENV['ID_HOST'].present?
       protocol = ENV['ID_HOST'].include?('.docker') ? 'http' : 'https'
-      PrxAuth::Rails.middleware = false
       config.middleware.insert_before 'ActionDispatch::ParamsParser', 'Rack::PrxAuth',
                                       cert_location: "#{protocol}://#{ENV['ID_HOST']}/api/v1/certs",
                                       issuer: ENV['ID_HOST']
