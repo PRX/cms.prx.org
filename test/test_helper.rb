@@ -80,24 +80,17 @@ Minitest::Expectations.infect_an_assertion :refute_operator, :wont_allow, :rever
 include Announce::Testing
 reset_announce
 
-StubToken = Struct.new(:resource, :scopes, :user_id)
-class StubToken
-  attr_accessor :authorized_resources, :attributes
+class StubToken < PrxAuth::Rails::Token
   @@fake_user_id = 0
 
   def initialize(res, scopes, explicit_user_id = nil)
-    @authorized_resources = { res => scopes }
-    if explicit_user_id
-      super(res.to_s, scopes, explicit_user_id)
-    else
-      super(res.to_s, scopes, @@fake_user_id += 1)
-    end
-  end
-
-  def authorized?(r, s = nil)
-    res = authorized_resources.keys
-    roles = authorized_resources.values.flatten
-    res.include?(r) && (s.nil? || roles.include?(s.to_s))
+    scopes = Array.wrap(scopes).map(&:to_s).join(' ')
+    aur = { res.to_s => scopes }
+    super(Rack::PrxAuth::TokenData.new({
+      "aur" => aur,
+      "scope" => scopes,
+      "sub" =>  explicit_user_id || @@fake_user_id += 1
+    }))
   end
 end
 

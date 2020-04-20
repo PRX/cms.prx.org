@@ -20,7 +20,7 @@ class Authorization
   end
 
   def token_auth_accounts
-    token_ids = token.authorized_resources.try(:keys)
+    token_ids = (token.resources(:member) + token.resources(:admin)).uniq
     @token_auth_accounts = Account.where(id: token_ids) if token_ids
   end
 
@@ -41,9 +41,8 @@ class Authorization
   end
 
   def cache_key
-    token_keys = (token.attributes || {}).keys.sort.map { |k| "#{k}:#{token.attributes[k]}" }
     key_components = ['c', self.class.model_name.cache_key]
-    key_components << OpenSSL::Digest::MD5.hexdigest(token_keys.join(','))
+    key_components << OpenSSL::Digest::MD5.hexdigest(token.resources.join(' '))
     ActiveSupport::Cache.expand_cache_key(key_components)
   end
 
