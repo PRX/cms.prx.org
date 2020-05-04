@@ -7,6 +7,7 @@ ENV['META_HOST'] = 'meta.prx.org'
 ENV['PRX_HOST'] = 'beta.prx.org'
 ENV['PRX_CLIENT_ID'] = '0123456789abcdefghijklmnopqrstuvwxyzABCD'
 ENV['PRX_SECRET'] = '0123456789abcdefghijklmnopqrstuvwxyzABCD'
+ENV['PORTER_SNS_TOPIC_ARN'] = ''
 
 if !ENV['GUARD'] || ENV['GUARD_COVERAGE']
   require 'simplecov'
@@ -91,6 +92,16 @@ class StubToken < PrxAuth::Rails::Token
       "scope" => scopes,
       "sub" =>  explicit_user_id || @@fake_user_id += 1
     }))
+  end
+end
+
+class StubSns
+  attr_accessor :messages
+
+  def publish(params)
+    self.messages ||= []
+    self.messages << JSON.parse(params[:message]).with_indifferent_access
+    {message_id: 'whatever'}
   end
 end
 
