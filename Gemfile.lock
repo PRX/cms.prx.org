@@ -62,7 +62,7 @@ GEM
     bindata (2.4.7)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    builder (3.2.3)
+    builder (3.2.4)
     byebug (9.0.6)
     carrierwave (0.11.2)
       activemodel (>= 3.2.0)
@@ -79,10 +79,10 @@ GEM
       simplecov
       url
     coderay (1.1.1)
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.5)
+    crass (1.0.6)
     dalli (2.7.6)
     database_cleaner (1.4.1)
     debug_inspector (0.0.2)
@@ -302,9 +302,18 @@ GEM
       aes_key_wrap
       bindata
     jwt (1.5.6)
-    kaminari (0.17.0)
-      actionpack (>= 3.0.0)
-      activesupport (>= 3.0.0)
+    kaminari (1.2.1)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.1)
+      kaminari-activerecord (= 1.2.1)
+      kaminari-core (= 1.2.1)
+    kaminari-actionview (1.2.1)
+      actionview
+      kaminari-core (= 1.2.1)
+    kaminari-activerecord (1.2.1)
+      activerecord
+      kaminari-core (= 1.2.1)
+    kaminari-core (1.2.1)
     listen (2.10.1)
       celluloid (~> 0.16.0)
       rb-fsevent (>= 0.9.3)
@@ -378,7 +387,7 @@ GEM
       activesupport (>= 3.0.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
-    rack (1.6.12)
+    rack (1.6.13)
     rack-cors (1.0.6)
       rack (>= 1.6.0)
     rack-prx_auth (1.0.0)
@@ -492,7 +501,7 @@ GEM
     timers (4.0.4)
       hitimes
     trollop (2.1.2)
-    tzinfo (1.2.5)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
     uber (0.0.15)
     unf (0.1.4)
