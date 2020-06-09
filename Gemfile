@@ -40,7 +40,7 @@ gem 'nokogiri', '>= 1.8.1'
 gem 'sanitize'
 
 ## Controller
-gem 'hal_api-rails', '~> 0.3.3'
+gem 'hal_api-rails', '~> 0.3.5'
 gem 'responders', '~> 2.0'
 
 # auth
