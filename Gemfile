@@ -40,7 +40,7 @@ gem 'nokogiri', '>= 1.8.1'
 gem 'sanitize'
 
 ## Controller
-gem 'hal_api-rails', '~> 0.3.5'
+gem 'hal_api-rails', '~> 0.3.6'
 gem 'responders', '~> 2.0'
 
 # auth
@@ -100,9 +100,9 @@ group :development do
   gem 'guard-bundler'
   gem 'guard-minitest'
   gem 'quiet_assets'
+  gem 'rubocop', '0.54.0'
   gem 'spring'
   gem 'web-console', '~> 2.0'
-  gem 'rubocop', '0.54.0'
 end
 
 group :test do
