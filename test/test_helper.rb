@@ -78,7 +78,9 @@ end
 Minitest::Expectations.infect_an_assertion :assert_operator, :must_allow, :reverse
 Minitest::Expectations.infect_an_assertion :refute_operator, :wont_allow, :reverse
 
+# rubocop:disable Style/MixinUsage
 include Announce::Testing
+# rubocop:enable Style/MixinUsage
 reset_announce
 
 class StubToken < PrxAuth::Rails::Token
@@ -88,10 +90,10 @@ class StubToken < PrxAuth::Rails::Token
     scopes = Array.wrap(scopes).map(&:to_s).join(' ')
     aur = { res.to_s => scopes }
     super(Rack::PrxAuth::TokenData.new({
-      "aur" => aur,
-      "scope" => scopes,
-      "sub" =>  explicit_user_id || @@fake_user_id += 1
-    }))
+                                         'aur' => aur,
+                                         'scope' => scopes,
+                                         'sub' =>  explicit_user_id || @@fake_user_id += 1
+                                       }))
   end
 end
 

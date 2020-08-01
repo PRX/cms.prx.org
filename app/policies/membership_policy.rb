@@ -4,7 +4,7 @@ class MembershipPolicy < ApplicationPolicy
   end
 
   def update?
-    token && token.authorized?(resource.account.id, :admin)
+    token && token.authorized?(resource.account.id, :account_members)
   end
 
   def destroy?

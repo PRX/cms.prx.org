@@ -1,9 +1,9 @@
 require 'test_helper'
 
 describe AccountPolicy do
-  let(:admin_token) { StubToken.new(account.id, ['admin']) }
-  let(:member_token) { StubToken.new(account.id, ['member']) }
-  let(:non_member_token) { StubToken.new(account.id + 2, ['admin']) }
+  let(:admin_token) { StubToken.new(account.id, ['cms:account', 'cms:account-members']) }
+  let(:member_token) { StubToken.new(account.id, ['cms:account']) }
+  let(:non_member_token) { StubToken.new(account.id + 2, ['cms:account-members', 'cms:account']) }
   let(:account) { build_stubbed(:account) }
 
   describe '#create?' do
