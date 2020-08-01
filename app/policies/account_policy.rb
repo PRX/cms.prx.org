@@ -4,10 +4,10 @@ class AccountPolicy < ApplicationPolicy
   end
 
   def update?
-    token && token.authorized?(resource.id, :account)
+    token&.authorized?(resource.id, :account)
   end
 
   def destroy?
-    token && token.authorized?(resource.id, :account_members)
+    token&.authorized?(resource.id, :account_members)
   end
 end
