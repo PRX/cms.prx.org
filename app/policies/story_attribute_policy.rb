@@ -4,6 +4,6 @@ class StoryAttributePolicy < ApplicationPolicy
   end
 
   def update?
-    AccountablePolicy.new(token, resource.story).update?
+    AccountablePolicy.new(token, resource.story, :story).update?
   end
 end

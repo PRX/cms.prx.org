@@ -4,6 +4,6 @@ class SeriesAttributePolicy < ApplicationPolicy
   end
 
   def update?
-    AccountablePolicy.new(token, resource.series).update?
+    AccountablePolicy.new(token, resource.series, :series).update?
   end
 end

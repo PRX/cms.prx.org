@@ -3,7 +3,7 @@ require 'test_helper'
 describe UserTagPolicy do
   let(:user_tag) { create(:user_tag) }
   let(:account) { create(:account) }
-  let(:token) { StubToken.new(account.id, ['member']) }
+  let(:token) { StubToken.new(account.id, ['cms:account']) }
 
   it 'allows anyone to create a tag' do
     UserTagPolicy.new(token, UserTag.new(name: 'test-tag')).must_allow :create?

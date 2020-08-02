@@ -1,9 +1,10 @@
 require 'test_helper'
 
 describe ProducerPolicy do
-  let(:producer_token) { StubToken.new(story.account_id + 1, ['member']) }
-  let(:member_token) { StubToken.new(story.account_id, ['member']) }
-  let(:non_member_token) { StubToken.new(story.account_id + 1, ['no']) }
+  let(:producer_token) { StubToken.new(story.account_id + 1, ['cms:story']) }
+  let(:member_token) { StubToken.new(story.account_id, ['cms:story']) }
+  let(:n_s_member_token) { StubToken.new(story.account_id, ['cms:account']) }
+  let(:non_member_token) { StubToken.new(story.account_id + 1, ['cms:story']) }
   let(:producer) { build_stubbed(:producer_with_user_and_story, user: user, story: story) }
   let(:story) { build(:story, account: account) }
   let(:account) { build_stubbed(:account) }
@@ -23,6 +24,11 @@ describe ProducerPolicy do
     it 'returns false otherwise' do
       ProducerPolicy.new(non_member_token, producer).wont_allow :update?
       ProducerPolicy.new(non_member_token, producer).wont_allow :create?
+    end
+
+    it 'returns false if the token lacks story permission' do
+      ProducerPolicy.new(n_s_member_token, producer).wont_allow :update?
+      ProducerPolicy.new(n_s_member_token, producer).wont_allow :create?
     end
   end
 end
