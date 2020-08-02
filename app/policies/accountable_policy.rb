@@ -1,5 +1,5 @@
 class AccountablePolicy < ApplicationPolicy
-  def initialize(token, resource, scope=nil)
+  def initialize(token, resource, scope = nil)
     super(token, resource)
     @scope = scope
   end
