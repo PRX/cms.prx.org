@@ -1,8 +1,8 @@
 require 'test_helper'
 
 describe AccountablePolicy do
-  let(:non_member_token) { StubToken.new(account.id + 1, ['no']) }
-  let(:member_token) { StubToken.new(account.id, ['member']) }
+  let(:non_member_token) { StubToken.new(account.id + 1, ['cms:account']) }
+  let(:member_token) { StubToken.new(account.id, ['cms:account']) }
   let(:account) { build_stubbed(:account) }
   let(:story) { build(:story, account: account) }
 
@@ -17,6 +17,16 @@ describe AccountablePolicy do
 
     it 'returns true if is a member of the account' do
       AccountablePolicy.new(member_token, story).must_allow :update?
+    end
+
+    describe 'with a scope specified' do
+      it 'returns true if the scope is present in the token for the given account-owned object' do
+        AccountablePolicy.new(member_token, story, :account).must_allow :update?
+      end
+
+      it 'returns false if the scope is missing in the token for the given account-owned object' do
+        AccountablePolicy.new(member_token, story, :admin).wont_allow :update?
+      end
     end
   end
 end

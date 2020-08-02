@@ -1,9 +1,9 @@
 require 'test_helper'
 
 describe MembershipPolicy do
-  let(:member_token) { StubToken.new(account.id, ['account']) }
-  let(:admin_token) { StubToken.new(account.id, ['account', 'account-members']) }
-  let(:non_member_token) { StubToken.new(account.id + 1, ['account', 'account-members']) }
+  let(:member_token) { StubToken.new(account.id, ['cms:account']) }
+  let(:admin_token) { StubToken.new(account.id, ['cms:account', 'cms:account-members']) }
+  let(:non_member_token) { StubToken.new(account.id + 1, ['cms:account', 'cms:account-members']) }
   let(:membership) { build_stubbed(:membership, user: user, account: account, approved: false) }
   let(:user) { build_stubbed(:user, id: non_member_token.user_id) }
   let(:account) { build_stubbed(:account) }
