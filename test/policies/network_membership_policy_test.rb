@@ -7,8 +7,8 @@ describe NetworkMembershipPolicy do
   let(:network) { create(:network, account: admin_account) }
   let(:membership) { NetworkMembership.new(network: network, account: member_account) }
 
-  let(:member_token) { StubToken.new(member_account.id, ['admin']) }
-  let(:admin_token) { StubToken.new(admin_account.id, ['admin']) }
+  let(:member_token) { StubToken.new(member_account.id, ['cms:network-members']) }
+  let(:admin_token) { StubToken.new(admin_account.id, ['cms:network-members']) }
   let(:non_member_token) { StubToken.new(random_account, ['no']) }
 
   describe '#update?' do
