@@ -26,8 +26,8 @@ describe MembershipPolicy do
         MembershipPolicy.new(non_member_token, membership).wont_allow :create?
       end
 
-      it 'returns true otherwise' do
-        MembershipPolicy.new(non_member_token, membership).must_allow :create?
+      it 'returns false otherwise' do
+        MembershipPolicy.new(non_member_token, membership).wont_allow :create?
       end
     end
   end
@@ -51,8 +51,8 @@ describe MembershipPolicy do
   end
 
   describe '#destroy?' do
-    it 'returns true if user is the member' do
-      MembershipPolicy.new(non_member_token, membership).must_allow :destroy?
+    it 'returns false if user is the member' do
+      MembershipPolicy.new(non_member_token, membership).wont_allow :destroy?
     end
 
     it 'returns true if user is an admin' do

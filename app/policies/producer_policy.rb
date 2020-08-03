@@ -4,8 +4,6 @@ class ProducerPolicy < ApplicationPolicy
   end
 
   def update?
-    token &&
-      (resource.user.id == token.user_id ||
-       AccountablePolicy.new(token, resource.story, :story).update?)
+    AccountablePolicy.new(token, resource.story, :story).update?
   end
 end

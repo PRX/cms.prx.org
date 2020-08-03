@@ -1,6 +1,6 @@
 class MembershipPolicy < ApplicationPolicy
   def create?
-    update? || (token.user_id == resource.user.id && !resource.approved?)
+    update?
   end
 
   def update?
@@ -8,6 +8,6 @@ class MembershipPolicy < ApplicationPolicy
   end
 
   def destroy?
-    token.user_id == resource.user.id || update?
+    update?
   end
 end

@@ -11,9 +11,9 @@ describe ProducerPolicy do
   let(:user) { build_stubbed(:user, id: producer_token.user_id) }
 
   describe '#update? and #create?' do
-    it 'returns true if user is the producer' do
-      ProducerPolicy.new(producer_token, producer).must_allow :update?
-      ProducerPolicy.new(producer_token, producer).must_allow :create?
+    it 'returns true if false is the producer' do
+      ProducerPolicy.new(producer_token, producer).wont_allow :update?
+      ProducerPolicy.new(producer_token, producer).wont_allow :create?
     end
 
     it 'returns true if user is associated with story' do
