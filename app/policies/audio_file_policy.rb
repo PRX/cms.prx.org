@@ -1,5 +1,5 @@
 class AudioFilePolicy < AccountablePolicy
   def original?
-    token && token.authorized?(resource.account.id) #todo: read-private
+    token&.authorized?(resource.account.id, :read_private)
   end
 end
