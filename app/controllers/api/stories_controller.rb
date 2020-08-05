@@ -89,7 +89,9 @@ class Api::StoriesController < Api::BaseController
       story.account_id ||= story.series.try(:account_id)
       story.account_id ||= account.id if account
       story.account_id ||= current_user.account_id
-      story.account_id ||= (authorization.resources(:story) + authorization.resources(:story_draft)).first
+      story.account_id ||= (
+        authorization.resources(:story) + authorization.resources(:story_draft)
+      ).first
     end
   end
 

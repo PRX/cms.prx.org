@@ -18,7 +18,7 @@ describe Authorization do
     assert_same_elements(authorization.token_auth_stories, account.stories)
     assert_same_elements(authorization.token_auth_series, account.series)
   end
-  
+
   it 'implements to_model' do
     skip "should implement Token#hash in library"
     authorization.cache_key.must_equal 'c/authorizations/b9c423a32f16a0997c5c5de0bf906027'
