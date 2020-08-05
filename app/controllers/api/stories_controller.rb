@@ -88,14 +88,11 @@ class Api::StoriesController < Api::BaseController
       story.creator_id = current_user.id
       story.account_id ||= story.series.try(:account_id)
 
-      if account && authorization.authorized?(account)
+      if account
         story.account_id ||= account.id
       end
-
-      if authorization.authorized?(current_user.default_account)
-        story.account_id ||= current_user.account_id
-      end
-
+      
+      story.account_id ||= current_user.account_id
       story.account_id ||= authorization.token_auth_accounts.first.try(:id)
     end
   end
