@@ -3,7 +3,7 @@ require 'test_helper'
 describe StoryQueryBuilder do
 
   let(:account) { create(:account) }
-  let(:token) { StubToken.new(account.id, ['member'], 456) }
+  let(:token) { StubToken.new(account.id, ['cms:read-private cms:story'], 456) }
   let(:authorization) { Authorization.new(token) }
 
   # sorry... ES filters can be a bit ugly

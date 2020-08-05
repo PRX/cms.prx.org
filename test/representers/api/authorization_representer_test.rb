@@ -4,7 +4,7 @@ describe Api::AuthorizationRepresenter do
 
   let(:user) { create(:user) }
   let(:account) { user.default_account }
-  let(:token) { StubToken.new(account.id, 'admin', user.id) }
+  let(:token) { StubToken.new(account.id, 'cms:read-private', user.id) }
   let(:authorization) { Authorization.new(token) }
   let(:representer) { Api::AuthorizationRepresenter.new(authorization) }
   let(:json) { JSON.parse(representer.to_json) }
