@@ -172,6 +172,6 @@ class Distribution < BaseModel
   end
 
   def self.policy_class
-    AccountablePolicy
+    DistributablePolicy
   end
 end
