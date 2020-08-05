@@ -27,28 +27,44 @@ class Authorization
   def token_auth_accounts
     @token_auth_accounts ||= begin
       token_ids = account_ids(:read_private)
-      Account.where(id: token_ids) unless token_ids.empty?
+      if token_ids.empty?
+        []
+      else
+        Account.where(id: token_ids)
+      end
     end
   end
 
   def token_auth_stories
     @token_auth_stories ||= begin
       token_ids = account_ids(:read_private)
-      Story.where(account_id: token_ids) unless token_ids.empty?
+      if token_ids.empty?
+        []
+      else
+        Story.where(account_id: token_ids)
+      end
     end
   end
 
   def token_auth_series
     @token_auth_series ||= begin
       token_ids = account_ids(:read_private)
-      Series.where(account_id: token_ids) unless token_ids.empty?
+      if token_ids.empty?
+        []
+      else
+        Series.where(account_id: token_ids)
+      end
     end
   end
 
   def podcast_imports
     @podcast_imports ||= begin
       token_ids = account_ids(:read_private)
-      PodcastImport.where(account_id: token_ids) unless token_ids.empty?
+      if token_ids.empty?
+        []
+      else
+        PodcastImport.where(account_id: token_ids)
+      end
     end
   end
 

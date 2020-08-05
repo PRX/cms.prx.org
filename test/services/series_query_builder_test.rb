@@ -3,7 +3,7 @@ require 'test_helper'
 describe SeriesQueryBuilder do
 
   let(:account) { create(:account) }
-  let(:token) { StubToken.new(account.id, ['member'], 456) }
+  let(:token) { StubToken.new(account.id, ['cms:read-private'], 456) }
   let(:authorization) { Authorization.new(token) }
 
   FILTER_PARANOID = {bool: {

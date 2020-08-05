@@ -9,8 +9,8 @@ describe Api::Auth::AccountsController do
   let (:token) { PrxAuth::Rails::Token.new(Rack::PrxAuth::TokenData.new('sub' => user.id, 'aur' => aur)) }
   let (:aur) do
     {
-      member_account.id.to_s => 'member',
-      individual_account.id.to_s => 'admin'
+      member_account.id.to_s => 'cms:read-private cms:account',
+      individual_account.id.to_s => 'cms:read-private cms:account'
     }
   end
 
