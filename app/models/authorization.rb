@@ -25,47 +25,19 @@ class Authorization
   end
 
   def token_auth_accounts
-    @token_auth_accounts ||= begin
-      token_ids = account_ids(:read_private)
-      if token_ids.empty?
-        []
-      else
-        Account.where(id: token_ids)
-      end
-    end
+    @token_auth_accounts ||= Account.where(id: account_ids(:read_private))
   end
 
   def token_auth_stories
-    @token_auth_stories ||= begin
-      token_ids = account_ids(:read_private)
-      if token_ids.empty?
-        []
-      else
-        Story.where(account_id: token_ids)
-      end
-    end
+    @token_auth_stories ||= Story.where(account_id: account_ids(:read_private))
   end
 
   def token_auth_series
-    @token_auth_series ||= begin
-      token_ids = account_ids(:read_private)
-      if token_ids.empty?
-        []
-      else
-        Series.where(account_id: token_ids)
-      end
-    end
+    @token_auth_series ||= Series.where(account_id: account_ids(:read_private))
   end
 
   def podcast_imports
-    @podcast_imports ||= begin
-      token_ids = account_ids(:read_private)
-      if token_ids.empty?
-        []
-      else
-        PodcastImport.where(account_id: token_ids)
-      end
-    end
+    @podcast_imports ||= PodcastImport.where(account_id: account_ids(:read_private))
   end
 
   def cache_key
