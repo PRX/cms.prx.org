@@ -97,8 +97,8 @@ describe Api::AudioFilesController do
   end
 
   describe '#original' do
-    let(:bad_token) { StubToken.new("bad", ['member']) }
-    let(:token) { StubToken.new(account.id, ['member']) }
+    let(:bad_token) { StubToken.new(account.id, ['member']) }
+    let(:token) { StubToken.new(account.id, ['cms:read-private']) }
 
     before(:each) do
       class << @controller; attr_accessor :prx_auth_token; end

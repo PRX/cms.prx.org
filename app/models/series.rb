@@ -181,7 +181,7 @@ class Series < BaseModel
   end
 
   def self.policy_class
-    AccountablePolicy
+    SeriesPolicy
   end
 
   def import_url=(url)
