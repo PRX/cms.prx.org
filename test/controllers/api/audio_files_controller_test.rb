@@ -3,7 +3,7 @@ require 'test_helper'
 describe Api::AudioFilesController do
   let(:user) { create(:user) }
   let(:account) { create(:account) }
-  let(:token) { StubToken.new(account.id, ['cms:read-private cms:story'], user.id) }
+  let(:token) { StubToken.new(account.id, ['cms:read-private cms:story cms:account'], user.id) }
   let(:story) { create(:story, account: account) }
   let(:story_with_version) { create(:story, account: account) }
   let(:audio_file) { create(:audio_file, story: story, account: account) }
