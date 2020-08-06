@@ -49,13 +49,13 @@ describe Api::StoriesController do
     end
 
     it 'can create a new story for a series' do
-      skip 'Not sure why this would have stopped working?'
       post :create,
            { title: 'story', set_series_uri: "/api/v1/series/#{series.id}" }.to_json,
            api_version: 'v1'
       assert_response :success
       id = JSON.parse(response.body)['id']
-      Story.find(id).account_id.must_equal account.id
+      Story.find(id).account_id.must_equal series.account.id
+      Story.find(id).series_id.must_equal series.id
     end
 
     it 'can create a new story and distributions' do

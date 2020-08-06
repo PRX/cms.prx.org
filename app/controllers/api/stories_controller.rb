@@ -84,14 +84,10 @@ class Api::StoriesController < Api::BaseController
   end
 
   def create_resource
-    super.tap do |story|
+    @create_resource ||= super.tap do |story|
       story.creator_id = current_user.id
-      story.account_id ||= story.series.try(:account_id)
       story.account_id ||= account.id if account
       story.account_id ||= current_user.account_id
-      story.account_id ||= (
-        authorization.resources(:story) + authorization.resources(:story_draft)
-      ).first
     end
   end
 
