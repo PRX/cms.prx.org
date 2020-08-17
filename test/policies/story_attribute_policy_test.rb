@@ -29,9 +29,20 @@ describe StoryAttributePolicy do
     end
 
     describe 'with a draft token' do
-      it 'returns true if token has story-draft and story is a draft'
-      it 'returns false if token has story-draft but story is published'
-      it 'returns false if token lacks story-draft and story is a draft'
+      let (:draft_token) { StubToken.new(story.account_id, ['cms:story-draft']) }
+      it 'returns true if token has story-draft and story is a draft' do
+        story.update_attribute :published_at, nil
+
+        StoryAttributePolicy.new(draft_token, musical_work).must_allow :update?
+        StoryAttributePolicy.new(draft_token, musical_work).must_allow :create?
+      end
+
+      it 'returns false if token has story-draft but story is published' do
+        story.update_attribute :published_at, 10.days.ago
+
+        StoryAttributePolicy.new(draft_token, musical_work).wont_allow :update?
+        StoryAttributePolicy.new(draft_token, musical_work).wont_allow :create?
+      end
     end
   end
 end

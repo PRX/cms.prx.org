@@ -282,6 +282,14 @@ class Story < BaseModel
     published_at.nil?
   end
 
+  def was_draft?
+    if published_at_changed?
+      published_at_was.nil?
+    else
+      draft?
+    end
+  end
+
   def date_for_boolean(value)
     if value.is_a?(Date) || value.is_a?(Time)
       value
