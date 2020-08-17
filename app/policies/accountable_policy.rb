@@ -19,12 +19,10 @@ class AccountablePolicy < ApplicationPolicy
   private
 
   def resource_id
-    resource&.account&.id
+    resource.try(:account).try(:id) || resource.try(:account_id)
   end
 
   def resource_id_was
-    resource&.account_was&.id
-  rescue StandardError
-    nil
+    resource.try(:account_was).try(:id) || resource.try(:account_id_was)
   end
 end

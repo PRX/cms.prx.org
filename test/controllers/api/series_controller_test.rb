@@ -115,6 +115,15 @@ describe Api::SeriesController do
       Series.find(series.id).title.must_equal('foobar')
     end
 
+    it 'cannot change account' do
+      series.update_attributes(account_id: 999999)
+      series_params = {
+        set_account_uri: "/api/v1/accounts/#{account.id}"
+      }
+      put :update, series_params.to_json, api_version: 'v1', id: series.id
+      assert_response 401
+    end
+
     it 'deletes a series' do
       delete :destroy, api_version: 'v1', id: series.id
       response.status.must_equal 204
