@@ -124,8 +124,8 @@ describe Api::StoriesController do
     end
 
     it 'can create a missing story distribution on update' do
-      series = create(:series, templates_count: 1, dist_count: 1)
-      story = create(:story, title: 'not this', account: account, series: series)
+      series = create(:series, templates_count: 1, dist_count: 1, account: account)
+      story = create(:story, title: 'not this', account: series.account, series: series)
       story.distributions.must_be_empty
 
       template_id = series.audio_version_templates.first.id
@@ -156,8 +156,8 @@ describe Api::StoriesController do
     end
 
     it 'won\'t create duplicate or needless distributions when updating a story' do
-      series = create(:series, templates_count: 2, dist_count: 2)
-      story = create(:story, title: 'not this', account: account, series: series, audio_versions_count: 2)
+      series = create(:series, templates_count: 2, dist_count: 2, account: account)
+      story = create(:story, title: 'not this', account: series.account, series: series, audio_versions_count: 2)
       story.distributions.must_be_empty
 
       common_template = series.audio_version_templates.first
