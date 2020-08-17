@@ -4,7 +4,7 @@ describe AccountablePolicy do
   let(:non_member_token) { StubToken.new(account.id + 1, ['cms:account']) }
   let(:member_token) { StubToken.new(account.id, ['cms:account']) }
   let(:account) { create(:account) }
-  let(:playlist) { create(:playlist, account: account)}
+  let(:playlist) { create(:playlist, account: account) }
   let(:playlist_section) { create(:playlist_section, playlist: playlist) }
   let(:pick) { create(:pick, playlist_section: playlist_section) }
 
