@@ -1,13 +1,11 @@
 class StoryPolicy < ApplicationPolicy
 
   def create?
-    token&.authorized?(resource.account_id, :story) ||
-      (resource.draft? && token&.authorized?(resource.account_id, :story_draft))
+    authorized?(:story) || (resource.draft? && authorized?(:story_draft))
   end
 
   def update?
-    token&.authorized?(resource.account_id, :story) ||
-      (token&.authorized?(resource.account_id, :story_draft) && resource.draft? &&  resource.was_draft?)
+    authorized?(:story) || (authorized?(:story_draft) && resource.draft? && resource.was_draft?)
   end
 
   def destroy?
@@ -15,7 +13,7 @@ class StoryPolicy < ApplicationPolicy
   end
 
   def publish?
-    token&.authorized?(resource.account_id, :story)
+    authorized?(:story)
   end
 
   def unpublish?

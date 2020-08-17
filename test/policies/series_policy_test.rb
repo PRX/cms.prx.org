@@ -26,5 +26,12 @@ describe SeriesPolicy do
       SeriesPolicy.new(n_s_token, series).wont_allow :update?
       SeriesPolicy.new(n_s_token, series).wont_allow :create?
     end
+
+    it 'returns false if the account has been changed from one the token has no access to' do
+      other_series = create(:series, account_id: series.account_id + 1)
+
+      other_series.account_id = series.account_id
+      SeriesPolicy.new(member_token, other_series).wont_allow :update?
+    end
   end
 end

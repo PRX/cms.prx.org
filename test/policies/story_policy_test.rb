@@ -13,9 +13,19 @@ describe StoryPolicy do
       policy.must_allow :create?
     end
 
-    it 'is allowed to #update?' do
-      story.published_at = 7.minutes.ago
-      policy.must_allow :update?
+    describe '#update?' do
+      it 'is allowed' do
+        story.published_at = 7.minutes.ago
+        policy.must_allow :update?
+      end
+
+      it 'is not allowed when account_id was not controlled' do
+        story.account_id = account.id + 1
+        story.save
+
+        story.account_id = account.id
+        policy.wont_allow :update?
+      end
     end
 
     it 'is allowed to #destroy?' do
@@ -69,6 +79,15 @@ describe StoryPolicy do
         story.published_at = 14.seconds.ago
         story.save
 
+        policy.wont_allow :update?
+      end
+
+      it 'is not allowed when account_id was not controlled' do
+        story.published_at = nil
+        story.account_id = account.id + 1
+        story.save
+
+        story.account_id = account.id
         policy.wont_allow :update?
       end
     end

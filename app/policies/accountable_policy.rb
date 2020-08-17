@@ -9,7 +9,7 @@ class AccountablePolicy < ApplicationPolicy
   end
 
   def update?
-    token&.authorized?(resource.account.id, @scope)
+    authorized?(@scope)
   end
 
   def destroy?

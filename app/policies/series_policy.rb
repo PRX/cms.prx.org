@@ -1,9 +1,9 @@
-class SeriesPolicy < ApplicationPolicy
-  def create?
-    update?
+class SeriesPolicy < AccountablePolicy
+  def initialize(token, series)
+    super(token, series, :series)
   end
-
-  def update?
-    AccountablePolicy.new(token, resource, :series).update?
+  
+  def destroy?
+    false
   end
 end
