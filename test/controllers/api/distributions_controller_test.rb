@@ -73,7 +73,6 @@ describe Api::DistributionsController do
 
       it 'cannot create a podcast distribution' do
         template_uri = "/api/v1/audio_version_templates/#{audio_version_template.id}"
-        podcast_uri = 'http://feeder.prx.org/api/v1/podcast/12345'
         pd_hash = {
           kind: 'podcast',
           guid: 'SET TEMPLATE',
@@ -81,7 +80,7 @@ describe Api::DistributionsController do
         }
         @request.env['CONTENT_TYPE'] = 'application/json'
         def @controller.after_create_resource(res)
-          res.update_attributes!(url: podcast_uri)
+          res.update_attributes!(url: 'http://feeder.prx.org/api/v1/podcast/12345')
         end
         post :create, pd_hash.to_json, api_request_opts(series_id: series.id)
         assert_response :unauthorized

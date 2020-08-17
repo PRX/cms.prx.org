@@ -6,7 +6,6 @@ describe StoryPolicy do
   let(:story) { build(:story, account: account) }
   let(:policy) { StoryPolicy.new(token, story) }
 
-
   describe 'with a full token' do
     it 'is allowed to #create?' do
       story.published_at = 13.days.ago
@@ -107,7 +106,7 @@ describe StoryPolicy do
         policy.wont_allow :destroy?
       end
     end
-  
+
     describe '#publish?' do
       it 'is not allowed, even with draft story' do
         story.published_at = nil
@@ -116,7 +115,7 @@ describe StoryPolicy do
         policy.wont_allow :publish?
       end
     end
-  
+
     describe '#unpublish?' do
       it 'is not allowed, even with draft story' do
         story.published_at = nil
