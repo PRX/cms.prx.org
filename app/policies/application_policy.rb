@@ -15,14 +15,19 @@ class ApplicationPolicy
 
   private
 
-  def authorized?(scope, resource_id_method_name = :account_id)
-    resource_id = resource.public_send(resource_id_method_name)
-    resource_id_was = resource.public_send("#{resource_id_method_name}_was")
-
+  def authorized?(scope)
     if resource_id_was.present? && resource_id_was != resource_id
       token&.authorized?(resource_id, scope) && token.authorized?(resource_id_was, scope)
     else
       token&.authorized?(resource_id, scope)
     end
+  end
+
+  def resource_id
+    resource&.account_id
+  end
+
+  def resource_id_was
+    resource&.account_id_was
   end
 end
