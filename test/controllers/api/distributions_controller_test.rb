@@ -81,7 +81,7 @@ describe Api::DistributionsController do
         }
         @request.env['CONTENT_TYPE'] = 'application/json'
         def @controller.after_create_resource(res)
-          res.update_attributes!(url: 'http://feeder.prx.org/api/v1/podcast/12345')
+          res.update_attributes!(url: podcast_uri)
         end
         post :create, pd_hash.to_json, api_request_opts(series_id: series.id)
         assert_response :unauthorized
