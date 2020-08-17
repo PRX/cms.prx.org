@@ -25,6 +25,6 @@ class AccountablePolicy < ApplicationPolicy
   def resource_id_was
     resource&.account_was&.id
   rescue StandardError
-    nil
+    super
   end
 end
