@@ -1,7 +1,7 @@
 class AccountablePolicy < ApplicationPolicy
-  def initialize(token, resource, scope = :account)
+  def initialize(token, resource, scopes = :account)
     super(token, resource)
-    @scope = scope
+    @scopes = Array.wrap(scopes)
   end
 
   def create?
@@ -9,7 +9,7 @@ class AccountablePolicy < ApplicationPolicy
   end
 
   def update?
-    authorized?(@scope)
+    @scopes.all? { |scope| authorized?(scope) }
   end
 
   def destroy?
