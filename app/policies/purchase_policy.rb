@@ -1,6 +1,6 @@
 class PurchasePolicy < ApplicationPolicy
   def create?
-    token && token.authorized?(resource.purchaser_account.id, :admin)
+    token&.authorized?(resource.purchaser_account.id, :purchase)
   end
 
   def update?

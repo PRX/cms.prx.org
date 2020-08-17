@@ -4,7 +4,7 @@ describe Api::SeriesImagesController do
   let(:user) { create(:user) }
   let(:series) { create(:series, account: user.individual_account) }
   let(:series_image) { create(:series_image, series: series, purpose: nil) }
-  let(:token) { StubToken.new(series.account.id, ['member'], user.id) }
+  let(:token) { StubToken.new(series.account.id, ['cms:read-private cms:series'], user.id) }
 
   before(:each) do
     class << @controller; attr_accessor :prx_auth_token; end

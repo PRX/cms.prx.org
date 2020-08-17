@@ -1,9 +1,9 @@
 require 'test_helper'
 
 describe MembershipPolicy do
-  let(:member_token) { StubToken.new(account.id, ['member']) }
-  let(:admin_token) { StubToken.new(account.id, ['admin']) }
-  let(:non_member_token) { StubToken.new(account.id + 1, ['no']) }
+  let(:member_token) { StubToken.new(account.id, ['cms:account']) }
+  let(:admin_token) { StubToken.new(account.id, ['cms:account', 'cms:account-members']) }
+  let(:non_member_token) { StubToken.new(account.id + 1, ['cms:account', 'cms:account-members']) }
   let(:membership) { build_stubbed(:membership, user: user, account: account, approved: false) }
   let(:user) { build_stubbed(:user, id: non_member_token.user_id) }
   let(:account) { build_stubbed(:account) }
@@ -26,8 +26,8 @@ describe MembershipPolicy do
         MembershipPolicy.new(non_member_token, membership).wont_allow :create?
       end
 
-      it 'returns true otherwise' do
-        MembershipPolicy.new(non_member_token, membership).must_allow :create?
+      it 'returns false otherwise' do
+        MembershipPolicy.new(non_member_token, membership).wont_allow :create?
       end
     end
   end
@@ -51,8 +51,8 @@ describe MembershipPolicy do
   end
 
   describe '#destroy?' do
-    it 'returns true if user is the member' do
-      MembershipPolicy.new(non_member_token, membership).must_allow :destroy?
+    it 'returns false if user is the member' do
+      MembershipPolicy.new(non_member_token, membership).wont_allow :destroy?
     end
 
     it 'returns true if user is an admin' do

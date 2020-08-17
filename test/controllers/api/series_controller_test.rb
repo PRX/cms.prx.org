@@ -72,7 +72,7 @@ describe Api::SeriesController do
 
   describe 'with a valid token' do
     around do |test|
-      token = StubToken.new(account.id, ['member'], user.id)
+      token = StubToken.new(account.id, ['cms:series'], user.id)
       @request.env['CONTENT_TYPE'] = 'application/json'
       @controller.stub(:prx_auth_token, token) { test.call }
     end

@@ -184,6 +184,16 @@ class Story < BaseModel
     series.try(:touch)
   end
 
+  def series=(series_object)
+    super
+    self.account_id = series.account_id if series&.account_id.present?
+  end
+
+  def series_id=(series_id)
+    super
+    self.account_id = series.account_id if series&.account_id.present?
+  end
+
   def points(level=point_level)
     has_custom_points? ? self.custom_points : Economy.points(level, self.length)
   end
@@ -270,6 +280,14 @@ class Story < BaseModel
 
   def draft?
     published_at.nil?
+  end
+
+  def was_draft?
+    if published_at_changed?
+      published_at_was.nil?
+    else
+      draft?
+    end
   end
 
   def date_for_boolean(value)

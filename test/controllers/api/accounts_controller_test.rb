@@ -6,7 +6,7 @@ describe Api::AccountsController do
   let (:user_without_account) { create(:user, with_individual_account: false) }
   let (:user) { create(:user) }
   let (:write_token) { StubToken.new(nil, nil, user_without_account.id) }
-  let (:token) { StubToken.new(nil, ['account'], user.id) }
+  let (:token) { StubToken.new(nil, ['cms:account'], user.id) }
 
   it 'should show' do
     get(:show, { api_version: 'v1', format: 'json', id: account.id })

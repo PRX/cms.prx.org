@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Api::Auth::SeriesController do
   let(:user) { create(:user) }
-  let(:token) { StubToken.new(account.id, ['member'], user.id) }
+  let(:token) { StubToken.new(account.id, ['cms:series cms:read-private'], user.id) }
   let(:account) { user.individual_account }
   let(:series) { create(:series, account: account) }
   let(:v3_series) { create(:series_v3, account: account) }

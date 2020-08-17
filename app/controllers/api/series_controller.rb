@@ -35,14 +35,8 @@ class Api::SeriesController < Api::BaseController
 
   def create_resource
     super.tap do |series|
-      if account && authorization.authorized?(account)
-        series.account_id ||= account.id
-      end
-
-      if authorization.authorized?(current_user.default_account)
-        series.account_id ||= current_user.account_id
-      end
-
+      series.account_id ||= account.id if account
+      series.account_id ||= current_user.account_id
       series.account_id ||= authorization.token_auth_accounts.first.try(:id)
     end
   end

@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Authorization do
   let(:account) { create(:account) }
-  let(:token) { StubToken.new(account.id, ['member'], 456) }
+  let(:token) { StubToken.new(account.id, ['read-private'], 456) }
   let(:authorization) { Authorization.new(token) }
   let(:unauth_account) { create(:account) }
 
@@ -19,14 +19,8 @@ describe Authorization do
     assert_same_elements(authorization.token_auth_series, account.series)
   end
 
-  it 'checks against token to see if accounts are authorized' do
-    authorization.authorized?(account).must_equal true
-    authorization.authorized?(unauth_account).must_equal false
-  end
-
   it 'implements to_model' do
     skip "should implement Token#hash in library"
-    authorization.token.attributes = { aur: [1,2,3], uid: 1 }
     authorization.cache_key.must_equal 'c/authorizations/b9c423a32f16a0997c5c5de0bf906027'
   end
 

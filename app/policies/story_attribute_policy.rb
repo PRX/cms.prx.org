@@ -1,9 +1,5 @@
-class StoryAttributePolicy < ApplicationPolicy
-  def create?
-    update?
-  end
-
-  def update?
-    AccountablePolicy.new(token, resource.story).update?
+class StoryAttributePolicy < StoryPolicy
+  def initialize(token, resource)
+    super(token, resource.story)
   end
 end

@@ -3,7 +3,7 @@ require 'test_helper'
 describe Api::Auth::StoriesController do
   let (:search_term) { 'title' } # factory value
   let (:user) { create(:user) }
-  let (:token) { StubToken.new(account.id, ['member'], user.id) }
+  let (:token) { StubToken.new(account.id, ['cms:read-private cms:story cms:account'], user.id) }
   let (:account) { user.individual_account }
   let (:published_story) { account.stories.last }
   let (:latest_story) { create(:story, account: account) }

@@ -18,7 +18,11 @@ class DistributionTemplate < BaseModel
     distribution.try(:account)
   end
 
+  def distributable
+    distribution&.distributable
+  end
+
   def self.policy_class
-    AccountablePolicy
+    DistributablePolicy
   end
 end

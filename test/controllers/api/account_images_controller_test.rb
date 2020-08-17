@@ -12,7 +12,7 @@ describe Api::AccountImagesController do
 
   describe 'write' do
 
-    let(:token) { StubToken.new(account.id, ['member'], user.id) }
+    let(:token) { StubToken.new(account.id, ['cms:account'], user.id) }
 
     before(:each) do
       class << @controller; attr_accessor :prx_auth_token; end

@@ -11,7 +11,7 @@ describe Api::StoriesController do
 
   describe 'editing' do
     let (:user) { create(:user) }
-    let (:token) { StubToken.new(account.id, ['member'], user.id) }
+    let (:token) { StubToken.new(account.id, ['cms:read-private cms:story'], user.id) }
 
     before(:each) do
       class << @controller; attr_accessor :prx_auth_token; end
@@ -54,7 +54,8 @@ describe Api::StoriesController do
            api_version: 'v1'
       assert_response :success
       id = JSON.parse(response.body)['id']
-      Story.find(id).account_id.must_equal account.id
+      Story.find(id).account_id.must_equal series.account.id
+      Story.find(id).series_id.must_equal series.id
     end
 
     it 'can create a new story and distributions' do
@@ -123,8 +124,8 @@ describe Api::StoriesController do
     end
 
     it 'can create a missing story distribution on update' do
-      series = create(:series, templates_count: 1, dist_count: 1)
-      story = create(:story, title: 'not this', account: account, series: series)
+      series = create(:series, templates_count: 1, dist_count: 1, account: account)
+      story = create(:story, title: 'not this', account: series.account, series: series)
       story.distributions.must_be_empty
 
       template_id = series.audio_version_templates.first.id
@@ -155,8 +156,12 @@ describe Api::StoriesController do
     end
 
     it 'won\'t create duplicate or needless distributions when updating a story' do
-      series = create(:series, templates_count: 2, dist_count: 2)
-      story = create(:story, title: 'not this', account: account, series: series, audio_versions_count: 2)
+      series = create(:series, templates_count: 2, dist_count: 2, account: account)
+      story = create(:story,
+                     title: 'not this',
+                     account: series.account,
+                     series: series,
+                     audio_versions_count: 2)
       story.distributions.must_be_empty
 
       common_template = series.audio_version_templates.first

@@ -4,6 +4,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    token.user_id == resource.id
+    false
   end
 end

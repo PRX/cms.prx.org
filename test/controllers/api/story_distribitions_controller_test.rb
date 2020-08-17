@@ -6,7 +6,7 @@ describe Api::StoryDistributionsController do
   let(:story_distribution) { create(:episode_distribution) }
   let(:distribution) { story_distribution.distribution }
   let(:story) { story_distribution.story }
-  let(:token) { StubToken.new(story.account.id, ['member'], user.id) }
+  let(:token) { StubToken.new(story.account.id, ['cms:story'], user.id) }
 
   it 'should show' do
     get :show, api_request_opts(story_id: story.id, id: story_distribution.id)

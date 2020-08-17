@@ -3,7 +3,7 @@ require 'test_helper'
 describe Api::Auth::EpisodeImportsController do
 
   let (:user) { create(:user) }
-  let (:token) { StubToken.new(account.id, ['member'], user.id) }
+  let (:token) { StubToken.new(account.id, ['cms:story'], user.id) }
   let (:account) { user.individual_account }
   let (:podcast_import) { create(:podcast_import, account: account) }
   let (:episode_import) { create(:episode_import, podcast_import: podcast_import) }

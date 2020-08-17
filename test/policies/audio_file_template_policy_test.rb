@@ -5,8 +5,9 @@ describe AudioFileTemplatePolicy do
   let(:series) { create(:series, account: account) }
   let(:audio_version_template) { create(:audio_version_template, series: series) }
   let(:audio_file_template) { build_stubbed(:audio_file_template, audio_version_template: audio_version_template) }
-  let(:token) { StubToken.new(series.account_id, ['member']) }
-  let(:non_member_token) { StubToken.new(series.account_id + 1, ['no']) }
+  let(:token) { StubToken.new(series.account_id, ['cms:series']) }
+  let(:non_member_token) { StubToken.new(series.account_id + 1, ['cms:series']) }
+  let(:non_series_token) { StubToken.new(series.account_id, ['cms:account']) }
   let(:user) { build_stubbed(:user, id: token.user_id) }
 
   describe '#update? and #create?' do
@@ -15,9 +16,15 @@ describe AudioFileTemplatePolicy do
       AudioFileTemplatePolicy.new(token, audio_file_template).must_allow :create?
     end
 
+    it 'returns false if the token lacks the series scope' do
+      AudioFileTemplatePolicy.new(non_series_token, audio_file_template).wont_allow :update?
+      AudioFileTemplatePolicy.new(non_series_token, audio_file_template).wont_allow :create?
+    end
+
     it 'returns false otherwise' do
       AudioFileTemplatePolicy.new(non_member_token, audio_file_template).wont_allow :update?
       AudioFileTemplatePolicy.new(non_member_token, audio_file_template).wont_allow :create?
     end
+
   end
 end

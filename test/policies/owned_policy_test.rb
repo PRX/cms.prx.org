@@ -7,8 +7,8 @@ end
 describe OwnedPolicy do
   let(:account) { create(:account) }
   let(:owned) { OwnedTestModel.new.tap { |o| o.owner = account } }
-  let(:token) { StubToken.new(account.id, ['member']) }
-  let(:bad_token) { StubToken.new(account.id + 1, ['member']) }
+  let(:token) { StubToken.new(account.id, ['cms:account']) }
+  let(:bad_token) { StubToken.new(account.id + 1, ['cms:account']) }
 
   describe '#update? or #create?' do
     it 'returns true if authorized on owning account' do

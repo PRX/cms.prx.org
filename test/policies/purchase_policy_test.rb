@@ -3,8 +3,8 @@ require 'test_helper'
 describe PurchasePolicy do
   let(:purchase) { create(:purchase) }
   let(:account) { purchase.purchaser_account }
-  let(:admin_token) { StubToken.new(account.id, ['admin']) }
-  let(:member_token) { StubToken.new(account.id, ['member']) }
+  let(:admin_token) { StubToken.new(account.id, ['cms:purchase cms:account']) }
+  let(:member_token) { StubToken.new(account.id, ['cms:account']) }
 
   it 'allows admins to make purchases' do
     PurchasePolicy.new(admin_token, purchase).must_allow :create?

@@ -3,7 +3,7 @@ require 'test_helper'
 describe Api::Auth::PodcastImportsController do
 
   let (:user) { create(:user) }
-  let (:token) { StubToken.new(account.id, ['member'], user.id) }
+  let (:token) { StubToken.new(account.id, ['cms:series cms:story cms:read-private'], user.id) }
   let (:account) { user.individual_account }
   let (:podcast_url) { 'http://feeds.prx.org/transistor_stem' }
   let (:podcast_import) { create(:podcast_import, account: account) }

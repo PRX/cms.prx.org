@@ -24,6 +24,15 @@ describe Api::StoryRepresenter do
       d_story.title.must_equal 'title'
       d_story.account_id.must_equal 8
     end
+
+    it 'can set the series' do
+      series = create(:series, account_id: 8)
+      story_hash = { title: 'title', set_series_uri: "api/v1/series/#{series.id}" }
+      d_representer = Api::StoryRepresenter.new(Story.new)
+      d_story = d_representer.from_json(story_hash.to_json)
+      d_story.title.must_equal 'title'
+      d_story.series_id.must_equal series.id
+    end
   end
 
   describe 'status flags' do
