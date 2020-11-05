@@ -227,6 +227,9 @@ ActiveRecord::Schema.define(version: 20200304162904) do
     t.string   "upload_path",      limit: 255
     t.integer  "current_job_id",   limit: 4
     t.text     "status_message",   limit: 65535
+    t.decimal  "integrated_loudness",            precision: 15, scale: 10
+    t.decimal  "loudness_range",                 precision: 15, scale: 10
+    t.decimal  "true_peak",                      precision: 15, scale: 10
   end
 
   add_index "audio_files", ["account_id", "filename"], name: "index_audio_files_on_account_id_and_filename", using: :btree
