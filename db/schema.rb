@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200304162904) do
+ActiveRecord::Schema.define(version: 20201102163043) do
 
   create_table "account_applications", force: :cascade do |t|
     t.integer  "account_id",            limit: 4
