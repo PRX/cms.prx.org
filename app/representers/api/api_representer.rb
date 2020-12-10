@@ -105,8 +105,8 @@ class Api::ApiRepresenter < Api::BaseRepresenter
     {
       title: 'Get information about the active authorization for this request',
       profile: profile_url(:user),
-      href: api_authorization_path(api_version: represented.version),
-      templated: false
+      href: api_authorization_path(api_version: represented.version) + show_url_params,
+      templated: true
     }
   end
 
