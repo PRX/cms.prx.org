@@ -95,7 +95,7 @@ class StoryQueryBuilder < ESQueryBuilder
   def authz_filter
     searchdsl = self
     Filter.new do
-      terms account_id: searchdsl.authorization.token_auth_accounts.try(:ids), _name: :authz
+      terms account_id: searchdsl.authorization.token_auth_account_ids, _name: :authz
     end
   end
 

@@ -24,9 +24,13 @@ class Authorization
     token.resources(scope).map(&:to_i)
   end
 
+  def token_auth_account_ids
+    account_ids(:read_private)
+  end
+
   def token_auth_accounts
-    @token_auth_accounts ||= Account.where(id: account_ids(:read_private)).
-                             joins(:address, :image, :opener).
+    @token_auth_accounts ||= Account.where(id: token_auth_account_ids).
+                             left_joins(:address, :image, :opener).
                              includes(:address, :image, :opener)
   end
 

@@ -315,6 +315,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.1)
     kaminari-core (1.2.1)
+    left_joins (1.0.8)
+      activerecord (>= 3)
     listen (2.10.1)
       celluloid (~> 0.16.0)
       rb-fsevent (>= 0.9.3)
@@ -555,6 +557,7 @@ DEPENDENCIES
   hyperresource
   icalendar (~> 2.5.0)
   kaminari
+  left_joins
   loofah
   m (~> 1.5.0)
   minitest (~> 5.9.1)
