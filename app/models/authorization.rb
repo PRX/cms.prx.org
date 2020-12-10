@@ -25,7 +25,9 @@ class Authorization
   end
 
   def token_auth_accounts
-    @token_auth_accounts ||= Account.where(id: account_ids(:read_private))
+    @token_auth_accounts ||= Account.where(id: account_ids(:read_private)).
+                             joins(:address, :image, :opener).
+                             includes(:address, :image, :opener)
   end
 
   def token_auth_stories
