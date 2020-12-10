@@ -11,6 +11,6 @@ class Api::AddressRepresenter < Api::BaseRepresenter
   property :country
 
   def self_url(address)
-    api_account_address_path(address.account) if address.account
+    api_account_address_path(address.account_id) if address.account_id
   end
 end

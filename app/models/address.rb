@@ -3,6 +3,15 @@
 class Address < BaseModel
   belongs_to :addressable, -> { with_deleted }, polymorphic: true, touch: true
 
+  def account_id
+    if addressable_type == 'Account'
+      addressable_id
+    elsif addressable_type == 'User'
+      # warning: this will load things
+      addressable.individual_account.id
+    end
+  end
+
   def account
     if addressable.is_a?(Account)
       addressable
