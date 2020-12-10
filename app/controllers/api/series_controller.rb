@@ -37,7 +37,7 @@ class Api::SeriesController < Api::BaseController
     super.tap do |series|
       series.account_id ||= account.id if account
       series.account_id ||= current_user.account_id
-      series.account_id ||= authorization.token_auth_accounts.first.try(:id)
+      series.account_id ||= authorization.token_auth_account_ids.first
     end
   end
 

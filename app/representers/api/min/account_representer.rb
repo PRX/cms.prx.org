@@ -36,8 +36,7 @@ class Api::Min::AccountRepresenter < Api::BaseRepresenter
   link :stories do
     {
       href: "#{api_account_stories_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.public_stories.count
+      templated: true
     }
   end
   embed :public_stories,

@@ -17,6 +17,7 @@ gem 'mysql2'
 # ActiveRecord model additions
 gem 'acts_as_list'
 gem 'event_attribute'
+gem 'left_joins'
 gem 'paranoia', ' ~> 2.0'
 
 # file uploads
