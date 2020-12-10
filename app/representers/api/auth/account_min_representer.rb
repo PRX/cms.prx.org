@@ -5,8 +5,7 @@ class Api::Auth::AccountMinRepresenter < Api::Min::AccountRepresenter
   link :stories do
     {
       href: "#{api_authorization_account_stories_path(represented)}#{index_url_params}",
-      templated: true,
-      count: represented.stories.count
+      templated: true
     }
   end
   embed :stories,
