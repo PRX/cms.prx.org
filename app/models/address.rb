@@ -8,7 +8,7 @@ class Address < BaseModel
       addressable_id
     elsif addressable_type == 'User'
       # warning: this will load things
-      addressable.individual_account.id
+      addressable.individual_account.try(:id)
     end
   end
 
