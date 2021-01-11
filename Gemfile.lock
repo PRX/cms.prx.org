@@ -439,7 +439,7 @@ GEM
       nokogiri (~> 1.5)
       trollop (~> 2.1)
     rdoc (4.3.0)
-    redcarpet (3.3.4)
+    redcarpet (3.5.1)
     representable (2.3.0)
       uber (~> 0.0.7)
     responders (2.3.0)
