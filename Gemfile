@@ -21,7 +21,7 @@ gem 'left_joins'
 gem 'paranoia', ' ~> 2.0'
 
 # file uploads
-gem 'carrierwave', '~> 0.11'
+gem 'carrierwave', '~> 1.3'
 gem 'fog'
 gem 'unf'
 
