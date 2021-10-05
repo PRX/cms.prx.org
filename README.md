@@ -17,7 +17,7 @@ https://cms.prx.org/browser/index.html
 Integrations & Dependencies
 ---------------------------
 - mysql - main database
-- memcached - caching API responses and JSON representations
+- Redis - caching API responses and JSON representations
 - AWS S3 - for private file access
 - Lambdas for processing audio (https://github.com/PRX/cms-audio-lambda) and images (https://github.com/PRX/cms-image-lambda)
 - (TBD) fixer.prx.org - validate/process media files

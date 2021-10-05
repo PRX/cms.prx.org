@@ -54,6 +54,8 @@ gem 'kaminari'
 # caching
 gem 'actionpack-action_caching'
 gem 'dalli' # perhaps only production?
+gem 'redis'
+gem 'hiredis'
 
 ## View
 # json handling
