@@ -12,11 +12,13 @@ PRX::Application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local = true
 
-  # config.action_controller.perform_caching = true
-  # config.cache_store = :mem_cache_store, *ENV['MEMCACHE_SERVERS'].split(',')
-
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
+
+  # config.action_controller.perform_caching = true
+  # config.cache_store = :redis_store,
+  #                      { host: ENV['REDIS_HOST'], port: ENV['REDIS_PORT'], namespace: 'cms' },
+  #                      { expires_in: 90.minutes }
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false

@@ -40,7 +40,10 @@ PRX::Application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
+  config.action_controller.perform_caching = true
+  config.cache_store = :redis_store,
+                       { host: ENV['REDIS_HOST'], port: ENV['REDIS_PORT'], namespace: 'cms' },
+                       { expires_in: 90.minutes }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
