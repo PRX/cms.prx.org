@@ -12,7 +12,7 @@ class Image < BaseModel
   include ValidityFlag
   include Portered
 
-  CALLBACK_QUEUE = ENV['SQS_IMAGE_CALLBACK_QUEUE_NAME']
+  CALLBACK_QUEUE = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
   porter_callbacks sqs: CALLBACK_QUEUE
 
   def self.profile
