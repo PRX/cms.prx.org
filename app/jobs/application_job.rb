@@ -1,6 +1,7 @@
 require 'newrelic_rpm'
 
 class ApplicationJob < ActiveJob::Base
+  queue_as ENV['SQS_DEFAULT_QUEUE_NAME']
 
   rescue_from(StandardError) do |e|
     NewRelic::Agent.notice_error(e)

@@ -8,7 +8,7 @@ ApplicationUsage () {
 }
 
 ApplicationUpdate () {
-  bundle exec rake -vt sqs:create announce:configure_broker db:create
+  bundle exec rake -vt announce:configure_broker db:create
 }
 
 SetWorkerDatabasePoolSize(){
@@ -80,7 +80,7 @@ ApplicationRun () {
   elif [ "$PROCESS" = "setup" ] ; then
     CMD="bundle exec rake -vt db:setup"
   elif [ "$PROCESS" = "sqs" ] ; then
-    CMD="bundle exec rake -vt sqs:create announce:configure_broker"
+    CMD="bundle exec rake -vt announce:configure_broker"
   elif [ "$PROCESS" = "bootstrap" ] ; then
     CMD="bundle exec rake -vt db:bootstrap"
   elif [ "$PROCESS" = "--" ] ; then

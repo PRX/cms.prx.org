@@ -66,7 +66,7 @@ module PRX
     end
 
     config.active_job.queue_adapter = :shoryuken
-    config.active_job.queue_name_prefix = Rails.env
+    config.active_job.queue_name_prefix = nil
     config.active_job.queue_name_delimiter = '_'
 
     config.active_record.raise_in_transactional_callbacks = true

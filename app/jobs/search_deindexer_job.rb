@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class SearchDeindexerJob < ApplicationJob
-  queue_as :cms_search_indexer
+  queue_as ENV['SQS_SEARCH_INDEXER_QUEUE_NAME']
 
   def perform(class_name, id)
     klass = class_name.constantize

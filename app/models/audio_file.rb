@@ -6,7 +6,7 @@ class AudioFile < BaseModel
   include ValidityFlag
   include Portered
 
-  CALLBACK_QUEUE = "#{ENV['RAILS_ENV']}_cms_audio_callback".freeze
+  CALLBACK_QUEUE = ENV['SQS_AUDIO_CALLBACK_QUEUE_NAME']
 
   porter_callbacks sqs: CALLBACK_QUEUE
 
