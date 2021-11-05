@@ -7,7 +7,7 @@ SayWhen.logger = Rails.logger
 # it will default to a :memory strategy and :simple processor
 SayWhen.configure do |options|
   options[:processor_strategy] = :active_job
-  options[:queue] = :cms_default
+  options[:queue] = ENV['SQS_DEFAULT_QUEUE_NAME']
 
   options[:storage_strategy] = :active_record
   options[:store_executions] = false
