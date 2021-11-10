@@ -12,7 +12,7 @@ class Image < BaseModel
   include ValidityFlag
   include Portered
 
-  CALLBACK_QUEUE = "#{ENV['RAILS_ENV']}_cms_image_callback".freeze
+  CALLBACK_QUEUE = "#{Rails.configuration.active_job.queue_name_prefix}_cms_image_callback".freeze
   porter_callbacks sqs: CALLBACK_QUEUE
 
   def self.profile
