@@ -5,7 +5,7 @@ LABEL org.prx.app="yes"
 
 RUN apk --no-cache add ca-certificates ruby ruby-irb ruby-json ruby-rake \
     ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev mysql-client \
-    linux-headers libc-dev zlib libxml2 libxslt libffi less git groff \
+    linux-headers libc-dev zlib libxml2 libxslt libffi less git groff shared-mime-info \
     python py-pip py-setuptools && \
     pip --no-cache-dir install awscli
 

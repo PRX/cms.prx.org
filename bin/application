@@ -8,7 +8,7 @@ ApplicationUsage () {
 }
 
 ApplicationUpdate () {
-  bundle exec rake -vt sqs:create announce:configure_broker db:create
+  bundle exec rake -vt announce:verify_config db:create
 }
 
 SetWorkerDatabasePoolSize(){

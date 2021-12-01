@@ -11,7 +11,7 @@ Shoryuken.on_start do
 end
 
 Shoryuken.default_worker_options = {
-  'queue'                   => "#{Rails.env}_cms_default",
+  'queue'                   => "#{Rails.configuration.active_job.queue_name_prefix}_cms_default",
   'auto_delete'             => true,
   'auto_visibility_timeout' => true,
   'batch'                   => false,
