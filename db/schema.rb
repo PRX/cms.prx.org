@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201102163043) do
+ActiveRecord::Schema.define(version: 20220516144606) do
 
   create_table "account_applications", force: :cascade do |t|
     t.integer  "account_id",            limit: 4
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20201102163043) do
     t.integer  "account_id",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "upload_path",   limit: 255
+    t.text     "upload_path",   limit: 65535
     t.string   "status",        limit: 255
     t.string   "caption",       limit: 255
     t.string   "credit",        limit: 255
@@ -224,7 +224,7 @@ ActiveRecord::Schema.define(version: 20201102163043) do
     t.datetime "deleted_at"
     t.string   "listenable_type",  limit: 255
     t.integer  "listenable_id",    limit: 4
-    t.string   "upload_path",      limit: 255
+    t.text     "upload_path",      limit: 65535
     t.integer  "current_job_id",   limit: 4
     t.text     "status_message",   limit: 65535
     t.decimal  "integrated_loudness",            precision: 15, scale: 10
@@ -1134,7 +1134,7 @@ ActiveRecord::Schema.define(version: 20201102163043) do
     t.integer  "position",      limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "upload_path",   limit: 255
+    t.text     "upload_path",   limit: 65535
     t.string   "status",        limit: 255
     t.string   "purpose",       limit: 255
     t.string   "porter_job_id", limit: 255
@@ -1220,7 +1220,7 @@ ActiveRecord::Schema.define(version: 20201102163043) do
     t.string   "credit",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "upload_path",  limit: 255
+    t.text     "upload_path",  limit: 65535
     t.string   "status",       limit: 255
   end
 
@@ -1250,7 +1250,7 @@ ActiveRecord::Schema.define(version: 20201102163043) do
     t.datetime "updated_at"
     t.string   "caption",        limit: 255
     t.string   "credit",         limit: 255
-    t.string   "upload_path",    limit: 255
+    t.text     "upload_path",    limit: 65535
     t.string   "status",         limit: 255
   end
 
@@ -1551,7 +1551,7 @@ ActiveRecord::Schema.define(version: 20201102163043) do
     t.string   "credit",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "upload_path",   limit: 255
+    t.text     "upload_path",   limit: 65535
     t.string   "status",        limit: 255
     t.string   "purpose",       limit: 255
     t.string   "porter_job_id", limit: 255
@@ -1722,7 +1722,7 @@ ActiveRecord::Schema.define(version: 20201102163043) do
     t.integer  "user_id",       limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "upload_path",   limit: 255
+    t.text     "upload_path",   limit: 65535
     t.string   "status",        limit: 255
     t.string   "caption",       limit: 255
     t.string   "credit",        limit: 255
