@@ -18,17 +18,6 @@ SetWorkerDatabasePoolSize(){
   fi
 }
 
-UpdateEnvironment () {
-  if [ -z "$LOCAL_ENV" ]; then
-    IFS=$'\n'
-    for item in `aws-secrets-get`; do
-      clean=`echo $item | sed 's/="\(.*\)"$/=\1/'`
-      export "$clean"
-    done
-    unset IFS
-  fi
-}
-
 WaitForMysql () {
   until mysql -h"$DB_PORT_3306_TCP_ADDR" -P"$DB_PORT_3306_TCP_PORT" -u"$DB_ENV_MYSQL_USER" -p"$DB_ENV_MYSQL_PASSWORD" -e"quit" &> /dev/null; do
     >&2 echo "Mysql is unavailable - sleeping"
@@ -91,7 +80,6 @@ ApplicationRun () {
     exit
   fi
 
-  UpdateEnvironment
   WaitForMysql
   if [ "$WAIT_FOR_ES" == "true" ]; then
     WaitForElasticsearch
