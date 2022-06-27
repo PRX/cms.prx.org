@@ -190,7 +190,7 @@ class Series < BaseModel
 
   def story_tags
     sql = %{
-      SELECT name FROM tags t
+      SELECT distinct name FROM tags t
       JOIN taggings g ON (t.id = g.tag_id)
       JOIN pieces p ON (g.taggable_id = p.id)
       WHERE taggable_type = 'Story'
