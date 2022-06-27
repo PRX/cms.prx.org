@@ -70,6 +70,18 @@ class Api::SeriesController < Api::BaseController
     end
   end
 
+  def tags
+    @series = Series.find(params.require(:series_id).to_i)
+    @tags = @series.story_tags
+
+    links = {
+      'self': { href: api_series_tags_path(@series) },
+      'prx:series': { href: api_series_path(@series) },
+    }
+
+    render json: { tags: @tags, _links: links }
+  end
+
   def included(relation)
     relation.includes(
       { account: [:image, :address, { opener: [:image] }] },

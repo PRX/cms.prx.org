@@ -103,6 +103,12 @@ class Api::SeriesRepresenter < Api::BaseRepresenter
         per: :all,
         zoom: false
 
+  link :tags do
+    {
+      href: api_series_tags_path(represented)
+    }
+  end
+
   link :calendar_ics do
     {
       href: api_series_calendar_path(represented, format: :ics),

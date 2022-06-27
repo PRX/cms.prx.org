@@ -188,6 +188,18 @@ class Series < BaseModel
     @import_url = url
   end
 
+  def story_tags
+    sql = %{
+      SELECT name FROM tags t
+      JOIN taggings g ON (t.id = g.tag_id)
+      JOIN pieces p ON (g.taggable_id = p.id)
+      WHERE taggable_type = 'Story'
+      AND p.series_id = #{id}
+      ORDER BY t.name ASC
+    }
+    Series.connection.execute(sql).to_a.flatten
+  end
+
   private
 
   def set_app_version
