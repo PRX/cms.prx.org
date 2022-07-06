@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.11.3'
-gem 'rails-html-sanitizer', '~> 1.3.0'
+gem 'rails-html-sanitizer', '~> 1.4.3'
 
 # TODO: sprockets 4.0.0 needs ruby >= 2.5.0
 gem 'sprockets', '~> 3.7.2'
