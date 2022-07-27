@@ -17,6 +17,7 @@ class Series < BaseModel
   settings index: {number_of_shards: 1, number_of_replicas: 1} do
     mappings dynamic: 'true' do
       indexes :subscription_approval_status, type: 'keyword'
+      indexes :use_porter, type: 'boolean'
     end
   end
 
