@@ -2,6 +2,7 @@ FROM ruby:2.3.7-alpine
 
 MAINTAINER PRX <sysadmin@prx.org>
 LABEL org.prx.app="yes"
+LABEL org.prx.spire.publish.ecr="WEB_SERVER"
 
 RUN apk --no-cache add ca-certificates ruby ruby-irb ruby-json ruby-rake \
     ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev mysql-client \
