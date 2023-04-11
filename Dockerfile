@@ -1,6 +1,6 @@
-FROM ruby:2.3.7-alpine
+FROM ruby:2.3.8-alpine
 
-MAINTAINER PRX <sysadmin@prx.org>
+LABEL PRX <sysadmin@prx.org>
 LABEL org.prx.app="yes"
 LABEL org.prx.spire.publish.ecr="WEB_SERVER"
 
