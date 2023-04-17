@@ -12,9 +12,6 @@ env:
     - PRX_SPIRE_ECR_PKG_PARAMETERS
     - WEB_SERVER
 phases:
-  install:
-    runtime-versions:
-      docker: 18
   pre_build:
     commands:
       - echo Logging in to Docker Hub...

@@ -1,6 +1,6 @@
-FROM ruby:2.3.7-alpine
+FROM ruby:2.3.8-alpine
 
-MAINTAINER PRX <sysadmin@prx.org>
+LABEL PRX <sysadmin@prx.org>
 LABEL org.prx.app="yes"
 LABEL org.prx.spire.publish.ecr="WEB_SERVER"
 
@@ -19,7 +19,7 @@ RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 ADD Gemfile ./
 ADD Gemfile.lock ./
-RUN gem install bundler
+RUN gem install bundler -v 2.3.26
 
 RUN apk --update add --virtual build-dependencies build-base curl-dev libressl-dev \
     zlib-dev libxml2-dev libxslt-dev libffi-dev libgcrypt-dev && \
