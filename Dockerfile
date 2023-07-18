@@ -6,12 +6,7 @@ LABEL org.prx.spire.publish.ecr="WEB_SERVER"
 
 RUN apk --no-cache add ca-certificates ruby ruby-irb ruby-json ruby-rake \
     ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-dev mysql-client \
-    linux-headers libc-dev zlib libxml2 libxslt libffi less git groff shared-mime-info \
-    python py-pip py-setuptools && \
-    pip --no-cache-dir install awscli
-
-RUN git clone -o github https://github.com/PRX/aws-secrets && \
-    cp ./aws-secrets/bin/* /usr/local/bin
+    linux-headers libc-dev zlib libxml2 libxslt libffi less git groff shared-mime-info
 
 ENV RAILS_ENV production
 ENV APP_HOME /app
