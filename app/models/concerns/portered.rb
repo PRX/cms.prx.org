@@ -36,7 +36,13 @@ module Portered
   end
 
   def self.sns_client
-    @sns_client ||= Aws::SNS::Client.new
+    @sns_client ||= Aws::SNS::Client.new(region: porter_region)
+  end
+
+  def self.porter_region
+    arn = ENV["PORTER_SNS_TOPIC_ARN"] || ""
+    match_data = arn.match(/arn:aws:sns:(?<region>.+):\d+:.+/) || {}
+    match_data[:region] || ENV["AWS_REGION"]
   end
 
   def submit_porter_job(job_id, source_uri, task_array = nil)
