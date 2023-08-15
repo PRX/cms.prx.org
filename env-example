@@ -12,6 +12,7 @@ DB_ENV_MYSQL_USER=root
 DB_PORT_3306_TCP_ADDR=db
 DB_PORT_3306_TCP_PORT=3306
 ELASTICSEARCH_URL=http://elasticsearch:9200
+FEEDER_HOST=feeder.prx.docker
 ID_HOST=id.prx.docker
 MEMCACHE_SERVERS=
 META_HOST=meta.prx.org
