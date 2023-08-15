@@ -17,12 +17,12 @@ class Authorization
   end
 
   def feeder_ui_access
-    if (token.resources(:feeder, :read_private) - token_auth_account_ids).any?
-      host = ENV["FEEDER_HOST"]
+    if (token.resources(:feeder, :read_private) - token.resources(:cms, :read_private)).any?
+      host = ENV['FEEDER_HOST']
       if host.present?
-        host.starts_with?("http") ? host : "https://#{host}"
+        host.starts_with?('http') ? host : "https://#{host}"
       else
-        "https://feeder.prx.org"
+        'https://feeder.prx.org'
       end
     end
   end
