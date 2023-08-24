@@ -17,7 +17,8 @@ class Authorization
   end
 
   def feeder_ui_access
-    if (token.resources(:feeder, :read_private) - token.resources(:cms, :read_private)).any?
+    # if the user has no CMS scope, but _does_ have Feeder - they get the new UI
+    if token.resources(:cms, :read_private).empty? && token.resources(:feeder, :read_private).any?
       host = ENV['FEEDER_HOST']
       if host.present?
         host.starts_with?('http') ? host : "https://#{host}"
