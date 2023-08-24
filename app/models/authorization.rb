@@ -16,6 +16,18 @@ class Authorization
     default_account.id
   end
 
+  def feeder_ui_access
+    # if the user has no CMS scope, but _does_ have Feeder - they get the new UI
+    if token.resources(:cms, :read_private).empty? && token.resources(:feeder, :read_private).any?
+      host = ENV['FEEDER_HOST']
+      if host.present?
+        host.starts_with?('http') ? host : "https://#{host}"
+      else
+        'https://feeder.prx.org'
+      end
+    end
+  end
+
   def default_account
     User.find(token.user_id).default_account
   end

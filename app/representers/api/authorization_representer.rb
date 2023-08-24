@@ -2,6 +2,7 @@
 
 class Api::AuthorizationRepresenter < Api::BaseRepresenter
   property :id, writeable: false
+  property :feeder_ui_access, writeable: false
 
   link :default_account do
     {
