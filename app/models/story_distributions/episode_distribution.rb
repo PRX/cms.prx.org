@@ -95,8 +95,7 @@ class StoryDistributions::EpisodeDistribution < StoryDistribution
       categories: story.tags,
       published_at: story.published_at,
       released_at: story.released_at,
-      updated_at: story.updated_at,
-      url: self.class.default_story_url(story)
+      updated_at: story.updated_at
     }
   end
 
