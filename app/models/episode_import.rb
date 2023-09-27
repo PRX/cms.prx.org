@@ -129,7 +129,7 @@ class EpisodeImport < BaseModel
   end
 
   def update_image
-    if !entry[:itunes_image]
+    if entry[:itunes_image].blank?
       story.images.destroy_all
       return []
     end
