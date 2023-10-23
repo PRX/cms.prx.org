@@ -13,15 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20220516144606) do
 
-  create_table "account_applications", force: :cascade do |t|
-    t.integer  "account_id",            limit: 4
-    t.integer  "client_application_id", limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "account_applications", ["account_id", "client_application_id"], name: "index_account_applications_uniq", unique: true, using: :btree
-
   create_table "account_images", force: :cascade do |t|
     t.integer  "parent_id",     limit: 4
     t.string   "content_type",  limit: 255
