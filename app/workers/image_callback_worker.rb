@@ -55,6 +55,8 @@ class ImageCallbackWorker
         announce_image_changed(image)
       end
     end
+  rescue ActiveRecord::RecordNotFound
+    Shoryuken.logger.error("Record #{job_result['Job']['Id']} not found")
   end
 
   def callback_copy(image, job_result)
