@@ -102,7 +102,7 @@ module PRX
       {
         params: controller.request.params.except(*exclude),
         user_agent: controller.request.user_agent,
-        user_id: controller.prx_auth_token&.user_id&.to_i,
+        user_id: controller.try(:prx_auth_token)&.user_id&.to_i,
         user_ip: controller.request.ip,
         user_ref: controller.request.referrer
       }.compact
