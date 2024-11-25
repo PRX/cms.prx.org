@@ -77,5 +77,50 @@ module PRX
     proto = (ENV['CMS_HOST'] || '').include?('.docker') ? 'http' : 'https'
     cms_url_options = { host: ENV['CMS_HOST'], protocol: proto }
     Rails.application.routes.default_url_options = cms_url_options
+
+    # Logging
+    module ActiveSupport::TaggedLogging::Formatter
+      def call(severity, time, progname, data)
+        data = {msg: data.to_s} unless data.is_a?(Hash)
+        tags = current_tags
+        data[:tags] = tags if tags.present?
+        _call(severity, time, progname, data)
+      end
+    end
+
+    require "#{Rails.root}/lib/cms_logger.rb"
+    config.logger = ActiveSupport::TaggedLogging.new(CmsLogger.new($stdout))
+
+    # Used when invoking the async workers via supervisord.
+    if ENV["USE_SYNC_STDOUT"].present?
+      $stdout.sync = true
+    end
+
+    config.lograge.enabled = true
+    config.lograge.custom_payload do |controller|
+      exclude = %w[controller action format id authenticity_token access_token id_token]
+      {
+        params: controller.request.params.except(*exclude),
+        user_agent: controller.request.user_agent,
+        user_id: controller.prx_auth_token&.user_id&.to_i,
+        user_ip: controller.request.ip,
+        user_ref: controller.request.referrer
+      }.compact
+    end
+    config.lograge.ignore_custom = lambda do |event|
+      if event.payload[:path] == "/" && event.payload[:status] == 302
+        true
+      elsif event.payload[:path] == "/api/v1"
+        true
+      end
+    end
+
+    config.lograge.formatter = Class.new do |fmt|
+      def fmt.call(data)
+        {msg: "Request", request: data.except(*%i[unpermitted_params])}
+      end
+    end
+
+    # config.log_tags = [:request_id]
   end
 end
