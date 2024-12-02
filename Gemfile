@@ -78,11 +78,11 @@ gem 'highline'
 gem 'rake'
 
 # monitoring/logging
-gem "logger"
-gem "lograge"
+gem 'logger'
+gem 'lograge'
 gem 'newrelic_rpm'
-gem "ougai"
-gem "ougai-formatters-customizable"
+gem 'ougai'
+gem 'ougai-formatters-customizable'
 
 # elasticsearch
 gem 'elasticsearch-dsl'

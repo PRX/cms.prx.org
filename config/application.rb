@@ -92,7 +92,7 @@ module PRX
     config.logger = ActiveSupport::TaggedLogging.new(CmsLogger.new($stdout))
 
     # Used when invoking the async workers via supervisord.
-    if ENV["USE_SYNC_STDOUT"].present?
+    if ENV['USE_SYNC_STDOUT'].present?
       $stdout.sync = true
     end
 
@@ -108,16 +108,16 @@ module PRX
       }.compact
     end
     config.lograge.ignore_custom = lambda do |event|
-      if event.payload[:path] == "/" && event.payload[:status] == 302
+      if event.payload[:path] == '/' && event.payload[:status] == 302
         true
-      elsif event.payload[:path] == "/api/v1"
+      elsif event.payload[:path] == '/api/v1'
         true
       end
     end
 
     config.lograge.formatter = Class.new do |fmt|
       def fmt.call(data)
-        {msg: "Request", request: data.except(*%i[unpermitted_params])}
+        {msg: 'Request', request: data.except('unpermitted_params')}
       end
     end
 
