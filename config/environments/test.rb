@@ -38,4 +38,7 @@ PRX::Application.configure do
   config.active_support.test_order = :random
 
   config.active_job.queue_adapter = :test
+
+  # Use a local file for logging test results
+  config.logger = ActiveSupport::TaggedLogging.new(CmsLogger.new('log/test.log'))
 end
