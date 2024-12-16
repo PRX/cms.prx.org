@@ -79,15 +79,6 @@ module PRX
     Rails.application.routes.default_url_options = cms_url_options
 
     # Logging
-    module ActiveSupport::TaggedLogging::Formatter
-      def call(severity, time, progname, data)
-        data = {msg: data.to_s} unless data.is_a?(Hash)
-        tags = current_tags
-        data[:tags] = tags if tags.present?
-        _call(severity, time, progname, data)
-      end
-    end
-
     require "#{Rails.root}/lib/cms_logger.rb"
     config.logger = ActiveSupport::TaggedLogging.new(CmsLogger.new($stdout))
 
@@ -117,7 +108,7 @@ module PRX
 
     config.lograge.formatter = Class.new do |fmt|
       def fmt.call(data)
-        {msg: 'Request', request: data.except('unpermitted_params')}
+        {msg: 'Request', request: data.except('unpermitted_params')}.to_json
       end
     end
 
