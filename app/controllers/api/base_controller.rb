@@ -18,7 +18,7 @@ class Api::BaseController < ApplicationController
   include PolymorphicResource
   include AnnounceActions
 
-  before_filter :authenticate_user!, only: [:create, :update, :delete]
+  before_filter :authenticate_user!
 
   protect_from_forgery with: :null_session
 
