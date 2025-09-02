@@ -7,6 +7,10 @@ describe Api::NetworksController do
 
   before { Network.delete_all }
 
+  around do |test|
+    @controller.stub(:prx_auth_token, StubToken.new(nil, nil)) { test.call }
+  end
+
   it 'should show' do
     get(:show, api_version: 'v1', format: 'json', id: network.id)
     resource = JSON.parse(@response.body)
