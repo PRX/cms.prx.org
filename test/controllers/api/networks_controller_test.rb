@@ -6,10 +6,7 @@ describe Api::NetworksController do
   let(:network) { create(:network, account: user.individual_account) }
 
   before { Network.delete_all }
-
-  around do |test|
-    @controller.stub(:prx_auth_token, StubToken.new(nil, nil)) { test.call }
-  end
+  around { |test| @controller.stub(:current_user, true) { test.call } }
 
   it 'should show' do
     get(:show, api_version: 'v1', format: 'json', id: network.id)

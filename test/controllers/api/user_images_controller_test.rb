@@ -5,6 +5,8 @@ describe Api::UserImagesController do
   let(:account) { user.default_account }
   let(:user_image) { create(:user_image) }
 
+  around { |test| @controller.stub(:current_user, true) { test.call } }
+
   it 'should show' do
     get(:show, api_request_opts(user_id: user_image.user_id))
     assert_response :success

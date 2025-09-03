@@ -4,6 +4,8 @@ describe Api::MembershipsController do
 
   let(:membership) { FactoryGirl.create(:membership) }
 
+  around { |test| @controller.stub(:current_user, true) { test.call } }
+
   it 'should show for account' do
     get :show, api_request_opts(account_id: membership.account_id, id: membership.id)
     assert_response :success

@@ -14,6 +14,8 @@ describe Api::DistributionsController do
   let(:token) { StubToken.new(account.id, ['cms:read-private cms:series'], user.id) }
   let(:bad_token) { StubToken.new(account.id, ['member'], user.id) }
 
+  around { |test| @controller.stub(:current_user, true) { test.call } }
+
   it 'should show' do
     get :show, api_request_opts(series_id: distribution.owner.id, id: distribution.id)
     assert_response :success

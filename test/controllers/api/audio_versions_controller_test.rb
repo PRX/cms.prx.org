@@ -5,6 +5,8 @@ describe Api::AudioVersionsController do
   let(:story) { create(:story, account: user.individual_account) }
   let(:audio_version) { create(:audio_version, story: story) }
 
+  around { |test| @controller.stub(:current_user, true) { test.call } }
+
   it 'should show' do
     get(:show, { api_version: 'v1', format: 'json', id: audio_version.id } )
     assert_response :success

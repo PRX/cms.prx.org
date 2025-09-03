@@ -4,6 +4,8 @@ describe Api::AudioFileTemplatesController do
   let(:version_template) { create(:audio_version_template) }
   let(:template) { create(:audio_file_template, audio_version_template: version_template) }
 
+  around { |test| @controller.stub(:current_user, true) { test.call } }
+
   it 'should show' do
     get(:show, api_request_opts(audio_version_template_id: version_template.id, id: template.id))
     assert_response :success
