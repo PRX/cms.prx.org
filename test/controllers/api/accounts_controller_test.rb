@@ -8,23 +8,27 @@ describe Api::AccountsController do
   let (:write_token) { StubToken.new(nil, nil, user_without_account.id) }
   let (:token) { StubToken.new(nil, ['cms:account'], user.id) }
 
-  it 'should show' do
-    get(:show, { api_version: 'v1', format: 'json', id: account.id })
-    assert_response :success
-  end
+  describe 'with any user' do
+    around { |test| @controller.stub(:current_user, true) { test.call } }
 
-  it 'should list' do
-    account.id.wont_be_nil
-    get(:index, { api_version: 'v1', format: 'json' })
-    assert_response :success
-  end
+    it 'should show' do
+      get(:show, { api_version: 'v1', format: 'json', id: account.id })
+      assert_response :success
+    end
 
-  it 'should list users accounts' do
-    membership.user.wont_be_nil
-    membership.account.wont_be_nil
+    it 'should list' do
+      account.id.wont_be_nil
+      get(:index, { api_version: 'v1', format: 'json' })
+      assert_response :success
+    end
 
-    get(:index, { api_version: 'v1', format: 'json', user_id: membership.user.id })
-    assert_response :success
+    it 'should list users accounts' do
+      membership.user.wont_be_nil
+      membership.account.wont_be_nil
+
+      get(:index, { api_version: 'v1', format: 'json', user_id: membership.user.id })
+      assert_response :success
+    end
   end
 
   describe 'with a different user\'s token' do

@@ -212,134 +212,138 @@ describe Api::StoriesController do
     end
   end
 
-  it 'should show' do
-    get(:show, { api_version: 'v1', format: 'json', id: story.id } )
-    assert_response :success
-  end
+  describe 'with any user' do
+    around { |test| @controller.stub(:current_user, true) { test.call } }
 
-  it 'should list published stories of any app version' do
-    story1 = create(:story, published_at: 1.day.ago)
-    story2 = create(:story, published_at: nil)
-    story3 = create(:story_v3, published_at: 1.day.ago)
+    it 'should show' do
+      get(:show, { api_version: 'v1', format: 'json', id: story.id } )
+      assert_response :success
+    end
 
-    get(:index, { api_version: 'v1', format: 'json' } )
-    assert_response :success
-    assigns[:stories].must_include story1
-    assigns[:stories].wont_include story2
-    assigns[:stories].must_include story3
-  end
+    it 'should list published stories of any app version' do
+      story1 = create(:story, published_at: 1.day.ago)
+      story2 = create(:story, published_at: nil)
+      story3 = create(:story_v3, published_at: 1.day.ago)
 
-  it 'should list stories for an account' do
-    story.must_be :published
-    get(:index, api_version: 'v1',
-                format: 'json',
-                account_id: story.account_id)
-    assert_response :success
-  end
+      get(:index, { api_version: 'v1', format: 'json' } )
+      assert_response :success
+      assigns[:stories].must_include story1
+      assigns[:stories].wont_include story2
+      assigns[:stories].must_include story3
+    end
 
-  it 'should list highlighted stories' do
-    portfolio = create(:portfolio)
-    playlist_section = create(:playlist_section, playlist: portfolio)
-    pick1 = create(:pick, story: story, playlist_section: playlist_section)
-    pick2 = create(:pick)
+    it 'should list stories for an account' do
+      story.must_be :published
+      get(:index, api_version: 'v1',
+                  format: 'json',
+                  account_id: story.account_id)
+      assert_response :success
+    end
 
-    get(:index, api_version: 'v1',
-                format: 'json',
-                account_id: portfolio.account_id,
-                filters: 'highlighted')
+    it 'should list highlighted stories' do
+      portfolio = create(:portfolio)
+      playlist_section = create(:playlist_section, playlist: portfolio)
+      pick1 = create(:pick, story: story, playlist_section: playlist_section)
+      pick2 = create(:pick)
 
-    assert_response :success
-    assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story
-    assigns[:stories].wont_include pick2.story
-  end
+      get(:index, api_version: 'v1',
+                  format: 'json',
+                  account_id: portfolio.account_id,
+                  filters: 'highlighted')
 
-  it 'should list purchased stories' do
-    create_list(:purchase, 3, purchased: story)
-    story2 = create(:story, account: story.account)
-    story3 = create(:story_with_purchases, account: story.account)
+      assert_response :success
+      assert_not_nil assigns[:stories]
+      assigns[:stories].must_include story
+      assigns[:stories].wont_include pick2.story
+    end
 
-    get(:index, api_version: 'v1',
-                format: 'json',
-                account_id: story.account_id,
-                filters: 'purchased')
+    it 'should list purchased stories' do
+      create_list(:purchase, 3, purchased: story)
+      story2 = create(:story, account: story.account)
+      story3 = create(:story_with_purchases, account: story.account)
 
-    assert_response :success
-    assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story
-    assigns[:stories].must_include story3
-    assigns[:stories].wont_include story2
-  end
+      get(:index, api_version: 'v1',
+                  format: 'json',
+                  account_id: story.account_id,
+                  filters: 'purchased')
 
-  it 'should list only v4 stories' do
-    story1 = create(:story)
-    story1.must_be :v4?
-    story2 = create(:story_v3)
-    get(:index, api_version: 'v1', format: 'json', filters: 'v4')
-    assert_response :success
-    assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story1
-    assigns[:stories].wont_include story2
-  end
+      assert_response :success
+      assert_not_nil assigns[:stories]
+      assigns[:stories].must_include story
+      assigns[:stories].must_include story3
+      assigns[:stories].wont_include story2
+    end
 
-  it 'should list only stories published in a timeframe' do
-    story1 = create(:story, published_at: Time.parse('2019-03-21T00:00:00Z'))
-    story2 = create(:story, published_at: Time.parse('2019-03-22T00:00:00Z'))
-    story3 = create(:story, published_at: Time.parse('2019-03-23T00:00:00Z'))
-    get(:index, api_version: 'v1', format: 'json', filters: 'before=20190323,after=20190321')
-    assert_response :success
-    assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story1
-    assigns[:stories].must_include story2
-    assigns[:stories].wont_include story3
-  end
+    it 'should list only v4 stories' do
+      story1 = create(:story)
+      story1.must_be :v4?
+      story2 = create(:story_v3)
+      get(:index, api_version: 'v1', format: 'json', filters: 'v4')
+      assert_response :success
+      assert_not_nil assigns[:stories]
+      assigns[:stories].must_include story1
+      assigns[:stories].wont_include story2
+    end
 
-  it 'should error on bad version' do
-    get(:index, { api_version: 'v2', format: 'json' } )
-    assert_response :not_acceptable
-  end
+    it 'should list only stories published in a timeframe' do
+      story1 = create(:story, published_at: Time.parse('2019-03-21T00:00:00Z'))
+      story2 = create(:story, published_at: Time.parse('2019-03-22T00:00:00Z'))
+      story3 = create(:story, published_at: Time.parse('2019-03-23T00:00:00Z'))
+      get(:index, api_version: 'v1', format: 'json', filters: 'before=20190323,after=20190321')
+      assert_response :success
+      assert_not_nil assigns[:stories]
+      assigns[:stories].must_include story1
+      assigns[:stories].must_include story2
+      assigns[:stories].wont_include story3
+    end
 
-  it 'should get a random story' do
-    story.published_at = Time.now
+    it 'should error on bad version' do
+      get(:index, { api_version: 'v2', format: 'json' } )
+      assert_response :not_acceptable
+    end
 
-    get(:random, api_version: 'v1', format: 'json')
+    it 'should get a random story' do
+      story.published_at = Time.now
 
-    assert_response :success
-    assert_not_nil assigns[:story]
-  end
+      get(:random, api_version: 'v1', format: 'json')
 
-  it 'should list matching stories for text' do
-    story = create(:story, title: 'You are all Weirdos')
-    story2 = create(:story, title: 'We are all Freakazoids')
-    get(:index, api_version: 'v1', format: 'json', filters: 'text=weirdos')
-    assert_response :success
-    assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story
-    assigns[:stories].wont_include story2
-  end
+      assert_response :success
+      assert_not_nil assigns[:story]
+    end
 
-  it 'should search text with Elasticsearch' do
-    # always start clean
-    ElasticsearchHelper.new.create_es_index(Story)
-    story = create(:story, title: 'You are all Weirdos').reindex(true)
-    story2 = create(:story, title: 'We are all Freakazoids').reindex(true)
-    get(:search, api_version: 'v1', format: 'json', q: 'weirdos')
-    assert_response :success
-    assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story
-    assigns[:stories].wont_include story2
-  end
+    it 'should list matching stories for text' do
+      story = create(:story, title: 'You are all Weirdos')
+      story2 = create(:story, title: 'We are all Freakazoids')
+      get(:index, api_version: 'v1', format: 'json', filters: 'text=weirdos')
+      assert_response :success
+      assert_not_nil assigns[:stories]
+      assigns[:stories].must_include story
+      assigns[:stories].wont_include story2
+    end
 
-  it 'should filter by published date with Elasticsearch' do
-    ElasticsearchHelper.new.create_es_index(Story)
-    story1 = create(:story, published_at: Time.parse('2019-03-21T00:00:00Z')).reindex(true)
-    story2 = create(:story, published_at: Time.parse('2019-03-22T00:00:00Z')).reindex(true)
-    story3 = create(:story, published_at: Time.parse('2019-03-23T00:00:00Z')).reindex(true)
-    get(:search, api_version: 'v1', format: 'json', filters: 'before=20190323,after=20190321')
-    assert_response :success
-    assert_not_nil assigns[:stories]
-    assigns[:stories].must_include story1
-    assigns[:stories].must_include story2
-    assigns[:stories].wont_include story3
+    it 'should search text with Elasticsearch' do
+      # always start clean
+      ElasticsearchHelper.new.create_es_index(Story)
+      story = create(:story, title: 'You are all Weirdos').reindex(true)
+      story2 = create(:story, title: 'We are all Freakazoids').reindex(true)
+      get(:search, api_version: 'v1', format: 'json', q: 'weirdos')
+      assert_response :success
+      assert_not_nil assigns[:stories]
+      assigns[:stories].must_include story
+      assigns[:stories].wont_include story2
+    end
+
+    it 'should filter by published date with Elasticsearch' do
+      ElasticsearchHelper.new.create_es_index(Story)
+      story1 = create(:story, published_at: Time.parse('2019-03-21T00:00:00Z')).reindex(true)
+      story2 = create(:story, published_at: Time.parse('2019-03-22T00:00:00Z')).reindex(true)
+      story3 = create(:story, published_at: Time.parse('2019-03-23T00:00:00Z')).reindex(true)
+      get(:search, api_version: 'v1', format: 'json', filters: 'before=20190323,after=20190321')
+      assert_response :success
+      assert_not_nil assigns[:stories]
+      assigns[:stories].must_include story1
+      assigns[:stories].must_include story2
+      assigns[:stories].wont_include story3
+    end
   end
 end

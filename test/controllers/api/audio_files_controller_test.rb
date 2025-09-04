@@ -105,6 +105,8 @@ describe Api::AudioFilesController do
       @controller.prx_auth_token = token
     end
 
+    around { |test| @controller.stub(:current_user, true) { test.call } }
+
     it 'should fail to get original when not authorized' do
       @controller.prx_auth_token = nil
       get :original, api_request_opts(id: audio_file.id)

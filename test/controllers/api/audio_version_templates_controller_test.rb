@@ -12,6 +12,8 @@ describe Api::AudioVersionTemplatesController do
            audio_version_template: template2)
   end
 
+  around { |test| @controller.stub(:current_user, true) { test.call } }
+
   it 'should show' do
     get(:show, api_request_opts(id: template.id))
     assert_response :success

@@ -1,6 +1,8 @@
 require 'test_helper'
 
 describe Api::PicksController do
+  around { |test| @controller.stub(:current_user, true) { test.call } }
+
   it 'only returns picks from named playlists' do
     playlist = create(:playlist, path: 'name')
     pick = create(:pick, playlist: playlist)

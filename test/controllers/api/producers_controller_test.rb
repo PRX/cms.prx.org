@@ -6,6 +6,8 @@ describe Api::ProducersController do
   let(:story) { create(:story, account: user.individual_account) }
   let(:producer) { create(:producer, story: story) }
 
+  around { |test| @controller.stub(:current_user, true) { test.call } }
+
   it 'should show' do
     get :show, api_request_opts(story_id: story.id, id: producer.id)
     assert_response :success
